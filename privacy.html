@@ -3,68 +3,228 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privacy Policy — ADAMAS by Falcon Intelligence Group</title>
-<meta name="description" content="How ADAMAS and Falcon Intelligence Group handle your data. Local-first by design.">
+<title>Privacy Policy — ADAMAS by Falcon Intelligence Group LLC</title>
+<meta name="description" content="How Falcon Intelligence Group LLC collects, uses, discloses, and protects personal information. Local-first by design.">
 <style>
   @font-face{font-family:'D-DIN';src:url('fonts/D-DIN.woff2') format('woff2'),url('fonts/D-DIN.woff') format('woff');font-weight:400;font-style:normal;font-display:swap}
   @font-face{font-family:'D-DIN';src:url('fonts/D-DIN-Bold.woff2') format('woff2'),url('fonts/D-DIN-Bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap}
-  :root{ --bg:#000;--surface:#161618;--border:rgba(255,255,255,.10);--text:#f5f5f7;--muted:#a1a1a6;--faint:#6e6e73;--accent:#c9a84c; }
+  :root{--bg:#000;--surface:#161618;--surface2:#1f1f22;--border:rgba(255,255,255,.11);--border2:rgba(255,255,255,.06);
+    --text:#f5f5f7;--muted:#a1a1a6;--faint:#6e6e73;--accent:#c9a84c;--accent-lt:#e3c977;
+    --font:'D-DIN',"DIN Alternate",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;}
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:'D-DIN',"DIN Alternate",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:760px;margin:0 auto;padding:56px 24px 90px}
+  html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.65;font-size:15px}
+  .wrap{max-width:820px;margin:0 auto;padding:50px 24px 100px}
   a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
-  h1{font-weight:700;text-transform:uppercase;font-size:clamp(1.9rem,5vw,2.6rem);letter-spacing:-.01em;margin:12px 0 6px}
-  .meta{color:var(--faint);font-size:12.5px;margin-bottom:30px}
-  h2{font-weight:700;font-size:1.15rem;letter-spacing:-.01em;margin:30px 0 8px}
-  p{color:#d4d2cc;margin:8px 0}
-  ul{margin:8px 0 8px 18px}li{color:#d4d2cc;margin:5px 0}
-  .back{display:inline-block;margin-bottom:24px;font-size:13px;color:var(--muted)}
-  hr{border:0;border-top:1px solid var(--border);margin:36px 0}
-  .ftr{color:var(--faint);font-size:11.5px;margin-top:30px}
+  .back{font-size:13px;color:var(--muted)}
+  .eyebrow{display:inline-block;font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.08);border-radius:99px;padding:6px 14px;margin:22px 0 14px}
+  h1{font-weight:700;text-transform:uppercase;font-size:clamp(2rem,5vw,3rem);letter-spacing:-.01em;line-height:1;margin-bottom:10px}
+  .meta{color:var(--faint);font-size:12.5px;line-height:1.7;margin-bottom:6px}
+  .lead{color:#d4d2cc;font-size:16px;margin:16px 0}
+  h2{font-weight:700;text-transform:uppercase;font-size:1.15rem;letter-spacing:.01em;margin:34px 0 8px;padding-top:10px;scroll-margin-top:20px;border-top:1px solid var(--border2)}
+  h2 .nz{color:var(--accent);margin-right:10px}
+  h3{font-weight:700;font-size:15px;margin:18px 0 6px;color:var(--text)}
+  p{color:#cdc9bf;margin:9px 0}
+  strong{color:var(--text)}
+  ul,ol{margin:9px 0 9px 4px;padding-left:20px}
+  li{color:#cdc9bf;margin:6px 0}
+  .toc{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 22px;margin:20px 0}
+  .toc h4{font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .toc ol{column-count:2;column-gap:28px;margin:0;padding-left:18px;font-size:13.5px}
+  .toc li{margin:4px 0}
+  .note{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.24);border-left:3px solid var(--accent);border-radius:10px;padding:16px 20px;margin:16px 0}
+  .note .l{display:block;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+  .kv{display:grid;grid-template-columns:200px 1fr;gap:8px 16px;margin:10px 0}
+  .kv dt{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+  .kv dd{font-size:14px;color:#d4d2cc}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
+  th,td{text-align:left;padding:10px 12px;border:1px solid var(--border2);vertical-align:top}
+  th{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:400}
+  hr{border:0;border-top:1px solid var(--border);margin:40px 0}
+  .ftr{color:var(--faint);font-size:11.5px;margin-top:40px;border-top:1px solid var(--border2);padding-top:16px}
+  @media(max-width:600px){.toc ol{column-count:1}.kv{grid-template-columns:1fr}}
+  @media print{body{background:#fff;color:#111}.back{display:none}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <a class="back" href="index.html">← Back to ADAMAS</a>
-  <div class="eyebrow">Legal</div>
+  <a class="back" href="index.html">← ADAMAS</a>
+  <div class="eyebrow">Legal · Privacy</div>
   <h1>Privacy Policy</h1>
-  <div class="meta">Falcon Intelligence Group LLC · Last updated June 2026</div>
+  <div class="meta">Falcon Intelligence Group LLC — a Delaware limited liability company<br>
+  Effective date: 6 June 2026 · Last updated: 6 June 2026</div>
 
-  <p>This Privacy Policy explains how Falcon Intelligence Group LLC (“Falcon Intelligence Group,” “we,” “us”) handles information in connection with the ADAMAS website at adamas-project.com and the ADAMAS product and services.</p>
+  <p class="lead">Falcon Intelligence Group LLC (“Falcon Intelligence Group,” “we,” “us,” or “our”) respects your privacy. This Privacy Policy explains how we collect, use, disclose, retain, and protect personal information in connection with the ADAMAS website at adamas-project.com (the “Site”) and the ADAMAS products and services (together, the “Services”). It also describes the privacy rights available to you and how to exercise them.</p>
 
-  <h2>1. Our local-first principle</h2>
-  <p>ADAMAS is built local-first. Your company’s decision ledger and vault run on hardware you own. We do not collect, store, or transmit the contents of your vault to our servers or to third-party clouds. Optional hybrid cloud processing is used only for specific tasks you explicitly approve, and only for the duration of that task.</p>
+  <div class="note"><span class="l">Local-first by design</span>ADAMAS is engineered so that your company’s decision ledger and vault run on hardware <strong>you own and control</strong>. In normal operation we do not collect, receive, host, or have access to the contents of your vault. This Policy primarily describes the personal information we handle as a <strong>controller</strong> — for example, information about Site visitors, prospective clients, and client contacts. Where we process personal data contained in a client’s environment on the client’s behalf, we do so as a <strong>processor</strong> under the terms of the relevant client agreement and any applicable data processing addendum, which govern in the event of a conflict with this Policy.</p></div>
 
-  <h2>2. Information we collect from this website</h2>
-  <p>This website is intentionally minimal. It does not use tracking cookies, advertising pixels, or third-party analytics that profile you. The only personal information we receive is what you choose to send us — for example, when you email us or request a Clarity Audit. That typically includes your name, email address, company, and anything you write to us.</p>
+  <div class="toc">
+    <h4>Contents</h4>
+    <ol>
+      <li><a href="#about">Who we are &amp; scope</a></li>
+      <li><a href="#collect">Information we collect</a></li>
+      <li><a href="#sources">Sources of information</a></li>
+      <li><a href="#use">How we use information</a></li>
+      <li><a href="#bases">Legal bases for processing</a></li>
+      <li><a href="#disclose">How we disclose information</a></li>
+      <li><a href="#selling">We do not sell your information</a></li>
+      <li><a href="#cookies">Cookies &amp; tracking</a></li>
+      <li><a href="#retention">Data retention</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#transfers">International transfers</a></li>
+      <li><a href="#children">Children’s privacy</a></li>
+      <li><a href="#thirdparty">Third-party services &amp; links</a></li>
+      <li><a href="#rights">Your privacy rights</a></li>
+      <li><a href="#us">U.S. state privacy notice</a></li>
+      <li><a href="#eea">EEA, UK &amp; Switzerland notice</a></li>
+      <li><a href="#changes">Changes to this Policy</a></li>
+      <li><a href="#contact">How to contact us</a></li>
+    </ol>
+  </div>
 
-  <h2>3. How we use information</h2>
+  <h2 id="about"><span class="nz">1</span>Who we are &amp; scope</h2>
+  <p>Falcon Intelligence Group LLC is the entity responsible for the Services and is the controller of personal information described in this Policy unless stated otherwise. This Policy applies to personal information we process through the Site, our sales and onboarding process, our client and supplier relationships, and our business communications. It does not apply to third-party websites or services we do not control, or to information you maintain solely within your own local ADAMAS environment.</p>
+
+  <h2 id="collect"><span class="nz">2</span>Information we collect</h2>
+  <p>We aim to collect the minimum personal information necessary. Depending on how you interact with us, we may collect the following categories:</p>
+  <h3>Information you provide to us</h3>
   <ul>
-    <li>To respond to your enquiry and schedule a Clarity Audit or call.</li>
-    <li>To deliver, support, and improve our services for you.</li>
-    <li>To send information you have requested. We do not sell your personal information.</li>
+    <li><strong>Identity &amp; contact details</strong> — such as your name, business email address, telephone number, company name, role, and country.</li>
+    <li><strong>Enquiry &amp; engagement information</strong> — the content of your messages, the details you share when you request a Clarity Audit or a call, and information exchanged during scoping, onboarding, and delivery.</li>
+    <li><strong>Commercial information</strong> — records of services discussed or purchased, proposals, and billing/contact information for invoicing (we do not collect payment-card numbers through the Site).</li>
+  </ul>
+  <h3>Information collected automatically</h3>
+  <ul>
+    <li><strong>Technical &amp; server-log data</strong> — when you visit the Site, our hosting provider may automatically process limited technical data such as your IP address, browser type, device and operating system, referring page, and the date/time of your request, for security, reliability, and abuse-prevention purposes.</li>
+    <li>The Site does <strong>not</strong> use advertising or cross-site tracking cookies and does not run third-party advertising or profiling analytics (see <a href="#cookies">Cookies &amp; tracking</a>).</li>
+  </ul>
+  <h3>Information from third parties</h3>
+  <ul>
+    <li><strong>Referrals &amp; professional networks</strong> — if a mutual contact introduces you, or you reach us through a professional network (e.g., LinkedIn), we may receive your name, company, and contact details.</li>
+    <li><strong>Service providers</strong> — providers that support our outreach, scheduling, or CRM may supply business-contact information used to communicate with you.</li>
+  </ul>
+  <p>We do not intentionally collect special categories of personal data (such as health, biometric, or government-identifier data) through the Site, and we ask that you not send such information to us.</p>
+
+  <h2 id="sources"><span class="nz">3</span>Sources of information</h2>
+  <p>We obtain personal information directly from you (when you contact us or engage our Services), automatically from your use of the Site, and occasionally from third parties such as referrers, publicly available professional sources, and our service providers.</p>
+
+  <h2 id="use"><span class="nz">4</span>How we use information</h2>
+  <p>We use personal information to:</p>
+  <ul>
+    <li>respond to your enquiries and provide the information or resources you request;</li>
+    <li>schedule and conduct calls, the Clarity Audit, and related consultations;</li>
+    <li>provide, deliver, support, maintain, and improve the Services;</li>
+    <li>manage our client, supplier, and prospect relationships, including contracts and invoicing;</li>
+    <li>communicate with you about your enquiry, engagement, or service-related matters;</li>
+    <li>operate, secure, and improve the Site (including diagnosing problems and preventing abuse);</li>
+    <li>comply with legal obligations and enforce our agreements; and</li>
+    <li>establish, exercise, or defend legal claims and protect our rights, property, and safety and those of others.</li>
+  </ul>
+  <p>We do not use your personal information for automated decision-making that produces legal or similarly significant effects about you, and we do not use it for third-party advertising.</p>
+
+  <h2 id="bases"><span class="nz">5</span>Legal bases for processing</h2>
+  <p>Where the EU/UK GDPR or similar laws apply, we rely on one or more of the following legal bases: (a) your <strong>consent</strong>; (b) the <strong>performance of a contract</strong> with you or steps taken at your request before entering a contract; (c) our <strong>legitimate interests</strong> in operating, securing, and growing our business in a balanced and proportionate way; and (d) <strong>compliance with a legal obligation</strong>. Where we rely on consent, you may withdraw it at any time (see <a href="#rights">Your privacy rights</a>).</p>
+
+  <h2 id="disclose"><span class="nz">6</span>How we disclose information</h2>
+  <p>We do not sell your personal information. We disclose personal information only as described below:</p>
+  <ul>
+    <li><strong>Service providers (processors).</strong> Trusted vendors who process information on our behalf and under contract — for example, website hosting, business email and productivity, scheduling, and customer-relationship management. They may only use the information to provide services to us.</li>
+    <li><strong>Professional advisors.</strong> Lawyers, accountants, auditors, and insurers, where reasonably necessary.</li>
+    <li><strong>Legal, compliance &amp; safety.</strong> Where required by law, regulation, legal process, or governmental request, or to protect the rights, property, or safety of Falcon Intelligence Group, our clients, or others.</li>
+    <li><strong>Business transfers.</strong> In connection with a merger, acquisition, financing, reorganisation, or sale of assets, subject to appropriate confidentiality protections.</li>
+    <li><strong>With your direction or consent.</strong> When you ask us to share information or otherwise agree to its disclosure.</li>
   </ul>
 
-  <h2>4. Sharing</h2>
-  <p>We do not sell or rent personal data. We share information only with service providers who help us operate (e.g., email and scheduling), under confidentiality obligations, or where required by law.</p>
+  <h2 id="selling"><span class="nz">7</span>We do not sell your personal information</h2>
+  <p>We do not sell your personal information, and we do not “share” it for cross-context behavioural advertising, as those terms are defined under applicable U.S. state privacy laws. We have not done so in the preceding twelve months.</p>
 
-  <h2>5. Retention</h2>
-  <p>We keep enquiry and client information only as long as needed for the purposes above or as required by law, then delete or anonymise it.</p>
+  <h2 id="cookies"><span class="nz">8</span>Cookies &amp; tracking technologies</h2>
+  <p>The Site is intentionally privacy-preserving. It does not use advertising cookies, cross-site tracking pixels, or third-party profiling analytics. Any cookies or local-storage values we use are strictly necessary to operate the Site (for example, remembering your selected colour theme). Because we do not engage in cross-site tracking, we treat browser “Do Not Track” and Global Privacy Control signals consistently with this no-tracking approach.</p>
 
-  <h2>6. Your rights</h2>
-  <p>Depending on where you live (including under the EU/EEA GDPR), you may have the right to access, correct, delete, or port your personal data, and to object to or restrict certain processing. To exercise any of these, contact us at <a href="mailto:m@adamas-project.com">m@adamas-project.com</a>.</p>
+  <h2 id="retention"><span class="nz">9</span>Data retention</h2>
+  <p>We retain personal information only for as long as necessary for the purposes set out in this Policy — including to provide the Services, maintain our business relationship, and meet legal, tax, accounting, or reporting requirements — after which we delete or anonymise it. Retention periods vary by the type of information and the context in which it was collected.</p>
 
-  <h2>7. Security</h2>
-  <p>We use reasonable technical and organisational measures to protect personal data. No method of transmission or storage is completely secure, but our local-first architecture is designed to minimise the data that ever leaves your control.</p>
+  <h2 id="security"><span class="nz">10</span>Security</h2>
+  <p>We maintain reasonable administrative, technical, and organisational measures designed to protect personal information against unauthorised access, loss, misuse, or alteration. Our local-first architecture is itself a privacy and security feature: it minimises the personal and proprietary data that ever leaves your control. No method of transmission or storage is completely secure, and we cannot guarantee absolute security.</p>
 
-  <h2>8. Changes</h2>
-  <p>We may update this policy from time to time. Material changes will be reflected by the “Last updated” date above.</p>
+  <h2 id="transfers"><span class="nz">11</span>International data transfers</h2>
+  <p>We are based in the United States and may process personal information in the United States and other countries where we or our service providers operate. These countries may have data-protection laws that differ from those in your jurisdiction. Where we transfer personal data from the EEA, the United Kingdom, or Switzerland to a country not recognised as providing an adequate level of protection, we use appropriate safeguards such as the European Commission’s Standard Contractual Clauses (and the UK Addendum), together with supplementary measures where required.</p>
 
-  <h2>9. Contact</h2>
-  <p>Falcon Intelligence Group LLC · <a href="mailto:m@adamas-project.com">m@adamas-project.com</a></p>
+  <h2 id="children"><span class="nz">12</span>Children’s privacy</h2>
+  <p>The Services are intended for businesses and are not directed to children. We do not knowingly collect personal information from children under 16. If you believe a child has provided us with personal information, please contact us and we will take appropriate steps to delete it.</p>
+
+  <h2 id="thirdparty"><span class="nz">13</span>Third-party services &amp; links</h2>
+  <p>The Site and Services may reference or interoperate with third-party tools — including, in your own environment, software such as Obsidian and the Hermes AI agent on which ADAMAS is built. Those tools are provided by their respective owners and are governed by their own terms and privacy practices. We are not responsible for the content or privacy practices of third-party sites or services. We encourage you to review their policies.</p>
+
+  <h2 id="rights"><span class="nz">14</span>Your privacy rights</h2>
+  <p>Subject to applicable law, you may have the right to access, correct, update, delete, or obtain a copy of your personal information; to object to or restrict certain processing; to withdraw consent; and to lodge a complaint with a regulator. Region-specific rights are described in the <a href="#us">U.S. state privacy notice</a> and the <a href="#eea">EEA, UK &amp; Switzerland notice</a> below. To exercise any right, contact us using the details in <a href="#contact">How to contact us</a>; we will respond within the timeframes required by applicable law and will not discriminate against you for exercising your rights.</p>
 
   <hr>
+
+  <h2 id="us"><span class="nz">★</span>U.S. State Privacy Notice</h2>
+  <p>This section provides additional information for residents of U.S. states with comprehensive privacy laws, including <strong>California</strong> (CCPA/CPRA) and states such as <strong>Virginia, Colorado, Connecticut, Utah, Texas, Oregon</strong>, and others. It supplements the rest of this Policy.</p>
+  <h3>Categories of personal information</h3>
+  <p>In the past twelve months we may have collected the following categories of personal information (as defined under California law):</p>
+  <table>
+    <thead><tr><th>Category</th><th>Collected</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td>Identifiers (name, email, phone, IP address)</td><td>Yes</td><td>Communication, service delivery, security</td></tr>
+      <tr><td>Commercial information (services discussed/purchased, billing contact)</td><td>Yes</td><td>Contracts, invoicing, support</td></tr>
+      <tr><td>Internet/network activity (server logs)</td><td>Yes</td><td>Site security and reliability</td></tr>
+      <tr><td>Professional/employment information (company, role)</td><td>Yes</td><td>Relationship management, qualification</td></tr>
+      <tr><td>Communications content (your messages to us)</td><td>Yes</td><td>Responding to and serving you</td></tr>
+      <tr><td>Sensitive personal information</td><td>No</td><td>Not intentionally collected</td></tr>
+    </tbody>
+  </table>
+  <p>We collect these from the sources described in <a href="#sources">Sources of information</a> and use and disclose them for the purposes described in <a href="#use">How we use information</a> and <a href="#disclose">How we disclose information</a>. We do <strong>not</strong> sell personal information or share it for cross-context behavioural advertising, and we do not use or disclose sensitive personal information beyond the purposes permitted by law.</p>
+  <h3>Your rights</h3>
+  <ul>
+    <li><strong>Know / access</strong> the personal information we have collected about you and how we use and disclose it.</li>
+    <li><strong>Correct</strong> inaccurate personal information.</li>
+    <li><strong>Delete</strong> personal information, subject to legal exceptions.</li>
+    <li><strong>Opt out</strong> of any “sale” or “sharing” (note: we do not sell or share).</li>
+    <li><strong>Non-discrimination</strong> for exercising your rights.</li>
+  </ul>
+  <h3>How to exercise your rights</h3>
+  <p>Submit a request by emailing <a href="mailto:m@adamas-project.com">m@adamas-project.com</a> with the subject line “Privacy Request.” We will verify your request using the information we hold and respond within the period required by law. You may use an authorised agent to submit a request on your behalf, subject to verification. If we decline a request, you may appeal by replying to our response; we will inform you of the outcome and, where applicable, how to contact your state attorney general.</p>
+
+  <hr>
+
+  <h2 id="eea"><span class="nz">★</span>EEA, UK &amp; Switzerland Privacy Notice</h2>
+  <p>If you are located in the European Economic Area, the United Kingdom, or Switzerland, the following applies in addition to the rest of this Policy.</p>
+  <div class="kv">
+    <dt>Data controller</dt><dd>Falcon Intelligence Group LLC, 8 The Green, Suite B, Dover, DE 19901, USA</dd>
+    <dt>Contact</dt><dd><a href="mailto:m@adamas-project.com">m@adamas-project.com</a></dd>
+    <dt>Legal bases</dt><dd>Consent; performance of a contract; legitimate interests; legal obligation (see §5)</dd>
+  </div>
+  <h3>Your rights</h3>
+  <p>Subject to conditions and exemptions under applicable law, you have the right to:</p>
+  <ul>
+    <li>request <strong>access</strong> to your personal data;</li>
+    <li>request <strong>rectification</strong> of inaccurate or incomplete data;</li>
+    <li>request <strong>erasure</strong> (“right to be forgotten”);</li>
+    <li>request <strong>restriction</strong> of processing;</li>
+    <li><strong>object</strong> to processing based on legitimate interests or direct marketing;</li>
+    <li>request <strong>data portability</strong>;</li>
+    <li><strong>withdraw consent</strong> at any time, without affecting prior processing; and</li>
+    <li>lodge a <strong>complaint</strong> with your local supervisory authority (in the UK, the Information Commissioner’s Office).</li>
+  </ul>
+  <h3>International transfers</h3>
+  <p>As described in §11, where we transfer your personal data outside the EEA, UK, or Switzerland to a country without an adequacy decision, we rely on appropriate safeguards such as the Standard Contractual Clauses (with the UK Addendum) and supplementary measures. You may request a copy of the relevant safeguards using the contact details above.</p>
+
+  <hr>
+
+  <h2 id="changes"><span class="nz">17</span>Changes to this Policy</h2>
+  <p>We may update this Policy from time to time to reflect changes in our practices, technology, or legal requirements. When we do, we will revise the “Last updated” date above and, where appropriate, provide additional notice. Your continued use of the Site or Services after an update indicates your acceptance of the revised Policy.</p>
+
+  <h2 id="contact"><span class="nz">18</span>How to contact us</h2>
+  <p>If you have questions about this Policy or wish to exercise your privacy rights, please contact us:</p>
+  <div class="kv">
+    <dt>Entity</dt><dd>Falcon Intelligence Group LLC</dd>
+    <dt>Postal address</dt><dd>8 The Green, Suite B, Dover, DE 19901, United States</dd>
+    <dt>Email</dt><dd><a href="mailto:m@adamas-project.com">m@adamas-project.com</a></dd>
+  </div>
+
   <div class="ftr">© 2026 Falcon Intelligence Group LLC. All rights reserved. · <a href="terms.html">Terms of Use</a> · <a href="index.html">Home</a></div>
 </div>
 </body>
