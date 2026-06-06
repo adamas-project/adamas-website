@@ -653,49 +653,55 @@
   </footer>
 
   <script>
-    // ---------- theme switching ----------
     const root = document.documentElement;
-    const btns = document.querySelectorAll('.theme-btn');
-    function applyTheme(t) {
-      root.setAttribute('data-theme', t);
-      try { localStorage.setItem('adamas-theme', t); } catch (e) {}
-      btns.forEach(b => b.setAttribute('aria-pressed', String(b.dataset.setTheme === t)));
-      if (t === 'matrix') startRain(); else stopRain();
-    }
-    btns.forEach(b => b.addEventListener('click', () => applyTheme(b.dataset.setTheme)));
-    // sync buttons with the theme set pre-paint
-    applyTheme(root.getAttribute('data-theme') || 'dark');
 
-    // ---------- scroll reveal ----------
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach((e, i) => {
-        if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('vis'), (i % 6) * 60);
-          obs.unobserve(e.target);
+    // ---------- scroll reveal (set up first & independently so nothing can block it) ----------
+    (function () {
+      try {
+        var fades = document.querySelectorAll('.fade');
+        if ('IntersectionObserver' in window) {
+          var obs = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e, i) {
+              if (e.isIntersecting) {
+                setTimeout(function () { e.target.classList.add('vis'); }, (i % 6) * 60);
+                obs.unobserve(e.target);
+              }
+            });
+          }, { threshold: 0.08, rootMargin: '0px 0px -5% 0px' });
+          fades.forEach(function (el) { if (!el.classList.contains('vis')) obs.observe(el); });
+        } else {
+          fades.forEach(function (el) { el.classList.add('vis'); });
         }
+      } catch (err) {
+        // never leave content hidden if the observer fails
+        document.querySelectorAll('.fade').forEach(function (el) { el.classList.add('vis'); });
+      }
+    })();
+
+    // ---------- mobile menu ----------
+    try {
+      document.querySelectorAll('#navlinks a').forEach(function (a) {
+        a.addEventListener('click', function () { document.getElementById('navlinks').classList.remove('open'); });
       });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.fade:not(.vis)').forEach(el => obs.observe(el));
+    } catch (e) {}
 
-    // close mobile menu on link tap
-    document.querySelectorAll('#navlinks a').forEach(a =>
-      a.addEventListener('click', () => document.getElementById('navlinks').classList.remove('open')));
-
-    // ---------- matrix rain ----------
-    let rainId = null, cv = document.getElementById('rain'), ctx = cv.getContext('2d'), cols = [], fontSize = 16;
-    const glyphs = 'アカサタナハマヤラワABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&'.split('');
+    // ---------- matrix rain (declared BEFORE theme code calls start/stopRain) ----------
+    var cv = document.getElementById('rain');
+    var ctx = cv ? cv.getContext('2d') : null;
+    var rainId = null, cols = [], fontSize = 16;
+    var glyphs = 'アカサタナハマヤラワABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&'.split('');
     function sizeRain() {
       cv.width = window.innerWidth; cv.height = window.innerHeight;
-      const n = Math.floor(cv.width / fontSize);
-      cols = new Array(n).fill(0).map(() => Math.random() * cv.height / fontSize);
+      var n = Math.floor(cv.width / fontSize);
+      cols = new Array(n).fill(0).map(function () { return Math.random() * cv.height / fontSize; });
     }
     function drawRain() {
       ctx.fillStyle = 'rgba(0, 6, 0, 0.08)';
       ctx.fillRect(0, 0, cv.width, cv.height);
       ctx.font = fontSize + "px 'JetBrains Mono', monospace";
-      for (let i = 0; i < cols.length; i++) {
-        const ch = glyphs[Math.floor(Math.random() * glyphs.length)];
-        const x = i * fontSize, y = cols[i] * fontSize;
+      for (var i = 0; i < cols.length; i++) {
+        var ch = glyphs[Math.floor(Math.random() * glyphs.length)];
+        var x = i * fontSize, y = cols[i] * fontSize;
         ctx.fillStyle = Math.random() > 0.975 ? '#c6ffce' : '#00ff41';
         ctx.fillText(ch, x, y);
         if (y > cv.height && Math.random() > 0.975) cols[i] = 0;
@@ -704,19 +710,32 @@
       rainId = requestAnimationFrame(drawRain);
     }
     function startRain() {
-      if (rainId || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (!ctx || rainId || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       sizeRain(); rainId = requestAnimationFrame(drawRain);
       window.addEventListener('resize', sizeRain);
     }
     function stopRain() {
       if (rainId) { cancelAnimationFrame(rainId); rainId = null; }
       window.removeEventListener('resize', sizeRain);
-      ctx.clearRect(0, 0, cv.width, cv.height);
+      if (ctx) ctx.clearRect(0, 0, cv.width, cv.height);
     }
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener('visibilitychange', function () {
       if (document.hidden) stopRain();
       else if (root.getAttribute('data-theme') === 'matrix') startRain();
     });
+
+    // ---------- theme switching (last; rain helpers now exist) ----------
+    try {
+      var btns = document.querySelectorAll('.theme-btn');
+      var applyTheme = function (t) {
+        root.setAttribute('data-theme', t);
+        try { localStorage.setItem('adamas-theme', t); } catch (e) {}
+        btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setTheme === t)); });
+        if (t === 'matrix') startRain(); else stopRain();
+      };
+      btns.forEach(function (b) { b.addEventListener('click', function () { applyTheme(b.dataset.setTheme); }); });
+      applyTheme(root.getAttribute('data-theme') || 'dark');
+    } catch (e) {}
   </script>
 </body>
 </html>
