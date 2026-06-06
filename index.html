@@ -345,6 +345,18 @@
     }
     .final h2 { font-family: var(--font-d); font-weight: 700; font-size: clamp(2.1rem,6vw,3rem); line-height: 0.95; letter-spacing: -0.01em; text-transform: uppercase; color: var(--text); }
     .final p { color: var(--muted); font-size: 17px; margin: 18px auto 0; max-width: 500px; }
+    /* lead capture form */
+    .lead-form { display: grid; gap: 12px; max-width: 540px; margin: 26px auto 0; text-align: left; }
+    .lf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .lead-form input, .lead-form textarea { width: 100%; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 13px 14px; color: var(--text); font-family: var(--font-b); font-size: 14px; transition: border-color .2s; }
+    .lead-form input::placeholder, .lead-form textarea::placeholder { color: var(--faint); }
+    .lead-form input:focus, .lead-form textarea:focus { outline: none; border-color: var(--accent); }
+    .lead-form textarea { resize: vertical; }
+    .lead-form button { justify-content: center; width: 100%; margin-top: 2px; }
+    .lf-note { font-size: 11.5px; color: var(--faint); text-align: center; margin-top: -2px; }
+    .lf-ok { display: none; max-width: 540px; margin: 26px auto 0; background: rgba(94,204,115,.08); border: 1px solid rgba(94,204,115,.3); border-radius: 14px; padding: 24px; color: var(--text); }
+    .cal-cta { margin-top: 18px; font-size: 14px; color: var(--muted); }
+    @media (max-width: 540px) { .lf-row { grid-template-columns: 1fr; } }
     .final .hero-cta { margin-top: 32px; }
     .signature { margin-top: 40px; font-family: var(--font-d); font-weight: 700; font-size: 1.3rem; color: var(--text); letter-spacing: -0.01em; }
     .signature span { display: block; font-family: var(--font-b); font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-top: 6px; }
@@ -699,16 +711,47 @@
       <div class="wrap">
         <div class="final-card fade">
           <h2>Let's build something that lasts.</h2>
-          <p>Start with a Clarity Audit. We'll map your knowledge trap and show you exactly what ADAMAS would preserve — before you commit to a build.</p>
-          <div class="hero-cta">
-            <a class="btn btn-gold" href="mailto:m@adamas-project.com?subject=Clarity%20Audit%20Inquiry&body=Hi%20Massimo%2C%20I'd%20like%20to%20book%20a%20Clarity%20Audit%20for%20my%20company.">Book your Clarity Audit →</a>
-            <a class="btn btn-ghost" href="mailto:m@adamas-project.com">Ask a question first</a>
-          </div>
+          <p>Start with a Clarity Audit — a 30-minute call, no obligation. Share your details and we'll be in touch within one business day.</p>
+          <form name="clarity-audit" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="lead-form" id="leadForm">
+            <input type="hidden" name="form-name" value="clarity-audit">
+            <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
+            <div class="lf-row">
+              <input name="name" type="text" required placeholder="Full name" autocomplete="name">
+              <input name="company" type="text" placeholder="Company" autocomplete="organization">
+            </div>
+            <div class="lf-row">
+              <input name="email" type="email" required placeholder="Work email" autocomplete="email">
+              <input name="phone" type="tel" required placeholder="Phone number" autocomplete="tel">
+            </div>
+            <textarea name="message" rows="3" placeholder="What knowledge trap are you trying to solve? (optional)"></textarea>
+            <button class="btn btn-gold" type="submit">Request your Clarity Audit →</button>
+            <p class="lf-note">Local-first &amp; private. We'll never share your details.</p>
+          </form>
+          <div class="lf-ok" id="leadOk"><strong>Thanks — got it.</strong> We'll reply within one business day to set up your 30-minute Clarity Audit.</div>
           <div class="signature">Massimo Sahin<span>Founder · Falcon Intelligence Group</span></div>
         </div>
       </div>
     </section>
   </main>
+
+  <script>
+    (function () {
+      var lf = document.getElementById('leadForm');
+      if (!lf) return;
+      lf.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var body = new URLSearchParams(new FormData(lf)).toString();
+        function done() {
+          lf.style.display = 'none';
+          var ok = document.getElementById('leadOk');
+          ok.style.display = 'block';
+          ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
+          .then(done).catch(done);
+      });
+    })();
+  </script>
 
   <!-- ============ FOOTER ============ -->
   <footer class="ftr">
