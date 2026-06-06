@@ -198,7 +198,24 @@
     .sec-head.center { margin-left: auto; margin-right: auto; text-align: center; }
     .sec-head p { color: var(--muted); font-size: 17px; margin-top: 16px; line-height: 1.55; }
 
-    section { padding: 80px 0; border-top: 1px solid var(--border-2); }
+    /* Apple-style section tiles: translucent boxes (rain shows through), ~3mm gap "lines" between */
+    section { padding: 0 16px; margin: 12px 0; scroll-margin-top: 84px; }
+    section:not(.final) > .wrap {
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 62px 48px;
+      background: rgba(150,150,160,0.04);
+    }
+    /* a slightly different colour touch per box — kept faint so the falling code stays visible */
+    section:nth-of-type(1) > .wrap { background: rgba(201,168,76,0.05); }
+    section:nth-of-type(2) > .wrap { background: rgba(112,144,176,0.055); }
+    section:nth-of-type(3) > .wrap { background: rgba(77,150,160,0.05); }
+    section:nth-of-type(4) > .wrap { background: rgba(212,127,32,0.045); }
+    section:nth-of-type(5) > .wrap { background: rgba(150,152,165,0.05); }
+    section:nth-of-type(6) > .wrap { background: rgba(184,160,200,0.05); }
+    section:nth-of-type(7) > .wrap { background: rgba(201,168,76,0.055); }
+    section:nth-of-type(8) > .wrap { background: rgba(112,144,176,0.05); }
+    [data-theme="matrix"] section:not(.final) > .wrap { background: rgba(0,255,65,0.045); border-color: rgba(0,255,65,0.16); }
 
     /* ============ HERO ============ */
     .hero { text-align: center; padding: 88px 0 74px; }
@@ -317,11 +334,26 @@
     .signature { margin-top: 40px; font-family: var(--font-d); font-weight: 700; font-size: 1.3rem; color: var(--text); letter-spacing: -0.01em; }
     .signature span { display: block; font-family: var(--font-b); font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); margin-top: 6px; }
 
-    /* ============ FOOTER ============ */
-    .ftr { border-top: 1px solid var(--border-2); padding: 40px 0; }
-    .ftr-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
-    .ftr-brand { font-family: var(--font-d); font-weight: 600; font-size: 18px; color: var(--text); letter-spacing: -0.01em; }
-    .ftr-meta { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
+    /* ============ FOOTER (Apple-style) ============ */
+    .ftr { border-top: 1px solid var(--border-2); background: var(--surface); }
+    .ftr-in { max-width: var(--maxw); margin: 0 auto; padding: 34px 24px 30px; }
+    .ftr-legal { font-size: 11px; line-height: 1.5; color: var(--faint); display: grid; gap: 9px; max-width: 1000px; }
+    .ftr-legal p { margin: 0; }
+    .ftr-rule { border: 0; border-top: 1px solid var(--border-2); margin: 20px 0; }
+    .ftr-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px 24px; }
+    .ftr-col h5 { font-size: 12px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; margin: 0 0 9px; }
+    .ftr-col a { display: block; font-size: 12.5px; color: var(--muted); padding: 4px 0; transition: color .2s; }
+    .ftr-col a:hover { color: var(--text); }
+    .ftr-bottom { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; justify-content: space-between; }
+    .ftr-bottom .cpy { font-size: 11.5px; color: var(--faint); }
+    .ftr-links { display: flex; flex-wrap: wrap; align-items: center; }
+    .ftr-links a { font-size: 11.5px; color: var(--muted); padding: 0 14px; transition: color .2s; }
+    .ftr-links a:first-child { padding-left: 0; }
+    .ftr-links a + a { border-left: 1px solid var(--border); }
+    .ftr-links a:hover { color: var(--text); }
+    .ftr-region { font-size: 11.5px; color: var(--faint); }
+    @media (max-width: 760px) { .ftr-cols { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 440px) { .ftr-cols { grid-template-columns: 1fr; } }
 
     /* ============ REVEAL ============ */
     .fade { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
@@ -343,7 +375,8 @@
     }
     @media (max-width: 540px) {
       .wrap { padding: 0 18px; }
-      section { padding: 60px 0; }
+      section { padding: 0 10px; margin: 10px 0; }
+      section:not(.final) > .wrap { padding: 38px 22px; border-radius: 18px; }
       .is-card, .final-card { padding: 30px 22px; }
       .schema { grid-template-columns: 1fr; }
       .brand-by { display: none; }
@@ -644,9 +677,56 @@
 
   <!-- ============ FOOTER ============ -->
   <footer class="ftr">
-    <div class="wrap ftr-inner">
-      <span class="ftr-brand">ADAMAS</span>
-      <span class="ftr-meta">By Falcon Intelligence Group · adamas-project.com</span>
+    <div class="ftr-in">
+      <div class="ftr-legal">
+        <p>ADAMAS™ — All Decisions And Memory Archive System — and the Hermes agent are products of Falcon Intelligence Group LLC.</p>
+        <p>Local-first by design: your vault and decision ledger run on hardware you own. ADAMAS does not send your company's knowledge to third-party clouds — optional hybrid cloud routing is used only for tasks you explicitly approve.</p>
+        <p>Pricing shown is indicative and may vary with scope. The Clarity Audit fee is credited toward your build if you proceed. Client hardware (e.g., Mac Mini M4) is purchased and owned by the client.</p>
+        <p>Market and industry figures cited on this site are drawn from third-party research and are provided for context only; they are not a guarantee of results.</p>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-cols">
+        <div class="ftr-col">
+          <h5>ADAMAS</h5>
+          <a href="#problem">The Problem</a>
+          <a href="#what">What It Is</a>
+          <a href="#how">How It Works</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Free Resources</h5>
+          <a href="#book">Knowledge-Trap Scorecard</a>
+          <a href="#book">Decision Ledger Starter Kit</a>
+          <a href="#book">Local-First AI Cost Calculator</a>
+          <a href="#book">Founder Succession Checklist</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Company</h5>
+          <a href="#top">About ADAMAS</a>
+          <a href="mailto:m@adamas-project.com">Falcon Intelligence Group</a>
+          <a href="mailto:m@adamas-project.com">Contact</a>
+          <a href="#why">Why Local-First</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Get Started</h5>
+          <a href="#book">Book a Clarity Audit</a>
+          <a href="mailto:m@adamas-project.com">m@adamas-project.com</a>
+          <a href="#compare">Why ADAMAS</a>
+          <a href="privacy.html">Privacy</a>
+        </div>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-bottom">
+        <span class="cpy">Copyright © 2026 Falcon Intelligence Group LLC. All rights reserved. ADAMAS™ is a trademark of Falcon Intelligence Group LLC.</span>
+        <nav class="ftr-links" aria-label="Legal">
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Use</a>
+          <a href="terms.html">Legal</a>
+          <a href="#top">Site Map</a>
+        </nav>
+        <span class="ftr-region">Falcon Intelligence Group LLC · United States</span>
+      </div>
     </div>
   </footer>
 
