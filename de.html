@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADAMAS — Das Entscheidungs-Ledger für Gründer | Falcon Intelligence Group</title>
+  <meta name="description" content="ADAMAS ist das Entscheidungs-Ledger, das verstreutes Unternehmenswissen in ein wachsendes Unternehmensgehirn verwandelt. Local-First, entscheidungs-first, für inhabergeführte Unternehmen von 2 bis 5 Mio. $.">
+  <!-- System fonts (Apple SF Pro / SF Mono) — no web fonts required -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    // Set theme before paint to avoid flash-of-wrong-theme
+    (function () {
+      try {
+        var t = localStorage.getItem('adamas-theme');
+        if (!t) t = 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="glow"></div>
+  <div class="grain"></div>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="#top" class="brand">
+        <span class="brand-name">ADAMAS</span>
+        <span class="brand-by">von Falcon Intelligence Group</span>
+      </a>
+      <div class="nav-right">
+        <div class="theme-switch" role="group" aria-label="Farbschema">
+          <button class="theme-btn" data-set-theme="dark" aria-pressed="true" title="Dunkel">☾</button>
+          <button class="theme-btn" data-set-theme="light" aria-pressed="false" title="Hell">☀</button>
+          <button class="theme-btn" data-set-theme="matrix" aria-pressed="false" title="Matrix" style="font-weight:700">⠿</button>
+        </div>
+        <div class="nav-links" id="navlinks">
+          <a class="lnk" href="#problem">Das Problem</a>
+          <a class="lnk" href="#what">Was es ist</a>
+          <a class="lnk" href="#how">So funktioniert's</a>
+          <a class="lnk" href="#pricing">Preise</a>
+          <a class="lnk" href="#resources">Ressourcen</a>
+          <a class="lnk lang-link" href="index.html" title="English">EN</a>
+          <a class="btn btn-gold" href="#book">Clarity-Audit buchen</a>
+        </div>
+        <button class="nav-toggle" aria-label="Menü" onclick="document.getElementById('navlinks').classList.toggle('open')">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <header class="hero wrap">
+      <span class="eyebrow fade vis"><span class="dot"></span> Wissenssystem · Local-First · Entscheidungs-First</span>
+      <h1 class="fade vis">Das beste Denken Ihres Unternehmens sollte nicht in einem Kopf stecken.</h1>
+      <p class="hero-sub fade vis">ADAMAS ist das Entscheidungs-Ledger, das verstreutes Unternehmenswissen in ein wachsendes Unternehmensgehirn verwandelt — es hält fest, <em>warum</em> Entscheidungen getroffen wurden, wer sie traf und in welchem Kontext.</p>
+      <p class="hero-matrix fade vis"><b>Befreien Sie den Verstand Ihres Unternehmens.</b> Behalten Sie das Wissen — verlieren Sie den Engpass.</p>
+      <div class="hero-cta fade vis">
+        <a class="btn btn-gold" href="#book">Clarity-Audit buchen →</a>
+        <a class="btn btn-ghost" href="#how">So funktioniert's</a>
+      </div>
+      <p class="hero-note fade vis">Für inhabergeführte Unternehmen, die von 2 bis 5 Mio. $ skalieren. Läuft auf Ihrer Hardware — nicht in der Cloud.</p>
+      <p class="acronym fade"><b>A</b>ll <b>D</b>ecisions <b>A</b>nd <b>M</b>emory <b>A</b>rchive <b>S</b>ystem</p>
+    </header>
+
+    <!-- ============ PROBLEM ============ -->
+    <section id="problem">
+      <div class="wrap">
+        <div class="sec-head fade">
+          <div class="kicker">Das Problem</div>
+          <h2 class="title">Das wertvollste Gut Ihres Unternehmens steckt <em>in wenigen Köpfen fest.</em></h2>
+          <p>Es lebt in Slack-Threads, auf Whiteboards, in Gesprächsaufzeichnungen und im Gedächtnis des Gründers. Heutige Tools speichern Informationen — keines erfasst die Begründung hinter der Entscheidung.</p>
+        </div>
+        <div class="prob-grid">
+          <div class="prob fade">
+            <div class="prob-ic">🚪</div>
+            <h4>Wenn Menschen gehen</h4>
+            <p>Kritischer Kontext geht zur Tür hinaus. Die Einarbeitung der nächsten Person dauert Monate, weil nie etwas strukturiert festgehalten wurde.</p>
+          </div>
+          <div class="prob fade">
+            <div class="prob-ic">❓</div>
+            <h4>Wenn Investoren nach dem „Warum“ fragen</h4>
+            <p>„Warum haben Sie sich für X statt Y entschieden?“ Es gibt keine Aufzeichnung der Entscheidung, des Kontexts oder wer sie traf. Die Begründung ist verloren.</p>
+          </div>
+          <div class="prob fade">
+            <div class="prob-ic">🧱</div>
+            <h4>Wenn der Gründer der Engpass ist</h4>
+            <p>Zu klein für einen COO, zu groß, um alles selbst zu machen. Sie können nicht delegieren, weil das Wissen nie aus Ihrem Kopf extrahiert wurde.</p>
+          </div>
+          <div class="prob fade">
+            <div class="prob-ic">💸</div>
+            <h4>Wenn Entscheidungen wiederholt werden</h4>
+            <p>Im Ingenieurwesen und in der Technik kann ein einziger fehlender Entscheidungskontext 50.000–500.000 $ an Nacharbeit kosten. Entscheidungs-Amnesie ist teuer.</p>
+          </div>
+          <div class="prob-quote fade">
+            <p>„Nicht was wir als Nächstes tun sollten — sondern was wir entschieden haben, und warum.“</p>
+            <p class="sub">Wir können die Zukunft nicht vorhersagen — aber wenn wir unsere eigene Geschichte kennen, können wir unsere vergangenen Entscheidungen lesen und uns mit strategischer Sicherheit durch die Gegenwart bewegen.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WHAT IT IS ============ -->
+    <section id="what">
+      <div class="wrap">
+        <div class="sec-head fade">
+          <div class="kicker">Was ADAMAS ist</div>
+          <h2 class="title">Keine Notiz-App. Kein CRM. Kein Chatbot.</h2>
+        </div>
+        <div class="isnt fade">
+          <span>Notiz-App</span>
+          <span>CRM</span>
+          <span>Projekt-Tool</span>
+          <span>Generischer KI-Chatbot</span>
+          <span>Cloud-Abo</span>
+        </div>
+        <div class="is-card fade">
+          <p class="lead">Ein <b>Entscheidungs-Ledger</b> — das erste System, das gezielt erfasst, <b>warum</b> Entscheidungen getroffen wurden, sie strukturiert, verknüpft und genau die Geschäftsunterlagen erzeugt, die Ihr Unternehmen in jeder Wachstumsphase braucht.</p>
+          <div class="schema">
+            <div class="sc"><div class="sc-ic">🧠</div><div class="sc-n">Kontext</div><div class="sc-d">Die Situation zum Zeitpunkt der Entscheidung</div></div>
+            <div class="sc"><div class="sc-ic">⚖️</div><div class="sc-n">Entscheidung</div><div class="sc-d">Die exakte Wahl und wer entschied</div></div>
+            <div class="sc"><div class="sc-ic">🔗</div><div class="sc-n">Verknüpft</div><div class="sc-d">Bidirektionale Verknüpfungen über alle Entscheidungen</div></div>
+            <div class="sc"><div class="sc-ic">🏷️</div><div class="sc-n">Bereich</div><div class="sc-d">Personal · Vertrieb · Produkt · Finanzen · Betrieb</div></div>
+            <div class="sc"><div class="sc-ic">🧬</div><div class="sc-n">Assets</div><div class="sc-d">Phasengerechte Dokumente, automatisch erzeugt</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section id="how">
+      <div class="wrap">
+        <div class="sec-head center fade">
+          <div class="kicker">So funktioniert's</div>
+          <h2 class="title">Drei Schritte. <em>Kein Aufwand für Sie.</em></h2>
+          <p>Wir begleiten Sie vom ersten Interview bis zur Live-Übergabe. Sie konfigurieren nichts und verwalten kein System — Sie bekommen eines zurück.</p>
+        </div>
+        <div class="steps">
+          <div class="step fade">
+            <div class="step-num">01</div>
+            <h4>Das Clarity-Audit</h4>
+            <div class="st">Wir kartieren Ihre Wissenslandschaft</div>
+            <p>Ein strukturierter Deep-Dive. Wir interviewen Sie und kartieren, wo kritisches Entscheidungswissen liegt — und wo es fehlt. Sie erhalten einen Klarheitsbericht. Das ist das Fundament für alles Weitere.</p>
+          </div>
+          <div class="step fade">
+            <div class="step-num">02</div>
+            <h4>Ihr Vault wird gebaut</h4>
+            <div class="st">Wir richten es auf Ihrer Hardware ein</div>
+            <p>Unser Team baut Ihren lokalen Vault und lädt das Entscheidungs-Ledger. Hermes — der KI-Agent, der ADAMAS antreibt — läuft lokal, rund um die Uhr, für ca. 2–3 $/Monat Strom. Keine Cloud-Abhängigkeit. Kein Abo-Schock.</p>
+          </div>
+          <div class="step fade">
+            <div class="step-num">03</div>
+            <h4>Das Ledger wächst</h4>
+            <div class="st">Es wird mit der Zeit immer wertvoller</div>
+            <p>Jede erfasste Entscheidung erweitert eine lebendige Wissensschicht. Jedes Asset — Einarbeitungsunterlagen, Einstellungs-Frameworks, Investorenmaterial — stammt aus derselben strukturierten Quelle. Der Burggraben um das Wissen Ihres Unternehmens wächst.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AUDIENCE ============ -->
+    <section id="who">
+      <div class="wrap">
+        <div class="aud-wrap">
+          <div class="fade">
+            <div class="kicker">Für wen</div>
+            <h2 class="title" style="margin-bottom:24px">Gebaut für Gründer, die <em>wissen, dass sie der Engpass sind.</em></h2>
+            <dl class="kv">
+              <dt>Segment</dt><dd>Inhabergeführte Dienstleister & SaaS-Unternehmen, 2–5 Mio. $ Umsatz</dd>
+              <dt>Team</dt><dd>5–50 Mitarbeitende, flache Hierarchie, Gründer noch operativ</dd>
+              <dt>Branchen</dt><dd>Ingenieurwesen, technische Dienstleistungen, spezialisiertes SaaS</dd>
+              <dt>Haltung</dt><dd>Pragmatisch, hype-skeptisch, will ein System — keinen Chatbot</dd>
+            </dl>
+          </div>
+          <div class="trigger-box fade">
+            <h4>Der Kaufauslöser</h4>
+            <ul>
+              <li>Eine Schlüsselperson geht — und ihr Wissen geht mit</li>
+              <li>Eine Einstellung scheitert, weil es nichts zum Einarbeiten gibt</li>
+              <li>Ein Investor fragt: „Warum haben Sie das entschieden?“</li>
+              <li>Der Gründer erkennt: Er kann sich selbst nicht skalieren</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WHY / COST ============ -->
+    <section id="why">
+      <div class="wrap">
+        <div class="sec-head center fade">
+          <div class="kicker">Warum Local-First</div>
+          <h2 class="title">Die Ökonomie der KI hat sich <em>gerade umgekehrt.</em></h2>
+          <p>Datenschutzbewusste Gründer misstrauen reinen Cloud-Tools für ihr Kern-IP. Bei ADAMAS ist der lokale Vault ein Feature — kein Kompromiss.</p>
+        </div>
+        <div class="cost">
+          <div class="cstat fade"><div class="big">$2–3</div><div class="lbl">pro Monat Strom, 24/7 lokal betrieben</div></div>
+          <div class="cstat fade"><div class="big">~80%</div><div class="lbl">der täglichen KI-Workflows lokal, keine Cloud-Rechnung</div></div>
+          <div class="cstat fade"><div class="big">$200–459</div><div class="lbl">typische monatliche Cloud-KI-Kosten, die ADAMAS ersetzt</div></div>
+        </div>
+        <div class="arb fade">
+          <p>Ein <b>Mac Mini M4</b> (499–699 $) ersetzt lokal <b>200–459 $/Monat</b> an Cloud-KI-Abos für den Großteil der täglichen Workflows. Das Wissen Ihres Unternehmens verlässt nie Ihre Hardware.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COMPARE ============ -->
+    <section id="compare">
+      <div class="wrap">
+        <div class="sec-head fade">
+          <div class="kicker">Warum ADAMAS gewinnt</div>
+          <h2 class="title">Entscheidungs-First, Local-First, adaptiv. <em>Wettbewerber können eines oder keines.</em></h2>
+        </div>
+        <div class="cmp-wrap fade">
+          <table class="cmp">
+            <thead>
+              <tr>
+                <th></th>
+                <th class="col-adamas">ADAMAS</th>
+                <th>Notion AI</th>
+                <th>ChatGPT</th>
+                <th>Berater</th>
+                <th>Obsidian</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><th>Erfasst Entscheidungsbegründung</th><td class="col-adamas yes">Ja</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td></tr>
+              <tr><th>Local-First (Ihre Hardware)</th><td class="col-adamas yes">Ja</td><td class="no">Nur Cloud</td><td class="no">Nur Cloud</td><td class="no">—</td><td class="yes">Ja</td></tr>
+              <tr><th>Dauerhafter Unternehmenskontext</th><td class="col-adamas yes">Ja</td><td class="no">Teilweise</td><td class="no">—</td><td class="no">—</td><td class="no">Manuell</td></tr>
+              <tr><th>Erzeugt phasengerechte Assets</th><td class="col-adamas yes">Ja</td><td class="no">—</td><td class="no">—</td><td class="no">Einmalig</td><td class="no">—</td></tr>
+              <tr><th>Wächst über die Zeit</th><td class="col-adamas yes">Ja</td><td class="no">—</td><td class="no">—</td><td class="no">Keine Speicherung</td><td class="no">Keine KI</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRICING ============ -->
+    <section id="pricing">
+      <div class="wrap">
+        <div class="sec-head center fade">
+          <div class="kicker">Angebot & Preise</div>
+          <h2 class="title">Beginnen Sie mit einem Audit. <em>Skalieren Sie zu einem System.</em></h2>
+          <p>Heute Done-for-You, mit klarem Weg zur Self-Service-Plattform. Transparente Preise, keine Überraschungen.</p>
+        </div>
+        <div class="price-grid">
+          <div class="pc feature fade">
+            <div class="pc-tag">Hier starten</div>
+            <div class="pc-name">Clarity-Audit</div>
+            <div class="pc-price">1.000 $</div>
+            <p class="pc-desc">Wir kartieren die Wissensfalle, interviewen Sie und liefern einen Klarheitsbericht.</p>
+            <span class="pc-badge">Wird auf Ihren Aufbau angerechnet</span>
+          </div>
+          <div class="pc fade">
+            <div class="pc-tag">Done-for-You</div>
+            <div class="pc-name">Der Aufbau</div>
+            <div class="pc-price">3.000 $ <small>einmalig</small></div>
+            <p class="pc-desc">Wir bauen den Vault, laden das Ledger und liefern ein laufendes System. Kein Aufwand für Sie.</p>
+          </div>
+          <div class="pc fade">
+            <div class="pc-tag">Laufend</div>
+            <div class="pc-name">Retainer</div>
+            <div class="pc-price">200 $ <small>/Mon.</small></div>
+            <p class="pc-desc">Optional. Laufende Verfeinerung, Ergänzungen und strategische Reviews während Sie wachsen.</p>
+          </div>
+          <div class="pc fade">
+            <div class="pc-tag">Demnächst</div>
+            <div class="pc-name">Self-Service</div>
+            <div class="pc-price">200 $ <small>/Mon.</small></div>
+            <p class="pc-desc">Daten hochladen; ADAMAS bewertet, ordnet, reichert an und aktualisiert Assets automatisch.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FAQ ============ -->
+    <section id="faq">
+      <div class="wrap">
+        <div class="sec-head center fade">
+          <div class="kicker">Ehrliche Antworten</div>
+          <h2 class="title">Die Fragen, die Gründer <em>wirklich stellen.</em></h2>
+        </div>
+        <div class="faq">
+          <details class="fade"><summary>Wir nutzen bereits Notion / Obsidian / Tabellen.</summary><p>Diese Tools speichern Informationen. ADAMAS erfasst die Begründung hinter der Entscheidung und erzeugt das nächste Asset automatisch. Das ist der Unterschied zwischen einem Aktenschrank und einem Betriebssystem.</p></details>
+          <details class="fade"><summary>Wir können doch alles aufschreiben.</summary><p>Das wissen Sie längst. Das Problem ist nicht das Aufschreiben — es ist das Strukturieren, Verknüpfen und Bereitstellen des richtigen Wissens im richtigen Moment. ADAMAS tut das automatisch.</p></details>
+          <details class="fade"><summary>Ist das nur KI-Hype?</summary><p>Die KI ist der Motor, nicht das Produkt. Das Produkt ist das Entscheidungs-Ledger — eine strukturierte, lokale Wissensschicht, die über die Zeit wächst, egal welches Modell sie antreibt.</p></details>
+          <details class="fade"><summary>Welche Hardware brauchen wir?</summary><p>Ein Mac Mini M4 (499–699 $) ist ideal, um Hermes rund um die Uhr zu betreiben. MacBook Air/Pro sowie ThinkPad/Surface werden ebenfalls unterstützt. Wir empfehlen ein hybrides Setup für insgesamt ca. 23 $/Monat.</p></details>
+          <details class="fade"><summary>Verlassen unsere Daten das Unternehmen?</summary><p>Nein. Der Vault ist Local-First und läuft auf Ihrer Hardware. Das ist der Punkt — Ihr wertvollstes IP bleibt im Haus, genau deshalb wählen datenschutzbewusste Gründer ADAMAS.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RESOURCES ============ -->
+    <section id="resources">
+      <div class="wrap">
+        <div class="sec-head center fade">
+          <div class="kicker">Kostenlose Ressourcen</div>
+          <h2 class="title">Werkzeuge, die Sie <em>heute</em> nutzen können.</h2>
+          <p>Praktische Ressourcen für Gründer, die wissen, dass sie der Engpass sind — ohne Anmeldung.</p>
+        </div>
+        <div class="res-grid">
+          <a class="res-card fade" href="scorecard.html"><div class="ic">🧭</div><h4>Wissensfallen-Scorecard</h4><p>Eine 2-minütige Selbsteinschätzung, die bewertet, wie abhängig Ihr Unternehmen vom Kopf des Gründers ist — mit den wichtigsten Lücken zuerst.</p><span class="go">Zur Selbsteinschätzung →</span></a>
+          <a class="res-card fade" href="calculator.html"><div class="ic">🧮</div><h4>Local-First-KI-Kostenrechner</h4><p>Sehen Sie, was Sie sparen, wenn KI lokal auf einem Mac Mini statt in Cloud-Abos läuft — Amortisation und 3-Jahres-Netto.</p><span class="go">Rechner öffnen →</span></a>
+          <a class="res-card fade" href="checklist.html"><div class="ic">✅</div><h4>Nachfolge-Checkliste für Gründer</h4><p>Was dokumentiert sein muss, damit Ihr Unternehmen den Weggang einer Schlüsselperson übersteht — und verkäuflich oder vererbbar ist.</p><span class="go">Checkliste öffnen →</span></a>
+          <a class="res-card fade" href="downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download><div class="ic">📦</div><h4>Decision-Ledger-Starterkit</h4><p>Ein einsatzbereiter Obsidian-Vault mit dem Entscheidungsschema und Beispielen. Erfassen Sie Ihre Begründungen ab heute.</p><span class="go">Kit herunterladen →</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="final" id="book">
+      <div class="wrap">
+        <div class="final-card fade">
+          <h2>Bauen wir etwas, das bleibt.</h2>
+          <p>Beginnen Sie mit einem Clarity-Audit — ein 30-minütiges Gespräch, unverbindlich. Hinterlassen Sie Ihre Daten und wir melden uns innerhalb eines Werktags.</p>
+          <form name="clarity-audit" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="lead-form" id="leadForm">
+            <input type="hidden" name="form-name" value="clarity-audit">
+            <input type="hidden" name="language" value="de">
+            <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
+            <div class="lf-row">
+              <input name="name" type="text" required placeholder="Vollständiger Name" autocomplete="name">
+              <input name="company" type="text" placeholder="Unternehmen" autocomplete="organization">
+            </div>
+            <div class="lf-row">
+              <input name="email" type="email" required placeholder="Geschäftliche E-Mail" autocomplete="email">
+              <input name="phone" type="tel" required placeholder="Telefonnummer" autocomplete="tel">
+            </div>
+            <textarea name="message" rows="3" placeholder="Welche Wissensfalle möchten Sie lösen? (optional)"></textarea>
+            <button class="btn btn-gold" type="submit">Clarity-Audit anfragen →</button>
+            <p class="lf-note">Local-First &amp; vertraulich. Wir geben Ihre Daten niemals weiter.</p>
+          </form>
+          <div class="lf-ok" id="leadOk"><strong>Danke — erhalten.</strong> Wir antworten innerhalb eines Werktags, um Ihr 30-minütiges Clarity-Audit zu vereinbaren.</div>
+          <div class="signature">Massimo Sahin<span>Gründer · Falcon Intelligence Group</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="ftr">
+    <div class="ftr-in">
+      <div class="ftr-legal">
+        <p>ADAMAS (All Decisions And Memory Archive System) ist ein Produkt der Falcon Intelligence Group LLC, aufgebaut auf dem KI-Agenten Hermes. Hermes ist ein Tool eines Drittanbieters und Eigentum des jeweiligen Inhabers.</p>
+        <p>Local-First by Design: Ihr Vault und Ihr Entscheidungs-Ledger laufen auf Hardware, die Ihnen gehört. ADAMAS sendet das Wissen Ihres Unternehmens nicht in Drittanbieter-Clouds — optionales hybrides Cloud-Routing wird nur für von Ihnen ausdrücklich freigegebene Aufgaben genutzt.</p>
+        <p>Pricing shown is indicative and may vary with scope. Das Clarity-Audit fee is credited toward your build if you proceed. Client hardware (e.g., Mac Mini M4) is purchased and owned by the client.</p>
+        <p>Auf dieser Website genannte Markt- und Branchenzahlen stammen aus Recherchen Dritter und dienen nur dem Kontext; sie sind keine Ergebnisgarantie.</p>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-cols">
+        <div class="ftr-col">
+          <h5>ADAMAS</h5>
+          <a href="#problem">Das Problem</a>
+          <a href="#what">Was es ist</a>
+          <a href="#how">So funktioniert's</a>
+          <a href="#pricing">Preise</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Kostenlose Ressourcen</h5>
+          <a href="scorecard.html">Wissensfallen-Scorecard</a>
+          <a href="downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download>Decision-Ledger-Starterkit</a>
+          <a href="calculator.html">Local-First-KI-Kostenrechner</a>
+          <a href="checklist.html">Nachfolge-Checkliste für Gründer</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Unternehmen</h5>
+          <a href="#top">Über ADAMAS</a>
+          <a href="mailto:m@adamas-project.com">Falcon Intelligence Group</a>
+          <a href="mailto:m@adamas-project.com">Kontakt</a>
+          <a href="#why">Warum Local-First</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Loslegen</h5>
+          <a href="#book">Clarity-Audit buchen</a>
+          <a href="mailto:m@adamas-project.com">m@adamas-project.com</a>
+          <a href="#compare">Warum ADAMAS</a>
+          <a href="privacy.html">Datenschutz</a>
+        </div>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-bottom">
+        <span class="cpy">Copyright © 2026 Falcon Intelligence Group LLC. Alle Rechte vorbehalten.</span>
+        <nav class="ftr-links" aria-label="Rechtliches">
+          <a href="privacy.html">Datenschutz</a>
+          <a href="terms.html">Nutzungsbedingungen</a>
+          <a href="terms.html">Impressum</a>
+          <a href="#top">Sitemap</a>
+        </nav>
+        <span class="ftr-region">Falcon Intelligence Group LLC · Delaware, USA</span>
+      </div>
+    </div>
+  </footer>
+
+  
+  <script src="app.js" defer></script>
+</body>
+</html>
