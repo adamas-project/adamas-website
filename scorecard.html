@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Knowledge-Trap Scorecard — ADAMAS</title>
+<meta name="description" content="A free 2-minute self-assessment: how dependent is your company on the knowledge trapped in the founder's head? Get your key-person-risk score.">
+<style>
+  :root{
+    --bg:#000;--surface:#161618;--surface2:#1f1f22;--border:rgba(255,255,255,.11);--border2:rgba(255,255,255,.06);
+    --text:#f5f5f7;--muted:#a1a1a6;--faint:#6e6e73;--accent:#c9a84c;--accent-lt:#e3c977;
+    --green:#5ecc73;--amber:#e0a52e;--red:#ff6b5e;
+    --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;font-size:15px}
+  .wrap{max-width:760px;margin:0 auto;padding:46px 22px 90px}
+  a{color:var(--accent);text-decoration:none}
+  .back{font-size:13px;color:var(--muted)}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.08);border-radius:99px;padding:6px 14px;margin:22px 0 14px}
+  h1{font-weight:700;font-size:clamp(2rem,5vw,3rem);letter-spacing:-.025em;line-height:1.05;margin-bottom:12px}
+  .sub{color:var(--muted);font-size:17px;max-width:60ch}
+  .meta{color:var(--faint);font-size:12.5px;margin-top:10px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:8px 22px;margin-top:14px}
+  .q{padding:18px 0;border-bottom:1px solid var(--border2)}
+  .q:last-child{border-bottom:0}
+  .q-t{font-weight:600;font-size:15.5px;margin-bottom:12px;display:flex;gap:10px}
+  .q-n{color:var(--accent);font-weight:700;flex-shrink:0}
+  .opts{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .opt{position:relative}
+  .opt input{position:absolute;opacity:0;inset:0;cursor:pointer}
+  .opt span{display:block;text-align:center;font-size:12px;color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:10px 6px;cursor:pointer;transition:all .15s;line-height:1.3}
+  .opt input:checked + span{border-color:var(--accent);background:rgba(201,168,76,.12);color:var(--accent-lt);font-weight:600}
+  .opt span:hover{border-color:rgba(201,168,76,.5)}
+  .bar{position:sticky;bottom:0;margin-top:18px;background:linear-gradient(to top,var(--bg) 60%,transparent);padding:16px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+  .prog{font-size:13px;color:var(--muted)}
+  .btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;border-radius:99px;padding:12px 24px;border:1px solid transparent;transition:all .2s}
+  .btn-gold{background:linear-gradient(135deg,var(--accent-lt),var(--accent) 75%);color:#1a1405}
+  .btn-gold:disabled{opacity:.4;cursor:not-allowed}
+  .btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}
+  /* result */
+  #result{display:none;margin-top:18px}
+  .score-hero{text-align:center;border:1px solid var(--border);border-radius:20px;padding:34px 24px;background:var(--surface)}
+  .score-num{font-size:64px;font-weight:700;letter-spacing:-.03em;line-height:1}
+  .score-max{font-size:22px;color:var(--faint)}
+  .tier{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:99px;padding:7px 16px;margin-top:14px}
+  .tier-desc{color:var(--muted);max-width:52ch;margin:14px auto 0}
+  .recs{margin-top:18px}
+  .recs h3{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:0 0 6px}
+  .recs li{list-style:none;position:relative;padding:8px 0 8px 22px;color:#d4d2cc;border-bottom:1px solid var(--border2)}
+  .recs li::before{content:'';position:absolute;left:2px;top:15px;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .cta{text-align:center;border:1px solid rgba(201,168,76,.3);border-radius:20px;padding:30px 24px;margin-top:16px;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.10),transparent 70%),var(--surface)}
+  .cta h2{font-weight:700;font-size:1.6rem;letter-spacing:-.02em}
+  .cta p{color:var(--muted);margin:10px auto 18px;max-width:46ch}
+  .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .ftr{margin-top:34px;padding-top:16px;border-top:1px solid var(--border2);font-size:11px;color:var(--faint)}
+  @media(max-width:480px){ .opts{grid-template-columns:1fr 1fr} }
+  @media print{
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .bar,.back,form{display:none !important}
+    #result{display:block !important}
+    body{background:#fff;color:#111}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← ADAMAS</a>
+  <div class="eyebrow">● Free Resource · 2-minute self-assessment</div>
+  <h1>The Knowledge-Trap Scorecard</h1>
+  <p class="sub">How dependent is your company on the knowledge trapped in one or two people's heads? Answer 10 quick statements and get your key-person-risk score — plus the gaps to fix first.</p>
+  <p class="meta">No signup required. Your answers stay in your browser; nothing is sent anywhere.</p>
+
+  <form id="form">
+    <div class="card" id="questions"></div>
+    <div class="bar">
+      <span class="prog" id="prog">0 of 10 answered</span>
+      <button class="btn btn-gold" id="submit" type="submit" disabled>See my score →</button>
+    </div>
+  </form>
+
+  <div id="result">
+    <div class="score-hero">
+      <div><span class="score-num" id="scoreNum">0</span><span class="score-max"> / 30</span></div>
+      <div class="tier" id="tier"></div>
+      <p class="tier-desc" id="tierDesc"></p>
+    </div>
+    <div class="card recs">
+      <h3>Where to focus first</h3>
+      <ul id="recs"></ul>
+    </div>
+    <div class="cta">
+      <h2>Want this done for you?</h2>
+      <p>The Clarity Audit is the full version of this scorecard — we map your knowledge trap, interview you, and deliver a report you can act on. Credited toward your build.</p>
+      <div class="row">
+        <a class="btn btn-gold" id="bookBtn" href="#">Book your Clarity Audit →</a>
+        <button class="btn btn-ghost" onclick="window.print()">Save as PDF</button>
+      </div>
+    </div>
+    <div class="ftr">ADAMAS by Falcon Intelligence Group · adamas-project.com · For context only; not a guarantee of results.</div>
+  </div>
+</div>
+
+<script>
+  var QUESTIONS = [
+    "If I (the founder) were unavailable for a month, important decisions would stall.",
+    "A new hire takes more than two months to become genuinely productive.",
+    "We have no structured record of WHY our major past decisions were made.",
+    "More than 40% of our critical know-how lives only in one or two people's heads.",
+    "When someone leaves, we scramble to recover what they knew.",
+    "We could not cleanly answer an investor or buyer asking “why did you decide X?”",
+    "Onboarding relies on shadowing and asking people, not documented systems.",
+    "We have no documented succession or handover plan.",
+    "Our knowledge is scattered across chats, email, drives and memory — not structured.",
+    "I am personally the bottleneck for the business to grow."
+  ];
+  var SCALE = ["Strongly disagree","Disagree","Agree","Strongly agree"]; // 0..3
+  var qWrap = document.getElementById('questions');
+  QUESTIONS.forEach(function(q,i){
+    var opts = SCALE.map(function(s,v){
+      return '<label class="opt"><input type="radio" name="q'+i+'" value="'+v+'"><span>'+s+'</span></label>';
+    }).join('');
+    qWrap.insertAdjacentHTML('beforeend',
+      '<div class="q"><div class="q-t"><span class="q-n">'+(i+1)+'.</span><span>'+q+'</span></div><div class="opts">'+opts+'</div></div>');
+  });
+
+  var form = document.getElementById('form'), submit = document.getElementById('submit'), prog = document.getElementById('prog');
+  function answered(){ return QUESTIONS.filter(function(_,i){ return form.querySelector('input[name="q'+i+'"]:checked'); }).length; }
+  form.addEventListener('change', function(){
+    var a = answered();
+    prog.textContent = a + ' of ' + QUESTIONS.length + ' answered';
+    submit.disabled = a < QUESTIONS.length;
+  });
+
+  var TIERS = [
+    {max:7,  name:"Resilient",  color:"#5ecc73", bg:"rgba(94,204,115,.14)",
+     desc:"Your knowledge is reasonably distributed and documented. Keep reinforcing the habit so it compounds as you grow."},
+    {max:15, name:"Moderate Risk", color:"#e0a52e", bg:"rgba(224,165,46,.14)",
+     desc:"You have real exposure. Some knowledge is captured, but key decisions and context still live in too few heads."},
+    {max:22, name:"High Risk", color:"#ff8a3d", bg:"rgba(255,138,61,.14)",
+     desc:"The founder is a single point of failure. A departure, illness, or fast growth would cost you months and serious money."},
+    {max:30, name:"Critical", color:"#ff6b5e", bg:"rgba(255,107,94,.16)",
+     desc:"Your company's most valuable asset is almost entirely undocumented. This is an urgent, addressable risk."}
+  ];
+  var ALL_RECS = [
+    "Capture your recurring decisions in a ledger so the team can act without you in the room.",
+    "Turn your most-repeated answers into structured onboarding assets a new hire can self-serve.",
+    "Document the reasoning behind your 10 biggest recent decisions while it's still fresh.",
+    "Identify knowledge held by only one person and extract it into a shared, structured record.",
+    "Add an offboarding capture step so a departing person's context stays in the company.",
+    "Keep a decision log with context and reasoning so diligence questions answer themselves.",
+    "Replace shadowing with documented, decision-linked onboarding paths.",
+    "Build a key-person-risk and succession checklist — what must survive if someone leaves.",
+    "Consolidate knowledge out of chats and memory into one linked, local-first vault.",
+    "Map which decisions only you can make, then document the criteria so others can too."
+  ];
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var total = 0, perQ = [];
+    QUESTIONS.forEach(function(_,i){
+      var v = parseInt(form.querySelector('input[name="q'+i+'"]:checked').value,10);
+      total += v; perQ.push({i:i,v:v});
+    });
+    var tier = TIERS.find(function(t){ return total <= t.max; });
+    document.getElementById('scoreNum').textContent = total;
+    var tEl = document.getElementById('tier');
+    tEl.textContent = tier.name; tEl.style.color = tier.color; tEl.style.background = tier.bg;
+    document.getElementById('tierDesc').textContent = tier.desc;
+    // recommendations: top scoring areas
+    perQ.sort(function(a,b){ return b.v - a.v; });
+    var picks = perQ.filter(function(p){ return p.v >= 2; }).slice(0,3);
+    if(!picks.length) picks = perQ.slice(0,2);
+    var recsEl = document.getElementById('recs'); recsEl.innerHTML = '';
+    picks.forEach(function(p){ var li=document.createElement('li'); li.textContent = ALL_RECS[p.i] || ALL_RECS[0]; recsEl.appendChild(li); });
+    // book link with score prefilled
+    var body = encodeURIComponent("Hi Massimo,\n\nI took the Knowledge-Trap Scorecard and scored "+total+"/30 ("+tier.name+"). I'd like to book a Clarity Audit.\n\n");
+    document.getElementById('bookBtn').href = "mailto:m@adamas-project.com?subject="+encodeURIComponent("Clarity Audit — Scorecard "+total+"/30")+"&body="+body;
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('result').scrollIntoView({behavior:'smooth'});
+  });
+</script>
+</body>
+</html>
