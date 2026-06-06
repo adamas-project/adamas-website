@@ -6,11 +6,13 @@
 <title>The Knowledge-Trap Scorecard — ADAMAS</title>
 <meta name="description" content="A free 2-minute self-assessment: how dependent is your company on the knowledge trapped in the founder's head? Get your key-person-risk score.">
 <style>
+  @font-face{font-family:'D-DIN';src:url('fonts/D-DIN.woff2') format('woff2'),url('fonts/D-DIN.woff') format('woff');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'D-DIN';src:url('fonts/D-DIN-Bold.woff2') format('woff2'),url('fonts/D-DIN-Bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap}
   :root{
     --bg:#000;--surface:#161618;--surface2:#1f1f22;--border:rgba(255,255,255,.11);--border2:rgba(255,255,255,.06);
     --text:#f5f5f7;--muted:#a1a1a6;--faint:#6e6e73;--accent:#c9a84c;--accent-lt:#e3c977;
     --green:#5ecc73;--amber:#e0a52e;--red:#ff6b5e;
-    --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;
+    --font:'D-DIN',"DIN Alternate",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
@@ -19,7 +21,7 @@
   a{color:var(--accent);text-decoration:none}
   .back{font-size:13px;color:var(--muted)}
   .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.08);border-radius:99px;padding:6px 14px;margin:22px 0 14px}
-  h1{font-weight:700;font-size:clamp(2rem,5vw,3rem);letter-spacing:-.025em;line-height:1.05;margin-bottom:12px}
+  h1{font-weight:700;text-transform:uppercase;font-size:clamp(1.9rem,5vw,2.8rem);letter-spacing:-.01em;line-height:1;margin-bottom:12px}
   .sub{color:var(--muted);font-size:17px;max-width:60ch}
   .meta{color:var(--faint);font-size:12.5px;margin-top:10px}
   .card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:8px 22px;margin-top:14px}

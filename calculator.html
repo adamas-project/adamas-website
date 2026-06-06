@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local-First AI Cost Calculator — ADAMAS</title>
+<meta name="description" content="See what you'd save running AI locally on a Mac Mini vs cloud subscriptions — monthly savings, payback period, and 3-year net.">
+<style>
+  @font-face{font-family:'D-DIN';src:url('fonts/D-DIN.woff2') format('woff2'),url('fonts/D-DIN.woff') format('woff');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'D-DIN';src:url('fonts/D-DIN-Bold.woff2') format('woff2'),url('fonts/D-DIN-Bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap}
+  :root{
+    --bg:#000;--surface:#161618;--surface2:#1f1f22;--border:rgba(255,255,255,.11);--border2:rgba(255,255,255,.06);
+    --text:#f5f5f7;--muted:#a1a1a6;--faint:#6e6e73;--accent:#c9a84c;--accent-lt:#e3c977;--green:#5ecc73;
+    --font:'D-DIN',"DIN Alternate",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;font-size:15px}
+  .wrap{max-width:760px;margin:0 auto;padding:46px 22px 90px}
+  a{color:var(--accent);text-decoration:none}
+  .back{font-size:13px;color:var(--muted)}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.08);border-radius:99px;padding:6px 14px;margin:22px 0 14px}
+  h1{font-weight:700;text-transform:uppercase;font-size:clamp(1.9rem,5vw,2.8rem);letter-spacing:-.01em;line-height:1;margin-bottom:14px}
+  .sub{color:var(--muted);font-size:17px;max-width:60ch}
+  .meta{color:var(--faint);font-size:12.5px;margin-top:10px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:24px;margin-top:16px}
+  .field{padding:14px 0;border-bottom:1px solid var(--border2)}
+  .field:last-child{border-bottom:0}
+  label.l{display:flex;justify-content:space-between;align-items:baseline;font-weight:700;font-size:14.5px;margin-bottom:10px;gap:12px}
+  .val{color:var(--accent-lt);font-weight:700}
+  input[type=range]{width:100%;accent-color:var(--accent);height:4px}
+  select{width:100%;background:var(--surface2);color:var(--text);border:1px solid var(--border);border-radius:10px;padding:11px 12px;font-family:var(--font);font-size:14px}
+  .chk{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px}
+  .chk input{width:18px;height:18px;accent-color:var(--accent)}
+  .results{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+  .res{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+  .res.big{grid-column:1 / -1;border-color:rgba(201,168,76,.3);background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.10),transparent 75%),var(--surface)}
+  .res .k{font-size:11px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .res .v{font-weight:700;font-size:1.9rem;letter-spacing:-.02em;margin-top:6px;line-height:1}
+  .res.big .v{font-size:2.8rem;color:var(--accent-lt)}
+  .res .n{font-size:11.5px;color:var(--faint);margin-top:6px}
+  .cta{text-align:center;border:1px solid rgba(201,168,76,.3);border-radius:20px;padding:30px 24px;margin-top:18px;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.10),transparent 70%),var(--surface)}
+  .cta h2{font-weight:700;text-transform:uppercase;font-size:1.5rem;letter-spacing:-.01em}
+  .cta p{color:var(--muted);margin:10px auto 18px;max-width:48ch}
+  .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;border-radius:99px;padding:12px 24px;border:1px solid transparent}
+  .btn-gold{background:linear-gradient(135deg,var(--accent-lt),var(--accent) 75%);color:#1a1405}
+  .btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}
+  .ftr{margin-top:30px;padding-top:16px;border-top:1px solid var(--border2);font-size:11px;color:var(--faint)}
+  @media(max-width:480px){.results{grid-template-columns:1fr}}
+  @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}.back,.btn-ghost{display:none}body{background:#fff;color:#111}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← ADAMAS</a>
+  <div class="eyebrow">● Free Resource · Cost calculator</div>
+  <h1>Local-First AI Cost Calculator</h1>
+  <p class="sub">Cloud-AI bills climb every month. A local machine runs ~80% of daily workflows for the price of electricity. See your number.</p>
+  <p class="meta">Estimates only, in USD. Nothing is sent anywhere.</p>
+
+  <div class="card">
+    <div class="field">
+      <label class="l"><span>Your current monthly cloud-AI spend</span><span class="val" id="spendV">$350</span></label>
+      <input type="range" id="spend" min="0" max="2000" step="10" value="350">
+    </div>
+    <div class="field">
+      <label class="l"><span>Local host (one-time hardware)</span></label>
+      <select id="hw">
+        <option value="499">Mac Mini M4 (base, 16GB) — $499</option>
+        <option value="699" selected>Mac Mini M4 (32GB) — $699</option>
+        <option value="1300">MacBook Air M3 — $1,300</option>
+        <option value="2300">MacBook Pro 14" M4 Pro — $2,300</option>
+        <option value="2000">ThinkPad X1 Carbon — $2,000</option>
+        <option value="0">I already have a suitable machine — $0</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="chk"><input type="checkbox" id="sub" checked> Keep one cloud subscription for genuinely hard tasks (~$20/mo)</label>
+      <p class="meta" style="margin-top:8px">Local electricity to run a Mac Mini 24/7 is ~$3/month and is always included.</p>
+    </div>
+  </div>
+
+  <div class="results" id="results"></div>
+
+  <div class="cta">
+    <h2>Want the system that runs on it?</h2>
+    <p>ADAMAS is the decision ledger that lives on that local machine — capturing your company's reasoning and generating the assets you need, privately.</p>
+    <div class="row">
+      <a class="btn btn-gold" id="bookBtn" href="mailto:m@adamas-project.com?subject=Clarity%20Audit%20%E2%80%94%20Cost%20Calculator">Book your Clarity Audit →</a>
+      <button class="btn btn-ghost" onclick="window.print()">Save as PDF</button>
+    </div>
+  </div>
+  <div class="ftr">ADAMAS by Falcon Intelligence Group · adamas-project.com · Estimates for context only; not a guarantee of results.</div>
+</div>
+
+<script>
+  var ELEC = 3;
+  var spend=document.getElementById('spend'), spendV=document.getElementById('spendV'),
+      hw=document.getElementById('hw'), sub=document.getElementById('sub'), out=document.getElementById('results');
+  function money(n){ return '$' + Math.round(n).toLocaleString('en-US'); }
+  function render(){
+    var cur=+spend.value, hardware=+hw.value, local=ELEC + (sub.checked?20:0);
+    spendV.textContent = money(cur);
+    var save = Math.max(0, cur - local);
+    var payback = (save>0 && hardware>0) ? Math.ceil(hardware/save) : 0;
+    var y1 = save*12 - hardware, y3 = save*36 - hardware;
+    var paybackTxt = hardware===0 ? 'Immediate' : (save<=0 ? '—' : payback + (payback===1?' month':' months'));
+    out.innerHTML =
+      '<div class="res big"><div class="k">Monthly savings</div><div class="v">'+money(save)+'<span style="font-size:1rem;color:var(--muted)"> /mo</span></div><div class="n">Local cost ≈ '+money(local)+'/mo (electricity'+(sub.checked?' + 1 subscription':'')+') vs '+money(cur)+'/mo cloud.</div></div>'+
+      '<div class="res"><div class="k">Payback period</div><div class="v">'+paybackTxt+'</div><div class="n">to recover '+money(hardware)+' hardware</div></div>'+
+      '<div class="res"><div class="k">Net savings · year 1</div><div class="v">'+money(y1)+'</div><div class="n">after hardware</div></div>'+
+      '<div class="res"><div class="k">Net savings · 3 years</div><div class="v">'+money(y3)+'</div><div class="n">after hardware</div></div>'+
+      '<div class="res"><div class="k">Cloud cost · 3 years</div><div class="v">'+money(cur*36)+'</div><div class="n">if nothing changes</div></div>';
+    var body=encodeURIComponent("Hi Massimo,\n\nI ran the Local-First AI Cost Calculator: ~"+money(save)+"/mo saved, payback "+paybackTxt+". I'd like to talk about a Clarity Audit.\n\n");
+    document.getElementById('bookBtn').href="mailto:m@adamas-project.com?subject="+encodeURIComponent("Clarity Audit — saving "+money(save)+"/mo")+"&body="+body;
+  }
+  [spend,hw,sub].forEach(function(el){ el.addEventListener('input',render); el.addEventListener('change',render); });
+  render();
+</script>
+</body>
+</html>

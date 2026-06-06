@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Founder Succession Checklist — ADAMAS</title>
+<meta name="description" content="What must be documented for your company to survive a key departure — and be sellable or inheritable. A free founder readiness checklist.">
+<style>
+  @font-face{font-family:'D-DIN';src:url('fonts/D-DIN.woff2') format('woff2'),url('fonts/D-DIN.woff') format('woff');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'D-DIN';src:url('fonts/D-DIN-Bold.woff2') format('woff2'),url('fonts/D-DIN-Bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap}
+  :root{
+    --bg:#000;--surface:#161618;--surface2:#1f1f22;--border:rgba(255,255,255,.11);--border2:rgba(255,255,255,.06);
+    --text:#f5f5f7;--muted:#a1a1a6;--faint:#6e6e73;--accent:#c9a84c;--accent-lt:#e3c977;--green:#5ecc73;--amber:#e0a52e;--red:#ff6b5e;
+    --font:'D-DIN',"DIN Alternate",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;font-size:15px}
+  .wrap{max-width:760px;margin:0 auto;padding:46px 22px 90px}
+  a{color:var(--accent);text-decoration:none}
+  .back{font-size:13px;color:var(--muted)}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(201,168,76,.3);background:rgba(201,168,76,.08);border-radius:99px;padding:6px 14px;margin:22px 0 14px}
+  h1{font-weight:700;text-transform:uppercase;font-size:clamp(1.9rem,5vw,2.8rem);letter-spacing:-.01em;line-height:1;margin-bottom:14px}
+  .sub{color:var(--muted);font-size:17px;max-width:60ch}
+  .meta{color:var(--faint);font-size:12.5px;margin-top:10px}
+  .progress{position:sticky;top:0;background:linear-gradient(to bottom,var(--bg) 70%,transparent);padding:14px 0 10px;z-index:5}
+  .pbar{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;border:1px solid var(--border2)}
+  .pfill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-lt));transition:width .25s}
+  .pmeta{display:flex;justify-content:space-between;align-items:baseline;margin-top:8px;font-size:13px}
+  .ptier{font-weight:700}
+  .group{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:6px 22px;margin-top:14px}
+  .group h3{font-size:12px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);padding:16px 0 6px}
+  .item{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--border2);cursor:pointer}
+  .item input{width:20px;height:20px;margin-top:1px;accent-color:var(--accent);flex-shrink:0;cursor:pointer}
+  .item span{font-size:14.5px;color:#d4d2cc}
+  .item input:checked + span{color:var(--faint);text-decoration:line-through}
+  .cta{text-align:center;border:1px solid rgba(201,168,76,.3);border-radius:20px;padding:30px 24px;margin-top:18px;background:radial-gradient(ellipse at 50% 0%,rgba(201,168,76,.10),transparent 70%),var(--surface)}
+  .cta h2{font-weight:700;text-transform:uppercase;font-size:1.5rem;letter-spacing:-.01em}
+  .cta p{color:var(--muted);margin:10px auto 18px;max-width:48ch}
+  .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:var(--font);font-size:14px;font-weight:700;border-radius:99px;padding:12px 24px;border:1px solid transparent}
+  .btn-gold{background:linear-gradient(135deg,var(--accent-lt),var(--accent) 75%);color:#1a1405}
+  .btn-ghost{background:var(--surface);color:var(--text);border-color:var(--border)}
+  .ftr{margin-top:30px;padding-top:16px;border-top:1px solid var(--border2);font-size:11px;color:var(--faint)}
+  @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}.back,.btn-ghost,.progress{position:static}body{background:#fff;color:#111}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← ADAMAS</a>
+  <div class="eyebrow">● Free Resource · Readiness checklist</div>
+  <h1>Founder Succession Checklist</h1>
+  <p class="sub">If you stepped away tomorrow, would the company hold? Tick what's already true. What's left is your key-person risk — and your roadmap.</p>
+  <p class="meta">No signup. Your progress stays in your browser.</p>
+
+  <div class="progress">
+    <div class="pbar"><div class="pfill" id="pfill"></div></div>
+    <div class="pmeta"><span id="pcount">0 of 0 in place</span><span class="ptier" id="ptier"></span></div>
+  </div>
+
+  <div id="groups"></div>
+
+  <div class="cta">
+    <h2>Close the gaps — done for you</h2>
+    <p>The Clarity Audit maps exactly what's trapped in your head and ADAMAS turns it into a living, transferable record. Credited toward your build.</p>
+    <div class="row">
+      <a class="btn btn-gold" id="bookBtn" href="mailto:m@adamas-project.com?subject=Clarity%20Audit%20%E2%80%94%20Succession%20Checklist">Book your Clarity Audit →</a>
+      <button class="btn btn-ghost" onclick="window.print()">Save as PDF</button>
+    </div>
+  </div>
+  <div class="ftr">ADAMAS by Falcon Intelligence Group · adamas-project.com · For guidance only; not legal or financial advice.</div>
+</div>
+
+<script>
+  var DATA = [
+    ["Decisions & reasoning", [
+      "The reasoning behind major past decisions is documented — not just the outcomes.",
+      "There is a single place where new material decisions are recorded.",
+      "Someone could understand WHY we operate the way we do without asking the founder."
+    ]],
+    ["Operations & process", [
+      "Core processes (delivery, sales, finance) are documented step by step.",
+      "Someone other than the founder could run day-to-day operations for a month.",
+      "Tool and vendor accounts/passwords are accessible to the team, not just the founder."
+    ]],
+    ["Knowledge & onboarding", [
+      "A new hire can onboard from documentation, not only by shadowing.",
+      "The know-how that drives most of our results is written down somewhere durable.",
+      "Knowledge lives in one organised place, not scattered across chats, email and memory."
+    ]],
+    ["Relationships", [
+      "Key client and partner relationships are documented and not solely founder-held.",
+      "There is a named backup contact for each critical relationship."
+    ]],
+    ["Financial & legal", [
+      "Financials, contracts and IP ownership are organised and accessible.",
+      "Signing authority and ownership are clearly defined."
+    ]],
+    ["People & continuity", [
+      "A documented succession or handover plan exists.",
+      "The business could be sold or handed over with its knowledge intact."
+    ]]
+  ];
+  var TIERS = [
+    {min:0,  name:"High exposure",      color:"#ff6b5e"},
+    {min:40, name:"Building resilience", color:"#e0a52e"},
+    {min:70, name:"Strong",             color:"#9ad17a"},
+    {min:90, name:"Succession-ready",   color:"#5ecc73"}
+  ];
+  var groups=document.getElementById('groups'), total=0;
+  DATA.forEach(function(g,gi){
+    var items=g[1].map(function(t,ii){ total++; return '<label class="item"><input type="checkbox" data-c="1"><span>'+t+'</span></label>'; }).join('');
+    groups.insertAdjacentHTML('beforeend','<div class="group"><h3>'+g[0]+'</h3>'+items+'</div>');
+  });
+  var boxes=[].slice.call(document.querySelectorAll('input[data-c]'));
+  var pfill=document.getElementById('pfill'), pcount=document.getElementById('pcount'), ptier=document.getElementById('ptier');
+  function update(){
+    var done=boxes.filter(function(b){return b.checked;}).length;
+    var pct=Math.round(done/total*100);
+    pfill.style.width=pct+'%';
+    pcount.textContent=done+' of '+total+' in place ('+pct+'%)';
+    var tier=TIERS.slice().reverse().find(function(t){return pct>=t.min;});
+    ptier.textContent=tier.name; ptier.style.color=tier.color;
+    var body=encodeURIComponent("Hi Massimo,\n\nI worked through the Founder Succession Checklist — "+pct+"% in place ("+tier.name+"). I'd like to close the gaps with a Clarity Audit.\n\n");
+    document.getElementById('bookBtn').href="mailto:m@adamas-project.com?subject="+encodeURIComponent("Clarity Audit — Succession "+pct+"%")+"&body="+body;
+  }
+  boxes.forEach(function(b){ b.addEventListener('change',update); });
+  update();
+</script>
+</body>
+</html>
