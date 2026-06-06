@@ -133,6 +133,8 @@
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
     /* Matrix falling-code canvas */
     #rain { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity .8s ease; }
+    [data-theme="dark"] #rain { opacity: 0.30; }
+    [data-theme="light"] #rain { opacity: 0.36; }
     [data-theme="matrix"] #rain { opacity: 0.45; }
     /* Matrix scanlines + glow */
     [data-theme="matrix"] .glow::after {
@@ -685,24 +687,37 @@
       });
     } catch (e) {}
 
-    // ---------- matrix rain (declared BEFORE theme code calls start/stopRain) ----------
+    // ---------- falling-code rain (runs in every theme, colored from the active palette) ----------
     var cv = document.getElementById('rain');
     var ctx = cv ? cv.getContext('2d') : null;
     var rainId = null, cols = [], fontSize = 16;
     var glyphs = 'アカサタナハマヤラワABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&'.split('');
+    var rainAccent = '#00ff41', rainBright = '#c6ffce', rainTrail = '0,6,0';
+    function hexToRgb(hex) {
+      hex = (hex || '').trim().replace('#', '');
+      if (hex.length === 3) hex = hex.replace(/(.)/g, '$1$1');
+      var n = parseInt(hex, 16);
+      return isNaN(n) ? '0,0,0' : (((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255));
+    }
+    function refreshRainColors() {
+      var cs = getComputedStyle(root);
+      rainAccent = cs.getPropertyValue('--accent').trim() || rainAccent;   // gold / green per theme
+      rainBright = cs.getPropertyValue('--accent-lt').trim() || rainBright; // lead-glyph highlight
+      rainTrail = hexToRgb(cs.getPropertyValue('--bg'));                    // trail fades into the bg
+    }
     function sizeRain() {
       cv.width = window.innerWidth; cv.height = window.innerHeight;
       var n = Math.floor(cv.width / fontSize);
       cols = new Array(n).fill(0).map(function () { return Math.random() * cv.height / fontSize; });
     }
     function drawRain() {
-      ctx.fillStyle = 'rgba(0, 6, 0, 0.08)';
+      ctx.fillStyle = 'rgba(' + rainTrail + ', 0.09)';
       ctx.fillRect(0, 0, cv.width, cv.height);
       ctx.font = fontSize + "px 'JetBrains Mono', monospace";
       for (var i = 0; i < cols.length; i++) {
         var ch = glyphs[Math.floor(Math.random() * glyphs.length)];
         var x = i * fontSize, y = cols[i] * fontSize;
-        ctx.fillStyle = Math.random() > 0.975 ? '#c6ffce' : '#00ff41';
+        ctx.fillStyle = Math.random() > 0.975 ? rainBright : rainAccent;
         ctx.fillText(ch, x, y);
         if (y > cv.height && Math.random() > 0.975) cols[i] = 0;
         cols[i] += 0.5;
@@ -720,8 +735,8 @@
       if (ctx) ctx.clearRect(0, 0, cv.width, cv.height);
     }
     document.addEventListener('visibilitychange', function () {
-      if (document.hidden) stopRain();
-      else if (root.getAttribute('data-theme') === 'matrix') startRain();
+      if (document.hidden) { stopRain(); }
+      else { refreshRainColors(); startRain(); }
     });
 
     // ---------- theme switching (last; rain helpers now exist) ----------
@@ -731,7 +746,9 @@
         root.setAttribute('data-theme', t);
         try { localStorage.setItem('adamas-theme', t); } catch (e) {}
         btns.forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setTheme === t)); });
-        if (t === 'matrix') startRain(); else stopRain();
+        refreshRainColors();
+        if (ctx) ctx.clearRect(0, 0, cv.width, cv.height); // wipe old-palette residue on switch
+        startRain(); // rain now runs in dark, light, and matrix
       };
       btns.forEach(function (b) { b.addEventListener('click', function () { applyTheme(b.dataset.setTheme); }); });
       applyTheme(root.getAttribute('data-theme') || 'dark');
