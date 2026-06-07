@@ -457,3 +457,8 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 .gd-card p{ font-size:13.5px; line-height:1.55; color:var(--muted); flex:1; margin-bottom:16px; }
 .gd-card .go{ font-family:var(--font-d); font-size:13px; font-weight:700; color:var(--accent); }
 @media (max-width:860px){ .gd-grid{ grid-template-columns:1fr; max-width:430px; margin-left:auto; margin-right:auto; } }
+
+/* footer: linked section headers + stacked sub-group */
+.ftr-col h5 a { color: var(--text); transition: color .2s; }
+.ftr-col h5 a:hover { color: var(--accent); }
+.ftr-col h5.ftr-sub { margin-top: 16px; }
