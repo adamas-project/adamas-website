@@ -382,9 +382,9 @@
         <div class="final-card fade">
           <h2>Let's build something that lasts.</h2>
           <p>The Clarity Audit is a paid engagement — $1,000, credited toward your build. Share your details below and we'll set up your 30-minute call.</p>
-          <form name="clarity-audit" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="lead-form" id="leadForm">
-            <input type="hidden" name="form-name" value="clarity-audit">
-            <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
+          <form method="POST" action="https://formspree.io/f/YOUR_FORM_ID" class="lead-form" id="leadForm">
+            <input type="hidden" name="_subject" value="New Clarity Audit request — ADAMAS (EN)">
+            <p hidden><label>Leave this empty: <input name="_gotcha"></label></p>
             <div class="lf-row">
               <input name="name" type="text" required placeholder="Full name" autocomplete="name">
               <input name="role" type="text" placeholder="Your role" autocomplete="organization-title">
