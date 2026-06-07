@@ -129,6 +129,8 @@ const root = document.documentElement;
       rainId = requestAnimationFrame(drawRain);
     }
     function startRain() {
+      // When the 3D WebGL background is present it owns the backdrop — skip the 2D rain.
+      if (document.getElementById('bg3d')) return;
       if (!ctx || rainId || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       sizeRain(); rainId = requestAnimationFrame(drawRain);
       window.addEventListener('resize', sizeRain);

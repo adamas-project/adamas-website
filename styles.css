@@ -430,3 +430,15 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 .book-call{font-size:13px;color:var(--faint);text-align:center;margin-top:16px}
 .book-call a{color:var(--accent);font-weight:700}
 .book-call a:hover{text-decoration:underline}
+
+/* ===== immersive 3D matrix background ===== */
+#bg3d{position:fixed;inset:0;z-index:0;display:block;pointer-events:none}
+.scrim3d{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(82% 66% at 50% 40%, rgba(0,0,0,.60), rgba(0,0,0,.46) 100%)}
+[data-theme="light"] #bg3d,[data-theme="light"] .scrim3d{opacity:0}
+/* darker, readable section tiles over the live background (dark + matrix only) */
+[data-theme="dark"] section:not(.final) > .wrap,
+[data-theme="matrix"] section:not(.final) > .wrap{background:rgba(9,10,13,0.5)}
+[data-theme="dark"] .hero h1,[data-theme="matrix"] .hero h1,
+[data-theme="dark"] .hero-sub,[data-theme="matrix"] .hero-sub,
+[data-theme="dark"] .hero-matrix,[data-theme="matrix"] .hero-matrix{text-shadow:0 2px 26px rgba(0,0,0,.7)}
