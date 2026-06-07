@@ -522,3 +522,17 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
   .pipe-arrow { transform: rotate(90deg); padding: 4px 0; }
 }
 @media (max-width: 440px) { .src-grid { grid-template-columns: 1fr; } }
+
+/* ===== Matrix-theme loading screen (green ramp-up to match the gold version) ===== */
+[data-theme="matrix"] #intro { background: radial-gradient(125% 90% at 50% 50%, #07140c 0%, #020803 60%, #000 100%); }
+[data-theme="matrix"] .intro-brand { color: #eafff0; animation-name: introGlowMx; }
+@keyframes introGlowMx { 0%,100% { text-shadow: 0 0 28px rgba(0,255,65,.32); } 50% { text-shadow: 0 0 58px rgba(0,255,65,.62); } }
+[data-theme="matrix"] #intro.intro-exit { filter: blur(14px) brightness(1.6); }
+[data-theme="matrix"] #intro.intro-exit::after {
+  background: radial-gradient(circle at 50% 50%, rgba(200,255,212,.95), rgba(0,255,65,.5) 34%, transparent 72%);
+}
+
+/* ===== How It Works — traffic-light stage numbers (red -> yellow -> green) ===== */
+.steps .step:nth-child(1) .step-num { color: #ff5f56; text-shadow: 0 0 18px rgba(255,95,86,.45); }
+.steps .step:nth-child(2) .step-num { color: #f2b01e; text-shadow: 0 0 18px rgba(242,176,30,.45); }
+.steps .step:nth-child(3) .step-num { color: #46c46a; text-shadow: 0 0 18px rgba(70,196,106,.45); }

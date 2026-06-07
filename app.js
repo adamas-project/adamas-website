@@ -7,16 +7,21 @@
     document.documentElement.classList.add('intro-on');
     document.body.classList.add('intro-on');
     var cv = document.getElementById('introNet'), ctx = cv ? cv.getContext('2d') : null;
+    // colour the intro rain from the active theme (gold in dark, green in matrix)
+    var ics = getComputedStyle(document.documentElement);
+    var introAcc = (ics.getPropertyValue('--accent').trim() || '#c9a84c');
+    var introBri = (ics.getPropertyValue('--accent-lt').trim() || '#efe1ad');
+    var introTrail = document.documentElement.getAttribute('data-theme') === 'matrix' ? 'rgba(0,8,2,0.12)' : 'rgba(6,6,5,0.12)';
     var W, H, cols = [], fontSize = 16, raf, done = false;
     var glyphs = 'アカサタナハマヤラワABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&'.split('');
     function size(){ W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
     function init(){ size(); cols = new Array(Math.floor(W / fontSize)).fill(0).map(function(){ return Math.random() * H / fontSize; }); }
     function draw(){
-      ctx.fillStyle = 'rgba(6,6,5,0.12)'; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = introTrail; ctx.fillRect(0, 0, W, H);
       ctx.font = fontSize + "px 'JetBrains Mono', monospace";
       for (var i = 0; i < cols.length; i++) {
         var ch = glyphs[Math.floor(Math.random() * glyphs.length)], x = i * fontSize, y = cols[i] * fontSize;
-        ctx.fillStyle = Math.random() > 0.97 ? '#efe1ad' : '#c9a84c';
+        ctx.fillStyle = Math.random() > 0.97 ? introBri : introAcc;
         ctx.fillText(ch, x, y);
         if (y > H && Math.random() > 0.975) cols[i] = 0;
         cols[i] += 0.5;
