@@ -52,14 +52,14 @@
       if (!lf) return;
       lf.addEventListener('submit', function (e) {
         e.preventDefault();
+        var body = new URLSearchParams(new FormData(lf)).toString();
         function done() {
           lf.style.display = 'none';
           var ok = document.getElementById('leadOk');
           ok.style.display = 'block';
           ok.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-        // POST to the form's endpoint (Formspree) as AJAX so the visitor stays on the page
-        fetch(lf.action, { method: 'POST', body: new FormData(lf), headers: { 'Accept': 'application/json' } })
+        fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
           .then(done).catch(done);
       });
     })();

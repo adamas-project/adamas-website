@@ -382,10 +382,10 @@
         <div class="final-card fade">
           <h2>Bauen wir etwas, das bleibt.</h2>
           <p>Das Clarity-Audit ist eine kostenpflichtige Leistung — 1.000 €, anrechenbar auf Ihren Aufbau. Hinterlassen Sie unten Ihre Daten und wir vereinbaren Ihr 30-minütiges Gespräch.</p>
-          <form method="POST" action="https://formspree.io/f/mojzeoyn" class="lead-form" id="leadForm">
-            <input type="hidden" name="_subject" value="New Clarity Audit request — ADAMAS (DE)">
+          <form name="clarity-audit" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="lead-form" id="leadForm">
+            <input type="hidden" name="form-name" value="clarity-audit">
             <input type="hidden" name="language" value="de">
-            <p hidden><label>Leave this empty: <input name="_gotcha"></label></p>
+            <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
             <div class="lf-row">
               <input name="name" type="text" required placeholder="Vollständiger Name" autocomplete="name">
               <input name="role" type="text" placeholder="Ihre Rolle" autocomplete="organization-title">
