@@ -416,9 +416,8 @@ html.intro-on,body.intro-on{overflow:hidden!important}
 body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 @media (prefers-reduced-motion:reduce){.intro-brand,.intro-enter{animation:none}#intro{transition:opacity .4s ease}}
 /* ===== wordmark (Greek alpha for the A) ===== */
-.brand-a{color:var(--accent);font-size:1.14em;line-height:1;position:relative;top:.055em}
-.intro-a{color:var(--accent);text-transform:none;font-size:1.02em;position:relative;top:.04em}
-.ftr-a{color:var(--accent)}
+.brand-a{color:var(--accent);font-size:1.34em;line-height:1;letter-spacing:-.01em}
+.intro-a{color:var(--accent);text-transform:none;font-size:1.34em;line-height:1;letter-spacing:-.01em}
 /* ===== form: phone country-code + selects + calendar ===== */
 .lf-phone{display:grid;grid-template-columns:150px 1fr;gap:12px}
 .lf-cc,.lf-select{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:13px 12px;color:var(--text);font-family:var(--font-b);font-size:14px;transition:border-color .2s}
