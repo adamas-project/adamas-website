@@ -1,43 +1,50 @@
-// ---------- cinematic intro / loading screen ----------
+// ---------- intro: initiation (matrix network -> paradise bloom) ----------
 (function () {
   try {
     var intro = document.getElementById('intro');
     if (!intro) return;
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var seen = false; try { seen = sessionStorage.getItem('adamas-intro') === '1'; } catch (e) {}
-    if (reduce || seen) { intro.remove(); return; }
     document.documentElement.classList.add('intro-on');
     document.body.classList.add('intro-on');
-    var cv = document.getElementById('introNet'), ctx = cv.getContext('2d'), W, H, nodes = [], raf;
-    function accent(){ return (getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#c9a84c').trim(); }
+    var cv = document.getElementById('introNet'), ctx = cv ? cv.getContext('2d') : null;
+    var W, H, nodes = [], parts = [], raf, done = false;
     function size(){ W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
-    function init(){ size(); var n = Math.max(36, Math.min(110, Math.floor(W * H / 15000))); nodes = []; for (var i = 0; i < n; i++) nodes.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-0.5)*0.55, vy: (Math.random()-0.5)*0.55 }); }
+    function init(){
+      size();
+      var n = Math.max(40, Math.min(120, Math.floor(W * H / 14000)));
+      nodes = []; for (var i=0;i<n;i++) nodes.push({ x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5 });
+      var pn = Math.max(24, Math.min(70, Math.floor(W / 26)));
+      parts = []; for (var k=0;k<pn;k++) parts.push({ x:Math.random()*W, y:Math.random()*H, r:Math.random()*2+0.8, v:Math.random()*0.5+0.22, a:Math.random()*0.5+0.3, ph:Math.random()*6.28 });
+    }
     function draw(){
       ctx.clearRect(0,0,W,H);
-      var col = accent(), i, j;
+      var i, j;
       for (i=0;i<nodes.length;i++){ var a=nodes[i]; a.x+=a.vx; a.y+=a.vy; if(a.x<0||a.x>W)a.vx*=-1; if(a.y<0||a.y>H)a.vy*=-1; }
       ctx.lineWidth = 1;
       for (i=0;i<nodes.length;i++) for (j=i+1;j<nodes.length;j++){
         var dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
-        if (d<150){ ctx.globalAlpha=(1-d/150)*0.45; ctx.strokeStyle=col; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
+        if (d<150){ var al=(1-d/150)*0.4; ctx.strokeStyle='rgba(150,120,235,'+al+')'; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
       }
-      ctx.globalAlpha=0.9; ctx.fillStyle=col;
-      for (i=0;i<nodes.length;i++){ ctx.beginPath(); ctx.arc(nodes[i].x,nodes[i].y,2,0,6.3); ctx.fill(); }
-      ctx.globalAlpha=1; raf=requestAnimationFrame(draw);
+      ctx.fillStyle='rgba(227,201,119,0.9)';
+      for (i=0;i<nodes.length;i++){ ctx.beginPath(); ctx.arc(nodes[i].x,nodes[i].y,1.6,0,6.3); ctx.fill(); }
+      ctx.shadowColor='rgba(130,205,255,0.9)'; ctx.shadowBlur=12;
+      for (i=0;i<parts.length;i++){ var p=parts[i]; p.y-=p.v; p.x+=Math.sin((p.y*0.012)+p.ph)*0.35; if(p.y<-12){ p.y=H+12; p.x=Math.random()*W; }
+        ctx.globalAlpha = p.a*(0.55+0.45*Math.sin(Date.now()*0.002+p.ph)); ctx.fillStyle='rgba(140,210,255,0.95)';
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.3); ctx.fill(); }
+      ctx.globalAlpha=1; ctx.shadowBlur=0;
+      raf = requestAnimationFrame(draw);
     }
-    init(); draw(); window.addEventListener('resize', init);
-    var done=false;
+    if (ctx && !reduce){ init(); draw(); window.addEventListener('resize', init); }
     function enter(){
-      if (done) return; done=true;
-      try { sessionStorage.setItem('adamas-intro','1'); } catch (e) {}
+      if (done) return; done = true;
       intro.classList.add('intro-exit');
       document.documentElement.classList.remove('intro-on');
       document.body.classList.remove('intro-on');
       document.body.classList.add('site-in');
-      setTimeout(function(){ cancelAnimationFrame(raf); window.removeEventListener('resize', init); if (intro.parentNode) intro.remove(); document.body.classList.remove('site-in'); }, 1300);
+      setTimeout(function(){ if (raf) cancelAnimationFrame(raf); window.removeEventListener('resize', init); if (intro.parentNode) intro.remove(); document.body.classList.remove('site-in'); }, 1500);
     }
-    window.addEventListener('wheel', enter, { passive: true, once: true });
-    window.addEventListener('touchmove', enter, { passive: true, once: true });
+    window.addEventListener('wheel', enter, { passive: true });
+    window.addEventListener('touchmove', enter, { passive: true });
     window.addEventListener('keydown', function (e) { if (['ArrowDown','PageDown',' ','Spacebar','Enter'].indexOf(e.key) > -1) enter(); });
     var b = document.getElementById('introEnter'); if (b) b.addEventListener('click', enter);
   } catch (e) {
