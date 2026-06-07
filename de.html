@@ -14,7 +14,7 @@
     (function () {
       try {
         var t = localStorage.getItem('adamas-theme');
-        if (!t) t = 'dark';
+        if (t !== 'matrix') t = 'dark';   // only two modes: dark gold + matrix
         document.documentElement.setAttribute('data-theme', t);
       } catch (e) {}
     })();
@@ -52,8 +52,7 @@
       </a>
       <div class="nav-right">
         <div class="theme-switch" role="group" aria-label="Farbschema">
-          <button class="theme-btn" data-set-theme="dark" aria-pressed="true" title="Dunkel">☾</button>
-          <button class="theme-btn" data-set-theme="light" aria-pressed="false" title="Hell">☀</button>
+          <button class="theme-btn" data-set-theme="dark" aria-pressed="true" title="Dunkelgold">◆</button>
           <button class="theme-btn" data-set-theme="matrix" aria-pressed="false" title="Matrix" style="font-weight:700">⠿</button>
         </div>
         <div class="nav-links" id="navlinks">
@@ -295,7 +294,7 @@
           <div class="pc fade">
             <div class="pc-tag">Done-for-You</div>
             <div class="pc-name">Der Aufbau</div>
-            <div class="pc-price">3.000 $ <small>einmalig</small></div>
+            <div class="pc-price">4.000 $ <small>einmalig</small></div>
             <p class="pc-desc">Wir bauen den Vault, laden das Ledger und liefern ein laufendes System. Kein Aufwand für Sie.</p>
           </div>
           <div class="pc fade">
