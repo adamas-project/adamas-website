@@ -442,3 +442,18 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 [data-theme="dark"] .hero h1,[data-theme="matrix"] .hero h1,
 [data-theme="dark"] .hero-sub,[data-theme="matrix"] .hero-sub,
 [data-theme="dark"] .hero-matrix,[data-theme="matrix"] .hero-matrix{text-shadow:0 2px 26px rgba(0,0,0,.7)}
+
+/* ===== eBooks & Guides (HBS-style cover grid) ===== */
+.gd-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:8px; }
+.gd-card{ display:flex; flex-direction:column; background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r-lg); overflow:hidden; transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease; }
+.gd-card:hover{ transform:translateY(-5px); border-color:var(--accent-line); box-shadow:var(--card-shadow); }
+.gd-cover{ background:#0a0908; border-bottom:1px solid var(--border); }
+.gd-cover img{ width:100%; height:auto; display:block; }
+.gd-body{ padding:20px 22px 24px; display:flex; flex-direction:column; flex:1; }
+.gd-tag{ font-family:var(--font-d); font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:11px; }
+.gd-card h4{ font-size:17.5px; line-height:1.25; letter-spacing:-.005em; color:var(--text); margin-bottom:9px; }
+.gd-card p{ font-size:13.5px; line-height:1.55; color:var(--muted); flex:1; margin-bottom:16px; }
+.gd-card .go{ font-family:var(--font-d); font-size:13px; font-weight:700; color:var(--accent); }
+@media (max-width:860px){ .gd-grid{ grid-template-columns:1fr; max-width:430px; margin-left:auto; margin-right:auto; } }

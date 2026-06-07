@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Founder's Guide to Escaping the Knowledge Bottleneck — ADAMAS</title>
+<style>
+  @font-face { font-family:'D-DIN'; src:url('../fonts/D-DIN.woff2') format('woff2'); font-weight:400; font-display:swap; }
+  @font-face { font-family:'D-DIN'; src:url('../fonts/D-DIN-Bold.woff2') format('woff2'); font-weight:700; font-display:swap; }
+  :root{
+    --ink:#1b1b1f; --soft:#54545c; --faint:#8a8a93; --line:#e4e2dc;
+    --gold:#b08a2e; --gold-dk:#8a6d22; --gold-lt:#d8c184;
+    --paper:#fbfaf7; --cream:#f4f1ea; --black:#0a0908;
+    --head:'D-DIN',"DIN Alternate","Helvetica Neue",Arial,sans-serif;
+    --body:"Georgia","Times New Roman",serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  @page{ size:Letter; margin:0; }
+  html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  body{ font-family:var(--body); color:var(--ink); background:#33322f; line-height:1.62; font-size:11.2pt; }
+  .page{
+    width:8.5in; min-height:11in; background:var(--paper); margin:0 auto;
+    padding:0.9in 0.95in 0.85in; position:relative; overflow:hidden;
+    page-break-after:always; display:flex; flex-direction:column;
+  }
+  .page:last-child{ page-break-after:auto; }
+  h1,h2,h3,h4,.eyebrow,.brand,.tag,.num,.cta-btn,.toc a,.foot,.cover-meta,.metric .v{ font-family:var(--head); }
+  .eyebrow{ font-size:8.2pt; letter-spacing:.26em; text-transform:uppercase; color:var(--gold-dk); font-weight:700; }
+  p{ margin:0 0 11pt; }
+  em{ color:var(--gold-dk); font-style:italic; }
+  strong{ color:var(--ink); }
+  .lead{ font-size:12.4pt; color:var(--soft); }
+  /* ---------- COVER ---------- */
+  .cover{ background:var(--black); color:#efe9da; padding:0; justify-content:space-between; }
+  .cover-inner{ padding:0.95in 0.95in 0.85in; display:flex; flex-direction:column; min-height:11in; position:relative; z-index:2; }
+  .cover .diamond{ position:absolute; right:-1.1in; top:2.0in; width:6in; height:6in; z-index:1; opacity:.9; }
+  .cover-brand{ display:flex; align-items:baseline; gap:.5em; }
+  .cover-brand .b{ font-size:17pt; font-weight:700; letter-spacing:.01em; }
+  .cover-brand .a{ color:var(--gold-lt); font-size:1.25em; }
+  .cover-brand .by{ font-size:7.6pt; letter-spacing:.18em; text-transform:uppercase; color:#7d7768; }
+  .cover-tag{ margin-top:.5in; display:inline-block; align-self:flex-start; border:1px solid rgba(216,193,132,.45); color:var(--gold-lt); font-family:var(--head); font-size:8pt; letter-spacing:.22em; text-transform:uppercase; padding:6pt 12pt; border-radius:30px; }
+  .cover h1{ font-size:38pt; line-height:1.02; font-weight:700; margin-top:auto; letter-spacing:-.01em; }
+  .cover h1 .hl{ color:var(--gold-lt); }
+  .cover .sub{ font-family:var(--body); font-size:13pt; color:#c9c2b2; margin-top:18pt; max-width:5.2in; line-height:1.5; }
+  .cover-foot{ margin-top:34pt; display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid rgba(255,255,255,.12); padding-top:14pt; }
+  .cover-foot .free{ font-family:var(--head); font-size:8.4pt; letter-spacing:.2em; text-transform:uppercase; color:#9a9384; }
+  .cover-foot .ed{ font-family:var(--head); font-size:8.4pt; letter-spacing:.14em; color:var(--gold-lt); }
+  /* ---------- HEADERS / FOOTERS ---------- */
+  .rh{ display:flex; justify-content:space-between; align-items:center; font-family:var(--head); font-size:7.6pt; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); border-bottom:1px solid var(--line); padding-bottom:9pt; margin-bottom:26pt; }
+  .rh .g{ color:var(--gold-dk); }
+  .pg-foot{ margin-top:auto; padding-top:16pt; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-family:var(--head); font-size:7.6pt; letter-spacing:.1em; color:var(--faint); }
+  /* ---------- TYPE ---------- */
+  h2.sec{ font-size:23pt; line-height:1.08; font-weight:700; letter-spacing:-.01em; margin:6pt 0 6pt; }
+  h2.sec .hl{ color:var(--gold-dk); }
+  .kick{ margin-bottom:14pt; }
+  h3{ font-size:13.5pt; font-weight:700; margin:20pt 0 7pt; letter-spacing:.005em; }
+  h4{ font-size:11pt; font-weight:700; letter-spacing:.02em; margin:0 0 5pt; }
+  .rule{ height:2px; width:46pt; background:var(--gold); margin:0 0 16pt; }
+  /* ---------- COMPONENTS ---------- */
+  .callout{ background:var(--cream); border-left:3px solid var(--gold); padding:14pt 16pt; margin:14pt 0; border-radius:0 6px 6px 0; }
+  .callout .eyebrow{ display:block; margin-bottom:5pt; }
+  .pull{ font-family:var(--head); font-size:16pt; line-height:1.28; color:var(--ink); border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:16pt 0; margin:18pt 0; }
+  .pull .q{ color:var(--gold-dk); }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12pt 18pt; margin:12pt 0; }
+  .box{ border:1px solid var(--line); border-radius:8px; padding:13pt 14pt; background:#fff; }
+  .box .n{ font-family:var(--head); font-weight:700; color:var(--gold-dk); font-size:9pt; letter-spacing:.12em; }
+  ul.clean{ list-style:none; margin:8pt 0 12pt; }
+  ul.clean li{ position:relative; padding-left:20pt; margin-bottom:7pt; }
+  ul.clean li::before{ content:''; position:absolute; left:2pt; top:7pt; width:7pt; height:7pt; background:var(--gold); transform:rotate(45deg); }
+  ol.steps{ counter-reset:s; list-style:none; margin:10pt 0; }
+  ol.steps > li{ counter-increment:s; position:relative; padding-left:34pt; margin-bottom:13pt; }
+  ol.steps > li::before{ content:counter(s); position:absolute; left:0; top:-2pt; width:23pt; height:23pt; background:var(--black); color:var(--gold-lt); font-family:var(--head); font-weight:700; font-size:11pt; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  table.schema{ width:100%; border-collapse:collapse; margin:12pt 0; font-size:9.6pt; }
+  table.schema th{ background:var(--black); color:var(--gold-lt); font-family:var(--head); text-align:left; padding:9pt 11pt; font-size:8.4pt; letter-spacing:.08em; text-transform:uppercase; }
+  table.schema td{ border-bottom:1px solid var(--line); padding:9pt 11pt; vertical-align:top; }
+  table.schema td:first-child{ font-family:var(--head); font-weight:700; color:var(--gold-dk); width:1.5in; }
+  table.schema tr:nth-child(even) td{ background:var(--cream); }
+  .metrics{ display:grid; grid-template-columns:repeat(3,1fr); gap:14pt; margin:14pt 0; }
+  .metric{ text-align:center; border:1px solid var(--line); border-radius:8px; padding:14pt 8pt; }
+  .metric .v{ font-size:24pt; font-weight:700; color:var(--gold-dk); line-height:1; }
+  .metric .l{ font-size:8.6pt; color:var(--soft); margin-top:6pt; }
+  .check li{ list-style:none; position:relative; padding-left:24pt; margin-bottom:8pt; }
+  .check li::before{ content:'\2713'; position:absolute; left:0; top:0; color:var(--gold-dk); font-weight:700; font-family:var(--head); }
+  /* TOC */
+  .toc{ margin-top:18pt; }
+  .toc a{ display:flex; justify-content:space-between; text-decoration:none; color:var(--ink); border-bottom:1px solid var(--line); padding:10pt 0; font-size:11pt; }
+  .toc a .t{ font-weight:700; }
+  .toc a .p{ color:var(--gold-dk); }
+  .toc a .d{ font-family:var(--body); color:var(--faint); font-size:9.4pt; font-weight:400; }
+  /* CTA page */
+  .cta{ background:var(--black); color:#efe9da; }
+  .cta .ci{ padding:0.95in; min-height:11in; display:flex; flex-direction:column; }
+  .cta h2{ font-family:var(--head); font-size:27pt; font-weight:700; line-height:1.08; margin:14pt 0 14pt; }
+  .cta h2 .hl{ color:var(--gold-lt); }
+  .cta p{ color:#c9c2b2; max-width:5.4in; }
+  .cta .price{ font-family:var(--head); font-size:15pt; color:var(--gold-lt); font-weight:700; margin:8pt 0 18pt; }
+  .cta-btn{ display:inline-block; align-self:flex-start; background:linear-gradient(180deg,#e3c977,#b08a2e); color:#1a1408; font-weight:700; font-size:11pt; letter-spacing:.02em; padding:12pt 24pt; border-radius:40px; text-decoration:none; }
+  .cta .url{ font-family:var(--head); color:var(--gold-lt); font-size:11pt; margin-top:10pt; }
+  .cta .legal{ margin-top:auto; border-top:1px solid rgba(255,255,255,.12); padding-top:14pt; font-family:var(--head); font-size:7.6pt; letter-spacing:.05em; color:#7d7768; line-height:1.6; }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<section class="page cover">
+  <svg class="diamond" viewBox="0 0 200 200" fill="none" stroke="#b08a2e" stroke-width="1.1">
+    <polygon points="100,8 168,66 100,192 32,66" stroke="#d8c184" stroke-width="1.4"/>
+    <polygon points="100,8 100,192 32,66" />
+    <polygon points="100,8 168,66 100,192" />
+    <line x1="32" y1="66" x2="168" y2="66"/>
+    <line x1="62" y1="66" x2="100" y2="192"/>
+    <line x1="138" y1="66" x2="100" y2="192"/>
+    <line x1="62" y1="66" x2="100" y2="8" stroke="#d8c184"/>
+    <line x1="138" y1="66" x2="100" y2="8" stroke="#d8c184"/>
+    <line x1="62" y1="66" x2="138" y2="66"/>
+  </svg>
+  <div class="cover-inner">
+    <div class="cover-brand"><span class="b">ADAMAS<span class="a">α</span></span> <span class="by">A Falcon Intelligence Group Guide</span></div>
+    <span class="cover-tag">Leadership &amp; Operations</span>
+    <h1>The Founder's Guide to Escaping the <span class="hl">Knowledge Bottleneck</span>.</h1>
+    <p class="sub">How to extract the decisions trapped in your head and build a company that compounds — and is sellable — without you.</p>
+    <div class="cover-foot">
+      <span class="free">Free Guide · No signup required</span>
+      <span class="ed">Edition 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INTRO / TOC ============ -->
+<section class="page">
+  <div class="rh"><span>The Founder's Guide to Escaping the Knowledge Bottleneck</span><span class="g">ADAMAS</span></div>
+  <span class="eyebrow">Before you begin</span>
+  <h2 class="sec kick">If your company stopped working the day you did, <span class="hl">you don't own a company — you own a job.</span></h2>
+  <p class="lead">Most founders of $2M–$5M companies hit the same wall. The business has outgrown what one person can hold in their head, but it hasn't yet built the systems to hold that knowledge for them. The result is a quiet, expensive tax: every important decision still routes through you.</p>
+  <p>This guide is a practical method for getting the reasoning out of your head and into a system that keeps it — so your team can move without waiting on you, new hires get productive in weeks instead of months, and the enterprise value you've built doesn't evaporate the moment a key person leaves.</p>
+  <p>It is not theory. Every section ends with something you can do this week.</p>
+
+  <div class="callout">
+    <span class="eyebrow">Who this is for</span>
+    Founder-led companies scaling from roughly $2M to $5M in revenue — in engineering, technical services, and specialty software — where the founder is still the single point of failure for the decisions that matter most.
+  </div>
+
+  <h3>What's inside</h3>
+  <div class="toc">
+    <a><span><span class="t">1. The hidden tax of founder-dependency.</span> <span class="d">— What it actually costs you, in cash and in valuation.</span></span><span class="p">03</span></a>
+    <a><span><span class="t">2. Information is not knowledge.</span> <span class="d">— Why your tools store everything except the part that matters.</span></span><span class="p">04</span></a>
+    <a><span><span class="t">3. The five decisions you must capture.</span> <span class="d">— A simple taxonomy for what's worth keeping.</span></span><span class="p">05</span></a>
+    <a><span><span class="t">4. The extraction system.</span> <span class="d">— A repeatable method for getting reasoning out of heads.</span></span><span class="p">06</span></a>
+    <a><span><span class="t">5. The decision ledger schema.</span> <span class="d">— The exact fields that turn a note into an asset.</span></span><span class="p">08</span></a>
+    <a><span><span class="t">6. Your 30-day rollout.</span> <span class="d">— A week-by-week plan to start compounding.</span></span><span class="p">09</span></a>
+  </div>
+  <div class="pg-foot"><span>© Falcon Intelligence Group LLC</span><span>02</span></div>
+</section>
+
+<!-- ============ PART 1 ============ -->
+<section class="page">
+  <div class="rh"><span>Part 1 · The hidden tax</span><span class="g">ADAMAS</span></div>
+  <span class="eyebrow">Part One</span>
+  <h2 class="sec kick">The hidden tax of <span class="hl">founder-dependency.</span></h2>
+  <div class="rule"></div>
+  <p>Founder-dependency rarely shows up as a line item, which is exactly why it's so dangerous. It hides inside slower cycle times, repeated mistakes, delayed hires, and a discount applied the day you try to sell. Here is where the money actually leaks.</p>
+
+  <h3>1. The bottleneck tax</h3>
+  <p>When every non-routine decision needs your sign-off, your calendar becomes the company's rate limiter. Work queues behind you. Capable people wait — or worse, guess. You feel busy and indispensable; the business feels stuck and fragile. Both are true at once.</p>
+
+  <h3>2. The rework tax</h3>
+  <p>In engineering and technical work, a single decision made without its original context routinely costs <strong>$50,000 to $500,000</strong> in rework. The team re-litigates a choice you already made two years ago, or repeats a mistake you already learned from — because the reasoning was never written down, only the outcome.</p>
+
+  <div class="metrics">
+    <div class="metric"><div class="v">3–6mo</div><div class="l">Typical onboarding for a senior hire when context lives only in people's heads</div></div>
+    <div class="metric"><div class="v">20–30%</div><div class="l">Valuation discount buyers apply to "key-person-dependent" businesses</div></div>
+    <div class="metric"><div class="v">$0</div><div class="l">Salvage value of undocumented reasoning the day a key person resigns</div></div>
+  </div>
+
+  <h3>3. The valuation tax</h3>
+  <p>Acquirers and investors pay for durable, transferable value. A business whose core judgment lives in one person's memory is, to them, a risk to be priced down — not an asset to be paid up for. The same company becomes worth materially more the moment its decision-making is legible to an outsider.</p>
+
+  <div class="pull">"The goal isn't to write down what happened. It's to capture <span class="q">why you chose it</span> — so the choice can be trusted, taught, and built upon."</div>
+
+  <p>The encouraging part: this tax is optional. It's the byproduct of a missing system, not a missing trait. The rest of this guide is about installing that system.</p>
+  <div class="pg-foot"><span>© Falcon Intelligence Group LLC</span><span>03</span></div>
+</section>
+
+<!-- ============ PART 2 ============ -->
+<section class="page">
+  <div class="rh"><span>Part 2 · Information vs. knowledge</span><span class="g">ADAMAS</span></div>
+  <span class="eyebrow">Part Two</span>
+  <h2 class="sec kick">Information is not <span class="hl">knowledge.</span></h2>
+  <div class="rule"></div>
+  <p>You are not short on information. It's in Slack threads, call recordings, email chains, whiteboards, project tools, and a dozen documents nobody can find. The problem is that all of these store <em>what</em> — what was said, what was decided, what was shipped. Almost none of them store <em>why</em>.</p>
+
+  <p>And "why" is the only part with compounding value. A decision without its reasoning is a dead fact. A decision <strong>with</strong> its reasoning is a reusable judgment — something a new hire can absorb, a partner can audit, and your future self can build on instead of relitigating.</p>
+
+  <div class="grid2">
+    <div class="box"><div class="n">WHAT MOST TOOLS KEEP</div><p style="margin:6pt 0 0">The outcome. "We chose Postgres." "We dropped the enterprise tier." "We hired the contractor."</p></div>
+    <div class="box"><div class="n">WHAT ACTUALLY COMPOUNDS</div><p style="margin:6pt 0 0">The reasoning. The options weighed, the constraints at the time, who decided, and what would change the answer.</p></div>
+  </div>
+
+  <h3>The four questions every decision should answer</h3>
+  <ul class="clean">
+    <li><strong>Context</strong> — What was the situation, and what constraints were real at the time?</li>
+    <li><strong>Options</strong> — What alternatives were genuinely considered, and why were they rejected?</li>
+    <li><strong>Rationale</strong> — Why this choice? What did we believe would happen?</li>
+    <li><strong>Owner &amp; trigger</strong> — Who made the call, and what new information would make us revisit it?</li>
+  </ul>
+
+  <div class="callout">
+    <span class="eyebrow">The reframe</span>
+    Stop trying to document your company. Start capturing your decisions. A decision is small, specific, and worth keeping — and a year of them is a map of how your company actually thinks.
+  </div>
+
+  <p><strong>Do this week:</strong> The next time you make a real call, write four sentences — context, options, rationale, trigger. That single note is more transferable than most companies' entire wikis.</p>
+  <div class="pg-foot"><span>© Falcon Intelligence Group LLC</span><span>04</span></div>
+</section>
+
+<!-- ============ PART 3 ============ -->
+<section class="page">
+  <div class="rh"><span>Part 3 · What to capture</span><span class="g">ADAMAS</span></div>
+  <span class="eyebrow">Part Three</span>
+  <h2 class="sec kick">The five decisions you <span class="hl">must capture.</span></h2>
+  <div class="rule"></div>
+  <p>You can't — and shouldn't — write down everything. The skill is knowing which decisions carry future weight. These five types almost always do. If a choice fits one of them, it's worth four sentences.</p>
+
+  <ol class="steps">
+    <li><h4>Directional decisions</h4>Choices that set a path others will follow for months or years: architecture, positioning, pricing model, who you sell to. Expensive to reverse, so the reasoning is gold.</li>
+    <li><h4>Trade-off decisions</h4>Any time you chose A <em>knowing</em> you were giving up B. The rejected option and the reason are what stop the team from re-opening a settled debate.</li>
+    <li><h4>"We learned the hard way" decisions</h4>Choices made after something broke. These encode scar tissue. Capture them and the lesson survives the person who paid for it.</li>
+    <li><h4>Exception decisions</h4>The times you deliberately broke your own rule for a specific reason. Without the reason on record, exceptions silently become the new default.</li>
+    <li><h4>People &amp; commitment decisions</h4>Who owns what, what was promised to a client or partner, and on what terms. The most expensive context to lose when someone leaves.</li>
+  </ol>
+
+  <div class="callout">
+    <span class="eyebrow">Rule of thumb</span>
+    If you'd be annoyed to re-explain it in six months, or angry to discover it was forgotten — capture it now.
+  </div>
+  <div class="pg-foot"><span>© Falcon Intelligence Group LLC</span><span>05</span></div>
+</section>
+
+<!-- ============ PART 4 ============ -->
+<section class="page">
+  <div class="rh"><span>Part 4 · The extraction system</span><span class="g">ADAMAS</span></div>
+  <span class="eyebrow">Part Four</span>
+  <h2 class="sec kick">The extraction <span class="hl">system.</span></h2>
+  <div class="rule"></div>
+  <p>Getting reasoning out of a founder's head is a process, not a personality. Here is the method we use. It works whether you're doing it solo or with help.</p>
+
+  <h3>Step 1 — Mine the backlog</h3>
+  <p>Don't start with a blank page. Start with the decisions you've already made. Spend 90 minutes listing the 20–30 calls that most shaped the company. You'll surprise yourself — most of the crown jewels surface in the first hour.</p>
+
+  <h3>Step 2 — Interview for the "why"</h3>
+  <p>For each one, answer aloud as if explaining to a sharp new hire: <em>What was going on? What else did we consider? Why this? What would change my mind?</em> Talking is faster than writing; record it and capture the four sentences after.</p>
+
+  <h3>Step 3 — Structure, don't just store</h3>
+  <p>Drop each decision into a consistent shape (the schema on the next page). Structure is what makes a year of notes searchable, linkable, and teachable instead of a pile.</p>
+
+  <h3>Step 4 — Install a cadence</h3>
+  <p>Capture is a habit, not a project. Tie it to events you already have:</p>
+  <ul class="clean">
+    <li>A two-minute decision note at the end of any meeting where a real call was made.</li>
+    <li>A 15-minute Friday review: what did we decide this week, and why?</li>
+    <li>A decision check in every retro: which broken thing traces to lost context?</li>
+  </ul>
+
+  <div class="pull">"A company that captures its decisions for one year has something almost no competitor has: <span class="q">a memory.</span>"</div>
+  <div class="pg-foot"><span>© Falcon Intelligence Group LLC</span><span>06</span></div>
+</section>
+
+<!-- ============ PART 4b — diagram ============ -->
+<section class="page">
+  <div class="rh"><span>Part 4 · The loop</span><span class="g">ADAMAS</span></div>
+  <span class="eyebrow">The compounding loop</span>
+  <h2 class="sec kick">Capture once. <span class="hl">Reuse forever.</span></h2>
+  <div class="rule"></div>
+  <p>Each captured decision feeds the next. This is why the value compounds: every entry makes the next decision faster and the whole company more legible.</p>
+
+  <ol class="steps">
+    <li><h4>Decide</h4>A real choice gets made in the normal flow of work.</li>
+    <li><h4>Capture</h4>Four sentences — context, options, rationale, trigger — in a consistent shape.</li>
+    <li><h4>Link</h4>Connect it to related decisions, so reasoning forms chains, not islands.</li>
+    <li><h4>Reuse</h4>Next time the question comes up, the answer — and its "why" — is already there.</li>
+    <li><h4>Compound</h4>New hires onboard on real judgment; buyers see a legible business; you stop being the bottleneck.</li>
+  </ol>
+
+  <div class="callout">
+    <span class="eyebrow">Why local-first matters</span>
+    Your decision ledger is the most sensitive asset you own — it <em>is</em> your company's judgment. Keep it on hardware you control, not scattered across third-party clouds you don't. Ownership of the knowledge should never be ambiguous.
+  </div>
+  <div class="pg-foot"><span>© Falcon Intelligence Group LLC</span><span>07</span></div>
+</section>
+
+<!-- ============ PART 5 — SCHEMA ============ -->
+<section class="page">
+  <div class="rh"><span>Part 5 · The schema</span><span class="g">ADAMAS</span></div>
+  <span class="eyebrow">Part Five</span>
+  <h2 class="sec kick">The decision ledger <span class="hl">schema.</span></h2>
+  <div class="rule"></div>
+  <p>This is the difference between a note and an asset. Use these fields for every captured decision. They take two minutes and make a decision searchable, auditable, and teachable for years.</p>
+
+  <table class="schema">
+    <tr><th>Field</th><th>What it captures</th><th>Example</th></tr>
+    <tr><td>Decision</td><td>The choice, in one line</td><td>Run AI workloads locally on a Mac Mini, not in the cloud.</td></tr>
+    <tr><td>Date &amp; owner</td><td>When, and who made the call</td><td>2026-03-04 · M. (Founder)</td></tr>
+    <tr><td>Context</td><td>The situation &amp; real constraints</td><td>Handling client IP; cloud per-seat costs rising; privacy commitments.</td></tr>
+    <tr><td>Options</td><td>Alternatives weighed</td><td>(a) Cloud SaaS, (b) self-host VPS, (c) local hardware.</td></tr>
+    <tr><td>Rationale</td><td>Why this one</td><td>Data ownership + fixed cost + no per-seat tax outweighs setup effort.</td></tr>
+    <tr><td>Trigger</td><td>What would make us revisit</td><td>Team &gt; 25, or a workload that needs elastic scale.</td></tr>
+    <tr><td>Links</td><td>Related decisions</td><td>→ "Data residency policy" · → "Vendor lock-in stance"</td></tr>
+  </table>
+
+  <div class="callout">
+    <span class="eyebrow">Tip</span>
+    The <strong>Trigger</strong> field is the one most people skip and the one that pays the most. It turns a static record into a living one — it tells future-you exactly when the old answer expires.
+  </div>
+  <p><strong>Do this week:</strong> Copy these seven fields into a template. Fill it once. You now have the first entry in your company's brain.</p>
+  <div class="pg-foot"><span>© Falcon Intelligence Group LLC</span><span>08</span></div>
+</section>
+
+<!-- ============ PART 6 — ROLLOUT ============ -->
+<section class="page">
+  <div class="rh"><span>Part 6 · 30-day rollout</span><span class="g">ADAMAS</span></div>
+  <span class="eyebrow">Part Six</span>
+  <h2 class="sec kick">Your 30-day <span class="hl">rollout.</span></h2>
+  <div class="rule"></div>
+  <p>You don't need a transformation program. You need 30 days of small, consistent reps. Here's the plan.</p>
+
+  <h3>Week 1 — Mine</h3>
+  <ul class="check">
+    <li>List the 20–30 decisions that most shaped the company.</li>
+    <li>Pick the 5 you'd least want to lose. Write each as four sentences.</li>
+  </ul>
+  <h3>Week 2 — Structure</h3>
+  <ul class="check">
+    <li>Put those 5 into the seven-field schema.</li>
+    <li>Link any that relate. Notice the chains starting to form.</li>
+  </ul>
+  <h3>Week 3 — Habit</h3>
+  <ul class="check">
+    <li>Add a two-minute decision note to the end of every real meeting.</li>
+    <li>Run one 15-minute Friday "what did we decide, and why?" review.</li>
+  </ul>
+  <h3>Week 4 — Prove it</h3>
+  <ul class="check">
+    <li>Hand the ledger to one team member and have them act on a decision without asking you.</li>
+    <li>Count the questions you <em>didn't</em> have to answer. That number is your new leverage.</li>
+  </ul>
+
+  <div class="callout">
+    <span class="eyebrow">Where you'll be in 90 days</span>
+    A growing, searchable record of how your company decides. Faster onboarding, fewer repeated mistakes, and a business that is measurably less dependent on the inside of your head.
+  </div>
+  <div class="pg-foot"><span>© Falcon Intelligence Group LLC</span><span>09</span></div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="page cta">
+  <div class="ci">
+    <div class="cover-brand"><span class="b" style="color:#efe9da">ADAMAS<span class="a">α</span></span> <span class="by">Falcon Intelligence Group</span></div>
+    <span class="eyebrow" style="color:#d8c184; margin-top:34pt;">Want it built for you?</span>
+    <h2>You've got the method. <span class="hl">We'll build the system.</span></h2>
+    <p>ADAMAS is the decision ledger that turns scattered company knowledge into a compounding business brain — local-first, decision-first, built for founder-led companies scaling from $2M to $5M.</p>
+    <p>Start with a <strong style="color:#efe9da">Clarity Audit</strong>: we map exactly where your knowledge is trapped and deliver a report you can act on — credited toward your build if you proceed.</p>
+    <div class="price">The Clarity Audit — $1,000, credited toward your build.</div>
+    <a class="cta-btn" href="https://adamas-project.com/#book">Book your Clarity Audit →</a>
+    <div class="url">adamas-project.com</div>
+    <div class="legal">
+      ADAMAS (All Decisions And Memory Archive System) is a product of Falcon Intelligence Group LLC, a Delaware company. This guide is provided free for educational purposes; figures cited are illustrative industry ranges, not a guarantee of results. © 2026 Falcon Intelligence Group LLC. All rights reserved.
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
