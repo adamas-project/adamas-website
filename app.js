@@ -23,13 +23,13 @@
       ctx.lineWidth = 1;
       for (i=0;i<nodes.length;i++) for (j=i+1;j<nodes.length;j++){
         var dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
-        if (d<150){ var al=(1-d/150)*0.4; ctx.strokeStyle='rgba(150,120,235,'+al+')'; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
+        if (d<150){ var al=(1-d/150)*0.4; ctx.strokeStyle='rgba(201,168,76,'+al+')'; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
       }
       ctx.fillStyle='rgba(227,201,119,0.9)';
       for (i=0;i<nodes.length;i++){ ctx.beginPath(); ctx.arc(nodes[i].x,nodes[i].y,1.6,0,6.3); ctx.fill(); }
-      ctx.shadowColor='rgba(130,205,255,0.9)'; ctx.shadowBlur=12;
+      ctx.shadowColor='rgba(227,201,119,0.85)'; ctx.shadowBlur=12;
       for (i=0;i<parts.length;i++){ var p=parts[i]; p.y-=p.v; p.x+=Math.sin((p.y*0.012)+p.ph)*0.35; if(p.y<-12){ p.y=H+12; p.x=Math.random()*W; }
-        ctx.globalAlpha = p.a*(0.55+0.45*Math.sin(Date.now()*0.002+p.ph)); ctx.fillStyle='rgba(140,210,255,0.95)';
+        ctx.globalAlpha = p.a*(0.55+0.45*Math.sin(Date.now()*0.002+p.ph)); ctx.fillStyle='rgba(235,218,160,0.95)';
         ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.3); ctx.fill(); }
       ctx.globalAlpha=1; ctx.shadowBlur=0;
       raf = requestAnimationFrame(draw);
