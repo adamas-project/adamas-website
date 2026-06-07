@@ -425,3 +425,8 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 /* ===== trailing alpha mark (ADAMASα) ===== */
 .brand-a{color:var(--accent);font-size:1.28em;line-height:1;margin-left:.04em}
 .intro-a{color:var(--accent);text-transform:none;font-size:1.18em;line-height:1;margin-left:.05em}
+
+/* ===== subtle "book a call" link ===== */
+.book-call{font-size:13px;color:var(--faint);text-align:center;margin-top:16px}
+.book-call a{color:var(--accent);font-weight:700}
+.book-call a:hover{text-decoration:underline}
