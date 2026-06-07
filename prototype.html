@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADAMAS — Immersive Prototype</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+  @font-face{font-family:'D-DIN';src:url('fonts/D-DIN.woff2') format('woff2'),url('fonts/D-DIN.woff') format('woff');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'D-DIN';src:url('fonts/D-DIN-Bold.woff2') format('woff2'),url('fonts/D-DIN-Bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap}
+  :root{
+    --navy:#060b18; --blue:#7fb2ff; --blue-dim:#9fb0cc; --gold:#c9a84c; --gold-lt:#e3c977;
+    --text:#eef2fb; --font:'D-DIN',"DIN Alternate",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--navy);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  /* fixed 3D canvas */
+  #scene{position:fixed;inset:0;z-index:0;display:block}
+  .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(120% 90% at 50% 38%, transparent 40%, rgba(3,6,14,.55) 100%);}
+  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.03;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  /* nav */
+  nav{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;justify-content:space-between;
+    padding:22px 34px;mix-blend-mode:normal}
+  .brand{font-weight:700;font-size:20px;letter-spacing:.04em}
+  .brand .a{color:var(--gold)}
+  .brand small{display:block;font-size:9px;font-weight:400;letter-spacing:.18em;color:var(--blue-dim);text-transform:uppercase;margin-top:2px}
+  .navtag{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--blue-dim)}
+  /* scroll content */
+  main{position:relative;z-index:3}
+  section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 34px;max-width:1100px;margin:0 auto}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;align-self:flex-start;font-size:10.5px;font-weight:700;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--gold-lt);
+    border:1px solid rgba(201,168,76,.35);background:rgba(201,168,76,.06);border-radius:99px;padding:6px 15px;
+    backdrop-filter:blur(4px)}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);box-shadow:0 0 10px var(--gold)}
+  h1{font-weight:700;text-transform:uppercase;letter-spacing:-.01em;line-height:.96;
+    font-size:clamp(2.4rem,6.4vw,5rem);margin:22px 0 0;max-width:18ch;
+    text-shadow:0 2px 40px rgba(10,30,80,.6)}
+  h1 .g{color:var(--gold-lt)}
+  .sub{margin-top:22px;font-size:clamp(1rem,2.2vw,1.25rem);color:#cdd8ee;max-width:54ch;line-height:1.5}
+  .scenes h2{font-weight:700;text-transform:uppercase;font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1;letter-spacing:-.01em;max-width:16ch}
+  .scenes h2 .g{color:var(--gold-lt)}
+  .scenes p{margin-top:18px;font-size:1.05rem;color:#c2d0ec;max-width:50ch;line-height:1.55}
+  .center{align-items:center;text-align:center}
+  .center h1,.center h2,.center .sub,.center p{margin-left:auto;margin-right:auto}
+  .center .eyebrow{align-self:center}
+  .cta{display:inline-flex;align-items:center;gap:9px;margin-top:30px;font-weight:700;font-size:14px;letter-spacing:.02em;
+    color:#0a1020;background:linear-gradient(135deg,var(--gold-lt),var(--gold));border-radius:99px;padding:13px 26px;
+    box-shadow:0 10px 40px rgba(201,168,76,.25);cursor:pointer;text-decoration:none}
+  .scrollcue{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:5;font-size:10px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--blue-dim);display:flex;flex-direction:column;align-items:center;gap:9px;animation:bob 2s ease-in-out infinite}
+  .scrollcue i{width:13px;height:13px;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg)}
+  @keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
+  .progress{position:fixed;left:0;top:0;height:2px;width:0;z-index:6;background:linear-gradient(90deg,var(--blue),var(--gold-lt))}
+  @media(max-width:640px){nav{padding:18px 20px}section{padding:0 20px}}
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+<div class="progress" id="prog"></div>
+
+<nav>
+  <div class="brand">ADAMAS<span class="a">α</span><small>by Falcon Intelligence Group</small></div>
+  <div class="navtag">Immersive · Prototype</div>
+</nav>
+
+<main>
+  <section class="hero center">
+    <span class="eyebrow"><span class="dot"></span> Knowledge System · Local-first · Decision-first</span>
+    <h1>Your company's best thinking shouldn't live in <span class="g">one head.</span></h1>
+    <p class="sub">A living constellation of every decision your company makes — captured, linked, and compounding.</p>
+  </section>
+  <section class="scenes">
+    <h2>Every decision, <span class="g">a point of light.</span></h2>
+    <p>ADAMAS captures the context, the choice, the owner, and the reasoning — and links them across time, so the knowledge in your company stops decaying and starts compounding.</p>
+  </section>
+  <section class="scenes center">
+    <h2>Free your company's <span class="g">mind.</span></h2>
+    <p>Keep the knowledge. Lose the bottleneck.</p>
+    <a class="cta" href="index.html">See the current site →</a>
+  </section>
+</main>
+
+<div class="scrollcue"><span>Scroll</span><i></i></div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import Lenis from 'https://cdn.jsdelivr.net/npm/lenis@1.1.14/+esm';
+
+const canvas = document.getElementById('scene');
+let renderer, scene, camera, composer, group, points, lines, W, H, DPR;
+let scrollT = 0, targetT = 0, mouseX = 0, mouseY = 0, t0 = performance.now();
+
+try { init(); } catch (e) { console.error(e); document.body.style.background =
+  'radial-gradient(120% 90% at 50% 30%, #102046, #060b18 70%)'; }
+
+function init(){
+  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:false });
+  renderer.setPixelRatio(DPR);
+  scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x070d1e, 0.0042);
+  scene.background = new THREE.Color(0x060b18);
+
+  camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1200);
+  camera.position.set(0, 26, 120);
+
+  group = new THREE.Group();
+  scene.add(group);
+
+  // ---------- organized node field (the "decision constellation") ----------
+  const GX = 64, GZ = 64, GAP = 9;               // grid columns/rows, spacing
+  const offX = (GX-1)*GAP/2, offZ = (GZ-1)*GAP/2;
+  const count = GX*GZ;
+  const pos = new Float32Array(count*3);
+  const col = new Float32Array(count*3);
+  const siz = new Float32Array(count);
+  const pha = new Float32Array(count);
+  const heightAt = (x,z)=> 6*Math.sin(x*0.05)*Math.cos(z*0.05) + 3.2*Math.sin(x*0.13+z*0.09) + 2*Math.sin(z*0.21);
+  const cBlue = new THREE.Color(0x8fb6ff), cBlue2 = new THREE.Color(0x4f7fd8), cGold = new THREE.Color(0xe3c977);
+  let k=0;
+  for (let i=0;i<GX;i++){
+    for (let j=0;j<GZ;j++){
+      const x = i*GAP - offX + (Math.random()-0.5)*2.2;
+      const z = j*GAP - offZ + (Math.random()-0.5)*2.2;
+      const y = heightAt(x,z) + (Math.random()-0.5)*1.4;
+      pos[k*3]=x; pos[k*3+1]=y; pos[k*3+2]=z;
+      const gold = Math.random() < 0.07;
+      const c = gold ? cGold : cBlue.clone().lerp(cBlue2, Math.random()*0.7);
+      col[k*3]=c.r; col[k*3+1]=c.g; col[k*3+2]=c.b;
+      siz[k] = gold ? (2.6+Math.random()*1.6) : (1.0+Math.random()*1.4);
+      pha[k] = Math.random()*6.28;
+      k++;
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  g.setAttribute('aColor', new THREE.BufferAttribute(col,3));
+  g.setAttribute('aSize', new THREE.BufferAttribute(siz,1));
+  g.setAttribute('aPhase', new THREE.BufferAttribute(pha,1));
+
+  const pMat = new THREE.ShaderMaterial({
+    uniforms:{ uTime:{value:0}, uSize:{value:6.0}, uDPR:{value:DPR} },
+    transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+    vertexShader:`
+      uniform float uTime, uSize, uDPR;
+      attribute float aSize, aPhase; attribute vec3 aColor;
+      varying vec3 vColor; varying float vFade;
+      void main(){
+        vColor = aColor;
+        vec4 mv = modelViewMatrix * vec4(position,1.0);
+        float tw = 0.6 + 0.4*sin(uTime*1.4 + aPhase);
+        gl_PointSize = aSize * uSize * tw * (300.0 / -mv.z) * uDPR;
+        vFade = smoothstep(520.0, 40.0, -mv.z);
+        gl_Position = projectionMatrix * mv;
+      }`,
+    fragmentShader:`
+      varying vec3 vColor; varying float vFade;
+      void main(){
+        vec2 uv = gl_PointCoord - 0.5;
+        float a = smoothstep(0.5, 0.04, length(uv));
+        a *= vFade;
+        gl_FragColor = vec4(vColor*a, a);
+      }`
+  });
+  points = new THREE.Points(g, pMat);
+  group.add(points);
+
+  // ---------- links between neighbours (the "network") ----------
+  const seg = [];
+  const segCol = [];
+  const idx = (i,j)=> i*GZ + j;
+  const addLine = (a,b)=>{
+    seg.push(pos[a*3],pos[a*3+1],pos[a*3+2], pos[b*3],pos[b*3+1],pos[b*3+2]);
+    for (let n=0;n<2;n++) segCol.push(0.32,0.5,0.85);
+  };
+  for (let i=0;i<GX;i++) for (let j=0;j<GZ;j++){
+    if (i<GX-1 && Math.random()<0.82) addLine(idx(i,j), idx(i+1,j));
+    if (j<GZ-1 && Math.random()<0.82) addLine(idx(i,j), idx(i,j+1));
+  }
+  const lg = new THREE.BufferGeometry();
+  lg.setAttribute('position', new THREE.Float32BufferAttribute(seg,3));
+  lg.setAttribute('color', new THREE.Float32BufferAttribute(segCol,3));
+  const lMat = new THREE.LineBasicMaterial({ vertexColors:true, transparent:true, opacity:0.16,
+    blending:THREE.AdditiveBlending, depthWrite:false, fog:true });
+  lines = new THREE.LineSegments(lg, lMat);
+  group.add(lines);
+
+  // ---------- atmospheric blue glow plane (light rays feel) ----------
+  const glowGeo = new THREE.PlaneGeometry(900, 500);
+  const glowMat = new THREE.MeshBasicMaterial({ color:0x12274f, transparent:true, opacity:0.5,
+    blending:THREE.AdditiveBlending, depthWrite:false, fog:false });
+  const glow = new THREE.Mesh(glowGeo, glowMat);
+  glow.position.set(0, 70, -260); glow.rotation.x = -0.12;
+  scene.add(glow);
+
+  // ---------- bloom ----------
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1,1), 0.9, 0.5, 0.0);
+  composer.addPass(bloom);
+
+  resize();
+  window.addEventListener('resize', resize);
+  window.addEventListener('pointermove', e=>{ mouseX=(e.clientX/W-0.5); mouseY=(e.clientY/H-0.5); }, {passive:true});
+
+  // ---------- smooth scroll ----------
+  const lenis = new Lenis({ lerp:0.085, wheelMultiplier:0.9 });
+  const docH = ()=> document.body.scrollHeight - window.innerHeight;
+  lenis.on('scroll', ({scroll})=>{ targetT = Math.min(1, Math.max(0, scroll / Math.max(1,docH()))); });
+  function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+
+  requestAnimationFrame(loop);
+}
+
+function resize(){
+  W = window.innerWidth; H = window.innerHeight;
+  renderer.setSize(W,H);
+  composer.setSize(W,H);
+  camera.aspect = W/H; camera.updateProjectionMatrix();
+}
+
+function loop(){
+  requestAnimationFrame(loop);
+  const time = (performance.now()-t0)/1000;
+  scrollT += (targetT - scrollT) * 0.06;            // eased scroll progress
+  points.material.uniforms.uTime.value = time;
+
+  // camera flies forward + descends as you scroll; gentle mouse parallax
+  const fly = scrollT;
+  camera.position.z = 120 - fly*210;
+  camera.position.y = 26 - fly*16 + Math.sin(time*0.4)*1.5;
+  camera.position.x += ((mouseX*22) - camera.position.x)*0.04;
+  camera.lookAt(0, 8 - fly*10, camera.position.z - 120);
+
+  group.rotation.y = Math.sin(time*0.05)*0.06 + mouseX*0.05;
+
+  document.getElementById('prog').style.width = (scrollT*100).toFixed(1)+'%';
+  composer.render();
+}
+</script>
+</body>
+</html>
