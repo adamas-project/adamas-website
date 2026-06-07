@@ -531,3 +531,8 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 [data-theme="matrix"] #intro.intro-exit::after {
   background: radial-gradient(circle at 50% 50%, rgba(200,255,212,.95), rgba(0,255,65,.5) 34%, transparent 72%);
 }
+
+/* "What It Is" — liberation closing line */
+.is-card .is-free { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border-2);
+  font-size: 16px; line-height: 1.62; color: var(--muted); }
+.is-card .is-free b { color: var(--text); }
