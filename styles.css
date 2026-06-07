@@ -177,16 +177,16 @@
 
     h2.title { font-family: var(--font-d); font-weight: 700; font-size: clamp(2.1rem, 6vw, 3rem); line-height: 0.95; letter-spacing: -0.01em; text-transform: uppercase; color: var(--text); }
     h2.title em { font-style: normal; color: var(--accent); }
-    .sec-head { max-width: 700px; margin-bottom: 46px; }
+    .sec-head { max-width: 700px; margin-bottom: 58px; }
     .sec-head.center { margin-left: auto; margin-right: auto; text-align: center; }
     .sec-head p { color: var(--muted); font-size: 17px; margin-top: 16px; line-height: 1.55; }
 
     /* Apple-style section tiles: translucent boxes (rain shows through), ~3mm gap "lines" between */
-    section { padding: 0 16px; margin: 12px 0; scroll-margin-top: 84px; }
+    section { padding: 0 16px; margin: 34px 0; scroll-margin-top: 84px; }
     section:not(.final) > .wrap {
       border: 1px solid var(--border);
       border-radius: 26px;
-      padding: 62px 48px;
+      padding: 84px 56px;
       background: rgba(150,150,160,0.04);
     }
     /* a slightly different colour touch per box — kept faint so the falling code stays visible */
@@ -217,7 +217,7 @@
     .acronym b { color: var(--accent); font-weight: 700; }
 
     /* ============ PROBLEM ============ */
-    .prob-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .prob-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
     .prob { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 28px; }
     .prob-ic { font-size: 24px; margin-bottom: 12px; }
     .prob h4 { font-family: var(--font-d); font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 7px; letter-spacing: -0.01em; }
@@ -296,7 +296,7 @@
     .pc-badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); border: 1px solid var(--border); border-radius: 99px; padding: 3px 10px; margin-top: 14px; align-self: flex-start; }
 
     /* ============ RESOURCES ============ */
-    .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
     .res-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 26px; display: flex; flex-direction: column; transition: border-color .2s, transform .2s; }
     .res-card:hover { border-color: var(--accent-line); transform: translateY(-2px); }
     .res-card .ic { font-size: 24px; margin-bottom: 12px; }
@@ -381,8 +381,8 @@
     }
     @media (max-width: 540px) {
       .wrap { padding: 0 18px; }
-      section { padding: 0 10px; margin: 10px 0; }
-      section:not(.final) > .wrap { padding: 38px 22px; border-radius: 18px; }
+      section { padding: 0 10px; margin: 22px 0; }
+      section:not(.final) > .wrap { padding: 50px 24px; border-radius: 18px; }
       .is-card, .final-card { padding: 30px 22px; }
       .schema { grid-template-columns: 1fr; }
       .brand-by { display: none; }
