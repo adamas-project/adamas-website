@@ -424,3 +424,7 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 .cal-or{font-size:14px;color:var(--muted);margin-bottom:14px}
 .cal-frame{width:100%;border:1px solid var(--border);border-radius:14px;background:#fff;color-scheme:light}
 @media (max-width:540px){.lf-phone{grid-template-columns:118px 1fr}}
+
+/* ===== trailing alpha mark (ADAMASα) ===== */
+.brand-a{color:var(--accent);font-size:1.28em;line-height:1;margin-left:.04em}
+.intro-a{color:var(--accent);text-transform:none;font-size:1.18em;line-height:1;margin-left:.05em}
