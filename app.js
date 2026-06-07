@@ -1,3 +1,51 @@
+// ---------- cinematic intro / loading screen ----------
+(function () {
+  try {
+    var intro = document.getElementById('intro');
+    if (!intro) return;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var seen = false; try { seen = sessionStorage.getItem('adamas-intro') === '1'; } catch (e) {}
+    if (reduce || seen) { intro.remove(); return; }
+    document.documentElement.classList.add('intro-on');
+    document.body.classList.add('intro-on');
+    var cv = document.getElementById('introNet'), ctx = cv.getContext('2d'), W, H, nodes = [], raf;
+    function accent(){ return (getComputedStyle(document.documentElement).getPropertyValue('--accent') || '#c9a84c').trim(); }
+    function size(){ W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
+    function init(){ size(); var n = Math.max(36, Math.min(110, Math.floor(W * H / 15000))); nodes = []; for (var i = 0; i < n; i++) nodes.push({ x: Math.random()*W, y: Math.random()*H, vx: (Math.random()-0.5)*0.55, vy: (Math.random()-0.5)*0.55 }); }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      var col = accent(), i, j;
+      for (i=0;i<nodes.length;i++){ var a=nodes[i]; a.x+=a.vx; a.y+=a.vy; if(a.x<0||a.x>W)a.vx*=-1; if(a.y<0||a.y>H)a.vy*=-1; }
+      ctx.lineWidth = 1;
+      for (i=0;i<nodes.length;i++) for (j=i+1;j<nodes.length;j++){
+        var dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
+        if (d<150){ ctx.globalAlpha=(1-d/150)*0.45; ctx.strokeStyle=col; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
+      }
+      ctx.globalAlpha=0.9; ctx.fillStyle=col;
+      for (i=0;i<nodes.length;i++){ ctx.beginPath(); ctx.arc(nodes[i].x,nodes[i].y,2,0,6.3); ctx.fill(); }
+      ctx.globalAlpha=1; raf=requestAnimationFrame(draw);
+    }
+    init(); draw(); window.addEventListener('resize', init);
+    var done=false;
+    function enter(){
+      if (done) return; done=true;
+      try { sessionStorage.setItem('adamas-intro','1'); } catch (e) {}
+      intro.classList.add('intro-exit');
+      document.documentElement.classList.remove('intro-on');
+      document.body.classList.remove('intro-on');
+      document.body.classList.add('site-in');
+      setTimeout(function(){ cancelAnimationFrame(raf); window.removeEventListener('resize', init); if (intro.parentNode) intro.remove(); document.body.classList.remove('site-in'); }, 1300);
+    }
+    window.addEventListener('wheel', enter, { passive: true, once: true });
+    window.addEventListener('touchmove', enter, { passive: true, once: true });
+    window.addEventListener('keydown', function (e) { if (['ArrowDown','PageDown',' ','Spacebar','Enter'].indexOf(e.key) > -1) enter(); });
+    var b = document.getElementById('introEnter'); if (b) b.addEventListener('click', enter);
+  } catch (e) {
+    var el = document.getElementById('intro'); if (el && el.parentNode) el.remove();
+    document.documentElement.classList.remove('intro-on'); document.body.classList.remove('intro-on');
+  }
+})();
+
 (function () {
       var lf = document.getElementById('leadForm');
       if (!lf) return;

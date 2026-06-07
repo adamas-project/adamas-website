@@ -21,6 +21,15 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div id="intro" role="dialog" aria-label="ADAMAS">
+    <canvas id="introNet" aria-hidden="true"></canvas>
+    <div class="intro-mid">
+      <div class="intro-brand">ADAMAS</div>
+      <div class="intro-sub">All Decisions And Memory Archive System</div>
+    </div>
+    <button class="intro-enter" id="introEnter" type="button"><span>Nach unten scrollen</span><span class="intro-chev"></span></button>
+  </div>
+  <noscript><style>#intro{display:none!important}</style></noscript>
   <canvas id="rain" aria-hidden="true"></canvas>
   <div class="glow"></div>
   <div class="grain"></div>
@@ -318,24 +327,41 @@
       <div class="wrap">
         <div class="final-card fade">
           <h2>Bauen wir etwas, das bleibt.</h2>
-          <p>Beginnen Sie mit einem Clarity-Audit — ein 30-minütiges Gespräch, unverbindlich. Hinterlassen Sie Ihre Daten und wir melden uns innerhalb eines Werktags.</p>
+          <p>Das Clarity-Audit ist eine kostenpflichtige Leistung — 1.000 $, anrechenbar auf Ihren Aufbau. Hinterlassen Sie unten Ihre Daten oder buchen Sie direkt einen Termin für Ihr 30-minütiges Gespräch.</p>
           <form name="clarity-audit" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="lead-form" id="leadForm">
             <input type="hidden" name="form-name" value="clarity-audit">
             <input type="hidden" name="language" value="de">
             <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
             <div class="lf-row">
               <input name="name" type="text" required placeholder="Vollständiger Name" autocomplete="name">
-              <input name="company" type="text" placeholder="Unternehmen" autocomplete="organization">
+              <input name="role" type="text" placeholder="Ihre Rolle" autocomplete="organization-title">
             </div>
             <div class="lf-row">
-              <input name="email" type="email" required placeholder="Geschäftliche E-Mail" autocomplete="email">
+              <input name="company" type="text" placeholder="Unternehmen" autocomplete="organization">
+              <input name="company_website" type="text" placeholder="Unternehmenswebsite" autocomplete="url" inputmode="url">
+            </div>
+            <input name="email" type="email" required placeholder="Geschäftliche E-Mail" autocomplete="email">
+            <div class="lf-phone">
+              <select name="country_code" class="lf-cc" aria-label="Ländervorwahl"><option value="+49" selected>🇩🇪 +49 Deutschland</option><option value="+43">🇦🇹 +43 Österreich</option><option value="+41">🇨🇭 +41 Schweiz</option><option value="+1">🇺🇸 +1 USA</option><option value="+44">🇬🇧 +44 Vereinigtes Königreich</option><option value="+353">🇮🇪 +353 Irland</option><option value="+33">🇫🇷 +33 Frankreich</option><option value="+31">🇳🇱 +31 Niederlande</option><option value="+32">🇧🇪 +32 Belgien</option><option value="+352">🇱🇺 +352 Luxemburg</option><option value="+39">🇮🇹 +39 Italien</option><option value="+34">🇪🇸 +34 Spanien</option><option value="+351">🇵🇹 +351 Portugal</option><option value="+46">🇸🇪 +46 Schweden</option><option value="+45">🇩🇰 +45 Dänemark</option><option value="+47">🇳🇴 +47 Norwegen</option><option value="+358">🇫🇮 +358 Finnland</option><option value="+48">🇵🇱 +48 Polen</option><option value="+420">🇨🇿 +420 Tschechien</option><option value="+1">🇨🇦 +1 Kanada</option><option value="+61">🇦🇺 +61 Australien</option><option value="+971">🇦🇪 +971 VAE</option><option value="+65">🇸🇬 +65 Singapur</option><option value="+91">🇮🇳 +91 Indien</option></select>
               <input name="phone" type="tel" required placeholder="Telefonnummer" autocomplete="tel">
             </div>
-            <textarea name="message" rows="3" placeholder="Welche Wissensfalle möchten Sie lösen? (optional)"></textarea>
+            <select name="situation" class="lf-select" required>
+              <option value="" disabled selected>Was beschreibt Ihre Situation am besten?</option>
+              <option>Ich bin der Engpass — zu viel läuft über mich</option>
+              <option>Schlüsselpersonen-Risiko — Wissen steckt in ein, zwei Köpfen</option>
+              <option>Einarbeitung ist langsam — kein System für neue Mitarbeitende</option>
+              <option>Nachfolge oder Übergabe — Rückzug oder Verkauf geplant</option>
+              <option>Investor oder Due Diligence — wir brauchen eine Entscheidungs-Historie</option>
+              <option>Ich informiere mich erst einmal</option>
+            </select>
             <button class="btn btn-gold" type="submit">Clarity-Audit anfragen →</button>
             <p class="lf-note">Local-First &amp; vertraulich. Wir geben Ihre Daten niemals weiter.</p>
           </form>
           <div class="lf-ok" id="leadOk"><strong>Danke — erhalten.</strong> Wir antworten innerhalb eines Werktags, um Ihr 30-minütiges Clarity-Audit zu vereinbaren.</div>
+          <div class="cal-block">
+            <div class="cal-or">Lieber direkt einen Termin wählen? Buchen Sie Ihr 30-minütiges Clarity-Audit (1.000 $):</div>
+            <iframe class="cal-frame" src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ3RrhY81EJLslG5MEONx0E-yplAqaWP8RcX78sIc_aLHFpjhzvSSWrlVuHcG3hTpqgSCOa-w9ZY?gv=true" width="100%" height="620" frameborder="0" loading="lazy" title="Book a Clarity Audit"></iframe>
+          </div>
           <div class="signature">Massimo Sahin<span>Gründer · Falcon Intelligence Group</span></div>
         </div>
       </div>
