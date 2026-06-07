@@ -462,3 +462,37 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 .ftr-col h5 a { color: var(--text); transition: color .2s; }
 .ftr-col h5 a:hover { color: var(--accent); }
 .ftr-col h5.ftr-sub { margin-top: 16px; }
+
+/* ===== nav dropdown (Resources) ===== */
+.nav-dd { position: relative; display: inline-flex; }
+.nav-dd-trigger { cursor: pointer; display: inline-flex; align-items: center; gap: 5px; user-select: none; }
+.nav-dd .caret { font-size: 9px; opacity: .75; transition: transform .2s ease; }
+.nav-dd:hover .caret, .nav-dd:focus-within .caret { transform: rotate(180deg); }
+.nav-dd-menu {
+  position: absolute; top: 100%; right: 0; margin-top: 16px;
+  min-width: 500px; padding: 22px 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 34px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--card-shadow);
+  opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(8px);
+  transition: opacity .2s ease, transform .2s ease; z-index: 70;
+}
+.nav-dd-menu::before { content: ''; position: absolute; top: -16px; left: 0; right: 0; height: 16px; }
+.nav-dd:hover .nav-dd-menu, .nav-dd:focus-within .nav-dd-menu {
+  opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0);
+}
+.dd-group .dd-h { display: block; font-family: var(--font-d); font-size: 10px; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin: 2px 0 9px; }
+.nav-dd-menu a { display: block; font-size: 13px; color: var(--muted); padding: 6px 0;
+  transition: color .2s; white-space: nowrap; }
+.nav-dd-menu a:hover { color: var(--text); }
+
+@media (max-width: 880px) {
+  .nav-dd { display: block; width: 100%; }
+  .nav-dd-trigger { padding: 14px 24px; width: 100%; }
+  .nav-dd .caret { display: none; }
+  .nav-dd-menu { position: static; opacity: 1; visibility: visible; pointer-events: auto; transform: none;
+    min-width: 0; grid-template-columns: 1fr; gap: 0; padding: 2px 24px 10px; margin-top: 0;
+    background: transparent; border: 0; box-shadow: none; }
+  .nav-dd-menu::before { display: none; }
+  .dd-group { margin-bottom: 6px; }
+  .dd-group .dd-h { margin-top: 8px; }
+}
