@@ -420,9 +420,6 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 .lf-cc,.lf-select{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:13px 12px;color:var(--text);font-family:var(--font-b);font-size:14px;transition:border-color .2s}
 .lf-cc:focus,.lf-select:focus{outline:none;border-color:var(--accent)}
 .lf-select:invalid{color:var(--faint)}
-.cal-block{margin-top:26px;border-top:1px solid var(--border-2);padding-top:22px;text-align:left}
-.cal-or{font-size:14px;color:var(--muted);margin-bottom:14px}
-.cal-frame{width:100%;border:1px solid var(--border);border-radius:14px;background:#fff;color-scheme:light}
 @media (max-width:540px){.lf-phone{grid-template-columns:118px 1fr}}
 
 /* ===== trailing alpha mark (ADAMASα) ===== */
