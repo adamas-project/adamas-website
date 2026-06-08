@@ -1,0 +1,88 @@
+/* ===== ADAMAS integration articles — clean, fast, SEO-friendly reading layout ===== */
+:root{
+  --ink:#f5f5f7; --muted:#a1a1a6; --faint:#6e6e73; --gold:#c9a84c; --gold-lt:#e3c977;
+  --bg:#000; --surface:#161618; --surface2:#1f1f22; --line:rgba(255,255,255,.11); --line2:rgba(255,255,255,.06);
+  --font-d:'D-DIN',"DIN Alternate",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --maxw:760px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-d);font-size:17px;line-height:1.7;
+  background-image:radial-gradient(140% 90% at 50% -10%, rgba(201,168,76,.07), transparent 55%);}
+a{color:inherit;text-decoration:none}
+.gold{color:var(--gold-lt)}
+em{color:var(--gold-lt);font-style:italic}
+/* nav */
+.anav{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(0,0,0,.6);border-bottom:1px solid var(--line2)}
+.anav-in{max-width:1080px;margin:0 auto;padding:14px clamp(20px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.abrand{font-weight:600;font-size:19px;letter-spacing:-.01em}
+.abrand i{color:var(--gold);font-style:normal;font-size:1.28em}
+.abrand small{display:block;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-top:1px}
+.anav .links{display:flex;align-items:center;gap:22px;font-size:13px;font-weight:600;color:var(--muted)}
+.anav .links a:hover{color:var(--ink)}
+.abtn{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(180deg,#e3c977,#b08a2e);color:#1a1408;
+  font-weight:700;font-size:13px;padding:9px 18px;border-radius:99px;white-space:nowrap}
+@media(max-width:640px){.anav .links a.hidem{display:none}}
+/* article */
+.art{max-width:var(--maxw);margin:0 auto;padding:46px clamp(20px,5vw,24px) 40px}
+.crumb{font-size:12px;letter-spacing:.04em;color:var(--faint);margin-bottom:26px}
+.crumb a{color:var(--gold)}
+.crumb span{margin:0 7px;color:var(--faint)}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+h1{font-size:clamp(2rem,5.4vw,3.1rem);line-height:1.06;letter-spacing:-.02em;font-weight:700;margin-bottom:20px}
+.lead{font-size:clamp(1.1rem,2.4vw,1.3rem);color:var(--muted);line-height:1.55;margin-bottom:14px}
+.art h2{font-size:clamp(1.5rem,3.4vw,1.9rem);line-height:1.15;letter-spacing:-.01em;margin:46px 0 8px;font-weight:700}
+.art h2 .gold{color:var(--gold-lt)}
+.art h3{font-size:1.15rem;margin:28px 0 6px;font-weight:700}
+.art p{margin:0 0 16px;color:#d6d6da}
+.art ul{margin:6px 0 18px;padding:0;list-style:none}
+.art ul li{position:relative;padding-left:24px;margin-bottom:9px;color:#d6d6da}
+.art ul li::before{content:'';position:absolute;left:2px;top:11px;width:7px;height:7px;background:var(--gold);transform:rotate(45deg)}
+.rule{height:2px;width:48px;background:var(--gold);margin:8px 0 0;border-radius:2px}
+.callout{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:0 12px 12px 0;padding:18px 20px;margin:22px 0}
+.callout .k{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:7px}
+.callout p{margin:0;color:#d6d6da}
+/* 3-step flow */
+.flow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:24px 0}
+.flow .s{background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:18px 16px}
+.flow .s .n{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.flow .s h4{font-size:15px;margin:7px 0 5px}
+.flow .s p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.5}
+@media(max-width:640px){.flow{grid-template-columns:1fr}}
+/* faq */
+.faq{margin:14px 0 0;border-top:1px solid var(--line2)}
+.faq details{border-bottom:1px solid var(--line2)}
+.faq summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:16px;display:flex;justify-content:space-between;gap:14px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';color:var(--gold);font-weight:700}
+.faq details[open] summary::after{content:'–'}
+.faq details p{padding:0 0 18px;color:var(--muted);font-size:15px;margin:0}
+/* cta */
+.cta-card{margin:44px 0 10px;background:linear-gradient(180deg,rgba(201,168,76,.08),rgba(0,0,0,0)),var(--surface);
+  border:1px solid var(--line);border-radius:18px;padding:34px 30px;text-align:center}
+.cta-card h2{font-size:1.7rem;margin:0 0 10px}
+.cta-card p{color:var(--muted);max-width:480px;margin:0 auto 20px}
+.cta-card .price{color:var(--gold-lt);font-weight:700;margin-bottom:18px}
+/* related */
+.related{margin:40px 0 0}
+.related h2{font-size:1.2rem;margin:0 0 14px}
+.rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rel-grid a{display:block;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;transition:border-color .2s,transform .2s}
+.rel-grid a:hover{border-color:var(--gold);transform:translateY(-2px)}
+.rel-grid a b{display:block;font-size:14.5px}
+.rel-grid a span{font-size:12.5px;color:var(--faint)}
+@media(max-width:640px){.rel-grid{grid-template-columns:1fr}}
+/* footer */
+.afoot{border-top:1px solid var(--line2);margin-top:50px}
+.afoot-in{max-width:1080px;margin:0 auto;padding:30px clamp(20px,4vw,40px);display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;align-items:center;font-size:13px;color:var(--faint)}
+.afoot-in a{color:var(--muted)}
+.afoot-in a:hover{color:var(--ink)}
+/* hub */
+.hub-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:30px 0 0}
+.hub-grid a{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 20px;transition:border-color .2s,transform .2s}
+.hub-grid a:hover{border-color:var(--gold);transform:translateY(-3px)}
+.hub-grid .cat{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.hub-grid h3{font-size:18px;margin:0 0 6px}
+.hub-grid p{font-size:13.5px;color:var(--muted);margin:0;line-height:1.5}
+@media(max-width:640px){.hub-grid{grid-template-columns:1fr}}
