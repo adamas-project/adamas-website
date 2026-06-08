@@ -164,3 +164,60 @@ const root = document.documentElement;
       btns.forEach(function (b) { b.addEventListener('click', function () { applyTheme(b.dataset.setTheme); }); });
       applyTheme(root.getAttribute('data-theme') || 'dark');
     } catch (e) {}
+
+/* ---------- email gate for eBook / guide downloads ---------- */
+(function () {
+  try {
+    var gate = document.getElementById('guideGate');
+    if (!gate) return;
+    var form = document.getElementById('gateForm');
+    var emailEl = document.getElementById('gateEmail');
+    var guideEl = document.getElementById('gateGuide');
+    var nameEl = document.getElementById('gateName');
+    var okEl = document.getElementById('gateOk');
+    var dlEl = document.getElementById('gateDl');
+    var pendingUrl = null;
+
+    function isGuide(a) {
+      var h = a && a.getAttribute && a.getAttribute('href');
+      return h && /downloads\/ADAMAS-Guide-[^"']*\.pdf$/i.test(h);
+    }
+    function openGate(url, name) {
+      pendingUrl = url;
+      if (guideEl) guideEl.value = name;
+      if (nameEl) nameEl.textContent = '“' + name + '”';
+      okEl.hidden = true; form.hidden = false; form.reset();
+      gate.hidden = false; document.body.style.overflow = 'hidden';
+      setTimeout(function () { try { emailEl.focus(); } catch (e) {} }, 60);
+    }
+    function closeGate() { gate.hidden = true; document.body.style.overflow = ''; }
+    function startDownload() {
+      if (!pendingUrl) return;
+      var a = document.createElement('a');
+      a.href = pendingUrl; a.setAttribute('download', ''); a.rel = 'noopener';
+      document.body.appendChild(a); a.click(); a.remove();
+    }
+
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest ? e.target.closest('a') : null;
+      if (!a || !isGuide(a)) return;
+      e.preventDefault();
+      var name = (a.textContent || '').trim() || a.getAttribute('href').split('/').pop();
+      openGate(a.getAttribute('href'), name);
+    });
+    gate.querySelectorAll('[data-gate-close]').forEach(function (el) { el.addEventListener('click', closeGate); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !gate.hidden) closeGate(); });
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var body = new URLSearchParams(new FormData(form)).toString();
+      function done() {
+        form.hidden = true; okEl.hidden = false;
+        if (dlEl && pendingUrl) dlEl.href = pendingUrl;
+        startDownload();
+      }
+      fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
+        .then(done).catch(done);
+    });
+  } catch (e) {}
+})();

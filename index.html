@@ -198,7 +198,7 @@
             <div class="fm-tile"><span class="ic">📅</span><span class="nm">Calendars &amp; repos</span><span class="ex">Schedules · GitHub · tickets</span></div>
           </div>
 
-          <div class="fm-funnel" aria-hidden="true"><span class="fm-step">1 · Fetch</span></div>
+          <div class="fm-funnel" aria-hidden="true"><span class="pulse p-l"></span><span class="pulse p-c"></span><span class="pulse p-r"></span><span class="fm-step">1 · Fetch</span></div>
 
           <div class="fm-core">
             <span class="fm-brand">ADAMAS<i>α</i></span>
@@ -497,6 +497,30 @@
   </footer>
 
   
+  <!-- email gate for eBook / guide downloads -->
+  <div class="gate" id="guideGate" hidden>
+    <div class="gate-backdrop" data-gate-close></div>
+    <div class="gate-card" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+      <button class="gate-x" type="button" data-gate-close aria-label="Close">×</button>
+      <div class="gate-eyebrow">Free guide</div>
+      <h3 id="gateTitle">Where should we send it?</h3>
+      <p class="gate-sub">Enter your email and we'll unlock <span id="gateName">the guide</span> instantly — no spam, just the PDF and the occasional decision-making insight.</p>
+      <form name="guide-download" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="gateForm">
+        <input type="hidden" name="form-name" value="guide-download">
+        <input type="hidden" name="guide" id="gateGuide" value="">
+        <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
+        <input type="email" name="email" id="gateEmail" required placeholder="Work email" autocomplete="email">
+        <button type="submit" class="btn btn-gold">Unlock the download →</button>
+        <p class="gate-note">We'll never share your details. <a href="privacy.html">Privacy</a></p>
+      </form>
+      <div class="gate-ok" id="gateOk" hidden>
+        <div class="gate-tick">✓</div>
+        <strong>Thanks — your download is starting.</strong>
+        <p>If it didn't begin automatically, <a id="gateDl" href="#" download>download the PDF here</a>.</p>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js" defer></script>
   <script type="module" src="bg.js"></script>
 </body>
