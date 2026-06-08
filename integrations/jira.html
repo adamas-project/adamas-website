@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jira Decision Log — Capture Engineering Decisions &amp; Their Why | ADAMAS</title>
+<meta name="description" content="Jira tracks issues and sprints, but the engineering reasoning behind tickets, priorities and architecture calls lives in comments and gets buried. ADAMAS turns it into a decision ledger.">
+<link rel="canonical" href="https://adamas-project.com/integrations/jira.html">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jira Decision Log — Capture Engineering Decisions &amp; Their Why | ADAMAS">
+<meta property="og:description" content="Jira tracks issues and sprints, but the engineering reasoning behind tickets, priorities and architecture calls lives in comments and gets buried. ADAMAS turns it into a decision ledger.">
+<meta property="og:url" content="https://adamas-project.com/integrations/jira.html">
+<meta property="og:site_name" content="ADAMAS">
+<meta property="og:image" content="https://adamas-project.com/favicon.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Jira Decision Log — Capture Engineering Decisions &amp; Their Why | ADAMAS">
+<meta name="twitter:description" content="Jira tracks issues and sprints, but the engineering reasoning behind tickets, priorities and architecture calls lives in comments and gets buried. ADAMAS turns it into a decision ledger.">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="article.css">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Jira Decision Log \u2014 Capture Engineering Decisions &amp; Their Why | ADAMAS", "description": "Jira tracks issues and sprints, but the engineering reasoning behind tickets, priorities and architecture calls lives in comments and gets buried. ADAMAS turns it into a decision ledger.", "author": {"@type": "Organization", "name": "Falcon Intelligence Group LLC"}, "publisher": {"@type": "Organization", "name": "ADAMAS by Falcon Intelligence Group", "logo": {"@type": "ImageObject", "url": "https://adamas-project.com/favicon.svg"}}, "mainEntityOfPage": "https://adamas-project.com/integrations/jira.html", "datePublished": "2026-06-08", "dateModified": "2026-06-08", "image": "https://adamas-project.com/favicon.svg"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Is ADAMAS a Jira replacement?", "acceptedAnswer": {"@type": "Answer", "text": "No. Jira stays your issue tracker; ADAMAS captures the reasoning behind the decisions made in it and structures it into a decision ledger."}}, {"@type": "Question", "name": "How does the Jira integration work?", "acceptedAnswer": {"@type": "Answer", "text": "Through Jira's API and webhooks \u2014 ADAMAS reads issues, status transitions and comments, then writes a structured decision entry for each meaningful call."}}, {"@type": "Question", "name": "Does our data leave Jira for a third-party cloud?", "acceptedAnswer": {"@type": "Answer", "text": "No. ADAMAS is local-first and runs on hardware you own; external routing only happens for tasks you explicitly approve."}}, {"@type": "Question", "name": "Can it combine Jira with Slack and docs?", "acceptedAnswer": {"@type": "Answer", "text": "Yes \u2014 ADAMAS unifies reasoning from Jira, comms, meetings and documents into one decision ledger."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://adamas-project.com/"}, {"@type": "ListItem", "position": 2, "name": "Integrations", "item": "https://adamas-project.com/integrations/"}, {"@type": "ListItem", "position": 3, "name": "ADAMAS for Jira", "item": "https://adamas-project.com/integrations/jira.html"}]}</script>
+</head>
+<body>
+<nav class="anav"><div class="anav-in">
+  <a class="abrand" href="/">ADAMAS<i>α</i><small>by Falcon Intelligence Group</small></a>
+  <div class="links">
+    <a class="hidem" href="/integrations/">Integrations</a>
+    <a class="hidem" href="/#how">How it works</a>
+    <a class="abtn" href="/#book">Book a Clarity Audit →</a>
+  </div>
+</div></nav>
+<main class="art">
+  <nav class="crumb"><a href="/">Home</a><span>/</span><a href="/integrations/">Integrations</a><span>/</span>Jira</nav>
+  <article>
+    <div class="eyebrow">Integration · Issue &amp; Project Tracking · Engineering</div>
+    <h1>The <span class="gold">decision-memory layer</span> for Jira</h1>
+    <p class="lead">Jira is the backbone of engineering delivery — but the <em>why</em> behind a priority call, a descoped ticket, or an architecture decision lives in comment threads nobody reads six months later.</p>
+    <p>ADAMAS is the decision ledger that connects to Jira and captures the <em>why</em> behind every decision made there — structuring it into a permanent, searchable record your whole company can use. It doesn't replace Jira; it gives it a memory.</p>
+
+    <h2>Where decisions <span class="gold">disappear</span> in Jira</h2>
+    <div class="rule"></div>
+    <p>A Jira status transition or a reprioritised epic is a decision. The reasoning sits in the comments — and as tickets close and boards reset, that engineering judgement quietly disappears.</p><p>For a scaling technical company, that lost reasoning is exactly what new engineers, post-mortems and architecture reviews depend on. Jira records the work; it doesn't preserve the thinking.</p>
+
+    <h2>How ADAMAS connects to Jira</h2>
+    <div class="rule"></div>
+    <p>ADAMAS plugs into Jira and continuously reads the places where decisions and their reasoning live:</p>
+    <ul><li>Issues and status transitions, with the owner of each call</li><li>Comments where the engineering reasoning is written</li><li>Sprint and priority changes</li><li>Linked issues, epics and components for context</li></ul>
+    <div class="callout"><span class="k">Example</span><p>An epic is descoped mid-sprint. ADAMAS captures the decision, reads the comment thread for the rationale ("dependency slipped, ship v1 without it"), records who decided, and links it to the epic — building an engineering decision trail post-mortems can use.</p></div>
+
+    <h2>Fetch → Evaluate → <span class="gold">Feed the ledger</span></h2>
+    <div class="rule"></div>
+    <div class="flow">
+      <div class="s"><div class="n">1 · Fetch</div><h4>Connect Jira</h4><p>ADAMAS securely reads the items, changes and threads where decisions happen — local-first.</p></div>
+      <div class="s"><div class="n">2 · Evaluate</div><h4>Find the real decisions</h4><p>AI surfaces the calls that actually matter — the why, the who and the trade-offs behind each one.</p></div>
+      <div class="s"><div class="n">3 · Feed</div><h4>Write the ledger</h4><p>Each decision is structured, linked and stored — searchable and permanent.</p></div>
+    </div>
+
+    <h2>What you get</h2>
+    <div class="rule"></div>
+    <ul><li>A structured record of engineering decisions and trade-offs, not just tickets.</li><li>Better post-mortems and architecture reviews, backed by real reasoning.</li><li>Onboard engineers on why the system is the way it is.</li><li>Local-first: your technical reasoning stays on hardware you own.</li></ul>
+
+    <div class="cta-card">
+      <h2>See it on your own Jira</h2>
+      <p>Start with a Clarity Audit: we map exactly where your decisions are leaking out of Jira and deliver a report you can act on.</p>
+      <div class="price">The Clarity Audit — $1,000, credited toward your build.</div>
+      <a class="abtn" href="/#book">Book your Clarity Audit →</a>
+    </div>
+
+    <section class="faq-wrap">
+      <h2>Jira + ADAMAS — FAQ</h2>
+      <div class="rule"></div>
+      <div class="faq"><details><summary>Is ADAMAS a Jira replacement?</summary><p>No. Jira stays your issue tracker; ADAMAS captures the reasoning behind the decisions made in it and structures it into a decision ledger.</p></details><details><summary>How does the Jira integration work?</summary><p>Through Jira's API and webhooks — ADAMAS reads issues, status transitions and comments, then writes a structured decision entry for each meaningful call.</p></details><details><summary>Does our data leave Jira for a third-party cloud?</summary><p>No. ADAMAS is local-first and runs on hardware you own; external routing only happens for tasks you explicitly approve.</p></details><details><summary>Can it combine Jira with Slack and docs?</summary><p>Yes — ADAMAS unifies reasoning from Jira, comms, meetings and documents into one decision ledger.</p></details></div>
+    </section>
+
+    <div class="related">
+      <h2>More ADAMAS integrations</h2>
+      <div class="rel-grid"><a href="monday.html"><b>ADAMAS for Monday.com</b><span>Work OS · CRM + Project Management</span></a>
+<a href="hubspot.html"><b>ADAMAS for HubSpot</b><span>CRM · Sales &amp; Marketing</span></a>
+<a href="pipedrive.html"><b>ADAMAS for Pipedrive</b><span>Sales CRM · Pipeline</span></a>
+<a href="salesforce.html"><b>ADAMAS for Salesforce</b><span>CRM · Enterprise</span></a>
+</div>
+    </div>
+  </article>
+</main>
+<footer class="afoot"><div class="afoot-in">
+  <span>© 2026 Falcon Intelligence Group LLC · Local-first by design</span>
+  <span><a href="/">Home</a> · <a href="/integrations/">All integrations</a> · <a href="/#book">Book a Clarity Audit</a></span>
+</div></footer>
+</body>
+</html>

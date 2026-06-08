@@ -14,4 +14,9 @@
   <url><loc>https://adamas-project.com/integrations/salesforce.html</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://adamas-project.com/integrations/notion.html</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://adamas-project.com/integrations/slack.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://adamas-project.com/integrations/clickup.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://adamas-project.com/integrations/jira.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://adamas-project.com/integrations/asana.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://adamas-project.com/integrations/google-workspace.html</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://adamas-project.com/integrations/microsoft-teams.html</loc><changefreq>monthly</changefreq></url>
 </urlset>
