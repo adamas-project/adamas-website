@@ -537,3 +537,47 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 .is-card .is-free { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border-2);
   font-size: 16px; line-height: 1.62; color: var(--muted); }
 .is-card .is-free b { color: var(--text); }
+
+/* ===== Connected by Design — data-flow diagram (sources → ADAMAS → ledger) ===== */
+.flowmap{ max-width: 880px; margin: 0 auto; }
+.fm-cap{ text-align:center; font-family:var(--font-d); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--faint); margin-bottom:16px; }
+.fm-sources{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.fm-tile{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:5px;
+  background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px 10px;
+  transition:border-color .25s ease, transform .25s ease, box-shadow .25s ease; }
+.fm-tile:hover{ border-color:var(--accent-line); transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,.35); }
+.fm-tile .ic{ font-size:22px; line-height:1; }
+.fm-tile .nm{ font-family:var(--font-d); font-weight:700; font-size:13px; color:var(--text); }
+.fm-tile .ex{ font-size:10.5px; color:var(--faint); line-height:1.35; }
+/* shared step pill */
+.fm-step{ font-family:var(--font-d); font-size:10.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--accent); background:var(--bg); border:1px solid var(--accent-line); border-radius:99px; padding:5px 12px; white-space:nowrap; }
+/* funnel: wide sources narrowing into the core */
+.fm-funnel{ position:relative; height:56px; display:flex; align-items:center; justify-content:center; }
+.fm-funnel::before{ content:''; position:absolute; inset:0; z-index:0;
+  background:linear-gradient(180deg, var(--accent-soft), transparent 92%);
+  clip-path:polygon(3% 0, 97% 0, 60% 100%, 40% 100%); }
+.fm-funnel .fm-step{ position:relative; z-index:1; }
+/* core engine */
+.fm-core{ max-width:560px; margin:0 auto; text-align:center;
+  background:linear-gradient(180deg, var(--accent-soft), transparent), var(--surface-2);
+  border:1px solid var(--accent-line); border-radius:18px; padding:24px 26px; box-shadow:0 0 50px var(--glow); }
+.fm-brand{ font-family:var(--font-d); font-weight:700; font-size:24px; color:var(--text); letter-spacing:-.01em; }
+.fm-brand i{ color:var(--accent); font-style:normal; font-size:1.18em; }
+.fm-in{ display:inline-block; margin:11px 0 0; }
+.fm-core p{ font-size:13.5px; color:var(--muted); line-height:1.5; max-width:440px; margin:12px auto 0; }
+/* down to ledger */
+.fm-down{ display:flex; flex-direction:column; align-items:center; gap:7px; padding:14px 0 12px; }
+.fm-down .ar{ color:var(--accent); font-size:18px; line-height:1; }
+/* ledger output */
+.fm-ledger{ max-width:560px; margin:0 auto; text-align:center;
+  background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:24px 26px; }
+.fm-ledger .t{ display:block; font-family:var(--font-d); font-weight:700; font-size:17px; color:var(--text); letter-spacing:.01em; }
+.fm-ledger .d{ display:block; font-size:13.5px; color:var(--muted); margin-top:6px; }
+.fm-ledger .pills{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:14px; }
+.fm-ledger .pill{ font-family:var(--font-d); font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--accent); border:1px solid var(--accent-line); border-radius:99px; padding:5px 12px; }
+@media (max-width:680px){
+  .fm-sources{ grid-template-columns:repeat(2,1fr); }
+  .fm-funnel::before{ clip-path:polygon(10% 0, 90% 0, 62% 100%, 38% 100%); }
+}

@@ -184,34 +184,34 @@
           <p>Your decisions are already happening — scattered across the tools your team lives in every day. ADAMAS connects to all of them, listens, and turns that noise into structured memory.</p>
         </div>
 
-        <div class="src-grid fade">
-          <div class="src"><div class="src-ic">💬</div><h4>Team comms</h4><p>Slack, Microsoft Teams, group chats</p></div>
-          <div class="src"><div class="src-ic">✉️</div><h4>Email</h4><p>Gmail, Outlook, shared inboxes</p></div>
-          <div class="src"><div class="src-ic">🎥</div><h4>Meeting rooms</h4><p>Zoom, Google Meet, Teams calls &amp; transcripts</p></div>
-          <div class="src"><div class="src-ic">🗂️</div><h4>Drives &amp; files</h4><p>Google Drive, SharePoint, Dropbox, OneDrive</p></div>
-          <div class="src"><div class="src-ic">📝</div><h4>Docs &amp; wikis</h4><p>Notion, Confluence, Google Docs</p></div>
-          <div class="src"><div class="src-ic">✅</div><h4>Project tools</h4><p>Jira, Asana, Linear, Trello</p></div>
-          <div class="src"><div class="src-ic">🤝</div><h4>CRM &amp; deals</h4><p>HubSpot, Salesforce, pipeline notes</p></div>
-          <div class="src"><div class="src-ic">📅</div><h4>Calendars &amp; repos</h4><p>Schedules, GitHub, tickets</p></div>
-        </div>
+        <!-- data-flow diagram: sources -> fetch -> ADAMAS -> ledger -->
+        <div class="flowmap fade">
+          <div class="fm-cap">Your data — wherever it already lives</div>
+          <div class="fm-sources">
+            <div class="fm-tile"><span class="ic">🤝</span><span class="nm">CRM</span><span class="ex">HubSpot · Salesforce · Monday</span></div>
+            <div class="fm-tile"><span class="ic">✉️</span><span class="nm">Email</span><span class="ex">Gmail · Outlook</span></div>
+            <div class="fm-tile"><span class="ic">💬</span><span class="nm">Team comms</span><span class="ex">Slack · Teams</span></div>
+            <div class="fm-tile"><span class="ic">🎥</span><span class="nm">Meetings</span><span class="ex">Zoom · Meet · transcripts</span></div>
+            <div class="fm-tile"><span class="ic">🗂️</span><span class="nm">Drives &amp; files</span><span class="ex">Drive · SharePoint · Dropbox</span></div>
+            <div class="fm-tile"><span class="ic">📝</span><span class="nm">Docs &amp; wikis</span><span class="ex">Notion · Confluence · Docs</span></div>
+            <div class="fm-tile"><span class="ic">✅</span><span class="nm">Project tools</span><span class="ex">Jira · Asana · Linear</span></div>
+            <div class="fm-tile"><span class="ic">📅</span><span class="nm">Calendars &amp; repos</span><span class="ex">Schedules · GitHub · tickets</span></div>
+          </div>
 
-        <div class="pipe fade">
-          <div class="pipe-step">
-            <div class="pipe-ic">📡</div>
-            <h4>1 · Fetch</h4>
-            <p>ADAMAS securely pulls signal from every connected source — local-first, on hardware you own.</p>
+          <div class="fm-funnel" aria-hidden="true"><span class="fm-step">1 · Fetch</span></div>
+
+          <div class="fm-core">
+            <span class="fm-brand">ADAMAS<i>α</i></span>
+            <span class="fm-step fm-in">2 · Evaluate with AI</span>
+            <p>Reads the noise from every source and surfaces the decisions that actually matter — the <em>why</em>, the who, and the trade-offs.</p>
           </div>
-          <div class="pipe-arrow" aria-hidden="true">→</div>
-          <div class="pipe-step">
-            <div class="pipe-ic">🧠</div>
-            <h4>2 · Evaluate</h4>
-            <p>AI algorithms read the noise and surface the decisions that actually matter — the <em>why</em>, the who, and the trade-offs behind each call.</p>
-          </div>
-          <div class="pipe-arrow" aria-hidden="true">→</div>
-          <div class="pipe-step">
-            <div class="pipe-ic">📓</div>
-            <h4>3 · Feed the ledger</h4>
-            <p>Each decision is structured and written back into your ledger — linked, searchable, and permanent.</p>
+
+          <div class="fm-down" aria-hidden="true"><span class="ar">↓</span><span class="fm-step">3 · Feed the ledger</span></div>
+
+          <div class="fm-ledger">
+            <span class="t">The Decision Ledger</span>
+            <span class="d">Every decision — structured, linked and searchable — on your own hardware.</span>
+            <div class="pills"><span class="pill">The why</span><span class="pill">The who</span><span class="pill">The context</span></div>
           </div>
         </div>
 
