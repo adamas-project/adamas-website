@@ -179,6 +179,8 @@ const root = document.documentElement;
     var pendingUrl = null;
 
     function isGuide(a) {
+      // never re-intercept the gate's own links (the unlocked download + fallback link)
+      if (a.hasAttribute('data-gate-dl') || (a.closest && a.closest('#guideGate'))) return false;
       var h = a && a.getAttribute && a.getAttribute('href');
       return h && /downloads\/ADAMAS-Guide-[^"']*\.pdf$/i.test(h);
     }
@@ -195,6 +197,7 @@ const root = document.documentElement;
       if (!pendingUrl) return;
       var a = document.createElement('a');
       a.href = pendingUrl; a.setAttribute('download', ''); a.rel = 'noopener';
+      a.setAttribute('data-gate-dl', '1');
       document.body.appendChild(a); a.click(); a.remove();
     }
 
