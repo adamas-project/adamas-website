@@ -163,6 +163,8 @@
     .btn-ghost:hover { border-color: var(--accent-line); }
     .nav .btn { padding: 9px 18px; }
     .nav-toggle { display: none; }
+    .nav-social { display: flex; align-items: center; color: var(--muted); transition: color .2s; line-height: 1; }
+    .nav-social:hover { color: var(--text); }
 
     /* ============ TYPE HELPERS ============ */
     .eyebrow {
