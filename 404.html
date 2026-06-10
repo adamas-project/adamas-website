@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>404 — Page Not Found | ADAMAS</title>
+  <meta name="robots" content="noindex,nofollow">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('adamas-theme');
+        if (t !== 'matrix') t = 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles.css">
+  <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
+
+  <style>
+    .e404-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(48px, 10vh, 96px) clamp(24px, 6vw, 48px);
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+    .e404-code {
+      font-family: var(--font-d);
+      font-size: clamp(5rem, 18vw, 10rem);
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin: 0 0 32px;
+      opacity: 0.18;
+      user-select: none;
+    }
+    .e404-headline {
+      font-family: var(--font-d);
+      font-size: clamp(1.3rem, 3.5vw, 2rem);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin: 0 0 16px;
+      max-width: 560px;
+    }
+    .e404-sub {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 420px;
+      margin: 0 0 48px;
+    }
+    .e404-links {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 0 40px;
+    }
+    .e404-links a.btn {
+      width: 100%;
+      justify-content: center;
+      text-align: center;
+    }
+    .e404-links a.e404-secondary {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: color .2s, border-color .2s;
+      padding-bottom: 1px;
+    }
+    .e404-links a.e404-secondary:hover {
+      color: var(--text);
+      border-color: var(--accent-line);
+    }
+    .e404-lang {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+    .e404-lang a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .e404-lang a:hover { color: var(--text); }
+
+    /* minimal top bar */
+    .e404-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 4vw, 40px);
+      z-index: 100;
+      border-bottom: 1px solid var(--border-2);
+      background: rgba(var(--bg-rgb, 22,22,24), 0.72);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .e404-brand {
+      display: flex; flex-direction: column; gap: 2px;
+      text-decoration: none;
+    }
+    .e404-brand-name {
+      font-family: var(--font-d);
+      font-size: 15px; font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.06em;
+    }
+    .e404-brand-name .brand-a { color: var(--accent); }
+    .e404-brand-by {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--faint);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg3d" aria-hidden="true"></canvas>
+  <div class="scrim3d"></div>
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="glow"></div>
+  <div class="grain"></div>
+
+  <header class="e404-bar">
+    <a href="/" class="e404-brand">
+      <span class="e404-brand-name">ADAMAS<span class="brand-a">α</span></span>
+      <span class="e404-brand-by">by Falcon Intelligence Group</span>
+    </a>
+    <div class="theme-switch" role="group" aria-label="Color theme">
+      <button class="theme-btn" data-set-theme="dark" aria-pressed="true" title="Dark gold">◆</button>
+      <button class="theme-btn" data-set-theme="matrix" aria-pressed="false" title="Matrix" style="font-weight:700">⠿</button>
+    </div>
+  </header>
+
+  <main class="e404-page" id="top">
+    <div class="e404-code" aria-hidden="true">404</div>
+    <h1 class="e404-headline">This page was a decision nobody recorded.</h1>
+    <p class="e404-sub">It may have moved, or it was never written down. Every record that matters is at one of these addresses.</p>
+
+    <nav class="e404-links" aria-label="Navigation options">
+      <a href="/" class="btn btn-gold">Go to the homepage →</a>
+      <a href="/blog/" class="e404-secondary">Read the blog →</a>
+      <a href="/scorecard.html" class="e404-secondary">Free: Knowledge-Trap Scorecard →</a>
+    </nav>
+
+    <p class="e404-lang">
+      Deutsch? <a href="/de.html">Zur deutschen Seite →</a>
+    </p>
+  </main>
+
+  <script src="/app.js" defer></script>
+  <script type="module">
+    if (window.innerWidth >= 760 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const load = () => import('/bg.js');
+      'requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 2000 }) : setTimeout(load, 500);
+    }
+  </script>
+</body>
+</html>

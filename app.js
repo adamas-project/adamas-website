@@ -244,3 +244,30 @@ const root = document.documentElement;
     });
   } catch (e) {}
 })();
+
+/* ---------- Plausible conversion events ---------- */
+(function () {
+  function fire(name, props) {
+    try { window.plausible && window.plausible(name, props ? { props: props } : undefined); } catch (e) {}
+  }
+
+  // Clarity Audit form submit
+  var lf = document.getElementById('leadForm');
+  if (lf) lf.addEventListener('submit', function () { fire('Clarity Audit Submit'); });
+
+  // Guide email-gate unlock — capture guide name at submit time
+  var gf = document.getElementById('gateForm');
+  if (gf) gf.addEventListener('submit', function () {
+    var g = document.getElementById('gateGuide');
+    fire('Guide Download', { guide: g ? g.value : 'unknown' });
+  });
+
+  // Book 30-min call + X profile clicks via event delegation
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var h = a.getAttribute('href') || '';
+    if (h.indexOf('calendar.app.google') > -1) fire('Book 30-min Call');
+    if (h.indexOf('x.com/THEGRANDFALCON') > -1) fire('X Profile Click');
+  });
+})();
