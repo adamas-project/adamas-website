@@ -12,11 +12,14 @@
     var introAcc = (ics.getPropertyValue('--accent').trim() || '#c9a84c');
     var introBri = (ics.getPropertyValue('--accent-lt').trim() || '#efe1ad');
     var introTrail = document.documentElement.getAttribute('data-theme') === 'matrix' ? 'rgba(0,8,2,0.12)' : 'rgba(6,6,5,0.12)';
-    var W, H, cols = [], fontSize = 16, raf, done = false;
+    var W, H, cols = [], fontSize = 16, raf, done = false, introLast = 0;
     var glyphs = 'アカサタナハマヤラワABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&'.split('');
     function size(){ W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
     function init(){ size(); cols = new Array(Math.floor(W / fontSize)).fill(0).map(function(){ return Math.random() * H / fontSize; }); }
-    function draw(){
+    function draw(ts){
+      raf = requestAnimationFrame(draw);
+      if (ts - introLast < 42) return;                   // cap to ~24fps
+      introLast = ts;
       ctx.fillStyle = introTrail; ctx.fillRect(0, 0, W, H);
       ctx.font = fontSize + "px 'JetBrains Mono', monospace";
       for (var i = 0; i < cols.length; i++) {
@@ -26,7 +29,6 @@
         if (y > H && Math.random() > 0.975) cols[i] = 0;
         cols[i] += 0.5;
       }
-      raf = requestAnimationFrame(draw);
     }
     if (ctx && !reduce){ init(); draw(); window.addEventListener('resize', init); }
     function enter(){
@@ -99,7 +101,7 @@ const root = document.documentElement;
     // ---------- falling-code rain (runs in every theme, colored from the active palette) ----------
     var cv = document.getElementById('rain');
     var ctx = cv ? cv.getContext('2d') : null;
-    var rainId = null, cols = [], fontSize = 16;
+    var rainId = null, rainLastFrame = 0, cols = [], fontSize = 16;
     var glyphs = 'アカサタナハマヤラワABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&'.split('');
     var rainAccent = '#00ff41', rainBright = '#c6ffce', rainTrail = '0,6,0';
     function hexToRgb(hex) {
@@ -119,7 +121,10 @@ const root = document.documentElement;
       var n = Math.floor(cv.width / fontSize);
       cols = new Array(n).fill(0).map(function () { return Math.random() * cv.height / fontSize; });
     }
-    function drawRain() {
+    function drawRain(ts) {
+      rainId = requestAnimationFrame(drawRain);
+      if (ts - rainLastFrame < 42) return;               // cap to ~24fps
+      rainLastFrame = ts;
       ctx.fillStyle = 'rgba(' + rainTrail + ', 0.09)';
       ctx.fillRect(0, 0, cv.width, cv.height);
       ctx.font = fontSize + "px 'JetBrains Mono', monospace";
@@ -131,11 +136,10 @@ const root = document.documentElement;
         if (y > cv.height && Math.random() > 0.975) cols[i] = 0;
         cols[i] += 0.5;
       }
-      rainId = requestAnimationFrame(drawRain);
     }
     function startRain() {
-      // When the 3D WebGL background is present it owns the backdrop — skip the 2D rain.
-      if (document.getElementById('bg3d')) return;
+      // Skip 2D rain when the 3D WebGL background has initialised and owns the backdrop.
+      if (document.getElementById('bg3d')?.dataset.active) return;
       if (!ctx || rainId || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       sizeRain(); rainId = requestAnimationFrame(drawRain);
       window.addEventListener('resize', sizeRain);
@@ -145,6 +149,8 @@ const root = document.documentElement;
       window.removeEventListener('resize', sizeRain);
       if (ctx) ctx.clearRect(0, 0, cv.width, cv.height);
     }
+    // When the 3D bg activates (desktop lazy-load), hand off cleanly
+    document.addEventListener('bg3d:active', stopRain);
     document.addEventListener('visibilitychange', function () {
       if (document.hidden) { stopRain(); }
       else { refreshRainColors(); startRain(); }

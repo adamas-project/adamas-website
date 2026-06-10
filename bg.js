@@ -36,11 +36,11 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
     return tex;
   }
 
-  try { init(); ok = true; } catch (e) { console.warn('WebGL bg unavailable', e); canvas.style.display = 'none'; }
+  try { init(); ok = true; canvas.dataset.active = '1'; document.dispatchEvent(new CustomEvent('bg3d:active')); } catch (e) { console.warn('WebGL bg unavailable', e); canvas.style.display = 'none'; }
 
   function init() {
-    DPR = Math.min(window.devicePixelRatio || 1, 1.75);
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+    DPR = Math.min(window.devicePixelRatio || 1, 1.5);
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'default' });
     renderer.setPixelRatio(DPR);
     scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x000000, 0.0072);
@@ -136,9 +136,12 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
     camera.aspect = W / H; camera.updateProjectionMatrix();
   }
 
-  function loop() {
+  let lastFrame = 0;
+  function loop(ts) {
     requestAnimationFrame(loop);
     if (isLight()) return;                                // skip in light theme (rAF auto-pauses in hidden tabs)
+    if (ts - lastFrame < 33) return;                      // cap to ~30fps
+    lastFrame = ts;
     const time = (performance.now() - t0) / 1000;
     const docH = Math.max(1, document.body.scrollHeight - window.innerHeight);
     targetT = Math.min(1, Math.max(0, window.scrollY / docH));

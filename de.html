@@ -23,9 +23,11 @@
   <meta name="twitter:title" content="ADAMAS — Das Entscheidungs-Ledger für Gründer">
   <meta name="twitter:description" content="Das Warum hinter jeder Entscheidung — damit Ihr Wissen wächst und Ihr Unternehmen ohne Sie skaliert.">
   <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
-  <!-- System fonts (Apple SF Pro / SF Mono) — no web fonts required -->
+  <!-- JetBrains Mono: async-loaded to avoid render-blocking -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
   <script>
     // Set theme before paint to avoid flash-of-wrong-theme
     (function () {
@@ -543,6 +545,13 @@
   </div>
 
   <script src="app.js" defer></script>
-  <script type="module" src="bg.js"></script>
+  <script type="module">
+    // Load the heavy 3D background only on desktop (≥760px) and non-reduced-motion.
+    // Deferred to idle so it never competes with first paint or user interaction.
+    if (window.innerWidth >= 760 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const load = () => import('./bg.js');
+      'requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 2000 }) : setTimeout(load, 500);
+    }
+  </script>
 </body>
 </html>
