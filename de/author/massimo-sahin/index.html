@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Massimo Sahin — Gründer, Falcon Intelligence Group | ADAMAS</title>
+  <meta name="description" content="Massimo Sahin ist der Gründer von Falcon Intelligence Group und der Architekt von ADAMAS — ein Entscheidungs-Ledger, entstanden aus jahrelanger operativer Arbeit mit inhabergeführten Unternehmen.">
+  <link rel="canonical" href="https://adamas-project.com/de/author/massimo-sahin/">
+  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/author/massimo-sahin/">
+  <link rel="alternate" hreflang="en" href="https://adamas-project.com/author/massimo-sahin/">
+  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/author/massimo-sahin/">
+  <meta name="robots" content="index,follow,max-image-preview:large">
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="ADAMAS">
+  <meta property="og:title" content="Massimo Sahin — Gründer, Falcon Intelligence Group">
+  <meta property="og:description" content="Massimo Sahin ist der Gründer von Falcon Intelligence Group und der Architekt von ADAMAS.">
+  <meta property="og:url" content="https://adamas-project.com/de/author/massimo-sahin/">
+  <meta property="og:image" content="https://adamas-project.com/assets/massimo-sahin.jpg">
+  <meta property="og:image:width" content="400">
+  <meta property="og:image:height" content="389">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@THEGRANDFALCON">
+  <meta name="twitter:creator" content="@THEGRANDFALCON">
+  <meta name="twitter:title" content="Massimo Sahin — Gründer, Falcon Intelligence Group">
+  <meta name="twitter:description" content="Massimo Sahin ist der Gründer von Falcon Intelligence Group und der Architekt von ADAMAS.">
+  <meta name="twitter:image" content="https://adamas-project.com/assets/massimo-sahin.jpg">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Massimo Sahin",
+    "jobTitle": "Gründer",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Falcon Intelligence Group LLC",
+      "url": "https://adamas-project.com/"
+    },
+    "url": "https://adamas-project.com/de/author/massimo-sahin/",
+    "image": "https://adamas-project.com/assets/massimo-sahin.jpg",
+    "sameAs": ["https://x.com/THEGRANDFALCON"],
+    "knowsAbout": [
+      "Entscheidungsmanagement", "Vertriebssysteme", "Maschinenbau",
+      "Fertigungsindustrie", "Industrieautomation", "Gründeroperationen",
+      "Wissensmanagement", "Organisationsskalierung"
+    ],
+    "description": "Massimo Sahin ist der Gründer von Falcon Intelligence Group und der Architekt von ADAMAS, einem Entscheidungs-Ledger für inhabergeführte Unternehmen."
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('adamas-theme');
+        if (t !== 'matrix') t = 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="/styles.css">
+
+  <script type="importmap">
+  { "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }}
+  </script>
+
+  <style>
+    /* ── Author page layout ── */
+    .ap-wrap { max-width: 780px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
+    .ap-hero { padding: 72px 0 54px; }
+    .ap-profile { display: flex; gap: 40px; align-items: flex-start; }
+    .ap-photo {
+      width: 140px; height: 140px; border-radius: 50%;
+      object-fit: cover; object-position: center top;
+      border: 2px solid var(--accent-line);
+      flex-shrink: 0;
+    }
+    .ap-identity { display: flex; flex-direction: column; gap: 9px; padding-top: 6px; }
+    .ap-name { font-family: var(--font-d); font-size: clamp(1.75rem, 4vw, 2.4rem); font-weight: 700; color: var(--text); letter-spacing: -0.01em; margin: 0; line-height: 1.05; }
+    .ap-role { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 0; }
+    .ap-org  { font-size: 13px; color: var(--muted); margin: 0; }
+    .ap-social { display: flex; gap: 10px; margin-top: 6px; }
+    .ap-social a {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 12.5px; font-weight: 600; color: var(--muted);
+      border: 1px solid var(--border); border-radius: 99px; padding: 6px 14px;
+      transition: color .2s, border-color .2s;
+    }
+    .ap-social a:hover { color: var(--text); border-color: var(--accent-line); }
+
+    .ap-body { padding-bottom: 96px; }
+    .ap-sec  { margin-bottom: 48px; }
+    .ap-sec h2 {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent); margin: 0 0 20px;
+    }
+    .ap-sec p { font-size: 16px; line-height: 1.7; color: var(--muted); margin: 0 0 16px; }
+    .ap-sec p:last-child { margin-bottom: 0; }
+    .ap-divider { border: 0; border-top: 1px solid var(--border-2); margin: 0 0 48px; }
+    .ap-cta {
+      padding: 48px 0 0; border-top: 1px solid var(--border-2);
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    .ap-cta p { color: var(--muted); font-size: 14px; margin: 0; flex: 1; min-width: 220px; }
+
+    .ap-body section { padding: 0; margin: 0; scroll-margin-top: 0; }
+    .ap-body section > .wrap { border: none !important; padding: 0 !important; background: none !important; border-radius: 0 !important; }
+
+    @media (max-width: 540px) {
+      .ap-profile { flex-direction: column; gap: 22px; }
+      .ap-photo   { width: 100px; height: 100px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg3d" aria-hidden="true"></canvas>
+  <div class="scrim3d"></div>
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="glow"></div>
+  <div class="grain"></div>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/de.html" class="brand">
+        <span class="brand-name">ADAMAS<span class="brand-a">α</span></span>
+        <span class="brand-by">by Falcon Intelligence Group</span>
+      </a>
+      <div class="nav-right">
+        <div class="theme-switch" role="group" aria-label="Farbschema">
+          <button class="theme-btn" data-set-theme="dark" aria-pressed="true" title="Dunkelgold">◆</button>
+          <button class="theme-btn" data-set-theme="matrix" aria-pressed="false" title="Matrix" style="font-weight:700">⠿</button>
+        </div>
+        <a href="https://x.com/THEGRANDFALCON" target="_blank" rel="noopener noreferrer" class="nav-social" aria-label="ADAMAS auf X folgen"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <div class="nav-links" id="navlinks">
+          <a class="lnk" href="/de.html#problem">Das Problem</a>
+          <a class="lnk" href="/de.html#what">Was es ist</a>
+          <a class="lnk" href="/de.html#how">Wie es funktioniert</a>
+          <a class="lnk" href="/de.html#pricing">Preise</a>
+          <div class="nav-dd">
+            <a class="lnk nav-dd-trigger" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Ressourcen <span class="caret" aria-hidden="true">▾</span></a>
+            <div class="nav-dd-menu" role="menu">
+              <div class="dd-group">
+                <span class="dd-h">eBooks &amp; Leitfäden</span>
+                <a href="/downloads/ADAMAS-Guide-Escaping-the-Knowledge-Bottleneck.pdf" target="_blank" rel="noopener">Escaping the Knowledge Bottleneck</a>
+                <a href="/downloads/ADAMAS-Guide-Decision-Ledger-Playbook.pdf" target="_blank" rel="noopener">The Decision Ledger Playbook</a>
+                <a href="/downloads/ADAMAS-Guide-Local-First-AI.pdf" target="_blank" rel="noopener">Local-First AI for Founders</a>
+              </div>
+              <div class="dd-group">
+                <span class="dd-h">Kostenlose Tools</span>
+                <a href="/scorecard.html" target="_blank" rel="noopener">Knowledge-Trap Scorecard</a>
+                <a href="/calculator.html" target="_blank" rel="noopener">Local-First AI Kostenrechner</a>
+                <a href="/checklist.html" target="_blank" rel="noopener">Founder Succession Checklist</a>
+                <a href="/downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download>Decision Ledger Starter Kit</a>
+              </div>
+              <div class="dd-group">
+                <span class="dd-h">Integrationen</span>
+                <a href="/integrations/monday.html">Monday.com</a>
+                <a href="/integrations/hubspot.html">HubSpot</a>
+                <a href="/integrations/notion.html">Notion</a>
+                <a href="/integrations/">Alle Integrationen →</a>
+              </div>
+            </div>
+          </div>
+          <a class="lnk lang-link" href="/author/massimo-sahin/" title="English">EN</a>
+          <a class="btn btn-gold" href="/de.html#book">Clarity-Audit buchen</a>
+        </div>
+        <button class="nav-toggle" aria-label="Menü" onclick="document.getElementById('navlinks').classList.toggle('open')">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <div class="ap-wrap">
+
+      <!-- Hero -->
+      <header class="ap-hero">
+        <div class="ap-profile">
+          <img
+            src="/assets/massimo-sahin.jpg"
+            alt="Massimo Sahin, Gründer von Falcon Intelligence Group"
+            class="ap-photo"
+            width="400" height="389"
+            loading="eager"
+          >
+          <div class="ap-identity">
+            <h1 class="ap-name">Massimo Sahin</h1>
+            <p class="ap-role">Gründer</p>
+            <p class="ap-org">Falcon Intelligence Group LLC</p>
+            <div class="ap-social">
+              <a href="https://x.com/THEGRANDFALCON" target="_blank" rel="noopener noreferrer" aria-label="Massimo Sahin auf X">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                @THEGRANDFALCON
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Bio -->
+      <div class="ap-body">
+
+        <div class="ap-sec">
+          <h2>Hintergrund</h2>
+          <p>Massimo Sahin ist der Gründer von Falcon Intelligence Group und hat ADAMAS entwickelt.</p>
+          <p>Seine Karriere begann im Unternehmensbereich bei Teleperformance und Accenture. Anschließend baute er eine Unternehmensberatung auf, die Vertriebssysteme und -prozesse in Unternehmen des Maschinenbaus, der Fertigungsindustrie und der Industrieautomation konzipierte und einführte — und Vertriebs- sowie Leadgenerierungsarbeit für Unternehmen in diesen Branchen sowie im Marketing- und Vertriebsdienstleistungsbereich erbrachte.</p>
+        </div>
+
+        <hr class="ap-divider">
+
+        <div class="ap-sec">
+          <h2>Warum ADAMAS existiert</h2>
+          <p>Das Muster entstand nicht aus einer einzelnen Erkenntnis, sondern durch die Beobachtung desselben Problems in Projekt nach Projekt.</p>
+          <p>Vertriebssysteme wurden aufgebaut. Das Leadvolumen stieg. Dann stockte die Organisation des Kunden — nicht wegen einer schlechten Strategie, sondern weil betriebliches Wissen bei zu wenigen Personen konzentriert war. Gründer, die in alles involviert waren, weil niemand sonst den Kontext hatte, ohne sie zu handeln. Führungskräfte, die Einarbeitung, Prozesswissen und institutionelles Denken in ihren Köpfen trugen statt in einem System, das dieses Wissen weitergeben könnte.</p>
+          <p>Das Leadvolumen, das jene Vertriebssysteme erzeugten, legte einen Engpass offen, der immer schon vorhanden war: Die Organisation konnte kein Wachstum aufnehmen, weil ihr Wissen sich nicht bewegen ließ. Verstreute Prozesse. Informationslücken. Übergaben, die scheiterten. Neue Mitarbeitende, die Monate brauchten, um operativ einsatzfähig zu werden.</p>
+          <p>ADAMAS wurde als direkte Antwort auf dieses Muster entwickelt.</p>
+        </div>
+
+        <hr class="ap-divider">
+
+        <div class="ap-sec">
+          <h2>Über Wissen und Skalierung</h2>
+          <p>Jede Entscheidung, die ein Unternehmen trifft, trägt eine Begründung in sich. Der größte Teil dieser Begründungen verschwindet.</p>
+          <p>Nicht weil sie wertlos wären — sondern weil kein System darauf ausgelegt wurde, sie zu bewahren. Entscheidungskontext, strategische Überlegungen, Einarbeitungslogik: Wo sie erfasst werden, potenzieren sie sich. Wo nicht, baut das Unternehmen nach jeder Kündigung, jeder Beförderung, jeder Übergabe von vorn auf.</p>
+          <p>Das wertvollste gebundene Kapital eines inhabergeführten Unternehmens ist das Entscheidungsdenken im Kopf des Gründers. Wer von der eigenen Organisation nicht ersetzt werden kann, hat noch keine aufgebaut. Über sich selbst hinauszuwachsen beginnt damit, dieses Denken explizit zu machen — und in ein System zu überführen, das es nutzbar macht.</p>
+        </div>
+
+        <div class="ap-cta">
+          <p>Ein Unternehmen aufbauen, das nicht allein von Ihnen abhängt.</p>
+          <a href="/de.html#book" class="btn btn-gold">Clarity-Audit buchen →</a>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="ftr">
+    <div class="ftr-in">
+      <div class="ftr-legal">
+        <p>ADAMAS (All Decisions And Memory Archive System) ist ein Produkt der Falcon Intelligence Group LLC, aufgebaut auf dem Hermes-KI-Agenten. Hermes ist ein Drittanbieter-Tool und bleibt Eigentum seines jeweiligen Inhabers.</p>
+        <p>Local-first by Design: Ihr Vault und das Entscheidungs-Ledger laufen auf Hardware, die Ihnen gehört. ADAMAS sendet das Wissen Ihres Unternehmens nicht in Drittanbieter-Clouds — optionales hybrides Cloud-Routing wird nur für explizit von Ihnen freigegebene Aufgaben genutzt.</p>
+        <p>Die angezeigten Preise sind Richtwerte und können je nach Projektumfang variieren. Die Clarity-Audit-Gebühr wird bei Projektdurchführung angerechnet. Client-Hardware (z. B. Mac Mini M4) wird vom Kunden erworben und ist sein Eigentum.</p>
+        <p>Auf dieser Website genannte Markt- und Branchenzahlen stammen aus Drittanbieter-Quellen und dienen ausschließlich der Orientierung; sie stellen keine Erfolgsgarantie dar.</p>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-cols">
+        <div class="ftr-col">
+          <h5>ADAMAS</h5>
+          <a href="/de.html#problem">Das Problem</a>
+          <a href="/de.html#what">Was es ist</a>
+          <a href="/de.html#how">Wie es funktioniert</a>
+          <a href="/de.html#pricing">Preise</a>
+          <a href="/de.html#faq">FAQ</a>
+        </div>
+        <div class="ftr-col">
+          <h5>eBooks &amp; Leitfäden</h5>
+          <a href="/downloads/ADAMAS-Guide-Escaping-the-Knowledge-Bottleneck.pdf" download>Escaping the Knowledge Bottleneck</a>
+          <a href="/downloads/ADAMAS-Guide-Decision-Ledger-Playbook.pdf" download>The Decision Ledger Playbook</a>
+          <a href="/downloads/ADAMAS-Guide-Local-First-AI.pdf" download>Local-First AI for Founders</a>
+          <h5 class="ftr-sub">Kostenlose Tools</h5>
+          <a href="/scorecard.html">Knowledge-Trap Scorecard</a>
+          <a href="/calculator.html">Local-First AI Kostenrechner</a>
+          <a href="/checklist.html">Founder Succession Checklist</a>
+          <a href="/downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download>Decision Ledger Starter Kit</a>
+        </div>
+        <div class="ftr-col">
+          <h5><a href="/integrations/">Integrationen</a></h5>
+          <a href="/integrations/monday.html">Monday.com</a>
+          <a href="/integrations/hubspot.html">HubSpot</a>
+          <a href="/integrations/pipedrive.html">Pipedrive</a>
+          <a href="/integrations/salesforce.html">Salesforce</a>
+          <a href="/integrations/notion.html">Notion</a>
+          <a href="/integrations/slack.html">Slack</a>
+          <a href="/integrations/">Alle Integrationen →</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Unternehmen</h5>
+          <a href="/de.html">Über ADAMAS</a>
+          <a href="/de/author/massimo-sahin/">Über den Gründer</a>
+          <a href="mailto:m@adamas-project.com">Falcon Intelligence Group</a>
+          <a href="mailto:m@adamas-project.com">Kontakt</a>
+          <a href="/de.html#why">Warum Local-First</a>
+          <a href="https://x.com/THEGRANDFALCON" target="_blank" rel="noopener noreferrer">X · @THEGRANDFALCON</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Loslegen</h5>
+          <a href="/de.html#book">Clarity-Audit buchen</a>
+          <a href="mailto:m@adamas-project.com">m@adamas-project.com</a>
+          <a href="/de.html#compare">Warum ADAMAS</a>
+          <a href="/privacy.html">Datenschutz</a>
+        </div>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-bottom">
+        <span class="cpy">Copyright © 2026 Falcon Intelligence Group LLC. Alle Rechte vorbehalten.</span>
+        <nav class="ftr-links" aria-label="Rechtliches">
+          <a href="/privacy.html">Datenschutzerklärung</a>
+          <a href="/terms.html">Nutzungsbedingungen</a>
+          <a href="/terms.html">Rechtliches</a>
+          <a href="#top">Sitemap</a>
+        </nav>
+        <span class="ftr-region">Falcon Intelligence Group LLC · Delaware, USA</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/app.js" defer></script>
+  <script type="module">
+    if (window.innerWidth >= 760 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const load = () => import('/bg.js');
+      'requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 2000 }) : setTimeout(load, 500);
+    }
+  </script>
+</body>
+</html>
