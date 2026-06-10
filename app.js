@@ -98,6 +98,20 @@ const root = document.documentElement;
       });
     } catch (e) {}
 
+    // ---------- nav dropdown aria-expanded ----------
+    try {
+      document.querySelectorAll('.nav-dd').forEach(function (dd) {
+        var trigger = dd.querySelector('.nav-dd-trigger');
+        if (!trigger) return;
+        function open()  { trigger.setAttribute('aria-expanded', 'true');  }
+        function close() { trigger.setAttribute('aria-expanded', 'false'); }
+        dd.addEventListener('mouseenter', open);
+        dd.addEventListener('mouseleave', close);
+        dd.addEventListener('focusin',    open);
+        dd.addEventListener('focusout',   function (e) { if (!dd.contains(e.relatedTarget)) close(); });
+      });
+    } catch (e) {}
+
     // ---------- falling-code rain (runs in every theme, colored from the active palette) ----------
     var cv = document.getElementById('rain');
     var ctx = cv ? cv.getContext('2d') : null;

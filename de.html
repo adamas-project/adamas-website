@@ -81,7 +81,7 @@
           <a class="lnk" href="#how">So funktioniert's</a>
           <a class="lnk" href="#pricing">Preise</a>
           <div class="nav-dd">
-            <a class="lnk nav-dd-trigger" role="button" tabindex="0" aria-haspopup="true">Ressourcen <span class="caret" aria-hidden="true">▾</span></a>
+            <a class="lnk nav-dd-trigger" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Ressourcen <span class="caret" aria-hidden="true">▾</span></a>
             <div class="nav-dd-menu" role="menu">
               <div class="dd-group">
                 <span class="dd-h">eBooks &amp; Leitfäden</span>
@@ -414,19 +414,19 @@
             <input type="hidden" name="language" value="de">
             <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
             <div class="lf-row">
-              <input name="name" type="text" required placeholder="Vollständiger Name" autocomplete="name">
-              <input name="role" type="text" placeholder="Ihre Rolle" autocomplete="organization-title">
+              <input name="name" type="text" required placeholder="Vollständiger Name" aria-label="Vollständiger Name" autocomplete="name">
+              <input name="role" type="text" placeholder="Ihre Rolle" aria-label="Ihre Rolle" autocomplete="organization-title">
             </div>
             <div class="lf-row">
-              <input name="company" type="text" placeholder="Unternehmen" autocomplete="organization">
-              <input name="company_website" type="text" placeholder="Unternehmenswebsite" autocomplete="url" inputmode="url">
+              <input name="company" type="text" placeholder="Unternehmen" aria-label="Unternehmen" autocomplete="organization">
+              <input name="company_website" type="text" placeholder="Unternehmenswebsite" aria-label="Unternehmenswebsite" autocomplete="url" inputmode="url">
             </div>
-            <input name="email" type="email" required placeholder="Geschäftliche E-Mail" autocomplete="email">
+            <input name="email" type="email" required placeholder="Geschäftliche E-Mail" aria-label="Geschäftliche E-Mail" autocomplete="email">
             <div class="lf-phone">
               <select name="country_code" class="lf-cc" aria-label="Ländervorwahl"><option value="+49" selected>🇩🇪 +49 Deutschland</option><option value="+43">🇦🇹 +43 Österreich</option><option value="+41">🇨🇭 +41 Schweiz</option><option value="+1">🇺🇸 +1 USA</option><option value="+44">🇬🇧 +44 Vereinigtes Königreich</option><option value="+353">🇮🇪 +353 Irland</option><option value="+33">🇫🇷 +33 Frankreich</option><option value="+31">🇳🇱 +31 Niederlande</option><option value="+32">🇧🇪 +32 Belgien</option><option value="+352">🇱🇺 +352 Luxemburg</option><option value="+39">🇮🇹 +39 Italien</option><option value="+34">🇪🇸 +34 Spanien</option><option value="+351">🇵🇹 +351 Portugal</option><option value="+46">🇸🇪 +46 Schweden</option><option value="+45">🇩🇰 +45 Dänemark</option><option value="+47">🇳🇴 +47 Norwegen</option><option value="+358">🇫🇮 +358 Finnland</option><option value="+48">🇵🇱 +48 Polen</option><option value="+420">🇨🇿 +420 Tschechien</option><option value="+1">🇨🇦 +1 Kanada</option><option value="+61">🇦🇺 +61 Australien</option><option value="+971">🇦🇪 +971 VAE</option><option value="+65">🇸🇬 +65 Singapur</option><option value="+91">🇮🇳 +91 Indien</option></select>
-              <input name="phone" type="tel" required placeholder="Telefonnummer" autocomplete="tel">
+              <input name="phone" type="tel" required placeholder="Telefonnummer" aria-label="Telefonnummer" autocomplete="tel">
             </div>
-            <select name="situation" class="lf-select" required>
+            <select name="situation" class="lf-select" required aria-label="Ihre Situation">
               <option value="" disabled selected>Was beschreibt Ihre Situation am besten?</option>
               <option>Ich bin der Engpass — zu viel läuft über mich</option>
               <option>Schlüsselpersonen-Risiko — Wissen steckt in ein, zwei Köpfen</option>
@@ -532,7 +532,7 @@
         <input type="hidden" name="guide" id="gateGuide" value="">
         <input type="hidden" name="language" value="de">
         <p hidden><label>Dieses Feld leer lassen: <input name="bot-field"></label></p>
-        <input type="email" name="email" id="gateEmail" required placeholder="Geschäftliche E-Mail" autocomplete="email">
+        <input type="email" name="email" id="gateEmail" required placeholder="Geschäftliche E-Mail" aria-label="Geschäftliche E-Mail" autocomplete="email">
         <button type="submit" class="btn btn-gold">Download freischalten →</button>
         <p class="gate-note">Wir geben Ihre Daten niemals weiter. <a href="privacy.html">Datenschutz</a></p>
       </form>

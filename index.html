@@ -80,7 +80,7 @@
           <a class="lnk" href="#how">How It Works</a>
           <a class="lnk" href="#pricing">Pricing</a>
           <div class="nav-dd">
-            <a class="lnk nav-dd-trigger" role="button" tabindex="0" aria-haspopup="true">Resources <span class="caret" aria-hidden="true">▾</span></a>
+            <a class="lnk nav-dd-trigger" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Resources <span class="caret" aria-hidden="true">▾</span></a>
             <div class="nav-dd-menu" role="menu">
               <div class="dd-group">
                 <span class="dd-h">eBooks &amp; Guides</span>
@@ -412,19 +412,19 @@
             <input type="hidden" name="form-name" value="clarity-audit">
             <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
             <div class="lf-row">
-              <input name="name" type="text" required placeholder="Full name" autocomplete="name">
-              <input name="role" type="text" placeholder="Your role" autocomplete="organization-title">
+              <input name="name" type="text" required placeholder="Full name" aria-label="Full name" autocomplete="name">
+              <input name="role" type="text" placeholder="Your role" aria-label="Your role" autocomplete="organization-title">
             </div>
             <div class="lf-row">
-              <input name="company" type="text" placeholder="Company" autocomplete="organization">
-              <input name="company_website" type="text" placeholder="Company website" autocomplete="url" inputmode="url">
+              <input name="company" type="text" placeholder="Company" aria-label="Company" autocomplete="organization">
+              <input name="company_website" type="text" placeholder="Company website" aria-label="Company website" autocomplete="url" inputmode="url">
             </div>
-            <input name="email" type="email" required placeholder="Work email" autocomplete="email">
+            <input name="email" type="email" required placeholder="Work email" aria-label="Work email" autocomplete="email">
             <div class="lf-phone">
               <select name="country_code" class="lf-cc" aria-label="Country dialing code"><option value="+49">🇩🇪 +49 Germany</option><option value="+43">🇦🇹 +43 Austria</option><option value="+41">🇨🇭 +41 Switzerland</option><option value="+1" selected>🇺🇸 +1 United States</option><option value="+44">🇬🇧 +44 United Kingdom</option><option value="+353">🇮🇪 +353 Ireland</option><option value="+33">🇫🇷 +33 France</option><option value="+31">🇳🇱 +31 Netherlands</option><option value="+32">🇧🇪 +32 Belgium</option><option value="+352">🇱🇺 +352 Luxembourg</option><option value="+39">🇮🇹 +39 Italy</option><option value="+34">🇪🇸 +34 Spain</option><option value="+351">🇵🇹 +351 Portugal</option><option value="+46">🇸🇪 +46 Sweden</option><option value="+45">🇩🇰 +45 Denmark</option><option value="+47">🇳🇴 +47 Norway</option><option value="+358">🇫🇮 +358 Finland</option><option value="+48">🇵🇱 +48 Poland</option><option value="+420">🇨🇿 +420 Czechia</option><option value="+1">🇨🇦 +1 Canada</option><option value="+61">🇦🇺 +61 Australia</option><option value="+971">🇦🇪 +971 UAE</option><option value="+65">🇸🇬 +65 Singapore</option><option value="+91">🇮🇳 +91 India</option></select>
-              <input name="phone" type="tel" required placeholder="Phone number" autocomplete="tel">
+              <input name="phone" type="tel" required placeholder="Phone number" aria-label="Phone number" autocomplete="tel">
             </div>
-            <select name="situation" class="lf-select" required>
+            <select name="situation" class="lf-select" required aria-label="Your situation">
               <option value="" disabled selected>What best describes your situation?</option>
               <option>I'm the bottleneck — too much runs through me</option>
               <option>Key-person risk — knowledge lives in one or two heads</option>
@@ -529,7 +529,7 @@
         <input type="hidden" name="form-name" value="guide-download">
         <input type="hidden" name="guide" id="gateGuide" value="">
         <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
-        <input type="email" name="email" id="gateEmail" required placeholder="Work email" autocomplete="email">
+        <input type="email" name="email" id="gateEmail" required placeholder="Work email" aria-label="Work email" autocomplete="email">
         <button type="submit" class="btn btn-gold">Unlock the download →</button>
         <p class="gate-note">We'll never share your details. <a href="privacy.html">Privacy</a></p>
       </form>
