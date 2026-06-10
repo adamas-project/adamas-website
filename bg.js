@@ -11,6 +11,7 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
   if (!canvas) return;
   let renderer, scene, camera, composer, rain, W, H, DPR, ok = false;
   let scrollT = 0, targetT = 0, mouseX = 0, mouseY = 0, t0 = performance.now();
+  let lastFrame = 0;  // must be initialized before init() calls loop() below
   const uColor = { value: new THREE.Color(0xc9a84c) };
 
   function accent() {
@@ -136,7 +137,6 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
     camera.aspect = W / H; camera.updateProjectionMatrix();
   }
 
-  let lastFrame = 0;
   function loop(ts) {
     requestAnimationFrame(loop);
     if (isLight()) return;                                // skip in light theme (rAF auto-pauses in hidden tabs)
