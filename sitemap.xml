@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url><loc>https://adamas-project.com/</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://adamas-project.com/de.html</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://adamas-project.com/privacy.html</loc><changefreq>monthly</changefreq></url>
@@ -21,4 +21,8 @@
   <url><loc>https://adamas-project.com/integrations/microsoft-teams.html</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://adamas-project.com/author/massimo-sahin/</loc><changefreq>monthly</changefreq></url>
   <url><loc>https://adamas-project.com/de/author/massimo-sahin/</loc><changefreq>monthly</changefreq></url>
+  <url><loc>https://adamas-project.com/blog/</loc><xhtml:link rel="alternate" hreflang="en" href="https://adamas-project.com/blog/"/><xhtml:link rel="alternate" hreflang="de" href="https://adamas-project.com/de/blog/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://adamas-project.com/blog/"/><changefreq>weekly</changefreq></url>
+  <url><loc>https://adamas-project.com/de/blog/</loc><xhtml:link rel="alternate" hreflang="en" href="https://adamas-project.com/blog/"/><xhtml:link rel="alternate" hreflang="de" href="https://adamas-project.com/de/blog/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://adamas-project.com/blog/"/><changefreq>weekly</changefreq></url>
+  <url><loc>https://adamas-project.com/blog/what-happens-when-a-key-employee-leaves</loc><xhtml:link rel="alternate" hreflang="en" href="https://adamas-project.com/blog/what-happens-when-a-key-employee-leaves"/><xhtml:link rel="alternate" hreflang="de" href="https://adamas-project.com/de/blog/wenn-eine-schluesselperson-das-unternehmen-verlaesst"/><xhtml:link rel="alternate" hreflang="x-default" href="https://adamas-project.com/blog/what-happens-when-a-key-employee-leaves"/><changefreq>monthly</changefreq></url>
+  <url><loc>https://adamas-project.com/de/blog/wenn-eine-schluesselperson-das-unternehmen-verlaesst</loc><xhtml:link rel="alternate" hreflang="en" href="https://adamas-project.com/blog/what-happens-when-a-key-employee-leaves"/><xhtml:link rel="alternate" hreflang="de" href="https://adamas-project.com/de/blog/wenn-eine-schluesselperson-das-unternehmen-verlaesst"/><xhtml:link rel="alternate" hreflang="x-default" href="https://adamas-project.com/blog/what-happens-when-a-key-employee-leaves"/><changefreq>monthly</changefreq></url>
 </urlset>
