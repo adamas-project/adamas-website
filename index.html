@@ -50,7 +50,7 @@
   <div id="intro" role="dialog" aria-label="ADAMAS">
     <canvas id="introNet" aria-hidden="true"></canvas>
     <div class="intro-mid">
-      <div class="intro-brand">ADAMAS<span class="intro-a">α</span></div>
+      <div class="intro-brand">ADAMAS<span class="intro-ea">Early Access</span></div>
       <div class="intro-sub">All Decisions And Memory Archive System</div>
     </div>
     <button class="intro-enter" id="introEnter" type="button"><span>Scroll to enter</span><span class="intro-chev"></span></button>
@@ -66,7 +66,7 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="#top" class="brand">
-        <span class="brand-name">ADAMAS<span class="brand-a">α</span></span>
+        <span class="brand-name">ADAMAS<span class="brand-ea">Early Access</span></span>
         <span class="brand-by">by Falcon Intelligence Group</span>
       </a>
       <div class="nav-right">
@@ -134,6 +134,44 @@
         <a class="btn btn-ghost" href="#how">See how it works</a>
       </div>
       <p class="hero-note fade vis">For founder-led companies scaling from $2M to $5M+. Runs on your hardware — not the cloud.</p>
+      <a class="hero-shot fade vis" href="demo.html" aria-label="Open the interactive decision-ledger demo">
+        <span class="hs-bar"><i></i><i></i><i></i><b>adamas — vault · ledger (sample data)</b></span>
+        <svg viewBox="0 0 640 250" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g>
+            <rect x="16" y="16" width="226" height="62" rx="9" fill="var(--accent-soft)" stroke="var(--accent)"/>
+            <text x="30" y="38" font-size="9.5" fill="var(--accent)">SAL-021 · SALES</text>
+            <rect x="30" y="48" width="190" height="6" rx="3" fill="var(--muted)" opacity=".55"/>
+            <rect x="30" y="61" width="130" height="5" rx="2.5" fill="var(--faint)" opacity=".4"/>
+            <rect x="16" y="90" width="226" height="62" rx="9" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="30" y="112" font-size="9.5" fill="var(--green)">FIN-016 · FINANCE</text>
+            <rect x="30" y="122" width="170" height="6" rx="3" fill="var(--muted)" opacity=".4"/>
+            <rect x="30" y="135" width="120" height="5" rx="2.5" fill="var(--faint)" opacity=".3"/>
+            <rect x="16" y="164" width="226" height="62" rx="9" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="30" y="186" font-size="9.5" fill="#7fb5ff">HIR-014 · HIRING</text>
+            <rect x="30" y="196" width="185" height="6" rx="3" fill="var(--muted)" opacity=".4"/>
+            <rect x="30" y="209" width="105" height="5" rx="2.5" fill="var(--faint)" opacity=".3"/>
+          </g>
+          <g>
+            <rect x="258" y="16" width="366" height="210" rx="10" fill="var(--surface-2)" stroke="var(--accent-line)"/>
+            <text x="276" y="42" font-size="10" fill="var(--accent)">SAL-021 · 2025-04-14</text>
+            <rect x="276" y="52" width="290" height="8" rx="4" fill="var(--text)" opacity=".7"/>
+            <text x="276" y="84" font-size="8.5" fill="var(--accent)">CONTEXT</text>
+            <rect x="276" y="92" width="320" height="5" rx="2.5" fill="var(--muted)" opacity=".4"/>
+            <rect x="276" y="102" width="290" height="5" rx="2.5" fill="var(--muted)" opacity=".4"/>
+            <text x="276" y="128" font-size="8.5" fill="var(--accent)">DECISION</text>
+            <rect x="276" y="136" width="320" height="5" rx="2.5" fill="var(--text)" opacity=".6"/>
+            <rect x="276" y="146" width="220" height="5" rx="2.5" fill="var(--text)" opacity=".6"/>
+            <text x="276" y="172" font-size="8.5" fill="var(--accent)">LINKED</text>
+            <rect x="276" y="181" width="86" height="20" rx="6" fill="none" stroke="var(--green)" opacity=".7"/>
+            <text x="285" y="194" font-size="8.5" fill="var(--green)">FIN-016</text>
+            <rect x="370" y="181" width="86" height="20" rx="6" fill="none" stroke="#ff9d7a" opacity=".7"/>
+            <text x="379" y="194" font-size="8.5" fill="#ff9d7a">OPS-020</text>
+            <rect x="464" y="181" width="86" height="20" rx="6" fill="none" stroke="var(--accent)" opacity=".7"/>
+            <text x="473" y="194" font-size="8.5" fill="var(--accent)">SAL-017</text>
+          </g>
+        </svg>
+        <span class="hs-cap">This is the product: the decision ledger. Click through the live sample →</span>
+      </a>
     </header>
 
     <!-- ============ PROBLEM ============ -->
@@ -146,22 +184,22 @@
         </div>
         <div class="prob-grid">
           <div class="prob fade">
-            <div class="prob-ic">🚪</div>
+            <div class="prob-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-door"/></svg></div>
             <h4>When people leave</h4>
             <p>Critical context walks out the door. Onboarding the next person takes months because nothing was ever written down in a structured way.</p>
           </div>
           <div class="prob fade">
-            <div class="prob-ic">❓</div>
+            <div class="prob-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-help"/></svg></div>
             <h4>When investors ask "why?"</h4>
             <p>"Why did you choose X over Y?" There's no record of the decision, the context, or who made the call. The reasoning is gone.</p>
           </div>
           <div class="prob fade">
-            <div class="prob-ic">🧱</div>
+            <div class="prob-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-wall"/></svg></div>
             <h4>When the founder is the bottleneck</h4>
             <p>You're too small for a COO, too large to do it all yourself. You can't delegate because the knowledge has never been extracted from your head.</p>
           </div>
           <div class="prob fade">
-            <div class="prob-ic">💸</div>
+            <div class="prob-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-dollar"/></svg></div>
             <h4>When decisions get repeated</h4>
             <p>In engineering and technical work, a single missed decision context can cost $50k–$500k in rework. Decision amnesia is expensive.</p>
           </div>
@@ -191,11 +229,11 @@
         <div class="is-card fade">
           <p class="lead">A <b>decision ledger</b> — the first system built specifically to capture <b>why</b> decisions were made, structure them, link them, and generate the exact business assets your company needs at each stage of growth.</p>
           <div class="schema">
-            <div class="sc"><div class="sc-ic">🧠</div><div class="sc-n">Context</div><div class="sc-d">The situation at the time of the call</div></div>
-            <div class="sc"><div class="sc-ic">⚖️</div><div class="sc-n">Decision</div><div class="sc-d">The exact choice made and who decided</div></div>
-            <div class="sc"><div class="sc-ic">🔗</div><div class="sc-n">Linked</div><div class="sc-d">Bi-directional links across every decision</div></div>
-            <div class="sc"><div class="sc-ic">🏷️</div><div class="sc-n">Domain</div><div class="sc-d">Hiring · Sales · Product · Finance · Ops</div></div>
-            <div class="sc"><div class="sc-ic">🧬</div><div class="sc-n">Assets</div><div class="sc-d">Stage-adaptive documents, generated</div></div>
+            <div class="sc"><div class="sc-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-network"/></svg></div><div class="sc-n">Context</div><div class="sc-d">The situation at the time of the call</div></div>
+            <div class="sc"><div class="sc-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-scale"/></svg></div><div class="sc-n">Decision</div><div class="sc-d">The exact choice made and who decided</div></div>
+            <div class="sc"><div class="sc-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-link"/></svg></div><div class="sc-n">Linked</div><div class="sc-d">Bi-directional links across every decision</div></div>
+            <div class="sc"><div class="sc-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-tag"/></svg></div><div class="sc-n">Domain</div><div class="sc-d">Hiring · Sales · Product · Finance · Ops</div></div>
+            <div class="sc"><div class="sc-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-layers"/></svg></div><div class="sc-n">Assets</div><div class="sc-d">Stage-adaptive documents, generated</div></div>
           </div>
           <p class="is-free">Your endless ideas stop piling up and slipping away. ADAMAS captures and structures every one — so you and your team <em>move freely again</em>, at full speed, with reason, structure, and force behind every decision.</p>
         </div>
@@ -215,20 +253,20 @@
         <div class="flowmap fade">
           <div class="fm-cap">Your data — wherever it already lives</div>
           <div class="fm-sources">
-            <div class="fm-tile"><span class="ic">🤝</span><span class="nm">CRM</span><span class="ex">HubSpot · Salesforce · Monday</span></div>
-            <div class="fm-tile"><span class="ic">✉️</span><span class="nm">Email</span><span class="ex">Gmail · Outlook</span></div>
-            <div class="fm-tile"><span class="ic">💬</span><span class="nm">Team comms</span><span class="ex">Slack · Teams</span></div>
-            <div class="fm-tile"><span class="ic">🎥</span><span class="nm">Meetings</span><span class="ex">Zoom · Meet · transcripts</span></div>
-            <div class="fm-tile"><span class="ic">🗂️</span><span class="nm">Drives &amp; files</span><span class="ex">Drive · SharePoint · Dropbox</span></div>
-            <div class="fm-tile"><span class="ic">📝</span><span class="nm">Docs &amp; wikis</span><span class="ex">Notion · Confluence · Docs</span></div>
-            <div class="fm-tile"><span class="ic">✅</span><span class="nm">Project tools</span><span class="ex">Jira · Asana · Linear</span></div>
-            <div class="fm-tile"><span class="ic">📅</span><span class="nm">Calendars &amp; repos</span><span class="ex">Schedules · GitHub · tickets</span></div>
+            <div class="fm-tile"><span class="ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-users"/></svg></span><span class="nm">CRM</span><span class="ex">HubSpot · Salesforce · Monday</span></div>
+            <div class="fm-tile"><span class="ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-mail"/></svg></span><span class="nm">Email</span><span class="ex">Gmail · Outlook</span></div>
+            <div class="fm-tile"><span class="ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-chat"/></svg></span><span class="nm">Team comms</span><span class="ex">Slack · Teams</span></div>
+            <div class="fm-tile"><span class="ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-video"/></svg></span><span class="nm">Meetings</span><span class="ex">Zoom · Meet · transcripts</span></div>
+            <div class="fm-tile"><span class="ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-folder"/></svg></span><span class="nm">Drives &amp; files</span><span class="ex">Drive · SharePoint · Dropbox</span></div>
+            <div class="fm-tile"><span class="ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-doc"/></svg></span><span class="nm">Docs &amp; wikis</span><span class="ex">Notion · Confluence · Docs</span></div>
+            <div class="fm-tile"><span class="ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-check"/></svg></span><span class="nm">Project tools</span><span class="ex">Jira · Asana · Linear</span></div>
+            <div class="fm-tile"><span class="ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-calendar"/></svg></span><span class="nm">Calendars &amp; repos</span><span class="ex">Schedules · GitHub · tickets</span></div>
           </div>
 
           <div class="fm-funnel" aria-hidden="true"><span class="pulse p-l"></span><span class="pulse p-c"></span><span class="pulse p-r"></span><span class="fm-step">1 · Fetch</span></div>
 
           <div class="fm-core">
-            <span class="fm-brand">ADAMAS<i>α</i></span>
+            <span class="fm-brand">ADAMAS<i>Early Access</i></span>
             <span class="fm-step fm-in">2 · Evaluate with AI</span>
             <p>Reads the noise from every source and surfaces the decisions that actually matter — the <em>why</em>, the who, and the trade-offs.</p>
           </div>
