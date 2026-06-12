@@ -271,3 +271,22 @@ const root = document.documentElement;
     if (h.indexOf('x.com/THEGRANDFALCON') > -1) fire('X Profile Click');
   });
 })();
+
+/* Self-Serve waitlist mini-form: ajax submit + inline confirmation */
+(function () {
+  document.querySelectorAll('form.pc-wait').forEach(function (f) {
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var body = new URLSearchParams(new FormData(f)).toString();
+      fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
+        .finally(function () {
+          var ok = document.createElement('p');
+          ok.className = 'pc-wait-ok';
+          ok.textContent = (document.documentElement.lang === 'de')
+            ? 'Danke — Sie stehen auf der Warteliste.'
+            : "Thanks — you're on the waitlist.";
+          f.replaceWith(ok);
+        });
+    });
+  });
+})();

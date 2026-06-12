@@ -400,12 +400,17 @@
           <h2 class="title">Start with an audit. <em>Scale into a system.</em></h2>
           <p>Done-for-you today, with a clear path to a self-serve platform. Transparent pricing, no surprises.</p>
         </div>
+        <div class="price-anchor fade">
+          <p><b>Anchor the math first:</b> a single missed decision context costs <em>$50k–$500k</em> in rework. The complete system — audit plus build — is $5,000. That's 1–10% of the cost of one lost decision.</p>
+        </div>
         <div class="price-grid">
           <div class="pc feature fade">
             <div class="pc-tag">Start here</div>
             <div class="pc-name">Clarity Audit</div>
             <div class="pc-price">$1,000</div>
             <p class="pc-desc">We map the knowledge trap, interview you, and deliver a clarity report.</p>
+            <!-- TODO (founder): confirm you stand behind this exact guarantee wording before launch. -->
+            <p class="pc-guarantee">If the audit surfaces nothing worth fixing, we refund it.</p>
             <span class="pc-badge">Credited toward your build</span>
           </div>
           <div class="pc fade">
@@ -413,6 +418,13 @@
             <div class="pc-name">The Build</div>
             <div class="pc-price">$4,000 <small>one-time</small></div>
             <p class="pc-desc">We build the vault, load the ledger, and deliver a live system. No setup required from you.</p>
+            <ul class="pc-list">
+              <li>Vault deployed on hardware you own</li>
+              <li>Ledger seeded with the decisions from your audit</li>
+              <li>Your key sources connected (read-only)</li>
+              <li>First three generated assets (e.g., onboarding doc)</li>
+              <li>Team walkthrough + 30 days of fixes included</li>
+            </ul>
           </div>
           <div class="pc fade">
             <div class="pc-tag">Ongoing</div>
@@ -421,12 +433,22 @@
             <p class="pc-desc">Optional. Ongoing refinement, additions, and strategic reviews as you grow.</p>
           </div>
           <div class="pc fade">
-            <div class="pc-tag">Coming soon</div>
+            <div class="pc-tag">On the roadmap</div>
             <div class="pc-name">Self-Serve</div>
             <div class="pc-price">$200 <small>/mo</small></div>
             <p class="pc-desc">Upload your data; ADAMAS evaluates, orders, enriches, and updates assets automatically.</p>
+            <!-- TODO (founder): add the expected launch quarter here once committed. -->
+            <form name="selfserve-waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="pc-wait">
+              <input type="hidden" name="form-name" value="selfserve-waitlist">
+              <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
+              <input type="email" name="email" required placeholder="Work email" aria-label="Work email for the Self-Serve waitlist">
+              <button class="btn btn-ghost" type="submit">Join the waitlist</button>
+              <span class="pc-wait-note">Waitlist members get the launch date — and founding pricing — first.</span>
+            </form>
           </div>
         </div>
+        <!-- TODO (founder): replace with the real monthly build capacity ("We take N builds per month") — never fake the number. -->
+        <p class="price-capacity fade">Every build is founder-delivered, so capacity is genuinely limited — we take on a small number of builds per month.</p>
       </div>
     </section>
 

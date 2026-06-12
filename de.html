@@ -401,12 +401,17 @@
           <h2 class="title">Beginnen Sie mit einem Audit. <em>Skalieren Sie zu einem System.</em></h2>
           <p>Heute Done-for-You, mit klarem Weg zur Self-Service-Plattform. Transparente Preise, keine Überraschungen.</p>
         </div>
+        <div class="price-anchor fade">
+          <p><b>Erst die Rechnung:</b> Ein einziger verlorener Entscheidungskontext kostet <em>50.000–500.000 €</em> an Nacharbeit. Das komplette System — Audit plus Aufbau — kostet 5.000 €. Das sind 1–10 % der Kosten einer einzigen verlorenen Entscheidung.</p>
+        </div>
         <div class="price-grid">
           <div class="pc feature fade">
             <div class="pc-tag">Hier starten</div>
             <div class="pc-name">Clarity-Audit</div>
             <div class="pc-price">1.000 €</div>
             <p class="pc-desc">Wir kartieren die Wissensfalle, interviewen Sie und liefern einen Klarheitsbericht.</p>
+            <!-- TODO (Gründer): genauen Garantie-Wortlaut vor dem Launch bestätigen. -->
+            <p class="pc-guarantee">Bringt das Audit nichts ans Licht, das sich zu beheben lohnt, erstatten wir die Gebühr.</p>
             <span class="pc-badge">Wird auf Ihren Aufbau angerechnet</span>
           </div>
           <div class="pc fade">
@@ -414,6 +419,13 @@
             <div class="pc-name">Der Aufbau</div>
             <div class="pc-price">4.000 € <small>einmalig</small></div>
             <p class="pc-desc">Wir bauen den Vault, laden das Ledger und liefern ein laufendes System. Kein Aufwand für Sie.</p>
+            <ul class="pc-list">
+              <li>Vault auf Hardware, die Ihnen gehört</li>
+              <li>Ledger befüllt mit den Entscheidungen aus Ihrem Audit</li>
+              <li>Ihre wichtigsten Quellen verbunden (read-only)</li>
+              <li>Die ersten drei generierten Assets (z. B. Onboarding-Dokument)</li>
+              <li>Team-Einführung + 30 Tage Nachbesserung inklusive</li>
+            </ul>
           </div>
           <div class="pc fade">
             <div class="pc-tag">Laufend</div>
@@ -422,12 +434,22 @@
             <p class="pc-desc">Optional. Laufende Verfeinerung, Ergänzungen und strategische Reviews während Sie wachsen.</p>
           </div>
           <div class="pc fade">
-            <div class="pc-tag">Demnächst</div>
+            <div class="pc-tag">Auf der Roadmap</div>
             <div class="pc-name">Self-Service</div>
             <div class="pc-price">200 € <small>/Mon.</small></div>
             <p class="pc-desc">Daten hochladen; ADAMAS bewertet, ordnet, reichert an und aktualisiert Assets automatisch.</p>
+            <!-- TODO (Gründer): erwartetes Startquartal ergänzen, sobald verbindlich. -->
+            <form name="selfserve-waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="pc-wait">
+              <input type="hidden" name="form-name" value="selfserve-waitlist">
+              <p hidden><label>Dieses Feld leer lassen: <input name="bot-field"></label></p>
+              <input type="email" name="email" required placeholder="Geschäftliche E-Mail" aria-label="Geschäftliche E-Mail für die Self-Service-Warteliste">
+              <button class="btn btn-ghost" type="submit">Auf die Warteliste</button>
+              <span class="pc-wait-note">Wartelisten-Mitglieder erhalten Starttermin — und Gründungskonditionen — zuerst.</span>
+            </form>
           </div>
         </div>
+        <!-- TODO (Gründer): durch echte Monatskapazität ersetzen ("Wir übernehmen N Aufbauten pro Monat") — niemals eine Zahl erfinden. -->
+        <p class="price-capacity fade">Jeder Aufbau wird vom Gründer persönlich geliefert — die Kapazität ist real begrenzt. Wir übernehmen eine kleine Zahl von Aufbauten pro Monat.</p>
       </div>
     </section>
 

@@ -657,3 +657,20 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
   .prob,.step,.pc,.cstat,.fm-tile,.hero-shot{transition:none}
   .prob:hover,.step:hover,.pc:hover,.hero-shot:hover{transform:none}
 }
+
+/* ============ PHASE 6 — offer & pricing ============ */
+.price-anchor{max-width:720px;margin:0 auto 30px;text-align:center;border:1px solid var(--accent-line);background:var(--accent-soft);border-radius:var(--r-md);padding:18px 22px}
+.price-anchor p{margin:0;color:var(--muted);font-size:14.5px;line-height:1.65}
+.price-anchor b{color:var(--text)}
+.price-anchor em{color:var(--accent);font-style:normal;font-weight:700}
+.pc-guarantee{margin:10px 0 0;font-size:13px;color:var(--green);font-weight:600;line-height:1.5}
+.pc-list{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.pc-list li{font-size:13px;color:var(--muted);line-height:1.5;padding-left:20px;position:relative}
+.pc-list li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:700}
+.pc-wait{margin-top:14px;display:grid;gap:8px}
+.pc-wait input[type=email]{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text);font-family:var(--font-b);font-size:13px;padding:10px 12px;width:100%}
+.pc-wait input[type=email]:focus{outline:none;border-color:var(--accent-line)}
+.pc-wait .btn{font-size:13px;padding:9px 14px;justify-content:center}
+.pc-wait-note{font-size:11.5px;color:var(--faint);line-height:1.5}
+.pc-wait-ok{font-size:13px;color:var(--green);font-weight:600}
+.price-capacity{text-align:center;margin:26px auto 0;font-size:13.5px;color:var(--muted);max-width:640px}
