@@ -66,7 +66,7 @@
     <h2>Close the gaps — done for you</h2>
     <p>The Clarity Audit maps exactly what's trapped in your head and ADAMAS turns it into a living, transferable record. Credited toward your build.</p>
     <div class="row">
-      <a class="btn btn-gold" id="bookBtn" href="mailto:m@adamas-project.com?subject=Clarity%20Audit%20%E2%80%94%20Succession%20Checklist">Book your Clarity Audit →</a>
+      <a class="btn btn-gold" id="bookBtn" href="mailto:hello@adamas-project.com?subject=Clarity%20Audit%20%E2%80%94%20Succession%20Checklist">Book your Clarity Audit →</a>
       <button class="btn btn-ghost" onclick="window.print()">Save as PDF</button>
     </div>
   </div>
@@ -124,7 +124,7 @@
     var tier=TIERS.slice().reverse().find(function(t){return pct>=t.min;});
     ptier.textContent=tier.name; ptier.style.color=tier.color;
     var body=encodeURIComponent("Hi Massimo,\n\nI worked through the Founder Succession Checklist — "+pct+"% in place ("+tier.name+"). I'd like to close the gaps with a Clarity Audit.\n\n");
-    document.getElementById('bookBtn').href="mailto:m@adamas-project.com?subject="+encodeURIComponent("Clarity Audit — Succession "+pct+"%")+"&body="+body;
+    document.getElementById('bookBtn').href="mailto:hello@adamas-project.com?subject="+encodeURIComponent("Clarity Audit — Succession "+pct+"%")+"&body="+body;
   }
   boxes.forEach(function(b){ b.addEventListener('change',update); });
   update();

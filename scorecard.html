@@ -180,7 +180,7 @@
     picks.forEach(function(p){ var li=document.createElement('li'); li.textContent = ALL_RECS[p.i] || ALL_RECS[0]; recsEl.appendChild(li); });
     // book link with score prefilled
     var body = encodeURIComponent("Hi Massimo,\n\nI took the Knowledge-Trap Scorecard and scored "+total+"/30 ("+tier.name+"). I'd like to book a Clarity Audit.\n\n");
-    document.getElementById('bookBtn').href = "mailto:m@adamas-project.com?subject="+encodeURIComponent("Clarity Audit — Scorecard "+total+"/30")+"&body="+body;
+    document.getElementById('bookBtn').href = "mailto:hello@adamas-project.com?subject="+encodeURIComponent("Clarity Audit — Scorecard "+total+"/30")+"&body="+body;
     document.getElementById('result').style.display = 'block';
     document.getElementById('result').scrollIntoView({behavior:'smooth'});
   });

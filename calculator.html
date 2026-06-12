@@ -89,7 +89,7 @@
     <h2>Want the system that runs on it?</h2>
     <p>ADAMAS is the decision ledger that lives on that local machine — capturing your company's reasoning and generating the assets you need, privately.</p>
     <div class="row">
-      <a class="btn btn-gold" id="bookBtn" href="mailto:m@adamas-project.com?subject=Clarity%20Audit%20%E2%80%94%20Cost%20Calculator">Book your Clarity Audit →</a>
+      <a class="btn btn-gold" id="bookBtn" href="mailto:hello@adamas-project.com?subject=Clarity%20Audit%20%E2%80%94%20Cost%20Calculator">Book your Clarity Audit →</a>
       <button class="btn btn-ghost" onclick="window.print()">Save as PDF</button>
     </div>
   </div>
@@ -115,7 +115,7 @@
       '<div class="res"><div class="k">Net savings · 3 years</div><div class="v">'+money(y3)+'</div><div class="n">after hardware</div></div>'+
       '<div class="res"><div class="k">Cloud cost · 3 years</div><div class="v">'+money(cur*36)+'</div><div class="n">if nothing changes</div></div>';
     var body=encodeURIComponent("Hi Massimo,\n\nI ran the Local-First AI Cost Calculator: ~"+money(save)+"/mo saved, payback "+paybackTxt+". I'd like to talk about a Clarity Audit.\n\n");
-    document.getElementById('bookBtn').href="mailto:m@adamas-project.com?subject="+encodeURIComponent("Clarity Audit — saving "+money(save)+"/mo")+"&body="+body;
+    document.getElementById('bookBtn').href="mailto:hello@adamas-project.com?subject="+encodeURIComponent("Clarity Audit — saving "+money(save)+"/mo")+"&body="+body;
   }
   [spend,hw,sub].forEach(function(el){ el.addEventListener('input',render); el.addEventListener('change',render); });
   render();
