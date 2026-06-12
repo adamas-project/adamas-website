@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<title>Data Processing Agreement (Template) — ADAMAS by Falcon Intelligence Group</title>
+<meta name="description" content="The data processing agreement (DPA) template Falcon Intelligence Group uses for ADAMAS client engagements — covering the build phase, sub-processors, and the local-first boundary.">
+<link rel="canonical" href="https://adamas-project.com/dpa.html">
+<link rel="alternate" hreflang="en" href="https://adamas-project.com/dpa.html">
+<link rel="alternate" hreflang="de" href="https://adamas-project.com/de/avv.html">
+<link rel="alternate" hreflang="x-default" href="https://adamas-project.com/dpa.html">
+<style>
+  @font-face{font-family:'D-DIN';src:url('fonts/D-DIN.woff2') format('woff2'),url('fonts/D-DIN.woff') format('woff');font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:'D-DIN';src:url('fonts/D-DIN-Bold.woff2') format('woff2'),url('fonts/D-DIN-Bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap}
+  :root{ --bg:#000;--surface:#161618;--border:rgba(255,255,255,.10);--text:#f5f5f7;--muted:#a1a1a6;--faint:#6e6e73;--accent:#c9a84c; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'D-DIN',"DIN Alternate",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:56px 24px 90px}
+  a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+  h1{font-weight:700;text-transform:uppercase;font-size:clamp(1.9rem,5vw,2.6rem);letter-spacing:-.01em;margin:12px 0 6px}
+  .meta{color:var(--faint);font-size:12.5px;margin-bottom:30px}
+  h2{font-weight:700;font-size:1.15rem;letter-spacing:-.01em;margin:30px 0 8px}
+  p{color:#d4d2cc;margin:8px 0}
+  ul{margin:8px 0 8px 18px}li{color:#d4d2cc;margin:5px 0}
+  .back{display:inline-block;margin-bottom:24px;font-size:13px;color:var(--muted)}
+  hr{border:0;border-top:1px solid var(--border);margin:36px 0}
+  .ftr{color:var(--faint);font-size:11.5px;margin-top:30px}
+  .note{background:rgba(201,168,76,.10);border:1px dashed var(--accent);border-radius:10px;padding:14px 18px;margin:18px 0;color:#d4d2cc;font-size:13.5px}
+</style>
+  <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← Back to ADAMAS</a>
+  <div class="eyebrow">Legal</div>
+  <h1>Data Processing Agreement</h1>
+  <div class="meta">Template for ADAMAS client engagements · Falcon Intelligence Group LLC · June 2026 · <a href="/de/avv.html">Deutsche Version (AVV)</a></div>
+
+  <div class="note"><strong>Template, published for transparency.</strong> Your lawyers will ask for this — so it's public before they do. The executed version is adapted per engagement and signed by both parties.
+  <!-- TODO (founder): have counsel review this template before executing it with a client. --></div>
+
+  <h2>1. Roles and scope</h2>
+  <p>For the <strong>build phase</strong> of an ADAMAS engagement, the client is the data controller and Falcon Intelligence Group LLC ("we") is the data processor for the material the client shares with us for setup (Art. 28 GDPR). Once the vault is handed over, processing happens on the client's own hardware under the client's sole control — we are no longer a processor for vault contents, retain no access, and hold no copy.</p>
+
+  <h2>2. Subject matter, duration, nature and purpose</h2>
+  <p>Processing is limited to: configuring the client's vault, connecting agreed sources, seeding the decision ledger from material the client provides, and verifying the system before handover. Duration: from engagement start until handover plus an agreed wind-down period, after which all client material in our possession is deleted or returned (client's choice), with deletion confirmed in writing.</p>
+
+  <h2>3. Categories of data and data subjects</h2>
+  <p>Typically: business contact data and business communications of the client's personnel, clients, and suppliers, as contained in the sources the client chooses to connect (e.g., email, team chat, CRM, documents, meeting transcripts). The client decides which sources and scopes are included; special categories of data are not requested and should be excluded from connected scopes.</p>
+
+  <h2>4. Our obligations as processor</h2>
+  <ul>
+    <li>Process client material only on documented instructions, for the purposes in Section 2.</li>
+    <li>Confidentiality undertakings from every person authorised to process the material.</li>
+    <li>Technical and organisational measures appropriate to the risk (encryption in transit and at rest, least-privilege access, separation of client environments).</li>
+    <li>Assist the controller with data-subject requests and Articles 32–36 obligations.</li>
+    <li>Notify the controller without undue delay after becoming aware of a personal-data breach.</li>
+    <li>Delete or return all personal data after the engagement (Section 2) and prove it.</li>
+    <li>Make available the information necessary to demonstrate compliance, and allow and contribute to audits.</li>
+  </ul>
+
+  <h2>5. Sub-processors</h2>
+  <p>General authorisation with prior notice of changes. Current sub-processors for the build phase are listed on the <a href="/security.html">Security page</a> (Netlify, Plausible, Google — for website, scheduling, and correspondence only). The Hermes AI agent runs locally on the client's hardware and does not receive client data on its provider's servers. The optional hybrid cloud route transmits data only with the client's explicit per-task approval and is disabled by default.</p>
+
+  <h2>6. International transfers</h2>
+  <p>Where the build phase involves transfers from the EEA, the UK, or Switzerland to the United States, the parties rely on the European Commission's Standard Contractual Clauses (Module 2, controller-to-processor) with the UK Addendum where applicable, incorporated into the executed agreement.</p>
+
+  <h2>7. Liability and governing law</h2>
+  <p>Liability and governing law follow the main services agreement between the parties. In case of conflict between this DPA and the main agreement regarding data protection, this DPA prevails.</p>
+
+  <hr>
+  <p>Questions about this template: <a href="mailto:privacy@adamas-project.com">privacy@adamas-project.com</a>. The local-first boundary that makes most of this short: <a href="/security.html">Security &amp; data ownership</a>.</p>
+  <div class="ftr">© 2026 Falcon Intelligence Group LLC. All rights reserved. · <a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Use</a> · <a href="index.html">Home</a></div>
+</div>
+</body>
+</html>

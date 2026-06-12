@@ -22,6 +22,58 @@
   <meta name="twitter:title" content="ADAMAS — The Decision Ledger for Founders">
   <meta name="twitter:description" content="Capture the why behind every decision — so your knowledge compounds and your company scales without you.">
   <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Falcon Intelligence Group LLC",
+    "url": "https://adamas-project.com/",
+    "logo": "https://adamas-project.com/og/og-default.png",
+    "email": "hello@adamas-project.com",
+    "founder": {
+      "@type": "Person",
+      "name": "Massimo S.",
+      "url": "https://adamas-project.com/author/massimo-sahin/"
+    },
+    "sameAs": ["https://x.com/THEGRANDFALCON"],
+    "address": { "@type": "PostalAddress", "addressRegion": "Delaware", "addressCountry": "US" },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "sales",
+      "email": "hello@adamas-project.com",
+      "availableLanguage": ["English", "German"]
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "name": "ADAMAS — The Decision Ledger",
+    "serviceType": "Decision ledger build (local-first knowledge system)",
+    "provider": { "@type": "Organization", "name": "Falcon Intelligence Group LLC", "url": "https://adamas-project.com/" },
+    "areaServed": ["US", "DE", "AT", "CH"],
+    "url": "https://adamas-project.com/",
+    "offers": [
+      { "@type": "Offer", "name": "Clarity Audit", "price": "1000", "priceCurrency": "USD", "description": "Knowledge-trap mapping, interviews, and a written clarity report. Credited toward the build." },
+      { "@type": "Offer", "name": "The Build", "price": "4000", "priceCurrency": "USD", "description": "Done-for-you local vault build with seeded decision ledger." },
+      { "@type": "Offer", "name": "Retainer", "price": "200", "priceCurrency": "USD", "description": "Optional monthly refinement and strategic reviews." }
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "We already use Notion / Obsidian / spreadsheets — why ADAMAS?", "acceptedAnswer": { "@type": "Answer", "text": "Those tools store information. ADAMAS captures the reasoning behind the decision and generates the next asset automatically. The difference is between a filing cabinet and an operating system." } },
+      { "@type": "Question", "name": "Can't we just write things down ourselves?", "acceptedAnswer": { "@type": "Answer", "text": "The problem isn't writing — it's structuring, linking, and surfacing the right knowledge at the right moment. ADAMAS does that automatically." } },
+      { "@type": "Question", "name": "Is this just AI hype?", "acceptedAnswer": { "@type": "Answer", "text": "The AI is the engine, not the product. The product is the decision ledger — a structured, local-first knowledge layer that compounds over time regardless of which model powers it." } },
+      { "@type": "Question", "name": "What hardware do we need?", "acceptedAnswer": { "@type": "Answer", "text": "A Mac Mini M4 ($499–$699) is the sweet spot to host Hermes 24/7. MacBook Air/Pro and ThinkPad/Surface options are supported too. A hybrid setup runs at roughly $23/month total." } },
+      { "@type": "Question", "name": "Does our data leave our company?", "acceptedAnswer": { "@type": "Answer", "text": "No. The vault is local-first and runs on your hardware. Optional hybrid cloud routing is used only for tasks you explicitly approve." } }
+    ]
+  }
+  </script>
   <!-- JetBrains Mono: async-loaded to avoid render-blocking -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -615,6 +667,30 @@
     </div>
   </div>
 
+
+  <!-- exit-intent capture — armed only after the visitor reaches the pricing section, shown once -->
+  <div class="gate" id="exitGate" hidden>
+    <div class="gate-backdrop" data-exit-close></div>
+    <div class="gate-card" role="dialog" aria-modal="true" aria-labelledby="exitTitle">
+      <button class="gate-x" type="button" data-exit-close aria-label="Close">×</button>
+      <div class="gate-eyebrow">Before you go</div>
+      <h3 id="exitTitle">Take the playbook with you.</h3>
+      <p class="gate-sub">The Decision Ledger Playbook — the exact structure for capturing the why behind your decisions. Free PDF, no spam.</p>
+      <form name="exit-capture" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="exitForm">
+        <input type="hidden" name="form-name" value="exit-capture">
+        <input type="hidden" name="source" value="pricing-exit-intent">
+        <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
+        <input type="email" name="email" required placeholder="Work email" aria-label="Work email" autocomplete="email">
+        <button type="submit" class="btn btn-gold">Send me the playbook →</button>
+        <p class="gate-note">We'll never share your details. <a href="privacy.html">Privacy</a></p>
+      </form>
+      <div class="gate-ok" id="exitOk" hidden>
+        <div class="gate-tick">✓</div>
+        <strong>Done — your download is starting.</strong>
+        <p>If it didn't begin automatically, <a href="downloads/ADAMAS-Guide-Decision-Ledger-Playbook.pdf" download>download the PDF here</a>.</p>
+      </div>
+    </div>
+  </div>
   <script src="app.js" defer></script>
   <script type="module">
     // Load the heavy 3D background only on desktop (≥760px) and non-reduced-motion.

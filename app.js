@@ -290,3 +290,43 @@ const root = document.documentElement;
     });
   });
 })();
+
+/* Exit-intent capture — pricing section only, desktop only, once per visitor */
+(function () {
+  var gate = document.getElementById('exitGate');
+  var pricing = document.getElementById('pricing');
+  if (!gate || !pricing) return;
+  if (window.innerWidth < 760 || !window.matchMedia('(pointer: fine)').matches) return;
+  try { if (localStorage.getItem('adamas-exit-shown')) return; } catch (e) {}
+  var reached = false;
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) reached = true; });
+    }, { threshold: 0.3 });
+    io.observe(pricing);
+  }
+  function close() { gate.hidden = true; }
+  gate.querySelectorAll('[data-exit-close]').forEach(function (el) { el.addEventListener('click', close); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  document.addEventListener('mouseout', function (e) {
+    if (!reached || !gate.hidden) return;
+    if (e.clientY > 8 || e.relatedTarget) return;
+    gate.hidden = false;
+    try { localStorage.setItem('adamas-exit-shown', '1'); } catch (err) {}
+  });
+  var f = document.getElementById('exitForm');
+  if (f) f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var body = new URLSearchParams(new FormData(f)).toString();
+    fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body })
+      .finally(function () {
+        f.hidden = true;
+        var ok = document.getElementById('exitOk');
+        if (ok) ok.hidden = false;
+        var a = document.createElement('a');
+        a.href = '/downloads/ADAMAS-Guide-Decision-Ledger-Playbook.pdf';
+        a.setAttribute('download', '');
+        document.body.appendChild(a); a.click(); a.remove();
+      });
+  });
+})();

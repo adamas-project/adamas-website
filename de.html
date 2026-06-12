@@ -24,6 +24,20 @@
   <meta name="twitter:description" content="Das Warum hinter jeder Entscheidung — damit Ihr Wissen wächst und Ihr Unternehmen ohne Sie skaliert.">
   <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
   <!-- JetBrains Mono: async-loaded to avoid render-blocking -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "inLanguage": "de",
+    "mainEntity": [
+      { "@type": "Question", "name": "Wir nutzen bereits Notion / Obsidian / Tabellen — warum ADAMAS?", "acceptedAnswer": { "@type": "Answer", "text": "Diese Tools speichern Informationen. ADAMAS erfasst die Begründung hinter der Entscheidung und erzeugt das nächste Asset automatisch. Der Unterschied ist der zwischen Aktenschrank und Betriebssystem." } },
+      { "@type": "Question", "name": "Können wir das nicht einfach selbst aufschreiben?", "acceptedAnswer": { "@type": "Answer", "text": "Das Problem ist nicht das Schreiben — es ist das Strukturieren, Verknüpfen und Auffinden des richtigen Wissens im richtigen Moment. ADAMAS macht das automatisch." } },
+      { "@type": "Question", "name": "Ist das nur KI-Hype?", "acceptedAnswer": { "@type": "Answer", "text": "Die KI ist der Motor, nicht das Produkt. Das Produkt ist das Entscheidungs-Ledger — eine strukturierte, lokale Wissensschicht, die unabhängig vom Modell über die Zeit wächst." } },
+      { "@type": "Question", "name": "Welche Hardware brauchen wir?", "acceptedAnswer": { "@type": "Answer", "text": "Ein Mac Mini M4 (499–699 €) ist der Sweet Spot, um Hermes rund um die Uhr zu betreiben. MacBook Air/Pro sowie ThinkPad/Surface werden ebenfalls unterstützt." } },
+      { "@type": "Question", "name": "Verlassen unsere Daten das Unternehmen?", "acceptedAnswer": { "@type": "Answer", "text": "Nein. Der Vault ist local-first und läuft auf Ihrer Hardware. Optionales hybrides Cloud-Routing wird nur für ausdrücklich freigegebene Aufgaben genutzt." } }
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -572,14 +586,14 @@
           <a href="#book">Clarity-Audit buchen</a>
           <a href="mailto:hello@adamas-project.com">hello@adamas-project.com</a>
           <a href="#compare">Warum ADAMAS</a>
-          <a href="privacy.html">Datenschutz</a>
+          <a href="de/datenschutz.html">Datenschutz</a>
         </div>
       </div>
       <hr class="ftr-rule">
       <div class="ftr-bottom">
         <span class="cpy">Copyright © 2026 Falcon Intelligence Group LLC. Alle Rechte vorbehalten.</span>
         <nav class="ftr-links" aria-label="Rechtliches">
-          <a href="privacy.html">Datenschutz</a>
+          <a href="de/datenschutz.html">Datenschutz</a>
           <a href="terms.html">Nutzungsbedingungen</a>
           <a href="impressum.html">Impressum</a>
           <a href="de/kontakt.html">Kontakt</a>
@@ -605,7 +619,7 @@
         <p hidden><label>Dieses Feld leer lassen: <input name="bot-field"></label></p>
         <input type="email" name="email" id="gateEmail" required placeholder="Geschäftliche E-Mail" aria-label="Geschäftliche E-Mail" autocomplete="email">
         <button type="submit" class="btn btn-gold">Download freischalten →</button>
-        <p class="gate-note">Wir geben Ihre Daten niemals weiter. <a href="privacy.html">Datenschutz</a></p>
+        <p class="gate-note">Wir geben Ihre Daten niemals weiter. <a href="de/datenschutz.html">Datenschutz</a></p>
       </form>
       <div class="gate-ok" id="gateOk" hidden>
         <div class="gate-tick">✓</div>
@@ -615,6 +629,30 @@
     </div>
   </div>
 
+
+  <!-- Exit-Intent-Capture — erst aktiv, wenn der Besucher die Preissektion erreicht hat; wird nur einmal gezeigt -->
+  <div class="gate" id="exitGate" hidden>
+    <div class="gate-backdrop" data-exit-close></div>
+    <div class="gate-card" role="dialog" aria-modal="true" aria-labelledby="exitTitle">
+      <button class="gate-x" type="button" data-exit-close aria-label="Schließen">×</button>
+      <div class="gate-eyebrow">Bevor Sie gehen</div>
+      <h3 id="exitTitle">Nehmen Sie das Playbook mit.</h3>
+      <p class="gate-sub">The Decision Ledger Playbook — die exakte Struktur, um das Warum hinter Ihren Entscheidungen festzuhalten. Kostenloses PDF, kein Spam.</p>
+      <form name="exit-capture" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="exitForm">
+        <input type="hidden" name="form-name" value="exit-capture">
+        <input type="hidden" name="source" value="pricing-exit-intent-de">
+        <p hidden><label>Dieses Feld leer lassen: <input name="bot-field"></label></p>
+        <input type="email" name="email" required placeholder="Geschäftliche E-Mail" aria-label="Geschäftliche E-Mail" autocomplete="email">
+        <button type="submit" class="btn btn-gold">Playbook zusenden →</button>
+        <p class="gate-note">Wir geben Ihre Daten niemals weiter. <a href="de/datenschutz.html">Datenschutz</a></p>
+      </form>
+      <div class="gate-ok" id="exitOk" hidden>
+        <div class="gate-tick">✓</div>
+        <strong>Fertig — Ihr Download startet.</strong>
+        <p>Falls nicht, <a href="downloads/ADAMAS-Guide-Decision-Ledger-Playbook.pdf" download>laden Sie das PDF hier</a>.</p>
+      </div>
+    </div>
+  </div>
   <script src="app.js" defer></script>
   <script type="module">
     // Load the heavy 3D background only on desktop (≥760px) and non-reduced-motion.
