@@ -1,0 +1,4 @@
+# Internal folders — committed to the repo but never served publicly.
+# The trailing "!" forces the rule even though the files exist on disk.
+/delivery/*   /404.html   404!
+/marketing/*  /404.html   404!
