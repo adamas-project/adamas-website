@@ -116,6 +116,14 @@
     .ap-body section { padding: 0; margin: 0; scroll-margin-top: 0; }
     .ap-body section > .wrap { border: none !important; padding: 0 !important; background: none !important; border-radius: 0 !important; }
 
+    /* founder timeline + sections */
+    .ap-timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+    .ap-timeline li { position: relative; padding: 0 0 22px 26px; }
+    .ap-timeline li::before { content: ""; position: absolute; left: 0; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+    .ap-timeline li::after { content: ""; position: absolute; left: 4px; top: 20px; bottom: -2px; width: 1px; background: var(--border-2); }
+    .ap-timeline li:last-child::after { display: none; }
+    .ap-timeline b { display: block; color: var(--text); font-size: 15px; }
+    .ap-timeline span { display: block; color: var(--muted); font-size: 13.5px; line-height: 1.55; margin-top: 3px; }
     @media (max-width: 540px) {
       .ap-profile { flex-direction: column; gap: 22px; }
       .ap-photo   { width: 100px; height: 100px; }
@@ -170,6 +178,7 @@
                 <a href="/product.html">Product Tour</a>
                 <a href="/how-it-works/architecture.html">Architecture</a>
                 <a href="/docs/">Documentation</a>
+                <a href="/standard.html">The Standard</a>
               </div>
               <div class="dd-group">
                 <span class="dd-h">Integrations</span>
@@ -212,6 +221,12 @@
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 @THEGRANDFALCON
               </a>
+              <!-- TODO (founder): add your LinkedIn profile URL and uncomment — keep the bio consistent with this page.
+              <a href="https://www.linkedin.com/in/YOUR-PROFILE" target="_blank" rel="noopener noreferrer" aria-label="Massimo S. on LinkedIn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+                LinkedIn
+              </a>
+              -->
             </div>
           </div>
         </div>
@@ -219,6 +234,14 @@
 
       <!-- Bio -->
       <div class="ap-body">
+
+      <!-- TODO (founder): record the 90-second founder video — the problem, in your own
+           words — host it as a self-hosted mp4, then uncomment. Single highest-trust
+           asset available to a solo founder; embed it on the homepage too.
+      <div class="ap-sec">
+        <video controls preload="metadata" style="width:100%;border-radius:14px;border:1px solid var(--border)" src="/assets/founder-90s.mp4"></video>
+      </div>
+      -->
 
         <div class="ap-sec">
           <h2>Background</h2>
@@ -243,6 +266,38 @@
           <p>Every decision a company makes carries reasoning. Most of that reasoning disappears.</p>
           <p>Not because it wasn't valuable — because no one built a system designed to keep it. Decision context, strategic rationale, onboarding logic: when captured, these compound. When they don't, the company rebuilds from scratch after every departure, every promotion, every handover.</p>
           <p>The most valuable trapped asset in a founder-led company is the decision reasoning stored in the founder's head. A founder who cannot be replaced by their own organization has not built one. Scaling past yourself starts with making that reasoning explicit — and putting it somewhere it can be used.</p>
+        </div>
+
+        <hr class="ap-divider">
+
+        <div class="ap-sec">
+          <h2>Stations</h2>
+          <!-- TODO (founder): add years per station; verify wording matches your LinkedIn. -->
+          <ol class="ap-timeline">
+            <li><b>Teleperformance</b><span>Operations at scale — where process quality is measured daily.</span></li>
+            <li><b>Accenture</b><span>Enterprise consulting — systems thinking inside large organizations.</span></li>
+            <li><b>HTC</b><span>Technology-sector operations.</span></li>
+            <li><b>Falcon Corporate Systems</b><span>Building and running sales systems for industrial companies.</span></li>
+            <li><b>Independent consultancy</b><span>Sales systems and lead generation for industrial machinery, manufacturing, and automation firms.</span></li>
+            <li><b>Falcon Intelligence Group — ADAMAS</b><span>The decision ledger: the system this site describes.</span></li>
+          </ol>
+        </div>
+
+        <hr class="ap-divider">
+
+        <div class="ap-sec">
+          <h2>Founder-built, founder-delivered</h2>
+          <p>ADAMAS has no sales team and no delivery department. Where this site says "we," it means me — plus the named partners on the <a href="/partners/" style="color:var(--accent)">Partners &amp; Backers</a> page. The audit is run by me, the vault is built by me, and the handover call is with me. For a system that holds your company's most sensitive knowledge, that's not a limitation — it's the point.</p>
+        </div>
+
+        <hr class="ap-divider">
+
+        <div class="ap-sec">
+          <h2>Advisors &amp; Partners</h2>
+          <p>Partners and backers are listed openly on the <a href="/partners/" style="color:var(--accent)">Partners &amp; Backers</a> page.</p>
+          <!-- TODO (founder): list advisors here as advisory relationships are formalized —
+               name, focus, written permission. Keep it minimal until then; never pad it. -->
+          <p style="font-size:13.5px;color:var(--faint)">Advisors will be listed here as advisory relationships are formalized.</p>
         </div>
 
         <div class="ap-cta">
@@ -302,6 +357,7 @@
           <a href="/">About ADAMAS</a>
           <a href="/author/massimo-sahin/">About the Founder</a>
           <a href="/partners/">Partners &amp; Backers</a>
+          <a href="/case-studies/">Case Studies</a>
           <a href="/blog/">Blog</a>
           <a href="/contact.html">Contact</a>
           <a href="/security.html">Security</a>
@@ -311,6 +367,7 @@
         <div class="ftr-col">
           <h5>Get Started</h5>
           <a href="/#book">Book a Clarity Audit</a>
+          <a href="/founding-clients.html">Founding Client Program</a>
           <a href="mailto:hello@adamas-project.com">hello@adamas-project.com</a>
           <a href="/#compare">Why ADAMAS</a>
           <a href="/privacy.html">Privacy</a>

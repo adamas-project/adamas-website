@@ -115,6 +115,14 @@
     .ap-body section { padding: 0; margin: 0; scroll-margin-top: 0; }
     .ap-body section > .wrap { border: none !important; padding: 0 !important; background: none !important; border-radius: 0 !important; }
 
+    /* founder timeline + sections */
+    .ap-timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+    .ap-timeline li { position: relative; padding: 0 0 22px 26px; }
+    .ap-timeline li::before { content: ""; position: absolute; left: 0; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+    .ap-timeline li::after { content: ""; position: absolute; left: 4px; top: 20px; bottom: -2px; width: 1px; background: var(--border-2); }
+    .ap-timeline li:last-child::after { display: none; }
+    .ap-timeline b { display: block; color: var(--text); font-size: 15px; }
+    .ap-timeline span { display: block; color: var(--muted); font-size: 13.5px; line-height: 1.55; margin-top: 3px; }
     @media (max-width: 540px) {
       .ap-profile { flex-direction: column; gap: 22px; }
       .ap-photo   { width: 100px; height: 100px; }
@@ -169,6 +177,7 @@
                 <a href="/de/produkt.html">Produkt-Tour</a>
                 <a href="/de/how-it-works/architektur.html">Architektur</a>
                 <a href="/de/docs/">Dokumentation</a>
+                <a href="/de/standard.html">Der Standard</a>
               </div>
               <div class="dd-group">
                 <span class="dd-h">Integrationen</span>
@@ -211,6 +220,12 @@
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 @THEGRANDFALCON
               </a>
+              <!-- TODO (Gründer): LinkedIn-Profil-URL eintragen und einkommentieren — Bio mit dieser Seite konsistent halten.
+              <a href="https://www.linkedin.com/in/IHR-PROFIL" target="_blank" rel="noopener noreferrer" aria-label="Massimo S. auf LinkedIn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+                LinkedIn
+              </a>
+              -->
             </div>
           </div>
         </div>
@@ -218,6 +233,14 @@
 
       <!-- Bio -->
       <div class="ap-body">
+
+      <!-- TODO (Gründer): das 90-Sekunden-Gründervideo aufnehmen — das Problem in eigenen
+           Worten —, als selbst gehostetes mp4 einbinden, dann einkommentieren. Das
+           vertrauensstärkste Asset eines Solo-Gründers; auch auf der Startseite einbetten.
+      <div class="ap-sec">
+        <video controls preload="metadata" style="width:100%;border-radius:14px;border:1px solid var(--border)" src="/assets/founder-90s.mp4"></video>
+      </div>
+      -->
 
         <div class="ap-sec">
           <h2>Hintergrund</h2>
@@ -242,6 +265,38 @@
           <p>Jede Entscheidung, die ein Unternehmen trifft, trägt eine Begründung in sich. Der größte Teil dieser Begründungen verschwindet.</p>
           <p>Nicht weil sie wertlos wären — sondern weil kein System darauf ausgelegt wurde, sie zu bewahren. Entscheidungskontext, strategische Überlegungen, Einarbeitungslogik: Wo sie erfasst werden, potenzieren sie sich. Wo nicht, baut das Unternehmen nach jeder Kündigung, jeder Beförderung, jeder Übergabe von vorn auf.</p>
           <p>Das wertvollste gebundene Kapital eines inhabergeführten Unternehmens ist das Entscheidungsdenken im Kopf des Gründers. Wer von der eigenen Organisation nicht ersetzt werden kann, hat noch keine aufgebaut. Über sich selbst hinauszuwachsen beginnt damit, dieses Denken explizit zu machen — und in ein System zu überführen, das es nutzbar macht.</p>
+        </div>
+
+        <hr class="ap-divider">
+
+        <div class="ap-sec">
+          <h2>Stationen</h2>
+          <!-- TODO (Gründer): Jahreszahlen je Station ergänzen; Wortlaut mit LinkedIn abgleichen. -->
+          <ol class="ap-timeline">
+            <li><b>Teleperformance</b><span>Operations im großen Maßstab — wo Prozessqualität täglich gemessen wird.</span></li>
+            <li><b>Accenture</b><span>Enterprise-Beratung — Systemdenken in großen Organisationen.</span></li>
+            <li><b>HTC</b><span>Operations im Technologiesektor.</span></li>
+            <li><b>Falcon Corporate Systems</b><span>Aufbau und Betrieb von Vertriebssystemen für Industrieunternehmen.</span></li>
+            <li><b>Eigene Beratung</b><span>Vertriebssysteme und Lead-Generierung für Maschinenbau-, Fertigungs- und Automatisierungsunternehmen.</span></li>
+            <li><b>Falcon Intelligence Group — ADAMAS</b><span>Das Entscheidungs-Ledger: das System, das diese Website beschreibt.</span></li>
+          </ol>
+        </div>
+
+        <hr class="ap-divider">
+
+        <div class="ap-sec">
+          <h2>Gründergebaut, gründergeliefert</h2>
+          <p>ADAMAS hat kein Vertriebsteam und keine Delivery-Abteilung. Wo diese Website „wir" sagt, ist damit ich gemeint — plus die namentlich genannten Partner auf der Seite <a href="/de/partner/" style="color:var(--accent)">Partner &amp; Unterstützer</a>. Das Audit führe ich durch, den Vault baue ich, und das Übergabegespräch führen Sie mit mir. Für ein System, das das sensibelste Wissen Ihres Unternehmens hält, ist das keine Einschränkung — es ist der Punkt.</p>
+        </div>
+
+        <hr class="ap-divider">
+
+        <div class="ap-sec">
+          <h2>Beirat &amp; Partner</h2>
+          <p>Partner und Unterstützer sind offen gelistet auf der Seite <a href="/de/partner/" style="color:var(--accent)">Partner &amp; Unterstützer</a>.</p>
+          <!-- TODO (Gründer): Beiräte hier eintragen, sobald Beziehungen formalisiert sind —
+               Name, Fokus, schriftliche Freigabe. Bis dahin minimal halten; niemals auffüllen. -->
+          <p style="font-size:13.5px;color:var(--faint)">Beiräte werden hier gelistet, sobald Beirats-Beziehungen formalisiert sind.</p>
         </div>
 
         <div class="ap-cta">
@@ -301,6 +356,7 @@
           <a href="/de.html">Über ADAMAS</a>
           <a href="/de/author/massimo-sahin/">Über den Gründer</a>
           <a href="/de/partner/">Partner &amp; Unterstützer</a>
+          <a href="/de/fallstudien/">Fallstudien</a>
           <a href="/de/blog/">Blog</a>
           <a href="/de/kontakt.html">Kontakt</a>
           <a href="/de/sicherheit.html">Sicherheit</a>
@@ -310,6 +366,7 @@
         <div class="ftr-col">
           <h5>Loslegen</h5>
           <a href="/de.html#book">Clarity-Audit buchen</a>
+          <a href="/de/gruendungskunden.html">Gründungskunden-Programm</a>
           <a href="mailto:hello@adamas-project.com">hello@adamas-project.com</a>
           <a href="/de.html#compare">Warum ADAMAS</a>
           <a href="/de/datenschutz.html">Datenschutz</a>
