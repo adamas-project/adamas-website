@@ -4,31 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <title>Blog — Entscheidungen, festgehalten | ADAMAS</title>
-  <meta name="description" content="Essays über institutionelles Wissen, Schlüsselpersonen-Risiko und die Kosten nicht dokumentierter Entscheidungen — vom Team hinter dem ADAMAS-Entscheidungs-Ledger.">
-  <link rel="canonical" href="https://adamas-project.com/de/blog/">
-  <link rel="alternate" hreflang="en" href="https://adamas-project.com/blog/">
-  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/blog/">
-  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/blog/">
-  <meta name="robots" content="index,follow,max-image-preview:large">
+  <title>Dokumentation — ADAMAS</title>
+  <meta name="description" content="ADAMAS-Dokumentation: erste Schritte, das Ledger-Schema, Integrationen, Hardware-Anforderungen und FAQ.">
+  <link rel="canonical" href="https://adamas-project.com/de/docs/index.html">
+  <link rel="alternate" hreflang="en" href="https://adamas-project.com/docs/index.html">
+  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/docs/index.html">
+  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/docs/index.html">
+  <meta name="robots" content="index,follow">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ADAMAS">
-  <meta property="og:title" content="Blog — Entscheidungen, festgehalten | ADAMAS">
-  <meta property="og:description" content="Essays über institutionelles Wissen, Schlüsselpersonen-Risiko und die Kosten nicht dokumentierter Entscheidungen — vom Team hinter dem ADAMAS-Entscheidungs-Ledger.">
-  <meta property="og:url" content="https://adamas-project.com/de/blog/">
+  <meta property="og:title" content="Dokumentation — ADAMAS">
+  <meta property="og:description" content="ADAMAS-Dokumentation: erste Schritte, das Ledger-Schema, Integrationen, Hardware-Anforderungen und FAQ.">
+  <meta property="og:url" content="https://adamas-project.com/de/docs/index.html">
   <meta property="og:image" content="https://adamas-project.com/og/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@THEGRANDFALCON">
-  <meta name="twitter:creator" content="@THEGRANDFALCON">
-  <meta name="twitter:title" content="Blog — Entscheidungen, festgehalten | ADAMAS">
-  <meta name="twitter:description" content="Essays über institutionelles Wissen, Schlüsselpersonen-Risiko und die Kosten nicht dokumentierter Entscheidungen — vom Team hinter dem ADAMAS-Entscheidungs-Ledger.">
+  <meta name="twitter:title" content="Dokumentation — ADAMAS">
+  <meta name="twitter:description" content="ADAMAS-Dokumentation: erste Schritte, das Ledger-Schema, Integrationen, Hardware-Anforderungen und FAQ.">
   <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
-
   <script>
     (function () {
       try {
@@ -38,9 +37,7 @@
       } catch (e) {}
     })();
   </script>
-
   <link rel="stylesheet" href="/styles.css">
-
   <script type="importmap">
   { "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -48,34 +45,40 @@
   }}
   </script>
 
-  <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
-
   <style>
-    /* ── Blog layout ── */
-    .bp-wrap { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
-    .bp-hero { padding: 72px 0 16px; }
-    .bp-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin: 0 0 20px; }
-    .bp-hero h1 { font-family: var(--font-d); font-size: clamp(1.8rem, 4.2vw, 2.6rem); font-weight: 700; color: var(--text); letter-spacing: -0.01em; line-height: 1.12; margin: 0 0 18px; }
-    .bp-meta { font-size: 13px; color: var(--faint); margin: 0; }
-    .bp-meta a { color: var(--accent); }
-    .bp-body { padding: 28px 0 96px; }
-    .bp-body h2 { font-family: var(--font-d); font-size: clamp(1.25rem, 2.6vw, 1.5rem); font-weight: 700; color: var(--text); letter-spacing: -0.01em; line-height: 1.25; margin: 46px 0 18px; }
-    .bp-body h3 { font-size: 16px; font-weight: 700; color: var(--text); margin: 30px 0 10px; }
-    .bp-body p { font-size: 16px; line-height: 1.75; color: var(--muted); margin: 0 0 18px; }
-    .bp-body a { color: var(--accent); }
-    .bp-body hr { border: 0; border-top: 1px solid var(--border-2); margin: 44px 0; }
-    .bp-byline { font-size: 14px; }
-    .bp-cta { margin-top: 48px; padding: 26px 28px; border: 1px solid var(--accent-line); border-radius: 14px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-    .bp-cta p { flex: 1; min-width: 220px; margin: 0; font-size: 14px; }
-    /* blog index cards */
-    .bi-list { display: flex; flex-direction: column; gap: 18px; padding: 28px 0 96px; }
-    .bi-card { display: block; border: 1px solid var(--border); border-radius: 14px; padding: 26px 28px; transition: border-color .2s, transform .2s; }
-    .bi-card:hover { border-color: var(--accent-line); transform: translateY(-2px); }
-    .bi-card h2 { font-family: var(--font-d); font-size: clamp(1.15rem, 2.4vw, 1.4rem); font-weight: 700; color: var(--text); margin: 0 0 10px; line-height: 1.25; }
-    .bi-card p { font-size: 14.5px; line-height: 1.65; color: var(--muted); margin: 0 0 14px; }
-    .bi-card .bi-date { font-size: 12px; color: var(--faint); letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 12px; }
-    .bi-card .bi-read { font-size: 13px; font-weight: 600; color: var(--accent); }
+    /* ── Docs layout ── */
+    .dc-wrap { max-width: 1020px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px) 96px; }
+    .dc-hero { padding: 64px 0 32px; }
+    .dc-hero h1 { font-family: var(--font-d); font-weight: 700; text-transform: uppercase; font-size: clamp(1.7rem, 4.5vw, 2.4rem); letter-spacing: -0.01em; line-height: 1.02; color: var(--text); margin: 12px 0 10px; }
+    .dc-hero p { color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 640px; margin: 0; }
+    .dc-body { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: start; }
+    .dc-side { position: sticky; top: 90px; display: grid; gap: 4px; }
+    .dc-side .h { font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
+    .dc-side a { font-size: 13.5px; color: var(--muted); padding: 7px 12px; border-radius: 8px; border: 1px solid transparent; }
+    .dc-side a:hover { color: var(--text); }
+    .dc-side a.on { color: var(--accent); background: var(--accent-soft); border-color: var(--accent-line); }
+    .dc-art h2 { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin: 34px 0 12px; }
+    .dc-art h2:first-child { margin-top: 0; }
+    .dc-art p { font-size: 15px; line-height: 1.7; color: var(--muted); margin: 0 0 12px; }
+    .dc-art p b { color: var(--text); }
+    .dc-art a { color: var(--accent); }
+    .dc-art ul, .dc-art ol { margin: 0 0 12px; padding-left: 20px; }
+    .dc-art li { font-size: 14.5px; line-height: 1.65; color: var(--muted); margin: 5px 0; }
+    .dc-art table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 0 0 16px; }
+    .dc-art th, .dc-art td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border-2); color: var(--muted); vertical-align: top; }
+    .dc-art th { color: var(--text); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+    .dc-art pre { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 18px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.55; color: var(--muted); margin: 0 0 16px; }
+    .dc-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .dc-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: 20px; transition: border-color .2s, transform .2s; }
+    .dc-card:hover { border-color: var(--accent-line); transform: translateY(-1px); }
+    .dc-card b { display: block; color: var(--text); font-size: 14.5px; margin-bottom: 6px; }
+    .dc-card span { color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .dc-art details { border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); padding: 14px 18px; margin-bottom: 10px; }
+    .dc-art summary { cursor: pointer; color: var(--text); font-weight: 600; font-size: 14.5px; }
+    .dc-art details p { margin-top: 10px; font-size: 14px; }
+    @media (max-width: 760px) { .dc-body { grid-template-columns: 1fr; } .dc-side { position: static; display: flex; flex-wrap: wrap; } }
   </style>
+  <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
   <canvas id="bg3d" aria-hidden="true"></canvas>
@@ -84,7 +87,7 @@
   <div class="glow"></div>
   <div class="grain"></div>
 
-<!-- ============ NAV ============ -->
+  <!-- ============ NAV ============ -->
   <nav class="nav">
     <div class="nav-inner">
       <a href="/de.html" class="brand">
@@ -114,7 +117,7 @@
               <div class="dd-group">
                 <span class="dd-h">Kostenlose Tools</span>
                 <a href="/scorecard.html" target="_blank" rel="noopener">Knowledge-Trap Scorecard</a>
-                <a href="/calculator.html" target="_blank" rel="noopener">Local-First AI Kostenrechner</a>
+                <a href="/calculator.html" target="_blank" rel="noopener">Local-First AI Cost Calculator</a>
                 <a href="/checklist.html" target="_blank" rel="noopener">Founder Succession Checklist</a>
                 <a href="/downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download>Decision Ledger Starter Kit</a>
               </div>
@@ -134,7 +137,7 @@
               </div>
             </div>
           </div>
-          <a class="lnk lang-link" href="/blog/" title="English">EN</a>
+          <a class="lnk lang-link" href="/docs/index.html" title="English">EN</a>
           <a class="btn btn-gold" href="/de.html#book">Clarity-Audit buchen</a>
         </div>
         <button class="nav-toggle" aria-label="Menü" onclick="document.getElementById('navlinks').classList.toggle('open')">
@@ -145,30 +148,42 @@
   </nav>
 
   <main id="top">
-    <div class="bp-wrap">
-      <header class="bp-hero">
-        <p class="bp-kicker">ADAMAS Blog</p>
-        <h1>Entscheidungen, festgehalten.</h1>
-        <p class="bp-meta">Essays über institutionelles Wissen, Schlüsselpersonen-Risiko und die Kosten, wenn Begründungen das Unternehmen verlassen.</p>
+    <div class="dc-wrap">
+      <header class="dc-hero">
+        <div class="kicker">Dokumentation</div>
+        <h1>Alles, was Sie zur Bewertung des Systems brauchen.</h1>
+        <p>Das Entscheidungs-Ledger, dokumentiert wie das Produkt, das es ist: wie ein Projekt abläuft, wie die Daten aussehen, was sich verbindet und worauf es läuft.</p>
       </header>
-      <div class="bi-list">
-        <a class="bi-card" href="/de/blog/wenn-eine-schluesselperson-das-unternehmen-verlaesst/">
-          <span class="bi-date">11. Juni 2026</span>
-          <h2>Wissensverlust: Wenn eine Schlüsselperson das Unternehmen verlässt</h2>
-          <p>Wenn eine Schlüsselperson geht, kostet das mehr als das Gehalt. Was wirklich verloren geht, was es kostet, und wie Sie es verhindern.</p>
-          <span class="bi-read">Artikel lesen →</span>
-        </a>
-        <a class="bi-card" href="/de/blog/firmenwissen-im-kopf-eines-mitarbeiters/">
-          <span class="bi-date">11. Juni 2026</span>
-          <h2>Wenn das Firmenwissen nur in einem Kopf steckt</h2>
-          <p>Wenn wichtige Mitarbeiter kündigen, geht nicht nur die Person — sondern alles, was sie wussten. So sichern Sie das Wissen rechtzeitig.</p>
-          <span class="bi-read">Artikel lesen →</span>
-        </a>
+      <div class="dc-body">
+        <nav class="dc-side" aria-label="Dokumentation">
+          <span class="h">Dokumentation</span>
+        <a href="/de/docs/index.html" class="on">Überblick</a>
+        <a href="/de/docs/getting-started.html">Erste Schritte</a>
+        <a href="/de/docs/ledger-schema.html">Ledger-Schema</a>
+        <a href="/de/docs/integrations.html">Integrationen</a>
+        <a href="/de/docs/hardware.html">Hardware</a>
+        <a href="/de/docs/faq.html">FAQ</a>
+        </nav>
+        <article class="dc-art">
+
+<h2>Hier starten</h2>
+<div class="dc-cards">
+  <a class="dc-card" href="/de/docs/getting-started.html"><b>Erste Schritte</b><span>So läuft ein Projekt: Clarity-Audit → Aufbau → Übergabe, und was Sie in jedem Schritt beisteuern.</span></a>
+  <a class="dc-card" href="/de/docs/ledger-schema.html"><b>Ledger-Schema</b><span>Die sechs Felder eines Eintrags, die offenen Dateiformate und ein rohes JSON-Beispiel.</span></a>
+  <a class="dc-card" href="/de/docs/integrations.html"><b>Integrationen</b><span>Wie Konnektoren aus Slack, E-Mail, CRM und Dokumenten ziehen — read-only, auf Ihre Maschine.</span></a>
+  <a class="dc-card" href="/de/docs/hardware.html"><b>Hardware</b><span>Das empfohlene Mac-Mini-M4-Setup, Alternativen und realistische Betriebskosten.</span></a>
+  <a class="dc-card" href="/de/docs/faq.html"><b>Produkt-FAQ</b><span>Backups, Exporte, mehrere Nutzer und was bei Projektende passiert.</span></a>
+  <a class="dc-card" href="/de/demo.html"><b>Interaktive Demo</b><span>Lesen überspringen — klicken Sie sich durch ein Beispiel-Ledger mit 14 verknüpften Entscheidungen.</span></a>
+</div>
+<h2>Was ADAMAS ist, in einem Absatz</h2>
+<p>ADAMAS (All Decisions And Memory Archive System) ist ein <b>Entscheidungs-Ledger</b>: ein Local-First-System, das festhält, warum Entscheidungen getroffen wurden, sie zu verknüpften Einträgen strukturiert und die Business-Assets erzeugt, die Ihre Wachstumsphase braucht — Onboarding-Dokumente, Hiring-Frameworks, Investorenunterlagen. Es läuft auf Hardware, die Ihnen gehört, angetrieben vom Drittanbieter-KI-Agenten Hermes, und wird als Done-for-you-Aufbau geliefert. Den vollständigen Datenfluss zeigt das <a href="/de/how-it-works/architektur.html">Architektur-Diagramm</a>.</p>
+
+        </article>
       </div>
     </div>
   </main>
 
-<!-- ============ FOOTER ============ -->
+  <!-- ============ FOOTER ============ -->
   <footer class="ftr">
     <div class="ftr-in">
       <div class="ftr-legal">

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Produkt-Tour — Im Inneren des ADAMAS-Vaults</title>
+  <meta name="description" content="Annotierte Ansichten des ADAMAS-Vaults: das Entscheidungs-Ledger, die Capture-Inbox, die Asset-Generierung und der Hybrid-Cloud-Freigabedialog — plus klickbare Demo.">
+  <link rel="canonical" href="https://adamas-project.com/de/produkt.html">
+  <link rel="alternate" hreflang="en" href="https://adamas-project.com/product.html">
+  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/produkt.html">
+  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/product.html">
+  <meta name="robots" content="index,follow">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ADAMAS">
+  <meta property="og:title" content="Produkt-Tour — Im Inneren des ADAMAS-Vaults">
+  <meta property="og:description" content="Das Entscheidungs-Ledger, die Capture-Inbox, die Asset-Generierung und der Hybrid-Freigabedialog — annotiert, plus klickbare Demo.">
+  <meta property="og:url" content="https://adamas-project.com/de/produkt.html">
+  <meta property="og:image" content="https://adamas-project.com/og/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Produkt-Tour — Im Inneren des ADAMAS-Vaults">
+  <meta name="twitter:description" content="Der Vault, annotiert — plus klickbare Demo.">
+  <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('adamas-theme');
+        if (t !== 'matrix') t = 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="importmap">
+  { "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }}
+  </script>
+
+  <style>
+    /* ── Product tour page ── */
+    .pt-wrap { max-width: 1020px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px) 96px; }
+    .pt-hero { padding: 72px 0 36px; }
+    .pt-hero h1 { font-family: var(--font-d); font-weight: 700; text-transform: uppercase; font-size: clamp(2rem, 5.5vw, 2.9rem); letter-spacing: -0.01em; line-height: 1; color: var(--text); margin: 12px 0 14px; }
+    .pt-hero p { color: var(--muted); font-size: 16px; line-height: 1.7; max-width: 680px; margin: 0 0 8px; }
+    .pt-note { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); border: 1px dashed var(--accent-line); border-radius: 99px; padding: 6px 14px; margin-top: 12px; }
+    .pt-row { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(18px, 4vw, 40px); align-items: center; margin: 56px 0; }
+    .pt-row.flip { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+    .pt-row.flip .pt-shot { order: 2; }
+    .pt-row.flip .pt-ann { order: 1; }
+    /* 16:10 framed screenshot slot */
+    .pt-shot { aspect-ratio: 16 / 10; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--card-shadow); display: flex; flex-direction: column; }
+    .pt-shot-bar { display: flex; gap: 6px; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--border-2); background: var(--surface-2); flex-shrink: 0; }
+    .pt-shot-bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+    .pt-shot-bar i:first-child { background: var(--accent); }
+    .pt-shot-bar span { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--faint); margin-left: 8px; }
+    .pt-shot svg { flex: 1; width: 100%; height: 100%; display: block; }
+    .pt-ann .n { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); }
+    .pt-ann h2 { font-family: var(--font-d); font-size: clamp(1.2rem, 2.6vw, 1.5rem); font-weight: 700; color: var(--text); margin: 8px 0 12px; line-height: 1.2; }
+    .pt-ann p { font-size: 14.5px; line-height: 1.7; color: var(--muted); margin: 0 0 10px; }
+    .pt-ann a { color: var(--accent); font-weight: 600; }
+    .pt-cta { margin-top: 24px; padding-top: 36px; border-top: 1px solid var(--border-2); display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .pt-cta p { color: var(--muted); font-size: 14px; margin: 0; flex: 1; min-width: 220px; }
+    .pt-shot text { font-family: 'JetBrains Mono', monospace; }
+    @media (max-width: 780px) {
+      .pt-row, .pt-row.flip { grid-template-columns: 1fr; }
+      .pt-row.flip .pt-shot { order: 1; }
+      .pt-row.flip .pt-ann { order: 2; }
+    }
+  </style>
+  <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
+</head>
+<body>
+  <canvas id="bg3d" aria-hidden="true"></canvas>
+  <div class="scrim3d"></div>
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="glow"></div>
+  <div class="grain"></div>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/de.html" class="brand">
+        <span class="brand-name">ADAMAS<span class="brand-a">α</span></span>
+        <span class="brand-by">by Falcon Intelligence Group</span>
+      </a>
+      <div class="nav-right">
+        <div class="theme-switch" role="group" aria-label="Farbschema">
+          <button class="theme-btn" data-set-theme="dark" aria-pressed="true" title="Dunkelgold">◆</button>
+          <button class="theme-btn" data-set-theme="matrix" aria-pressed="false" title="Matrix" style="font-weight:700">⠿</button>
+        </div>
+        <a href="https://x.com/THEGRANDFALCON" target="_blank" rel="noopener noreferrer" class="nav-social" aria-label="ADAMAS auf X folgen"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <div class="nav-links" id="navlinks">
+          <a class="lnk" href="/de.html#problem">Das Problem</a>
+          <a class="lnk" href="/de.html#what">Was es ist</a>
+          <a class="lnk" href="/de.html#how">Wie es funktioniert</a>
+          <a class="lnk" href="/de.html#pricing">Preise</a>
+          <div class="nav-dd">
+            <a class="lnk nav-dd-trigger" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Ressourcen <span class="caret" aria-hidden="true">▾</span></a>
+            <div class="nav-dd-menu" role="menu">
+              <div class="dd-group">
+                <span class="dd-h">eBooks &amp; Leitfäden</span>
+                <a href="/downloads/ADAMAS-Guide-Escaping-the-Knowledge-Bottleneck.pdf" target="_blank" rel="noopener">Escaping the Knowledge Bottleneck</a>
+                <a href="/downloads/ADAMAS-Guide-Decision-Ledger-Playbook.pdf" target="_blank" rel="noopener">The Decision Ledger Playbook</a>
+                <a href="/downloads/ADAMAS-Guide-Local-First-AI.pdf" target="_blank" rel="noopener">Local-First AI for Founders</a>
+              </div>
+              <div class="dd-group">
+                <span class="dd-h">Kostenlose Tools</span>
+                <a href="/scorecard.html" target="_blank" rel="noopener">Knowledge-Trap Scorecard</a>
+                <a href="/calculator.html" target="_blank" rel="noopener">Local-First AI Cost Calculator</a>
+                <a href="/checklist.html" target="_blank" rel="noopener">Founder Succession Checklist</a>
+                <a href="/downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download>Decision Ledger Starter Kit</a>
+              </div>
+              <div class="dd-group">
+                <span class="dd-h">Integrationen</span>
+                <a href="/integrations/monday.html">Monday.com</a>
+                <a href="/integrations/hubspot.html">HubSpot</a>
+                <a href="/integrations/notion.html">Notion</a>
+                <a href="/integrations/">Alle Integrationen →</a>
+              </div>
+            </div>
+          </div>
+          <a class="lnk lang-link" href="/product.html" title="English">EN</a>
+          <a class="btn btn-gold" href="/de.html#book">Clarity-Audit buchen</a>
+        </div>
+        <button class="nav-toggle" aria-label="Menü" onclick="document.getElementById('navlinks').classList.toggle('open')">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <div class="pt-wrap">
+
+      <header class="pt-hero">
+        <div class="kicker">Produkt-Tour</div>
+        <h1>Im Inneren des Vaults.</h1>
+        <p>Fünf Ansichten des Systems, das Sie bekommen: wie Entscheidungen erfasst, gespeichert, verknüpft und in Assets verwandelt werden — und der eine Dialog, der Ihre Datengrenze bewacht.</p>
+        <p>Lieber klicken statt lesen? <a href="/de/demo.html" style="color:var(--accent);font-weight:600">Zur interaktiven Ledger-Demo →</a></p>
+        <!-- TODO (Gründer): diese High-Fidelity-Mockups durch echte Vault-Screenshots ersetzen
+             (16:10, PNG/WebP), sobald die UI vorzeigbar ist. Die Rahmen sind dimensioniert und
+             annotiert — Drop-in-Ersatz. -->
+        <span class="pt-note">High-Fidelity-Mockups — echte Screenshots in Vorbereitung</span>
+      </header>
+
+      <!-- 1 · Ledger view -->
+      <div class="pt-row">
+        <div class="pt-shot">
+          <div class="pt-shot-bar"><i></i><i></i><i></i><span>adamas — vault · ledger</span></div>
+          <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" aria-label="Mockup of the ledger view: a filterable list of decisions on the left, the selected decision with context and trade-offs on the right.">
+            <rect x="18" y="16" width="60" height="16" rx="8" fill="var(--accent-soft)" stroke="var(--accent-line)"/>
+            <rect x="84" y="16" width="60" height="16" rx="8" fill="none" stroke="var(--border)"/>
+            <rect x="150" y="16" width="60" height="16" rx="8" fill="none" stroke="var(--border)"/>
+            <rect x="216" y="16" width="60" height="16" rx="8" fill="none" stroke="var(--border)"/>
+            <g>
+              <rect x="18" y="48" width="240" height="52" rx="8" fill="var(--accent-soft)" stroke="var(--accent)"/>
+              <text x="30" y="68" font-size="9" fill="var(--accent)">SAL-021</text>
+              <rect x="30" y="76" width="200" height="6" rx="3" fill="var(--muted)" opacity=".55"/>
+              <rect x="30" y="88" width="140" height="5" rx="2.5" fill="var(--faint)" opacity=".4"/>
+              <rect x="18" y="110" width="240" height="52" rx="8" fill="var(--surface-2)" stroke="var(--border)"/>
+              <text x="30" y="130" font-size="9" fill="var(--green)">FIN-016</text>
+              <rect x="30" y="138" width="190" height="6" rx="3" fill="var(--muted)" opacity=".4"/>
+              <rect x="30" y="150" width="120" height="5" rx="2.5" fill="var(--faint)" opacity=".3"/>
+              <rect x="18" y="172" width="240" height="52" rx="8" fill="var(--surface-2)" stroke="var(--border)"/>
+              <text x="30" y="192" font-size="9" fill="#7fb5ff">HIR-014</text>
+              <rect x="30" y="200" width="180" height="6" rx="3" fill="var(--muted)" opacity=".4"/>
+              <rect x="30" y="212" width="150" height="5" rx="2.5" fill="var(--faint)" opacity=".3"/>
+              <rect x="18" y="234" width="240" height="52" rx="8" fill="var(--surface-2)" stroke="var(--border)"/>
+              <text x="30" y="254" font-size="9" fill="#ff9d7a">OPS-020</text>
+              <rect x="30" y="262" width="200" height="6" rx="3" fill="var(--muted)" opacity=".4"/>
+              <rect x="30" y="274" width="110" height="5" rx="2.5" fill="var(--faint)" opacity=".3"/>
+              <rect x="18" y="296" width="240" height="52" rx="8" fill="var(--surface-2)" stroke="var(--border)"/>
+              <text x="30" y="316" font-size="9" fill="#b89aff">PRD-019</text>
+              <rect x="30" y="324" width="170" height="6" rx="3" fill="var(--muted)" opacity=".4"/>
+            </g>
+            <g>
+              <rect x="276" y="48" width="346" height="300" rx="10" fill="var(--surface-2)" stroke="var(--accent-line)"/>
+              <text x="294" y="76" font-size="10" fill="var(--accent)">SAL-021 · SALES · 2025-04-14</text>
+              <rect x="294" y="88" width="280" height="9" rx="4" fill="var(--text)" opacity=".7"/>
+              <text x="294" y="124" font-size="8.5" fill="var(--accent)">CONTEXT</text>
+              <rect x="294" y="132" width="300" height="5" rx="2.5" fill="var(--muted)" opacity=".4"/>
+              <rect x="294" y="142" width="280" height="5" rx="2.5" fill="var(--muted)" opacity=".4"/>
+              <rect x="294" y="152" width="240" height="5" rx="2.5" fill="var(--muted)" opacity=".4"/>
+              <text x="294" y="180" font-size="8.5" fill="var(--accent)">DECISION</text>
+              <rect x="294" y="188" width="300" height="5" rx="2.5" fill="var(--text)" opacity=".6"/>
+              <rect x="294" y="198" width="200" height="5" rx="2.5" fill="var(--text)" opacity=".6"/>
+              <text x="294" y="226" font-size="8.5" fill="var(--accent)">TRADE-OFFS</text>
+              <rect x="304" y="234" width="270" height="5" rx="2.5" fill="var(--muted)" opacity=".4"/>
+              <rect x="304" y="244" width="250" height="5" rx="2.5" fill="var(--muted)" opacity=".4"/>
+              <text x="294" y="276" font-size="8.5" fill="var(--accent)">LINKED</text>
+              <rect x="294" y="284" width="90" height="20" rx="6" fill="none" stroke="var(--green)" opacity=".7"/>
+              <text x="302" y="297" font-size="8.5" fill="var(--green)">FIN-016</text>
+              <rect x="392" y="284" width="90" height="20" rx="6" fill="none" stroke="#ff9d7a" opacity=".7"/>
+              <text x="400" y="297" font-size="8.5" fill="#ff9d7a">OPS-020</text>
+              <rect x="490" y="284" width="90" height="20" rx="6" fill="none" stroke="var(--accent)" opacity=".7"/>
+              <text x="498" y="297" font-size="8.5" fill="var(--accent)">SAL-017</text>
+            </g>
+          </svg>
+        </div>
+        <div class="pt-ann">
+          <span class="n">01</span>
+          <h2>Das Ledger</h2>
+          <p>Das Herz des Vaults: jede Entscheidung als strukturierter Eintrag — Kontext, die exakte Entscheidung, wer sie traf, die akzeptierten Trade-offs und bidirektionale Verknüpfungen zu den Entscheidungen, die sie geprägt hat.</p>
+          <p>Nach Bereich filtern, einer Verknüpfung folgen — und die Begründung jeder Entscheidung von vor zwei Jahren ist drei Klicks entfernt. <a href="/de/demo.html">In der Demo ausprobieren →</a></p>
+        </div>
+      </div>
+
+      <!-- 2 · Capture inbox -->
+      <div class="pt-row flip">
+        <div class="pt-shot">
+          <div class="pt-shot-bar"><i></i><i></i><i></i><span>adamas — capture inbox</span></div>
+          <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" aria-label="Mockup of the capture inbox: decision candidates surfaced by Hermes from Slack, email and meetings, each awaiting confirm or dismiss.">
+            <text x="18" y="30" font-size="11" fill="var(--text)" font-weight="bold">Surfaced this week · 6 candidates</text>
+            <g>
+              <rect x="18" y="46" width="604" height="64" rx="10" fill="var(--surface-2)" stroke="var(--border)"/>
+              <text x="34" y="68" font-size="9" fill="var(--faint)">FROM #sales · Slack thread · Tue 14:32</text>
+              <rect x="34" y="78" width="380" height="6" rx="3" fill="var(--muted)" opacity=".5"/>
+              <rect x="34" y="90" width="300" height="5" rx="2.5" fill="var(--faint)" opacity=".35"/>
+              <rect x="470" y="62" width="70" height="22" rx="11" fill="var(--accent-soft)" stroke="var(--accent)"/>
+              <text x="484" y="77" font-size="9" fill="var(--accent)">Confirm</text>
+              <rect x="548" y="62" width="60" height="22" rx="11" fill="none" stroke="var(--border)"/>
+              <text x="560" y="77" font-size="9" fill="var(--faint)">Dismiss</text>
+            </g>
+            <g>
+              <rect x="18" y="120" width="604" height="64" rx="10" fill="var(--surface-2)" stroke="var(--border)"/>
+              <text x="34" y="142" font-size="9" fill="var(--faint)">FROM weekly review · meeting transcript · Fri 09:12</text>
+              <rect x="34" y="152" width="420" height="6" rx="3" fill="var(--muted)" opacity=".5"/>
+              <rect x="34" y="164" width="260" height="5" rx="2.5" fill="var(--faint)" opacity=".35"/>
+              <rect x="470" y="136" width="70" height="22" rx="11" fill="var(--accent-soft)" stroke="var(--accent)"/>
+              <text x="484" y="151" font-size="9" fill="var(--accent)">Confirm</text>
+              <rect x="548" y="136" width="60" height="22" rx="11" fill="none" stroke="var(--border)"/>
+              <text x="560" y="151" font-size="9" fill="var(--faint)">Dismiss</text>
+            </g>
+            <g>
+              <rect x="18" y="194" width="604" height="64" rx="10" fill="var(--surface-2)" stroke="var(--border)"/>
+              <text x="34" y="216" font-size="9" fill="var(--faint)">FROM client email · thread (4 msgs) · Wed 17:05</text>
+              <rect x="34" y="226" width="350" height="6" rx="3" fill="var(--muted)" opacity=".5"/>
+              <rect x="34" y="238" width="310" height="5" rx="2.5" fill="var(--faint)" opacity=".35"/>
+              <rect x="470" y="210" width="70" height="22" rx="11" fill="var(--accent-soft)" stroke="var(--accent)"/>
+              <text x="484" y="225" font-size="9" fill="var(--accent)">Confirm</text>
+              <rect x="548" y="210" width="60" height="22" rx="11" fill="none" stroke="var(--border)"/>
+              <text x="560" y="225" font-size="9" fill="var(--faint)">Dismiss</text>
+            </g>
+            <g opacity=".5">
+              <rect x="18" y="268" width="604" height="64" rx="10" fill="var(--surface-2)" stroke="var(--border)"/>
+              <text x="34" y="290" font-size="9" fill="var(--faint)">FROM Jira · ticket comment · Thu 11:48</text>
+              <rect x="34" y="300" width="390" height="6" rx="3" fill="var(--muted)" opacity=".5"/>
+              <rect x="34" y="312" width="280" height="5" rx="2.5" fill="var(--faint)" opacity=".35"/>
+            </g>
+          </svg>
+        </div>
+        <div class="pt-ann">
+          <span class="n">02</span>
+          <h2>Die Capture-Inbox</h2>
+          <p>Hermes liest das Rauschen der Woche — Slack-Threads, E-Mails, Transkripte, Tickets — und zeigt die Momente, die tatsächlich Entscheidungen waren. Sie bestätigen oder verwerfen; nichts gelangt ungeprüft ins Ledger.</p>
+          <p>Das ist der „läuft auf Autopilot"-Teil: Die Erfassung kostet das Team Minuten pro Woche — keine Dokumentationsgewohnheit, die niemand durchhält.</p>
+        </div>
+      </div>
+
+      <!-- 3 · Link graph -->
+      <div class="pt-row">
+        <div class="pt-shot">
+          <div class="pt-shot-bar"><i></i><i></i><i></i><span>adamas — decision graph</span></div>
+          <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" aria-label="Mockup of the decision graph: nodes for decisions connected by lines, with one decision highlighted and its connections emphasized.">
+            <g stroke="var(--border)" stroke-width="1">
+              <line x1="320" y1="180" x2="160" y2="90"/><line x1="320" y1="180" x2="480" y2="100"/>
+              <line x1="320" y1="180" x2="500" y2="250"/><line x1="320" y1="180" x2="170" y2="270"/>
+              <line x1="160" y1="90" x2="480" y2="100"/><line x1="170" y1="270" x2="500" y2="250"/>
+              <line x1="480" y1="100" x2="560" y2="190"/><line x1="160" y1="90" x2="80" y2="180"/>
+              <line x1="80" y1="180" x2="170" y2="270"/>
+            </g>
+            <g stroke="var(--accent)" stroke-width="1.6" opacity=".9">
+              <line x1="320" y1="180" x2="160" y2="90"/><line x1="320" y1="180" x2="500" y2="250"/><line x1="320" y1="180" x2="480" y2="100"/>
+            </g>
+            <circle cx="320" cy="180" r="34" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.6"/>
+            <text x="320" y="184" font-size="10" fill="var(--accent)" text-anchor="middle">SAL-021</text>
+            <circle cx="160" cy="90" r="26" fill="var(--surface-2)" stroke="var(--green)"/>
+            <text x="160" y="94" font-size="9" fill="var(--green)" text-anchor="middle">FIN-016</text>
+            <circle cx="480" cy="100" r="26" fill="var(--surface-2)" stroke="var(--accent-line)"/>
+            <text x="480" y="104" font-size="9" fill="var(--accent)" text-anchor="middle">SAL-017</text>
+            <circle cx="500" cy="250" r="26" fill="var(--surface-2)" stroke="#ff9d7a"/>
+            <text x="500" y="254" font-size="9" fill="#ff9d7a" text-anchor="middle">OPS-020</text>
+            <circle cx="170" cy="270" r="26" fill="var(--surface-2)" stroke="#b89aff"/>
+            <text x="170" y="274" font-size="9" fill="#b89aff" text-anchor="middle">PRD-019</text>
+            <circle cx="80" cy="180" r="22" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="80" y="184" font-size="8.5" fill="var(--faint)" text-anchor="middle">FIN-007</text>
+            <circle cx="560" cy="190" r="22" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="560" y="194" font-size="8.5" fill="var(--faint)" text-anchor="middle">FIN-022</text>
+          </svg>
+        </div>
+        <div class="pt-ann">
+          <span class="n">03</span>
+          <h2>Der Entscheidungsgraph</h2>
+          <p>Entscheidungen stehen nie allein. Einen Großauftrag abzulehnen berührt Preise, Abrechnung und Personal — und der Graph zeigt es. Fragt jemand „Warum sind wir so aufgestellt?", ist die Antwort eine sichtbare Struktur, keine Archäologie.</p>
+          <p>Genau das ist es, was sich verzinst: Jeder neue Eintrag fügt Kanten hinzu, und der Graph wird zum institutionellen Gedächtnis Ihres Unternehmens.</p>
+        </div>
+      </div>
+
+      <!-- 4 · Asset generation -->
+      <div class="pt-row flip">
+        <div class="pt-shot">
+          <div class="pt-shot-bar"><i></i><i></i><i></i><span>adamas — asset generation</span></div>
+          <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" aria-label="Mockup of asset generation: a panel selecting 'onboarding document' with source decisions listed, and a generated document preview.">
+            <rect x="18" y="20" width="250" height="320" rx="10" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="34" y="48" font-size="10" fill="var(--text)" font-weight="bold">Generate asset</text>
+            <rect x="34" y="62" width="218" height="26" rx="7" fill="var(--accent-soft)" stroke="var(--accent-line)"/>
+            <text x="46" y="79" font-size="9" fill="var(--accent)">Onboarding document</text>
+            <rect x="34" y="94" width="218" height="26" rx="7" fill="none" stroke="var(--border)"/>
+            <text x="46" y="111" font-size="9" fill="var(--faint)">Hiring framework</text>
+            <rect x="34" y="126" width="218" height="26" rx="7" fill="none" stroke="var(--border)"/>
+            <text x="46" y="143" font-size="9" fill="var(--faint)">Investor one-pager</text>
+            <text x="34" y="180" font-size="8.5" fill="var(--accent)">SOURCES · 9 DECISIONS</text>
+            <g font-size="8.5" fill="var(--faint)">
+              <text x="34" y="200">HIR-009 · OPS-013 · SAL-011</text>
+              <text x="34" y="216">FIN-022 · SAL-017 · OPS-020</text>
+              <text x="34" y="232">PRD-019 · PRD-008 · OPS-005</text>
+            </g>
+            <rect x="34" y="294" width="120" height="26" rx="13" fill="var(--accent)" opacity=".85"/>
+            <text x="56" y="311" font-size="9.5" fill="#1a1405" font-weight="bold">Generate →</text>
+            <rect x="286" y="20" width="336" height="320" rx="10" fill="var(--surface-2)" stroke="var(--accent-line)"/>
+            <text x="302" y="48" font-size="9" fill="var(--faint)">onboarding_automation-engineer.md</text>
+            <rect x="302" y="60" width="240" height="9" rx="4" fill="var(--text)" opacity=".7"/>
+            <g fill="var(--muted)" opacity=".45">
+              <rect x="302" y="84" width="300" height="5" rx="2.5"/><rect x="302" y="95" width="280" height="5" rx="2.5"/>
+              <rect x="302" y="106" width="290" height="5" rx="2.5"/><rect x="302" y="117" width="200" height="5" rx="2.5"/>
+            </g>
+            <text x="302" y="146" font-size="8.5" fill="var(--accent)">HOW WE QUOTE WORK</text>
+            <g fill="var(--muted)" opacity=".45">
+              <rect x="302" y="156" width="300" height="5" rx="2.5"/><rect x="302" y="167" width="260" height="5" rx="2.5"/>
+              <rect x="302" y="178" width="290" height="5" rx="2.5"/>
+            </g>
+            <text x="302" y="206" font-size="8.5" fill="var(--accent)">HOW WE DELIVER ON SITE</text>
+            <g fill="var(--muted)" opacity=".45">
+              <rect x="302" y="216" width="280" height="5" rx="2.5"/><rect x="302" y="227" width="300" height="5" rx="2.5"/>
+              <rect x="302" y="238" width="230" height="5" rx="2.5"/>
+            </g>
+            <text x="302" y="266" font-size="8.5" fill="var(--accent)">WHO DECIDES WHAT</text>
+            <g fill="var(--muted)" opacity=".45">
+              <rect x="302" y="276" width="290" height="5" rx="2.5"/><rect x="302" y="287" width="270" height="5" rx="2.5"/>
+            </g>
+            <rect x="302" y="306" width="150" height="18" rx="9" fill="none" stroke="var(--accent-line)"/>
+            <text x="314" y="318" font-size="8" fill="var(--accent)">traced to 9 ledger entries</text>
+          </svg>
+        </div>
+        <div class="pt-ann">
+          <span class="n">04</span>
+          <h2>Asset-Generierung</h2>
+          <p>Wählen Sie das Asset, das Ihre Wachstumsphase braucht — Onboarding-Dokument, Hiring-Framework, Investorenunterlage — und ADAMAS setzt es aus dem Ledger zusammen, jede Sektion auf ihre Quell-Entscheidungen zurückgeführt.</p>
+          <p>Ändert sich eine Entscheidung, wird das Asset neu generiert. Dokumentation hört auf zu veralten. <a href="/de/beispiel-asset.html">Vollständiges generiertes Beispiel lesen →</a></p>
+        </div>
+      </div>
+
+      <!-- 5 · Hybrid opt-in -->
+      <div class="pt-row">
+        <div class="pt-shot">
+          <div class="pt-shot-bar"><i></i><i></i><i></i><span>adamas — hybrid approval</span></div>
+          <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" aria-label="Mockup of the hybrid-cloud approval dialog: a task requests cloud processing, showing exactly what content would be sent, with approve and run-locally buttons.">
+            <rect x="0" y="0" width="640" height="360" fill="var(--bg)" opacity=".5"/>
+            <rect x="140" y="60" width="360" height="240" rx="14" fill="var(--surface-2)" stroke="var(--accent)" stroke-width="1.4"/>
+            <text x="164" y="94" font-size="11" fill="var(--text)" font-weight="bold">Cloud processing requested</text>
+            <text x="164" y="114" font-size="9" fill="var(--faint)">Task: summarize 214 supplier emails (heavy)</text>
+            <text x="164" y="146" font-size="8.5" fill="var(--accent)">WOULD BE TRANSMITTED</text>
+            <rect x="164" y="156" width="312" height="60" rx="8" fill="var(--surface)" stroke="var(--border)"/>
+            <g fill="var(--muted)" opacity=".5">
+              <rect x="178" y="168" width="280" height="5" rx="2.5"/><rect x="178" y="179" width="250" height="5" rx="2.5"/>
+              <rect x="178" y="190" width="270" height="5" rx="2.5"/><rect x="178" y="201" width="180" height="5" rx="2.5"/>
+            </g>
+            <text x="164" y="238" font-size="8.5" fill="var(--faint)">Result returns to your vault. Route is logged in the ledger.</text>
+            <rect x="164" y="252" width="130" height="28" rx="14" fill="var(--accent)" opacity=".85"/>
+            <text x="186" y="270" font-size="9.5" fill="#1a1405" font-weight="bold">Approve once</text>
+            <rect x="306" y="252" width="130" height="28" rx="14" fill="none" stroke="var(--border)"/>
+            <text x="326" y="270" font-size="9.5" fill="var(--muted)">Run locally</text>
+          </svg>
+        </div>
+        <div class="pt-ann">
+          <span class="n">05</span>
+          <h2>Der Grenz-Dialog</h2>
+          <p>Der einzige Moment, in dem Daten Ihre Maschine verlassen können — und das nie im Stillen. Sie sehen genau, was übertragen würde, geben pro Aufgabe frei oder lehnen ab, und die Route wird im Ledger protokolliert.</p>
+          <p>Lehnen Sie ab, läuft die Aufgabe stattdessen lokal. Der Standard ist immer: Nichts geht hinaus. <a href="/de/sicherheit.html">Alle Sicherheitsdetails →</a></p>
+        </div>
+      </div>
+
+      <div class="pt-cta">
+        <p>Die Architektur hinter diesen Ansichten, in einem Diagramm: <a href="/de/how-it-works/architektur.html" style="color:var(--accent);font-weight:600">So funktioniert es →</a></p>
+        <a href="/de.html#book" class="btn btn-gold">Clarity-Audit buchen →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="ftr">
+    <div class="ftr-in">
+      <div class="ftr-legal">
+        <p>ADAMAS (All Decisions And Memory Archive System) ist ein Produkt der Falcon Intelligence Group LLC, aufgebaut auf dem Hermes-KI-Agenten. Hermes ist ein Drittanbieter-Tool und bleibt Eigentum seines jeweiligen Inhabers.</p>
+        <p>Local-first by Design: Ihr Vault und das Entscheidungs-Ledger laufen auf Hardware, die Ihnen gehört. ADAMAS sendet das Wissen Ihres Unternehmens nicht in Drittanbieter-Clouds — optionales hybrides Cloud-Routing wird nur für explizit von Ihnen freigegebene Aufgaben genutzt.</p>
+        <p>Die angezeigten Preise sind Richtwerte und können je nach Projektumfang variieren. Die Clarity-Audit-Gebühr wird bei Projektdurchführung angerechnet. Client-Hardware (z. B. Mac Mini M4) wird vom Kunden erworben und ist sein Eigentum.</p>
+        <p>Die Oberflächen auf dieser Seite sind High-Fidelity-Mockups mit Beispieldaten; sie illustrieren das Design des Systems und können vom ausgelieferten Produkt abweichen.</p>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-cols">
+        <div class="ftr-col">
+          <h5>ADAMAS</h5>
+          <a href="/de.html#problem">Das Problem</a>
+          <a href="/de/demo.html">Interaktive Demo</a>
+          <a href="/de/produkt.html">Produkt-Tour</a>
+          <a href="/de/docs/">Dokumentation</a>
+          <a href="/de.html#what">Was es ist</a>
+          <a href="/de.html#how">Wie es funktioniert</a>
+          <a href="/de.html#pricing">Preise</a>
+          <a href="/de.html#faq">FAQ</a>
+        </div>
+        <div class="ftr-col">
+          <h5>eBooks &amp; Leitfäden</h5>
+          <a href="/downloads/ADAMAS-Guide-Escaping-the-Knowledge-Bottleneck.pdf" download>Escaping the Knowledge Bottleneck</a>
+          <a href="/downloads/ADAMAS-Guide-Decision-Ledger-Playbook.pdf" download>The Decision Ledger Playbook</a>
+          <a href="/downloads/ADAMAS-Guide-Local-First-AI.pdf" download>Local-First AI for Founders</a>
+          <h5 class="ftr-sub">Kostenlose Tools</h5>
+          <a href="/scorecard.html">Knowledge-Trap Scorecard</a>
+          <a href="/calculator.html">Local-First AI Kostenrechner</a>
+          <a href="/checklist.html">Founder Succession Checklist</a>
+          <a href="/downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download>Decision Ledger Starter Kit</a>
+        </div>
+        <div class="ftr-col">
+          <h5><a href="/integrations/">Integrationen</a></h5>
+          <a href="/integrations/monday.html">Monday.com</a>
+          <a href="/integrations/hubspot.html">HubSpot</a>
+          <a href="/integrations/pipedrive.html">Pipedrive</a>
+          <a href="/integrations/salesforce.html">Salesforce</a>
+          <a href="/integrations/notion.html">Notion</a>
+          <a href="/integrations/slack.html">Slack</a>
+          <a href="/integrations/">Alle Integrationen →</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Unternehmen</h5>
+          <a href="/de.html">Über ADAMAS</a>
+          <a href="/de/author/massimo-sahin/">Über den Gründer</a>
+          <a href="/de/partner/">Partner &amp; Unterstützer</a>
+          <a href="/de/blog/">Blog</a>
+          <a href="/de/kontakt.html">Kontakt</a>
+          <a href="/de/sicherheit.html">Sicherheit</a>
+          <a href="/de.html#why">Warum Local-First</a>
+          <a href="https://x.com/THEGRANDFALCON" target="_blank" rel="noopener noreferrer">X · @THEGRANDFALCON</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Loslegen</h5>
+          <a href="/de.html#book">Clarity-Audit buchen</a>
+          <a href="mailto:hello@adamas-project.com">hello@adamas-project.com</a>
+          <a href="/de.html#compare">Warum ADAMAS</a>
+          <a href="/privacy.html">Datenschutz</a>
+        </div>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-bottom">
+        <span class="cpy">Copyright © 2026 Falcon Intelligence Group LLC. Alle Rechte vorbehalten.</span>
+        <nav class="ftr-links" aria-label="Rechtliches">
+          <a href="/privacy.html">Datenschutzerklärung</a>
+          <a href="/terms.html">Nutzungsbedingungen</a>
+          <a href="/impressum.html">Impressum</a>
+          <a href="/de/kontakt.html">Kontakt</a>
+        </nav>
+        <span class="ftr-region">Falcon Intelligence Group LLC · Delaware, USA</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/app.js" defer></script>
+  <script type="module">
+    if (window.innerWidth >= 760 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const load = () => import('/bg.js');
+      'requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 2000 }) : setTimeout(load, 500);
+    }
+  </script>
+</body>
+</html>

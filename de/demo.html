@@ -4,31 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <title>Blog — Entscheidungen, festgehalten | ADAMAS</title>
-  <meta name="description" content="Essays über institutionelles Wissen, Schlüsselpersonen-Risiko und die Kosten nicht dokumentierter Entscheidungen — vom Team hinter dem ADAMAS-Entscheidungs-Ledger.">
-  <link rel="canonical" href="https://adamas-project.com/de/blog/">
-  <link rel="alternate" hreflang="en" href="https://adamas-project.com/blog/">
-  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/blog/">
-  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/blog/">
-  <meta name="robots" content="index,follow,max-image-preview:large">
+  <title>Interaktive Demo — Das ADAMAS Entscheidungs-Ledger</title>
+  <meta name="description" content="Klicken Sie sich durch ein Beispiel-Ledger von ADAMAS: 14 realistische, anonymisierte Entscheidungen aus Personal, Vertrieb, Produkt, Finanzen und Betrieb — mit Kontext, Trade-offs und bidirektionalen Verknüpfungen.">
+  <link rel="canonical" href="https://adamas-project.com/de/demo.html">
+  <link rel="alternate" hreflang="en" href="https://adamas-project.com/demo.html">
+  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/demo.html">
+  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/demo.html">
+  <meta name="robots" content="index,follow">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ADAMAS">
-  <meta property="og:title" content="Blog — Entscheidungen, festgehalten | ADAMAS">
-  <meta property="og:description" content="Essays über institutionelles Wissen, Schlüsselpersonen-Risiko und die Kosten nicht dokumentierter Entscheidungen — vom Team hinter dem ADAMAS-Entscheidungs-Ledger.">
-  <meta property="og:url" content="https://adamas-project.com/de/blog/">
+  <meta property="og:title" content="Interaktive Demo — Das ADAMAS Entscheidungs-Ledger">
+  <meta property="og:description" content="Das Produktkonzept sehen und anklicken: ein Beispiel-Ledger mit Kontext, Trade-offs und bidirektionalen Verknüpfungen. Ohne Anmeldung.">
+  <meta property="og:url" content="https://adamas-project.com/de/demo.html">
   <meta property="og:image" content="https://adamas-project.com/og/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@THEGRANDFALCON">
-  <meta name="twitter:creator" content="@THEGRANDFALCON">
-  <meta name="twitter:title" content="Blog — Entscheidungen, festgehalten | ADAMAS">
-  <meta name="twitter:description" content="Essays über institutionelles Wissen, Schlüsselpersonen-Risiko und die Kosten nicht dokumentierter Entscheidungen — vom Team hinter dem ADAMAS-Entscheidungs-Ledger.">
+  <meta name="twitter:title" content="Interaktive Demo — Das ADAMAS Entscheidungs-Ledger">
+  <meta name="twitter:description" content="Ein Beispiel-Ledger zum Durchklicken — Kontext, Trade-offs, bidirektionale Verknüpfungen. Ohne Anmeldung.">
   <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
-
   <script>
     (function () {
       try {
@@ -38,9 +37,7 @@
       } catch (e) {}
     })();
   </script>
-
   <link rel="stylesheet" href="/styles.css">
-
   <script type="importmap">
   { "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -48,34 +45,60 @@
   }}
   </script>
 
-  <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
-
   <style>
-    /* ── Blog layout ── */
-    .bp-wrap { max-width: 720px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
-    .bp-hero { padding: 72px 0 16px; }
-    .bp-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin: 0 0 20px; }
-    .bp-hero h1 { font-family: var(--font-d); font-size: clamp(1.8rem, 4.2vw, 2.6rem); font-weight: 700; color: var(--text); letter-spacing: -0.01em; line-height: 1.12; margin: 0 0 18px; }
-    .bp-meta { font-size: 13px; color: var(--faint); margin: 0; }
-    .bp-meta a { color: var(--accent); }
-    .bp-body { padding: 28px 0 96px; }
-    .bp-body h2 { font-family: var(--font-d); font-size: clamp(1.25rem, 2.6vw, 1.5rem); font-weight: 700; color: var(--text); letter-spacing: -0.01em; line-height: 1.25; margin: 46px 0 18px; }
-    .bp-body h3 { font-size: 16px; font-weight: 700; color: var(--text); margin: 30px 0 10px; }
-    .bp-body p { font-size: 16px; line-height: 1.75; color: var(--muted); margin: 0 0 18px; }
-    .bp-body a { color: var(--accent); }
-    .bp-body hr { border: 0; border-top: 1px solid var(--border-2); margin: 44px 0; }
-    .bp-byline { font-size: 14px; }
-    .bp-cta { margin-top: 48px; padding: 26px 28px; border: 1px solid var(--accent-line); border-radius: 14px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-    .bp-cta p { flex: 1; min-width: 220px; margin: 0; font-size: 14px; }
-    /* blog index cards */
-    .bi-list { display: flex; flex-direction: column; gap: 18px; padding: 28px 0 96px; }
-    .bi-card { display: block; border: 1px solid var(--border); border-radius: 14px; padding: 26px 28px; transition: border-color .2s, transform .2s; }
-    .bi-card:hover { border-color: var(--accent-line); transform: translateY(-2px); }
-    .bi-card h2 { font-family: var(--font-d); font-size: clamp(1.15rem, 2.4vw, 1.4rem); font-weight: 700; color: var(--text); margin: 0 0 10px; line-height: 1.25; }
-    .bi-card p { font-size: 14.5px; line-height: 1.65; color: var(--muted); margin: 0 0 14px; }
-    .bi-card .bi-date { font-size: 12px; color: var(--faint); letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 12px; }
-    .bi-card .bi-read { font-size: 13px; font-weight: 600; color: var(--accent); }
+    /* ── Demo page layout ── */
+    .dm-wrap { max-width: 1060px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px) 96px; }
+    .dm-hero { padding: 72px 0 36px; }
+    .dm-hero h1 { font-family: var(--font-d); font-weight: 700; text-transform: uppercase; font-size: clamp(2rem, 5.5vw, 2.9rem); letter-spacing: -0.01em; line-height: 1; color: var(--text); margin: 12px 0 14px; }
+    .dm-hero p { color: var(--muted); font-size: 16px; line-height: 1.7; max-width: 680px; margin: 0 0 10px; }
+    .dm-after { margin-top: 40px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--border-2); padding-top: 32px; }
+    .dm-after p { color: var(--muted); font-size: 14.5px; margin: 0; flex: 1; min-width: 240px; }
+    .dm-after p a { color: var(--accent); font-weight: 600; }
+
+    /* ── Ledger component ── */
+    .dl-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .dl-sample { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); border: 1px dashed var(--accent-line); border-radius: 99px; padding: 6px 14px; }
+    .dl-stats { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--faint); }
+    .dl-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .dl-pill { background: var(--surface); border: 1px solid var(--border); color: var(--muted); border-radius: 99px; padding: 7px 16px; font-family: var(--font-b); font-size: 12.5px; font-weight: 600; cursor: pointer; transition: border-color .2s, color .2s; }
+    .dl-pill:hover { color: var(--text); border-color: var(--accent-line); }
+    .dl-pill.on { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+    .dl-hint { font-size: 13px; color: var(--faint); margin: 0 0 18px; }
+    .dl-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 18px; align-items: start; }
+    .dl-list { display: grid; gap: 10px; max-height: 640px; overflow-y: auto; padding-right: 4px; }
+    .dl-card { display: grid; gap: 6px; text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; cursor: pointer; font-family: var(--font-b); transition: border-color .2s, transform .2s; }
+    .dl-card:hover { border-color: var(--accent-line); transform: translateY(-1px); }
+    .dl-card.on { border-color: var(--accent); background: var(--accent-soft); }
+    .dl-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; width: fit-content; border-radius: 6px; padding: 2px 8px; border: 1px solid var(--border); }
+    .dm-hiring  { color: #7fb5ff; }
+    .dm-sales   { color: var(--accent-lt); }
+    .dm-product { color: #b89aff; }
+    .dm-finance { color: var(--green); }
+    .dm-ops     { color: #ff9d7a; }
+    .dl-card-t { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.35; }
+    .dl-card-m { font-size: 11.5px; color: var(--faint); }
+    .dl-detail { background: var(--surface); border: 1px solid var(--accent-line); border-radius: var(--r-lg); padding: clamp(18px, 3vw, 28px); position: sticky; top: 90px; }
+    .dl-d-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+    .dl-d-meta { font-size: 12px; color: var(--faint); flex: 1; }
+    .dl-d-close { background: none; border: 1px solid var(--border); border-radius: 99px; color: var(--muted); font-family: var(--font-b); font-size: 12px; font-weight: 600; padding: 5px 13px; cursor: pointer; }
+    .dl-d-close:hover { color: var(--text); border-color: var(--accent-line); }
+    .dl-d-title { font-family: var(--font-d); font-size: clamp(1.15rem, 2.5vw, 1.45rem); font-weight: 700; color: var(--text); margin: 0 0 18px; line-height: 1.2; }
+    .dl-d-h { font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 18px 0 6px; }
+    .dl-d-p { font-size: 14px; line-height: 1.65; color: var(--muted); margin: 0; }
+    .dl-d-dec { color: var(--text); }
+    .dl-d-ul { margin: 0; padding-left: 18px; }
+    .dl-d-ul li { font-size: 13.5px; line-height: 1.6; color: var(--muted); margin: 4px 0; }
+    .dl-d-links { display: grid; gap: 8px; margin-top: 4px; }
+    .dl-link { text-align: left; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 10px 12px; font-family: var(--font-b); font-size: 12.5px; line-height: 1.45; color: var(--muted); cursor: pointer; transition: border-color .2s; }
+    .dl-link:hover { border-color: var(--accent-line); color: var(--text); }
+    .dl-link b { font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-right: 6px; }
+    @media (max-width: 860px) {
+      .dl-body { grid-template-columns: 1fr; }
+      .dl-list { max-height: 320px; }
+      .dl-detail { position: static; }
+    }
   </style>
+  <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
 </head>
 <body>
   <canvas id="bg3d" aria-hidden="true"></canvas>
@@ -84,7 +107,7 @@
   <div class="glow"></div>
   <div class="grain"></div>
 
-<!-- ============ NAV ============ -->
+  <!-- ============ NAV ============ -->
   <nav class="nav">
     <div class="nav-inner">
       <a href="/de.html" class="brand">
@@ -114,7 +137,7 @@
               <div class="dd-group">
                 <span class="dd-h">Kostenlose Tools</span>
                 <a href="/scorecard.html" target="_blank" rel="noopener">Knowledge-Trap Scorecard</a>
-                <a href="/calculator.html" target="_blank" rel="noopener">Local-First AI Kostenrechner</a>
+                <a href="/calculator.html" target="_blank" rel="noopener">Local-First AI Cost Calculator</a>
                 <a href="/checklist.html" target="_blank" rel="noopener">Founder Succession Checklist</a>
                 <a href="/downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download>Decision Ledger Starter Kit</a>
               </div>
@@ -134,7 +157,7 @@
               </div>
             </div>
           </div>
-          <a class="lnk lang-link" href="/blog/" title="English">EN</a>
+          <a class="lnk lang-link" href="/demo.html" title="English">EN</a>
           <a class="btn btn-gold" href="/de.html#book">Clarity-Audit buchen</a>
         </div>
         <button class="nav-toggle" aria-label="Menü" onclick="document.getElementById('navlinks').classList.toggle('open')">
@@ -145,37 +168,34 @@
   </nav>
 
   <main id="top">
-    <div class="bp-wrap">
-      <header class="bp-hero">
-        <p class="bp-kicker">ADAMAS Blog</p>
-        <h1>Entscheidungen, festgehalten.</h1>
-        <p class="bp-meta">Essays über institutionelles Wissen, Schlüsselpersonen-Risiko und die Kosten, wenn Begründungen das Unternehmen verlassen.</p>
+    <div class="dm-wrap">
+
+      <header class="dm-hero">
+        <div class="kicker">Interaktive Demo</div>
+        <h1>So sieht ein Entscheidungs-Ledger aus.</h1>
+        <p>Unten sehen Sie ein Beispiel-Ledger für ein fiktives Unternehmen der Industrieautomatisierung (ca. 3 Mio. $ Umsatz, 18 Mitarbeiter). Vierzehn Entscheidungen aus Personal, Vertrieb, Produkt, Finanzen und Betrieb — jede mit dem damaligen Kontext, den akzeptierten Trade-offs und Verknüpfungen zu den Entscheidungen, die sie geprägt hat.</p>
+        <p>Folgen Sie einem Faden: Öffnen Sie <b>SAL-021</b> (den abgelehnten OEM-Rahmenvertrag) und klicken Sie sich durch die Verknüpfungen — Sie sehen, wie eine Entscheidung mit Preisen, Abrechnung und Personal zusammenhängt.</p>
       </header>
-      <div class="bi-list">
-        <a class="bi-card" href="/de/blog/wenn-eine-schluesselperson-das-unternehmen-verlaesst/">
-          <span class="bi-date">11. Juni 2026</span>
-          <h2>Wissensverlust: Wenn eine Schlüsselperson das Unternehmen verlässt</h2>
-          <p>Wenn eine Schlüsselperson geht, kostet das mehr als das Gehalt. Was wirklich verloren geht, was es kostet, und wie Sie es verhindern.</p>
-          <span class="bi-read">Artikel lesen →</span>
-        </a>
-        <a class="bi-card" href="/de/blog/firmenwissen-im-kopf-eines-mitarbeiters/">
-          <span class="bi-date">11. Juni 2026</span>
-          <h2>Wenn das Firmenwissen nur in einem Kopf steckt</h2>
-          <p>Wenn wichtige Mitarbeiter kündigen, geht nicht nur die Person — sondern alles, was sie wussten. So sichern Sie das Wissen rechtzeitig.</p>
-          <span class="bi-read">Artikel lesen →</span>
-        </a>
+
+      <div id="demo" aria-label="Beispiel-Entscheidungs-Ledger"></div>
+      <noscript><p style="color:var(--muted)">Die interaktive Demo benötigt JavaScript. Eine statische Ansicht des Ledger-Schemas finden Sie in der <a href="/de/docs/ledger-schema.html">Schema-Dokumentation</a>.</p></noscript>
+
+      <div class="dm-after">
+        <p>Jeder Eintrag oben speist die Asset-Generierung: Aus genau diesem Beispiel-Ledger hat ADAMAS ein vollständiges Onboarding-Dokument erzeugt. <a href="/de/beispiel-asset.html">Zum generierten Beispiel-Asset →</a></p>
+        <a href="/de.html#book" class="btn btn-gold">Clarity-Audit buchen →</a>
       </div>
+
     </div>
   </main>
 
-<!-- ============ FOOTER ============ -->
+  <!-- ============ FOOTER ============ -->
   <footer class="ftr">
     <div class="ftr-in">
       <div class="ftr-legal">
         <p>ADAMAS (All Decisions And Memory Archive System) ist ein Produkt der Falcon Intelligence Group LLC, aufgebaut auf dem Hermes-KI-Agenten. Hermes ist ein Drittanbieter-Tool und bleibt Eigentum seines jeweiligen Inhabers.</p>
         <p>Local-first by Design: Ihr Vault und das Entscheidungs-Ledger laufen auf Hardware, die Ihnen gehört. ADAMAS sendet das Wissen Ihres Unternehmens nicht in Drittanbieter-Clouds — optionales hybrides Cloud-Routing wird nur für explizit von Ihnen freigegebene Aufgaben genutzt.</p>
         <p>Die angezeigten Preise sind Richtwerte und können je nach Projektumfang variieren. Die Clarity-Audit-Gebühr wird bei Projektdurchführung angerechnet. Client-Hardware (z. B. Mac Mini M4) wird vom Kunden erworben und ist sein Eigentum.</p>
-        <p>Auf dieser Website genannte Markt- und Branchenzahlen stammen aus Drittanbieter-Quellen und dienen ausschließlich der Orientierung; sie stellen keine Erfolgsgarantie dar.</p>
+        <p>Alle in dieser Demo gezeigten Ledger-Einträge sind Beispieldaten — illustrativ und anonymisiert; sie beschreiben keinen realen Kunden.</p>
       </div>
       <hr class="ftr-rule">
       <div class="ftr-cols">
@@ -245,6 +265,12 @@
   </footer>
 
   <script src="/app.js" defer></script>
+  <script src="/assets/demo.js" defer></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      if (window.ADAMAS_DEMO) window.ADAMAS_DEMO.mount('#demo', 'de');
+    });
+  </script>
   <script type="module">
     if (window.innerWidth >= 760 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const load = () => import('/bg.js');

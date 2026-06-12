@@ -4,56 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <title>Massimo S. — Founder, Falcon Intelligence Group | ADAMAS</title>
-  <meta name="description" content="Massimo S. is the founder of Falcon Intelligence Group and the architect of ADAMAS — a decision ledger built from years of operational work inside founder-led companies.">
-  <link rel="canonical" href="https://adamas-project.com/author/massimo-sahin/">
-  <link rel="alternate" hreflang="en" href="https://adamas-project.com/author/massimo-sahin/">
-  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/author/massimo-sahin/">
-  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/author/massimo-sahin/">
-  <meta name="robots" content="index,follow,max-image-preview:large">
-  <meta property="og:type" content="profile">
+  <title>Product FAQ — ADAMAS Docs</title>
+  <meta name="description" content="Technical and practical questions about the ADAMAS vault: backups, exports, multiple users, what happens if the engagement ends.">
+  <link rel="canonical" href="https://adamas-project.com/docs/faq.html">
+  <link rel="alternate" hreflang="en" href="https://adamas-project.com/docs/faq.html">
+  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/docs/faq.html">
+  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/docs/faq.html">
+  <meta name="robots" content="index,follow">
+  <meta property="og:type" content="website">
   <meta property="og:site_name" content="ADAMAS">
-  <meta property="og:title" content="Massimo S. — Founder, Falcon Intelligence Group">
-  <meta property="og:description" content="Massimo S. is the founder of Falcon Intelligence Group and the architect of ADAMAS — a decision ledger built from years of operational work inside founder-led companies.">
-  <meta property="og:url" content="https://adamas-project.com/author/massimo-sahin/">
-  <meta property="og:image" content="https://adamas-project.com/assets/massimo-sahin.jpg">
-  <meta property="og:image:width" content="400">
-  <meta property="og:image:height" content="389">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="@THEGRANDFALCON">
-  <meta name="twitter:creator" content="@THEGRANDFALCON">
-  <meta name="twitter:title" content="Massimo S. — Founder, Falcon Intelligence Group">
-  <meta name="twitter:description" content="Massimo S. is the founder of Falcon Intelligence Group and the architect of ADAMAS.">
-  <meta name="twitter:image" content="https://adamas-project.com/assets/massimo-sahin.jpg">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Massimo S.",
-    "jobTitle": "Founder",
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Falcon Intelligence Group LLC",
-      "url": "https://adamas-project.com/"
-    },
-    "url": "https://adamas-project.com/author/massimo-sahin/",
-    "image": "https://adamas-project.com/assets/massimo-sahin.jpg",
-    "sameAs": ["https://x.com/THEGRANDFALCON"],
-    "knowsAbout": [
-      "Decision management", "Sales systems", "Industrial machinery",
-      "Manufacturing", "Industrial automation", "Founder operations",
-      "Knowledge management", "Organizational scaling"
-    ],
-    "description": "Massimo S. is the founder of Falcon Intelligence Group and the architect of ADAMAS, a decision ledger for founder-led companies."
-  }
-  </script>
+  <meta property="og:title" content="Product FAQ — ADAMAS Docs">
+  <meta property="og:description" content="Technical and practical questions about the ADAMAS vault: backups, exports, multiple users, what happens if the engagement ends.">
+  <meta property="og:url" content="https://adamas-project.com/docs/faq.html">
+  <meta property="og:image" content="https://adamas-project.com/og/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Product FAQ — ADAMAS Docs">
+  <meta name="twitter:description" content="Technical and practical questions about the ADAMAS vault: backups, exports, multiple users, what happens if the engagement ends.">
+  <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
-
   <script>
     (function () {
       try {
@@ -63,9 +37,7 @@
       } catch (e) {}
     })();
   </script>
-
   <link rel="stylesheet" href="/styles.css">
-
   <script type="importmap">
   { "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -74,52 +46,37 @@
   </script>
 
   <style>
-    /* ── Author page layout ── */
-    .ap-wrap { max-width: 780px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
-    .ap-hero { padding: 72px 0 54px; }
-    .ap-profile { display: flex; gap: 40px; align-items: flex-start; }
-    .ap-photo {
-      width: 140px; height: 140px; border-radius: 50%;
-      object-fit: cover; object-position: center top;
-      border: 2px solid var(--accent-line);
-      flex-shrink: 0;
-    }
-    .ap-identity { display: flex; flex-direction: column; gap: 9px; padding-top: 6px; }
-    .ap-name { font-family: var(--font-d); font-size: clamp(1.75rem, 4vw, 2.4rem); font-weight: 700; color: var(--text); letter-spacing: -0.01em; margin: 0; line-height: 1.05; }
-    .ap-role { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 0; }
-    .ap-org  { font-size: 13px; color: var(--muted); margin: 0; }
-    .ap-social { display: flex; gap: 10px; margin-top: 6px; }
-    .ap-social a {
-      display: inline-flex; align-items: center; gap: 7px;
-      font-size: 12.5px; font-weight: 600; color: var(--muted);
-      border: 1px solid var(--border); border-radius: 99px; padding: 6px 14px;
-      transition: color .2s, border-color .2s;
-    }
-    .ap-social a:hover { color: var(--text); border-color: var(--accent-line); }
-
-    .ap-body { padding-bottom: 96px; }
-    .ap-sec  { margin-bottom: 48px; }
-    .ap-sec h2 {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--accent); margin: 0 0 20px;
-    }
-    .ap-sec p { font-size: 16px; line-height: 1.7; color: var(--muted); margin: 0 0 16px; }
-    .ap-sec p:last-child { margin-bottom: 0; }
-    .ap-divider { border: 0; border-top: 1px solid var(--border-2); margin: 0 0 48px; }
-    .ap-cta {
-      padding: 48px 0 0; border-top: 1px solid var(--border-2);
-      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
-    }
-    .ap-cta p { color: var(--muted); font-size: 14px; margin: 0; flex: 1; min-width: 220px; }
-
-    /* section reset — prevent site-wide section tile styles from applying */
-    .ap-body section { padding: 0; margin: 0; scroll-margin-top: 0; }
-    .ap-body section > .wrap { border: none !important; padding: 0 !important; background: none !important; border-radius: 0 !important; }
-
-    @media (max-width: 540px) {
-      .ap-profile { flex-direction: column; gap: 22px; }
-      .ap-photo   { width: 100px; height: 100px; }
-    }
+    /* ── Docs layout ── */
+    .dc-wrap { max-width: 1020px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px) 96px; }
+    .dc-hero { padding: 64px 0 32px; }
+    .dc-hero h1 { font-family: var(--font-d); font-weight: 700; text-transform: uppercase; font-size: clamp(1.7rem, 4.5vw, 2.4rem); letter-spacing: -0.01em; line-height: 1.02; color: var(--text); margin: 12px 0 10px; }
+    .dc-hero p { color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 640px; margin: 0; }
+    .dc-body { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: start; }
+    .dc-side { position: sticky; top: 90px; display: grid; gap: 4px; }
+    .dc-side .h { font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); margin-bottom: 8px; }
+    .dc-side a { font-size: 13.5px; color: var(--muted); padding: 7px 12px; border-radius: 8px; border: 1px solid transparent; }
+    .dc-side a:hover { color: var(--text); }
+    .dc-side a.on { color: var(--accent); background: var(--accent-soft); border-color: var(--accent-line); }
+    .dc-art h2 { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin: 34px 0 12px; }
+    .dc-art h2:first-child { margin-top: 0; }
+    .dc-art p { font-size: 15px; line-height: 1.7; color: var(--muted); margin: 0 0 12px; }
+    .dc-art p b { color: var(--text); }
+    .dc-art a { color: var(--accent); }
+    .dc-art ul, .dc-art ol { margin: 0 0 12px; padding-left: 20px; }
+    .dc-art li { font-size: 14.5px; line-height: 1.65; color: var(--muted); margin: 5px 0; }
+    .dc-art table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 0 0 16px; }
+    .dc-art th, .dc-art td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border-2); color: var(--muted); vertical-align: top; }
+    .dc-art th { color: var(--text); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+    .dc-art pre { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-md); padding: 18px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.55; color: var(--muted); margin: 0 0 16px; }
+    .dc-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .dc-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: 20px; transition: border-color .2s, transform .2s; }
+    .dc-card:hover { border-color: var(--accent-line); transform: translateY(-1px); }
+    .dc-card b { display: block; color: var(--text); font-size: 14.5px; margin-bottom: 6px; }
+    .dc-card span { color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .dc-art details { border: 1px solid var(--border); border-radius: var(--r-md); background: var(--surface); padding: 14px 18px; margin-bottom: 10px; }
+    .dc-art summary { cursor: pointer; color: var(--text); font-weight: 600; font-size: 14.5px; }
+    .dc-art details p { margin-top: 10px; font-size: 14px; }
+    @media (max-width: 760px) { .dc-body { grid-template-columns: 1fr; } .dc-side { position: static; display: flex; flex-wrap: wrap; } }
   </style>
   <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
 </head>
@@ -180,7 +137,7 @@
               </div>
             </div>
           </div>
-          <a class="lnk lang-link" href="/de/author/massimo-sahin/" title="Deutsch">DE</a>
+          <a class="lnk lang-link" href="/de/docs/faq.html" title="Deutsch">DE</a>
           <a class="btn btn-gold" href="/#book">Book a Clarity Audit</a>
         </div>
         <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('navlinks').classList.toggle('open')">
@@ -191,65 +148,34 @@
   </nav>
 
   <main id="top">
-    <div class="ap-wrap">
-
-      <!-- Hero -->
-      <header class="ap-hero">
-        <div class="ap-profile">
-          <img
-            src="/assets/massimo-sahin.jpg"
-            alt="Massimo S., founder of Falcon Intelligence Group"
-            class="ap-photo"
-            width="400" height="389"
-            loading="eager"
-          >
-          <div class="ap-identity">
-            <h1 class="ap-name">Massimo S.</h1>
-            <p class="ap-role">Founder</p>
-            <p class="ap-org">Falcon Intelligence Group LLC</p>
-            <div class="ap-social">
-              <a href="https://x.com/THEGRANDFALCON" target="_blank" rel="noopener noreferrer" aria-label="Massimo S. on X">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                @THEGRANDFALCON
-              </a>
-            </div>
-          </div>
-        </div>
+    <div class="dc-wrap">
+      <header class="dc-hero">
+        <div class="kicker">Product FAQ</div>
+        <h1>The practical questions.</h1>
+        <p>Backups, exports, users, failure modes, and what happens if we part ways.</p>
       </header>
+      <div class="dc-body">
+        <nav class="dc-side" aria-label="Documentation">
+          <span class="h">Documentation</span>
+        <a href="/docs/index.html">Overview</a>
+        <a href="/docs/getting-started.html">Getting started</a>
+        <a href="/docs/ledger-schema.html">Ledger schema</a>
+        <a href="/docs/integrations.html">Integrations</a>
+        <a href="/docs/hardware.html">Hardware</a>
+        <a href="/docs/faq.html" class="on">FAQ</a>
+        </nav>
+        <article class="dc-art">
 
-      <!-- Bio -->
-      <div class="ap-body">
+<details><summary>What happens to the vault if our engagement ends?</summary><p>It keeps running. The hardware is yours, the data is yours, and the ledger is stored in open formats (Markdown + JSON) you can read, export, and migrate without us. We keep no copy and hold nothing back.</p></details>
+<details><summary>How is the vault backed up?</summary><p>Locally, to a target you control — an external SSD via Time Machine or your existing NAS. Backups are encrypted with your keys. We recommend (and configure) a second offline copy for the truly cautious.</p></details>
+<details><summary>Can multiple people use it?</summary><p>Yes. The vault serves your office LAN; team members confirm surfaced decisions and browse the ledger from their own machines. Role-based visibility (e.g., finance entries restricted) is configured during the build.</p></details>
+<details><summary>What if the machine dies?</summary><p>Restore the latest backup onto a replacement machine and the vault is back — ledger, indexes, assets, everything. That's a property of keeping the whole system on one machine you own.</p></details>
+<details><summary>Does it work offline?</summary><p>Fully — local evaluation, the ledger, and asset generation don't need the internet at all. Connectors simply catch up on their next scheduled pull when connectivity returns.</p></details>
+<details><summary>What exactly is Hermes, and what if it goes away?</summary><p>Hermes is the third-party AI agent that powers evaluation — we name it honestly because you should know what you depend on. Your data and the ledger are independent of it: open formats, local storage. If the engine ever had to change, the ledger survives intact.</p></details>
+<details><summary>How much team effort does it really take?</summary><p>After the build: minutes per week. Confirming or dismissing surfaced decisions is the only recurring task. The founding habit that helps most is a weekly 30-minute decision review — see how a sample company did it in the <a href="/demo.html">demo</a> (OPS-005).</p></details>
+<details><summary>Can we start without connecting sensitive sources?</summary><p>Yes — many builds start with meeting transcripts and one team channel only, then widen scopes after the first quarter once trust is established. Scope is your call, revisited quarterly.</p></details>
 
-        <div class="ap-sec">
-          <h2>Background</h2>
-          <p>Massimo S. founded Falcon Intelligence Group and built ADAMAS.</p>
-          <p>Ex Teleperformance and Accenture. He then built and ran a consultancy that designed and installed sales systems and processes inside industrial machinery, manufacturing, and automation companies — and delivered sales and lead-generation work for firms in those sectors and in marketing and sales services.</p>
-        </div>
-
-        <hr class="ap-divider">
-
-        <div class="ap-sec">
-          <h2>Why ADAMAS Exists</h2>
-          <p>The pattern emerged not from a single insight, but from seeing the same problem repeat across engagements.</p>
-          <p>Sales systems got built. Lead volume increased. Then the client's organization stalled — not from bad strategy, but because operational knowledge was concentrated in too few people. Founders involved in everything because no one else had the context to act without them. Managers carrying onboarding, process memory, and institutional reasoning in their heads rather than in any system that could transfer it.</p>
-          <p>The lead volume those sales systems produced exposed a bottleneck that was already there: the organization couldn't absorb growth because its knowledge couldn't move. Scattered processes. Informational gaps. Handoffs that broke. New hires who took months to reach operating capacity.</p>
-          <p>ADAMAS was built as the direct answer to that pattern.</p>
-        </div>
-
-        <hr class="ap-divider">
-
-        <div class="ap-sec">
-          <h2>On Knowledge and Scale</h2>
-          <p>Every decision a company makes carries reasoning. Most of that reasoning disappears.</p>
-          <p>Not because it wasn't valuable — because no one built a system designed to keep it. Decision context, strategic rationale, onboarding logic: when captured, these compound. When they don't, the company rebuilds from scratch after every departure, every promotion, every handover.</p>
-          <p>The most valuable trapped asset in a founder-led company is the decision reasoning stored in the founder's head. A founder who cannot be replaced by their own organization has not built one. Scaling past yourself starts with making that reasoning explicit — and putting it somewhere it can be used.</p>
-        </div>
-
-        <div class="ap-cta">
-          <p>Building a company that doesn't depend on you alone.</p>
-          <a href="/#book" class="btn btn-gold">Book a Clarity Audit →</a>
-        </div>
-
+        </article>
       </div>
     </div>
   </main>

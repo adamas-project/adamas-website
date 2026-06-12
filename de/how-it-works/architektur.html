@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Architektur — Wie das Local-First-System von ADAMAS funktioniert</title>
+  <meta name="description" content="Die ADAMAS-Architektur im Diagramm: Ihre Quellen, lokale Ingestion, Hermes-Auswertung, das Entscheidungs-Ledger und die Asset-Generierung — mit einer harten Grenze, die zeigt, was Ihre Maschine nie verlässt.">
+  <link rel="canonical" href="https://adamas-project.com/de/how-it-works/architektur.html">
+  <link rel="alternate" hreflang="en" href="https://adamas-project.com/how-it-works/architecture.html">
+  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/how-it-works/architektur.html">
+  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/how-it-works/architecture.html">
+  <meta name="robots" content="index,follow">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ADAMAS">
+  <meta property="og:title" content="Architektur — Wie das Local-First-System von ADAMAS funktioniert">
+  <meta property="og:description" content="Quellen → Ingestion → Hermes-Auswertung → Entscheidungs-Ledger → Asset-Generierung. Ein Diagramm, eine harte Grenze: Ihre Maschine.">
+  <meta property="og:url" content="https://adamas-project.com/de/how-it-works/architektur.html">
+  <meta property="og:image" content="https://adamas-project.com/og/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Architektur — Das Local-First-System von ADAMAS">
+  <meta name="twitter:description" content="Ein Diagramm, eine harte Grenze: Ihre Maschine.">
+  <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('adamas-theme');
+        if (t !== 'matrix') t = 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="importmap">
+  { "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }}
+  </script>
+
+  <style>
+    /* ── Architecture page ── */
+    .ar-wrap { max-width: 980px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px) 96px; }
+    .ar-hero { padding: 72px 0 36px; }
+    .ar-hero h1 { font-family: var(--font-d); font-weight: 700; text-transform: uppercase; font-size: clamp(2rem, 5.5vw, 2.9rem); letter-spacing: -0.01em; line-height: 1; color: var(--text); margin: 12px 0 14px; }
+    .ar-hero p { color: var(--muted); font-size: 16px; line-height: 1.7; max-width: 660px; margin: 0; }
+    .ar-fig { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: clamp(14px, 3vw, 30px); margin-bottom: 14px; }
+    .ar-fig svg { width: 100%; height: auto; display: block; }
+    .ar-cap { font-size: 12.5px; color: var(--faint); margin: 0 0 44px; }
+    .ar-sec { margin-bottom: 40px; }
+    .ar-sec h2 { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+    .ar-sec p { font-size: 15.5px; line-height: 1.7; color: var(--muted); margin: 0 0 12px; }
+    .ar-sec p b { color: var(--text); }
+    .ar-steps { display: grid; gap: 12px; }
+    .ar-step { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: 16px 18px; display: flex; gap: 16px; align-items: baseline; }
+    .ar-step .n { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); flex-shrink: 0; }
+    .ar-step p { margin: 0; font-size: 14.5px; line-height: 1.65; color: var(--muted); }
+    .ar-step p b { color: var(--text); }
+    .ar-cta { padding-top: 36px; border-top: 1px solid var(--border-2); display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .ar-cta p { color: var(--muted); font-size: 14px; margin: 0; flex: 1; min-width: 220px; }
+    /* SVG text styling */
+    .ar-fig text { font-family: 'JetBrains Mono', 'D-DIN', monospace; }
+  </style>
+  <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
+</head>
+<body>
+  <canvas id="bg3d" aria-hidden="true"></canvas>
+  <div class="scrim3d"></div>
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="glow"></div>
+  <div class="grain"></div>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/de.html" class="brand">
+        <span class="brand-name">ADAMAS<span class="brand-a">α</span></span>
+        <span class="brand-by">by Falcon Intelligence Group</span>
+      </a>
+      <div class="nav-right">
+        <div class="theme-switch" role="group" aria-label="Farbschema">
+          <button class="theme-btn" data-set-theme="dark" aria-pressed="true" title="Dunkelgold">◆</button>
+          <button class="theme-btn" data-set-theme="matrix" aria-pressed="false" title="Matrix" style="font-weight:700">⠿</button>
+        </div>
+        <a href="https://x.com/THEGRANDFALCON" target="_blank" rel="noopener noreferrer" class="nav-social" aria-label="ADAMAS auf X folgen"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <div class="nav-links" id="navlinks">
+          <a class="lnk" href="/de.html#problem">Das Problem</a>
+          <a class="lnk" href="/de.html#what">Was es ist</a>
+          <a class="lnk" href="/de.html#how">Wie es funktioniert</a>
+          <a class="lnk" href="/de.html#pricing">Preise</a>
+          <div class="nav-dd">
+            <a class="lnk nav-dd-trigger" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Ressourcen <span class="caret" aria-hidden="true">▾</span></a>
+            <div class="nav-dd-menu" role="menu">
+              <div class="dd-group">
+                <span class="dd-h">eBooks &amp; Leitfäden</span>
+                <a href="/downloads/ADAMAS-Guide-Escaping-the-Knowledge-Bottleneck.pdf" target="_blank" rel="noopener">Escaping the Knowledge Bottleneck</a>
+                <a href="/downloads/ADAMAS-Guide-Decision-Ledger-Playbook.pdf" target="_blank" rel="noopener">The Decision Ledger Playbook</a>
+                <a href="/downloads/ADAMAS-Guide-Local-First-AI.pdf" target="_blank" rel="noopener">Local-First AI for Founders</a>
+              </div>
+              <div class="dd-group">
+                <span class="dd-h">Kostenlose Tools</span>
+                <a href="/scorecard.html" target="_blank" rel="noopener">Knowledge-Trap Scorecard</a>
+                <a href="/calculator.html" target="_blank" rel="noopener">Local-First AI Cost Calculator</a>
+                <a href="/checklist.html" target="_blank" rel="noopener">Founder Succession Checklist</a>
+                <a href="/downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download>Decision Ledger Starter Kit</a>
+              </div>
+              <div class="dd-group">
+                <span class="dd-h">Produkt</span>
+                <a href="/de/demo.html">Interaktive Demo</a>
+                <a href="/de/produkt.html">Produkt-Tour</a>
+                <a href="/de/how-it-works/architektur.html">Architektur</a>
+                <a href="/de/docs/">Dokumentation</a>
+              </div>
+              <div class="dd-group">
+                <span class="dd-h">Integrationen</span>
+                <a href="/integrations/monday.html">Monday.com</a>
+                <a href="/integrations/hubspot.html">HubSpot</a>
+                <a href="/integrations/notion.html">Notion</a>
+                <a href="/integrations/">Alle Integrationen →</a>
+              </div>
+            </div>
+          </div>
+          <a class="lnk lang-link" href="/how-it-works/architecture.html" title="English">EN</a>
+          <a class="btn btn-gold" href="/de.html#book">Clarity-Audit buchen</a>
+        </div>
+        <button class="nav-toggle" aria-label="Menü" onclick="document.getElementById('navlinks').classList.toggle('open')">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <div class="ar-wrap">
+
+      <header class="ar-hero">
+        <div class="kicker">Architektur</div>
+        <h1>Ein Diagramm. Eine harte Grenze.</h1>
+        <p>Das ist der gesamte ADAMAS-Datenfluss. Die gestrichelte goldene Linie ist der Punkt: Alles Wesentliche passiert in einer Maschine, die Ihnen gehört. Das Einzige, was sie je überquert, ist eine Aufgabe, die Sie ausdrücklich freigeben.</p>
+      </header>
+
+      <figure class="ar-fig" role="img" aria-label="ADAMAS-Architekturdiagramm: Quellen fließen über die Ingestion in die Hermes-Auswertung, das Entscheidungs-Ledger und die Asset-Generierung — alles innerhalb einer Grenze namens 'Ihre Hardware'. Eine optionale Opt-in-Hybrid-Route überquert die Grenze zu einem Cloud-Modell.">
+        <svg viewBox="0 0 920 560" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--accent)"/>
+            </marker>
+            <marker id="arrm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--muted)"/>
+            </marker>
+          </defs>
+
+          <!-- sources column -->
+          <text x="20" y="38" fill="var(--faint)" font-size="12" letter-spacing="2">IHRE QUELLEN</text>
+          <g font-size="13" fill="var(--muted)">
+            <rect x="20" y="56"  width="170" height="40" rx="9" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="36" y="81">E-Mail · Kalender</text>
+            <rect x="20" y="106" width="170" height="40" rx="9" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="36" y="131">Slack · Teams</text>
+            <rect x="20" y="156" width="170" height="40" rx="9" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="36" y="181">CRM · Projekttools</text>
+            <rect x="20" y="206" width="170" height="40" rx="9" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="36" y="231">Dokumente · Drives · Wikis</text>
+            <rect x="20" y="256" width="170" height="40" rx="9" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="36" y="281">Meeting-Transkripte</text>
+          </g>
+
+          <!-- ingestion arrow -->
+          <line x1="200" y1="176" x2="268" y2="176" stroke="var(--accent)" stroke-width="1.6" marker-end="url(#arr)"/>
+          <text x="202" y="162" fill="var(--accent)" font-size="11" letter-spacing="1">1 · INGESTION</text>
+
+          <!-- hard boundary -->
+          <rect x="280" y="30" width="620" height="400" rx="18" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-dasharray="8 7"/>
+          <text x="300" y="58" fill="var(--accent)" font-size="13" font-weight="bold" letter-spacing="2">IHRE HARDWARE — z. B. MAC MINI M4, IN IHREM BÜRO</text>
+          <text x="300" y="412" fill="var(--faint)" font-size="11.5">Nichts innerhalb dieser Linie wird irgendwohin übertragen — kein Cloud-Konto, keine Telemetrie, keine Kopien bei uns.</text>
+
+          <!-- Hermes -->
+          <rect x="312" y="96" width="250" height="110" rx="12" fill="var(--surface-2)" stroke="var(--border)"/>
+          <text x="332" y="126" fill="var(--text)" font-size="15" font-weight="bold">2 · Hermes wertet aus</text>
+          <text x="332" y="150" fill="var(--muted)" font-size="12">Liest das Rauschen aller Quellen.</text>
+          <text x="332" y="169" fill="var(--muted)" font-size="12">Findet Entscheidungen: das Warum,</text>
+          <text x="332" y="188" fill="var(--muted)" font-size="12">das Wer und die Trade-offs.</text>
+
+          <!-- arrow Hermes -> ledger -->
+          <line x1="437" y1="206" x2="437" y2="252" stroke="var(--accent)" stroke-width="1.6" marker-end="url(#arr)"/>
+          <text x="450" y="236" fill="var(--accent)" font-size="11" letter-spacing="1">3 · SPEISEN</text>
+
+          <!-- Ledger -->
+          <rect x="312" y="258" width="250" height="120" rx="12" fill="var(--accent-soft)" stroke="var(--accent-line)"/>
+          <text x="332" y="288" fill="var(--accent)" font-size="15" font-weight="bold">Das Entscheidungs-Ledger</text>
+          <text x="332" y="312" fill="var(--muted)" font-size="12">Kontext · Entscheidung · Owner ·</text>
+          <text x="332" y="331" fill="var(--muted)" font-size="12">Trade-offs · Links · Bereich.</text>
+          <text x="332" y="350" fill="var(--muted)" font-size="12">Offene Formate: Markdown + JSON.</text>
+
+          <!-- arrow ledger -> assets -->
+          <line x1="562" y1="318" x2="640" y2="318" stroke="var(--accent)" stroke-width="1.6" marker-end="url(#arr)"/>
+          <text x="568" y="304" fill="var(--accent)" font-size="11" letter-spacing="1">4 · GENERIEREN</text>
+
+          <!-- assets -->
+          <g font-size="12.5" fill="var(--muted)">
+            <rect x="652" y="226" width="226" height="38" rx="9" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="668" y="250">Onboarding-Dokumente</text>
+            <rect x="652" y="274" width="226" height="38" rx="9" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="668" y="298">Hiring-Frameworks</text>
+            <rect x="652" y="322" width="226" height="38" rx="9" fill="var(--surface-2)" stroke="var(--border)"/>
+            <text x="668" y="346">Investoren- &amp; Diligence-Unterlagen</text>
+            <text x="652" y="218" fill="var(--faint)" font-size="12" letter-spacing="2">STAGE-ASSETS</text>
+          </g>
+
+          <!-- hybrid cloud (outside boundary) -->
+          <rect x="652" y="470" width="226" height="64" rx="12" fill="none" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="4 5"/>
+          <text x="668" y="496" fill="var(--muted)" font-size="13" font-weight="bold">Cloud-Modell (optional)</text>
+          <text x="668" y="516" fill="var(--faint)" font-size="11.5">Opt-in pro Aufgabe — nie Standard</text>
+          <line x1="700" y1="430" x2="700" y2="466" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="4 5" marker-end="url(#arrm)"/>
+          <line x1="730" y1="466" x2="730" y2="434" stroke="var(--muted)" stroke-width="1.2" stroke-dasharray="4 5" marker-end="url(#arrm)"/>
+          <text x="744" y="456" fill="var(--faint)" font-size="11">nur freigegebene Inhalte,</text>
+          <text x="744" y="471" fill="var(--faint)" font-size="11">Ergebnis zurück in den Vault</text>
+        </svg>
+      </figure>
+      <p class="ar-cap">Abb. 1 — Der ADAMAS-Datenfluss. Die gestrichelte goldene Grenze ist physisch: eine Maschine in Ihrem Büro, die Ihnen gehört.</p>
+
+      <div class="ar-sec">
+        <h2>Die fünf Stufen</h2>
+        <div class="ar-steps">
+          <div class="ar-step"><span class="n">01</span><p><b>Quellen.</b> Ihre Entscheidungen passieren bereits in E-Mail, Slack, Ihrem CRM, Meeting-Transkripten und Dokumenten. An der Arbeitsweise Ihres Teams muss sich nichts ändern.</p></div>
+          <div class="ar-step"><span class="n">02</span><p><b>Ingestion.</b> Konnektoren ziehen aus diesen Quellen auf Ihre Maschine. Daten fließen <em>hinein</em>, zu Ihrer Hardware — nie hinaus in eine Anbieter-Cloud.</p></div>
+          <div class="ar-step"><span class="n">03</span><p><b>Auswertung.</b> Hermes — der Drittanbieter-KI-Agent hinter ADAMAS — läuft lokal, rund um die Uhr. Er trennt Rauschen von Entscheidungen und extrahiert das Warum, das Wer und die Trade-offs.</p></div>
+          <div class="ar-step"><span class="n">04</span><p><b>Das Ledger.</b> Jede Entscheidung wird strukturiert und bidirektional verknüpft gespeichert — in offenen Formaten (Markdown + JSON), die Sie ohne uns lesen und exportieren können. <a href="/de/demo.html" style="color:var(--accent)">Beispiel-Ledger durchklicken →</a></p></div>
+          <div class="ar-step"><span class="n">05</span><p><b>Asset-Generierung.</b> Onboarding-Dokumente, Hiring-Frameworks, Investorenunterlagen — generiert aus dem Ledger, neu generiert, wenn sich Entscheidungen ändern. <a href="/de/beispiel-asset.html" style="color:var(--accent)">Generiertes Beispiel lesen →</a></p></div>
+        </div>
+      </div>
+
+      <div class="ar-sec">
+        <h2>Die Grenze, präzise</h2>
+        <p>Innerhalb der gestrichelten Linie: Quellmaterial, das Ledger, Embeddings und Indizes, das Arbeitsgedächtnis der KI und jedes generierte Asset. Nichts davon wird irgendwohin übertragen. Es gibt kein ADAMAS-Cloud-Konto und keine Telemetrie von Ihrem Vault zu uns.</p>
+        <p>Die einzige Ausnahme ist die <b>Hybrid-Route</b>: Für seltene, rechenintensive Aufgaben kann ADAMAS um Ihre Erlaubnis bitten, den Inhalt einer Aufgabe an ein Frontier-Cloud-Modell zu senden. Sie sehen genau, was gesendet würde, geben pro Aufgabe frei oder lehnen ab, und das Ergebnis wird zurück in Ihren Vault geschrieben. Details auf der <a href="/de/sicherheit.html" style="color:var(--accent)">Sicherheitsseite</a>.</p>
+      </div>
+
+      <div class="ar-cta">
+        <p>Möchten Sie das auf Ihren tatsächlichen Tool-Stack übertragen?</p>
+        <a href="/de.html#book" class="btn btn-gold">Clarity-Audit buchen →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="ftr">
+    <div class="ftr-in">
+      <div class="ftr-legal">
+        <p>ADAMAS (All Decisions And Memory Archive System) ist ein Produkt der Falcon Intelligence Group LLC, aufgebaut auf dem Hermes-KI-Agenten. Hermes ist ein Drittanbieter-Tool und bleibt Eigentum seines jeweiligen Inhabers.</p>
+        <p>Local-first by Design: Ihr Vault und das Entscheidungs-Ledger laufen auf Hardware, die Ihnen gehört. ADAMAS sendet das Wissen Ihres Unternehmens nicht in Drittanbieter-Clouds — optionales hybrides Cloud-Routing wird nur für explizit von Ihnen freigegebene Aufgaben genutzt.</p>
+        <p>Die angezeigten Preise sind Richtwerte und können je nach Projektumfang variieren. Die Clarity-Audit-Gebühr wird bei Projektdurchführung angerechnet. Client-Hardware (z. B. Mac Mini M4) wird vom Kunden erworben und ist sein Eigentum.</p>
+        <p>Auf dieser Website genannte Markt- und Branchenzahlen stammen aus Drittanbieter-Quellen und dienen ausschließlich der Orientierung; sie stellen keine Erfolgsgarantie dar.</p>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-cols">
+        <div class="ftr-col">
+          <h5>ADAMAS</h5>
+          <a href="/de.html#problem">Das Problem</a>
+          <a href="/de/demo.html">Interaktive Demo</a>
+          <a href="/de/produkt.html">Produkt-Tour</a>
+          <a href="/de/docs/">Dokumentation</a>
+          <a href="/de.html#what">Was es ist</a>
+          <a href="/de.html#how">Wie es funktioniert</a>
+          <a href="/de.html#pricing">Preise</a>
+          <a href="/de.html#faq">FAQ</a>
+        </div>
+        <div class="ftr-col">
+          <h5>eBooks &amp; Leitfäden</h5>
+          <a href="/downloads/ADAMAS-Guide-Escaping-the-Knowledge-Bottleneck.pdf" download>Escaping the Knowledge Bottleneck</a>
+          <a href="/downloads/ADAMAS-Guide-Decision-Ledger-Playbook.pdf" download>The Decision Ledger Playbook</a>
+          <a href="/downloads/ADAMAS-Guide-Local-First-AI.pdf" download>Local-First AI for Founders</a>
+          <h5 class="ftr-sub">Kostenlose Tools</h5>
+          <a href="/scorecard.html">Knowledge-Trap Scorecard</a>
+          <a href="/calculator.html">Local-First AI Kostenrechner</a>
+          <a href="/checklist.html">Founder Succession Checklist</a>
+          <a href="/downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download>Decision Ledger Starter Kit</a>
+        </div>
+        <div class="ftr-col">
+          <h5><a href="/integrations/">Integrationen</a></h5>
+          <a href="/integrations/monday.html">Monday.com</a>
+          <a href="/integrations/hubspot.html">HubSpot</a>
+          <a href="/integrations/pipedrive.html">Pipedrive</a>
+          <a href="/integrations/salesforce.html">Salesforce</a>
+          <a href="/integrations/notion.html">Notion</a>
+          <a href="/integrations/slack.html">Slack</a>
+          <a href="/integrations/">Alle Integrationen →</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Unternehmen</h5>
+          <a href="/de.html">Über ADAMAS</a>
+          <a href="/de/author/massimo-sahin/">Über den Gründer</a>
+          <a href="/de/partner/">Partner &amp; Unterstützer</a>
+          <a href="/de/blog/">Blog</a>
+          <a href="/de/kontakt.html">Kontakt</a>
+          <a href="/de/sicherheit.html">Sicherheit</a>
+          <a href="/de.html#why">Warum Local-First</a>
+          <a href="https://x.com/THEGRANDFALCON" target="_blank" rel="noopener noreferrer">X · @THEGRANDFALCON</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Loslegen</h5>
+          <a href="/de.html#book">Clarity-Audit buchen</a>
+          <a href="mailto:hello@adamas-project.com">hello@adamas-project.com</a>
+          <a href="/de.html#compare">Warum ADAMAS</a>
+          <a href="/privacy.html">Datenschutz</a>
+        </div>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-bottom">
+        <span class="cpy">Copyright © 2026 Falcon Intelligence Group LLC. Alle Rechte vorbehalten.</span>
+        <nav class="ftr-links" aria-label="Rechtliches">
+          <a href="/privacy.html">Datenschutzerklärung</a>
+          <a href="/terms.html">Nutzungsbedingungen</a>
+          <a href="/impressum.html">Impressum</a>
+          <a href="/de/kontakt.html">Kontakt</a>
+        </nav>
+        <span class="ftr-region">Falcon Intelligence Group LLC · Delaware, USA</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/app.js" defer></script>
+  <script type="module">
+    if (window.innerWidth >= 760 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const load = () => import('/bg.js');
+      'requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 2000 }) : setTimeout(load, 500);
+    }
+  </script>
+</body>
+</html>

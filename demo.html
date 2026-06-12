@@ -4,56 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <title>Massimo S. — Founder, Falcon Intelligence Group | ADAMAS</title>
-  <meta name="description" content="Massimo S. is the founder of Falcon Intelligence Group and the architect of ADAMAS — a decision ledger built from years of operational work inside founder-led companies.">
-  <link rel="canonical" href="https://adamas-project.com/author/massimo-sahin/">
-  <link rel="alternate" hreflang="en" href="https://adamas-project.com/author/massimo-sahin/">
-  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/author/massimo-sahin/">
-  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/author/massimo-sahin/">
-  <meta name="robots" content="index,follow,max-image-preview:large">
-  <meta property="og:type" content="profile">
+  <title>Interactive Demo — The ADAMAS Decision Ledger</title>
+  <meta name="description" content="Click through a sample ADAMAS decision ledger: 14 realistic, anonymized decisions across Hiring, Sales, Product, Finance and Ops — with context, trade-offs, and bi-directional links.">
+  <link rel="canonical" href="https://adamas-project.com/demo.html">
+  <link rel="alternate" hreflang="en" href="https://adamas-project.com/demo.html">
+  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/demo.html">
+  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/demo.html">
+  <meta name="robots" content="index,follow">
+  <meta property="og:type" content="website">
   <meta property="og:site_name" content="ADAMAS">
-  <meta property="og:title" content="Massimo S. — Founder, Falcon Intelligence Group">
-  <meta property="og:description" content="Massimo S. is the founder of Falcon Intelligence Group and the architect of ADAMAS — a decision ledger built from years of operational work inside founder-led companies.">
-  <meta property="og:url" content="https://adamas-project.com/author/massimo-sahin/">
-  <meta property="og:image" content="https://adamas-project.com/assets/massimo-sahin.jpg">
-  <meta property="og:image:width" content="400">
-  <meta property="og:image:height" content="389">
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:site" content="@THEGRANDFALCON">
-  <meta name="twitter:creator" content="@THEGRANDFALCON">
-  <meta name="twitter:title" content="Massimo S. — Founder, Falcon Intelligence Group">
-  <meta name="twitter:description" content="Massimo S. is the founder of Falcon Intelligence Group and the architect of ADAMAS.">
-  <meta name="twitter:image" content="https://adamas-project.com/assets/massimo-sahin.jpg">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Massimo S.",
-    "jobTitle": "Founder",
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Falcon Intelligence Group LLC",
-      "url": "https://adamas-project.com/"
-    },
-    "url": "https://adamas-project.com/author/massimo-sahin/",
-    "image": "https://adamas-project.com/assets/massimo-sahin.jpg",
-    "sameAs": ["https://x.com/THEGRANDFALCON"],
-    "knowsAbout": [
-      "Decision management", "Sales systems", "Industrial machinery",
-      "Manufacturing", "Industrial automation", "Founder operations",
-      "Knowledge management", "Organizational scaling"
-    ],
-    "description": "Massimo S. is the founder of Falcon Intelligence Group and the architect of ADAMAS, a decision ledger for founder-led companies."
-  }
-  </script>
+  <meta property="og:title" content="Interactive Demo — The ADAMAS Decision Ledger">
+  <meta property="og:description" content="See and click the product concept: a sample decision ledger with context, trade-offs, and bi-directional links. No signup.">
+  <meta property="og:url" content="https://adamas-project.com/demo.html">
+  <meta property="og:image" content="https://adamas-project.com/og/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Interactive Demo — The ADAMAS Decision Ledger">
+  <meta name="twitter:description" content="Click through a sample decision ledger — context, trade-offs, bi-directional links. No signup.">
+  <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
-
   <script>
     (function () {
       try {
@@ -63,9 +37,7 @@
       } catch (e) {}
     })();
   </script>
-
   <link rel="stylesheet" href="/styles.css">
-
   <script type="importmap">
   { "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
@@ -74,51 +46,56 @@
   </script>
 
   <style>
-    /* ── Author page layout ── */
-    .ap-wrap { max-width: 780px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px); }
-    .ap-hero { padding: 72px 0 54px; }
-    .ap-profile { display: flex; gap: 40px; align-items: flex-start; }
-    .ap-photo {
-      width: 140px; height: 140px; border-radius: 50%;
-      object-fit: cover; object-position: center top;
-      border: 2px solid var(--accent-line);
-      flex-shrink: 0;
-    }
-    .ap-identity { display: flex; flex-direction: column; gap: 9px; padding-top: 6px; }
-    .ap-name { font-family: var(--font-d); font-size: clamp(1.75rem, 4vw, 2.4rem); font-weight: 700; color: var(--text); letter-spacing: -0.01em; margin: 0; line-height: 1.05; }
-    .ap-role { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 0; }
-    .ap-org  { font-size: 13px; color: var(--muted); margin: 0; }
-    .ap-social { display: flex; gap: 10px; margin-top: 6px; }
-    .ap-social a {
-      display: inline-flex; align-items: center; gap: 7px;
-      font-size: 12.5px; font-weight: 600; color: var(--muted);
-      border: 1px solid var(--border); border-radius: 99px; padding: 6px 14px;
-      transition: color .2s, border-color .2s;
-    }
-    .ap-social a:hover { color: var(--text); border-color: var(--accent-line); }
+    /* ── Demo page layout ── */
+    .dm-wrap { max-width: 1060px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px) 96px; }
+    .dm-hero { padding: 72px 0 36px; }
+    .dm-hero h1 { font-family: var(--font-d); font-weight: 700; text-transform: uppercase; font-size: clamp(2rem, 5.5vw, 2.9rem); letter-spacing: -0.01em; line-height: 1; color: var(--text); margin: 12px 0 14px; }
+    .dm-hero p { color: var(--muted); font-size: 16px; line-height: 1.7; max-width: 680px; margin: 0 0 10px; }
+    .dm-after { margin-top: 40px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--border-2); padding-top: 32px; }
+    .dm-after p { color: var(--muted); font-size: 14.5px; margin: 0; flex: 1; min-width: 240px; }
+    .dm-after p a { color: var(--accent); font-weight: 600; }
 
-    .ap-body { padding-bottom: 96px; }
-    .ap-sec  { margin-bottom: 48px; }
-    .ap-sec h2 {
-      font-size: 11px; font-weight: 700; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--accent); margin: 0 0 20px;
-    }
-    .ap-sec p { font-size: 16px; line-height: 1.7; color: var(--muted); margin: 0 0 16px; }
-    .ap-sec p:last-child { margin-bottom: 0; }
-    .ap-divider { border: 0; border-top: 1px solid var(--border-2); margin: 0 0 48px; }
-    .ap-cta {
-      padding: 48px 0 0; border-top: 1px solid var(--border-2);
-      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
-    }
-    .ap-cta p { color: var(--muted); font-size: 14px; margin: 0; flex: 1; min-width: 220px; }
-
-    /* section reset — prevent site-wide section tile styles from applying */
-    .ap-body section { padding: 0; margin: 0; scroll-margin-top: 0; }
-    .ap-body section > .wrap { border: none !important; padding: 0 !important; background: none !important; border-radius: 0 !important; }
-
-    @media (max-width: 540px) {
-      .ap-profile { flex-direction: column; gap: 22px; }
-      .ap-photo   { width: 100px; height: 100px; }
+    /* ── Ledger component ── */
+    .dl-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .dl-sample { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); border: 1px dashed var(--accent-line); border-radius: 99px; padding: 6px 14px; }
+    .dl-stats { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--faint); }
+    .dl-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+    .dl-pill { background: var(--surface); border: 1px solid var(--border); color: var(--muted); border-radius: 99px; padding: 7px 16px; font-family: var(--font-b); font-size: 12.5px; font-weight: 600; cursor: pointer; transition: border-color .2s, color .2s; }
+    .dl-pill:hover { color: var(--text); border-color: var(--accent-line); }
+    .dl-pill.on { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+    .dl-hint { font-size: 13px; color: var(--faint); margin: 0 0 18px; }
+    .dl-body { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 18px; align-items: start; }
+    .dl-list { display: grid; gap: 10px; max-height: 640px; overflow-y: auto; padding-right: 4px; }
+    .dl-card { display: grid; gap: 6px; text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: 14px 16px; cursor: pointer; font-family: var(--font-b); transition: border-color .2s, transform .2s; }
+    .dl-card:hover { border-color: var(--accent-line); transform: translateY(-1px); }
+    .dl-card.on { border-color: var(--accent); background: var(--accent-soft); }
+    .dl-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; width: fit-content; border-radius: 6px; padding: 2px 8px; border: 1px solid var(--border); }
+    .dm-hiring  { color: #7fb5ff; }
+    .dm-sales   { color: var(--accent-lt); }
+    .dm-product { color: #b89aff; }
+    .dm-finance { color: var(--green); }
+    .dm-ops     { color: #ff9d7a; }
+    .dl-card-t { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.35; }
+    .dl-card-m { font-size: 11.5px; color: var(--faint); }
+    .dl-detail { background: var(--surface); border: 1px solid var(--accent-line); border-radius: var(--r-lg); padding: clamp(18px, 3vw, 28px); position: sticky; top: 90px; }
+    .dl-d-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+    .dl-d-meta { font-size: 12px; color: var(--faint); flex: 1; }
+    .dl-d-close { background: none; border: 1px solid var(--border); border-radius: 99px; color: var(--muted); font-family: var(--font-b); font-size: 12px; font-weight: 600; padding: 5px 13px; cursor: pointer; }
+    .dl-d-close:hover { color: var(--text); border-color: var(--accent-line); }
+    .dl-d-title { font-family: var(--font-d); font-size: clamp(1.15rem, 2.5vw, 1.45rem); font-weight: 700; color: var(--text); margin: 0 0 18px; line-height: 1.2; }
+    .dl-d-h { font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 18px 0 6px; }
+    .dl-d-p { font-size: 14px; line-height: 1.65; color: var(--muted); margin: 0; }
+    .dl-d-dec { color: var(--text); }
+    .dl-d-ul { margin: 0; padding-left: 18px; }
+    .dl-d-ul li { font-size: 13.5px; line-height: 1.6; color: var(--muted); margin: 4px 0; }
+    .dl-d-links { display: grid; gap: 8px; margin-top: 4px; }
+    .dl-link { text-align: left; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 10px 12px; font-family: var(--font-b); font-size: 12.5px; line-height: 1.45; color: var(--muted); cursor: pointer; transition: border-color .2s; }
+    .dl-link:hover { border-color: var(--accent-line); color: var(--text); }
+    .dl-link b { font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-right: 6px; }
+    @media (max-width: 860px) {
+      .dl-body { grid-template-columns: 1fr; }
+      .dl-list { max-height: 320px; }
+      .dl-detail { position: static; }
     }
   </style>
   <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
@@ -180,7 +157,7 @@
               </div>
             </div>
           </div>
-          <a class="lnk lang-link" href="/de/author/massimo-sahin/" title="Deutsch">DE</a>
+          <a class="lnk lang-link" href="/de/demo.html" title="Deutsch">DE</a>
           <a class="btn btn-gold" href="/#book">Book a Clarity Audit</a>
         </div>
         <button class="nav-toggle" aria-label="Menu" onclick="document.getElementById('navlinks').classList.toggle('open')">
@@ -191,66 +168,23 @@
   </nav>
 
   <main id="top">
-    <div class="ap-wrap">
+    <div class="dm-wrap">
 
-      <!-- Hero -->
-      <header class="ap-hero">
-        <div class="ap-profile">
-          <img
-            src="/assets/massimo-sahin.jpg"
-            alt="Massimo S., founder of Falcon Intelligence Group"
-            class="ap-photo"
-            width="400" height="389"
-            loading="eager"
-          >
-          <div class="ap-identity">
-            <h1 class="ap-name">Massimo S.</h1>
-            <p class="ap-role">Founder</p>
-            <p class="ap-org">Falcon Intelligence Group LLC</p>
-            <div class="ap-social">
-              <a href="https://x.com/THEGRANDFALCON" target="_blank" rel="noopener noreferrer" aria-label="Massimo S. on X">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                @THEGRANDFALCON
-              </a>
-            </div>
-          </div>
-        </div>
+      <header class="dm-hero">
+        <div class="kicker">Interactive Demo</div>
+        <h1>This is what a decision ledger looks like.</h1>
+        <p>Below is a sample ADAMAS ledger for a fictional industrial-automation company (~$3M revenue, 18 people). Fourteen decisions across Hiring, Sales, Product, Finance, and Ops — each with the context at the time, the trade-offs accepted, and links to the decisions it shaped.</p>
+        <p>Follow a thread: open <b>SAL-021</b> (the declined OEM contract) and click through its links to see how one decision connects to pricing, billing, and staffing.</p>
       </header>
 
-      <!-- Bio -->
-      <div class="ap-body">
+      <div id="demo" aria-label="Sample decision ledger"></div>
+      <noscript><p style="color:var(--muted)">The interactive demo requires JavaScript. For a static view of the ledger schema, see <a href="/docs/ledger-schema.html">the ledger schema documentation</a>.</p></noscript>
 
-        <div class="ap-sec">
-          <h2>Background</h2>
-          <p>Massimo S. founded Falcon Intelligence Group and built ADAMAS.</p>
-          <p>Ex Teleperformance and Accenture. He then built and ran a consultancy that designed and installed sales systems and processes inside industrial machinery, manufacturing, and automation companies — and delivered sales and lead-generation work for firms in those sectors and in marketing and sales services.</p>
-        </div>
-
-        <hr class="ap-divider">
-
-        <div class="ap-sec">
-          <h2>Why ADAMAS Exists</h2>
-          <p>The pattern emerged not from a single insight, but from seeing the same problem repeat across engagements.</p>
-          <p>Sales systems got built. Lead volume increased. Then the client's organization stalled — not from bad strategy, but because operational knowledge was concentrated in too few people. Founders involved in everything because no one else had the context to act without them. Managers carrying onboarding, process memory, and institutional reasoning in their heads rather than in any system that could transfer it.</p>
-          <p>The lead volume those sales systems produced exposed a bottleneck that was already there: the organization couldn't absorb growth because its knowledge couldn't move. Scattered processes. Informational gaps. Handoffs that broke. New hires who took months to reach operating capacity.</p>
-          <p>ADAMAS was built as the direct answer to that pattern.</p>
-        </div>
-
-        <hr class="ap-divider">
-
-        <div class="ap-sec">
-          <h2>On Knowledge and Scale</h2>
-          <p>Every decision a company makes carries reasoning. Most of that reasoning disappears.</p>
-          <p>Not because it wasn't valuable — because no one built a system designed to keep it. Decision context, strategic rationale, onboarding logic: when captured, these compound. When they don't, the company rebuilds from scratch after every departure, every promotion, every handover.</p>
-          <p>The most valuable trapped asset in a founder-led company is the decision reasoning stored in the founder's head. A founder who cannot be replaced by their own organization has not built one. Scaling past yourself starts with making that reasoning explicit — and putting it somewhere it can be used.</p>
-        </div>
-
-        <div class="ap-cta">
-          <p>Building a company that doesn't depend on you alone.</p>
-          <a href="/#book" class="btn btn-gold">Book a Clarity Audit →</a>
-        </div>
-
+      <div class="dm-after">
+        <p>Every entry above feeds asset generation: from this same sample ledger, ADAMAS produced a complete onboarding document. <a href="/sample-asset.html">Read the generated sample asset →</a></p>
+        <a href="/#book" class="btn btn-gold">Book a Clarity Audit →</a>
       </div>
+
     </div>
   </main>
 
@@ -261,7 +195,7 @@
         <p>ADAMAS (All Decisions And Memory Archive System) is a product of Falcon Intelligence Group LLC, built on the Hermes AI agent. Hermes is a third-party tool and the property of its respective owner.</p>
         <p>Local-first by design: your vault and decision ledger run on hardware you own. ADAMAS does not send your company's knowledge to third-party clouds — optional hybrid cloud routing is used only for tasks you explicitly approve.</p>
         <p>Pricing shown is indicative and may vary with scope. The Clarity Audit fee is credited toward your build if you proceed. Client hardware (e.g., Mac Mini M4) is purchased and owned by the client.</p>
-        <p>Market and industry figures cited on this site are drawn from third-party research and are provided for context only; they are not a guarantee of results.</p>
+        <p>All ledger entries shown in this demo are sample data — illustrative and anonymized; they do not describe a real client.</p>
       </div>
       <hr class="ftr-rule">
       <div class="ftr-cols">
@@ -331,6 +265,12 @@
   </footer>
 
   <script src="/app.js" defer></script>
+  <script src="/assets/demo.js" defer></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      if (window.ADAMAS_DEMO) window.ADAMAS_DEMO.mount('#demo', 'en');
+    });
+  </script>
   <script type="module">
     if (window.innerWidth >= 760 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const load = () => import('/bg.js');

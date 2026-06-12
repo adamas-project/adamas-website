@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Generiertes Beispiel-Asset — Onboarding-Dokument aus dem Entscheidungs-Ledger | ADAMAS</title>
+  <meta name="description" content="Ein vollständiges Onboarding-Dokument, von ADAMAS aus dem Beispiel-Ledger generiert — lesen Sie den tatsächlichen Output, jede Sektion auf ihre Ledger-Einträge zurückgeführt.">
+  <link rel="canonical" href="https://adamas-project.com/de/beispiel-asset.html">
+  <link rel="alternate" hreflang="en" href="https://adamas-project.com/sample-asset.html">
+  <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/beispiel-asset.html">
+  <link rel="alternate" hreflang="x-default" href="https://adamas-project.com/sample-asset.html">
+  <meta name="robots" content="index,follow">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="ADAMAS">
+  <meta property="og:title" content="Generiertes Beispiel-Asset — Onboarding aus dem Entscheidungs-Ledger">
+  <meta property="og:description" content="Ein tatsächlicher ADAMAS-Output: ein Onboarding-Dokument aus dem Beispiel-Ledger, jede Sektion auf ihre Quell-Entscheidungen zurückgeführt.">
+  <meta property="og:url" content="https://adamas-project.com/de/beispiel-asset.html">
+  <meta property="og:image" content="https://adamas-project.com/og/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Generiertes Beispiel-Asset — Onboarding aus dem Entscheidungs-Ledger">
+  <meta name="twitter:description" content="Ein tatsächlicher ADAMAS-Output, zurückgeführt auf seine Quell-Entscheidungen.">
+  <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('adamas-theme');
+        if (t !== 'matrix') t = 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="importmap">
+  { "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }}
+  </script>
+
+  <style>
+    /* ── Sample asset page ── */
+    .sa-wrap { max-width: 860px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px) 96px; }
+    .sa-hero { padding: 72px 0 36px; }
+    .sa-hero h1 { font-family: var(--font-d); font-weight: 700; text-transform: uppercase; font-size: clamp(1.8rem, 5vw, 2.6rem); letter-spacing: -0.01em; line-height: 1.02; color: var(--text); margin: 12px 0 14px; }
+    .sa-hero p { color: var(--muted); font-size: 15.5px; line-height: 1.7; max-width: 640px; margin: 0 0 8px; }
+    .sa-sample { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); border: 1px dashed var(--accent-line); border-radius: 99px; padding: 6px 14px; margin-top: 14px; }
+    /* the "generated document" frame */
+    .sa-doc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--card-shadow); }
+    .sa-doc-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 14px 22px; border-bottom: 1px solid var(--border-2); background: var(--surface-2); }
+    .sa-doc-bar .ic { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+    .sa-doc-bar .nm { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); flex: 1; }
+    .sa-doc-bar .gen { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--faint); }
+    .sa-doc-in { padding: clamp(24px, 5vw, 48px); }
+    .sa-doc-in h2 { font-family: var(--font-d); font-size: clamp(1.3rem, 3vw, 1.7rem); font-weight: 700; color: var(--text); margin: 0 0 6px; }
+    .sa-doc-in .sub { font-size: 13px; color: var(--faint); margin: 0 0 28px; }
+    .sa-doc-in h3 { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 30px 0 10px; }
+    .sa-doc-in p { font-size: 14.5px; line-height: 1.7; color: var(--muted); margin: 0 0 12px; }
+    .sa-doc-in p b { color: var(--text); }
+    .sa-doc-in ul, .sa-doc-in ol { margin: 0 0 12px; padding-left: 20px; }
+    .sa-doc-in li { font-size: 14.5px; line-height: 1.65; color: var(--muted); margin: 5px 0; }
+    .sa-src { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--faint); border: 1px solid var(--border); border-radius: 5px; padding: 1px 7px; white-space: nowrap; }
+    .sa-src a { color: var(--accent); }
+    .sa-after { margin-top: 40px; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--border-2); padding-top: 32px; }
+    .sa-after p { color: var(--muted); font-size: 14.5px; margin: 0; flex: 1; min-width: 240px; }
+    .sa-after p a { color: var(--accent); font-weight: 600; }
+  </style>
+  <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
+</head>
+<body>
+  <canvas id="bg3d" aria-hidden="true"></canvas>
+  <div class="scrim3d"></div>
+  <canvas id="rain" aria-hidden="true"></canvas>
+  <div class="glow"></div>
+  <div class="grain"></div>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="/de.html" class="brand">
+        <span class="brand-name">ADAMAS<span class="brand-a">α</span></span>
+        <span class="brand-by">by Falcon Intelligence Group</span>
+      </a>
+      <div class="nav-right">
+        <div class="theme-switch" role="group" aria-label="Farbschema">
+          <button class="theme-btn" data-set-theme="dark" aria-pressed="true" title="Dunkelgold">◆</button>
+          <button class="theme-btn" data-set-theme="matrix" aria-pressed="false" title="Matrix" style="font-weight:700">⠿</button>
+        </div>
+        <a href="https://x.com/THEGRANDFALCON" target="_blank" rel="noopener noreferrer" class="nav-social" aria-label="ADAMAS auf X folgen"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.631Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <div class="nav-links" id="navlinks">
+          <a class="lnk" href="/de.html#problem">Das Problem</a>
+          <a class="lnk" href="/de.html#what">Was es ist</a>
+          <a class="lnk" href="/de.html#how">Wie es funktioniert</a>
+          <a class="lnk" href="/de.html#pricing">Preise</a>
+          <div class="nav-dd">
+            <a class="lnk nav-dd-trigger" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Ressourcen <span class="caret" aria-hidden="true">▾</span></a>
+            <div class="nav-dd-menu" role="menu">
+              <div class="dd-group">
+                <span class="dd-h">eBooks &amp; Leitfäden</span>
+                <a href="/downloads/ADAMAS-Guide-Escaping-the-Knowledge-Bottleneck.pdf" target="_blank" rel="noopener">Escaping the Knowledge Bottleneck</a>
+                <a href="/downloads/ADAMAS-Guide-Decision-Ledger-Playbook.pdf" target="_blank" rel="noopener">The Decision Ledger Playbook</a>
+                <a href="/downloads/ADAMAS-Guide-Local-First-AI.pdf" target="_blank" rel="noopener">Local-First AI for Founders</a>
+              </div>
+              <div class="dd-group">
+                <span class="dd-h">Kostenlose Tools</span>
+                <a href="/scorecard.html" target="_blank" rel="noopener">Knowledge-Trap Scorecard</a>
+                <a href="/calculator.html" target="_blank" rel="noopener">Local-First AI Cost Calculator</a>
+                <a href="/checklist.html" target="_blank" rel="noopener">Founder Succession Checklist</a>
+                <a href="/downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download>Decision Ledger Starter Kit</a>
+              </div>
+              <div class="dd-group">
+                <span class="dd-h">Produkt</span>
+                <a href="/de/demo.html">Interaktive Demo</a>
+                <a href="/de/produkt.html">Produkt-Tour</a>
+                <a href="/de/how-it-works/architektur.html">Architektur</a>
+                <a href="/de/docs/">Dokumentation</a>
+              </div>
+              <div class="dd-group">
+                <span class="dd-h">Integrationen</span>
+                <a href="/integrations/monday.html">Monday.com</a>
+                <a href="/integrations/hubspot.html">HubSpot</a>
+                <a href="/integrations/notion.html">Notion</a>
+                <a href="/integrations/">Alle Integrationen →</a>
+              </div>
+            </div>
+          </div>
+          <a class="lnk lang-link" href="/sample-asset.html" title="English">EN</a>
+          <a class="btn btn-gold" href="/de.html#book">Clarity-Audit buchen</a>
+        </div>
+        <button class="nav-toggle" aria-label="Menü" onclick="document.getElementById('navlinks').classList.toggle('open')">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <div class="sa-wrap">
+
+      <header class="sa-hero">
+        <div class="kicker">Generiertes Beispiel-Asset</div>
+        <h1>Vom Ledger zum Onboarding-Dokument — automatisch.</h1>
+        <p>Dies ist ein tatsächliches ADAMAS-Output-Format: ein Onboarding-Dokument, generiert aus dem <a href="/de/demo.html" style="color:var(--accent)">Beispiel-Ledger</a>. Jede Sektion ist auf die Ledger-Einträge zurückgeführt, aus denen sie entstand — das ist der <span class="sa-src">SRC</span>-Tag, den Sie überall sehen.</p>
+        <span class="sa-sample">Beispieldaten — illustrativ</span>
+      </header>
+
+      <div class="sa-doc">
+        <div class="sa-doc-bar">
+          <span class="ic" aria-hidden="true"></span>
+          <span class="nm">onboarding_automation-engineer.md</span>
+          <span class="gen">von ADAMAS generiert aus Ledger v2025-05 · 14 Entscheidungen · Beispiel</span>
+        </div>
+        <div class="sa-doc-in">
+          <h2>Onboarding: Automatisierungsingenieur/in</h2>
+          <p class="sub">Für neue Engineering-Mitarbeiter · Generiert aus dem Entscheidungs-Ledger des Unternehmens · Ersetzt 3–4 Monate Shadowing durch einen strukturierten ersten Monat</p>
+
+          <h3>Warum es dieses Dokument gibt <span class="sa-src">SRC: <a href="/de/demo.html">HIR-009</a>, <a href="/de/demo.html">OPS-013</a></span></h3>
+          <p>Bis 2024 lernten neue Ingenieure durch Mitlaufen bei den zwei erfahrensten Kollegen — die zugleich der Engpass in jedem Projekt waren. Nachdem ein Senior-Abgang neun Jahre undokumentierten Kontext mitnahm, entschied das Unternehmen, das Onboarding aus dem Entscheidungs-Ledger zu generieren und quartalsweise aktuell zu halten. Sie lesen das Ergebnis.</p>
+
+          <h3>Wie wir Angebote kalkulieren <span class="sa-src">SRC: <a href="/de/demo.html">SAL-011</a>, <a href="/de/demo.html">FIN-022</a>, <a href="/de/demo.html">SAL-017</a></span></h3>
+          <p><b>Kein Festpreis ohne bezahlte Discovery.</b> Zwei Projekte liefen um über 40 % aus dem Ruder, weil der Umfang nach einem einzigen Termin kalkuliert wurde; seit Juni 2024 erfordert jedes Festpreisangebot eine bezahlte Discovery-Phase von 2–5 Tagen. Angebote nach Discovery lagen binnen 10 % der Ist-Kosten.</p>
+          <ul>
+            <li>Jedes Festpreisangebot enthält eine sichtbare Contingency-Position von 15 %; bleiben sie ungenutzt, werden 5 % bei Abnahme erstattet. Kunden sehen die Ehrlichkeit, wir behalten den Puffer.</li>
+            <li>Preisliste: Neukundensätze wurden im Januar 2025 um 12 % erhöht; Bestandskunden haben 12 Monate Bestandsschutz. Prüfen Sie vor jeder Kalkulation, welche Liste gilt.</li>
+          </ul>
+
+          <h3>Wie wir vor Ort liefern <span class="sa-src">SRC: <a href="/de/demo.html">OPS-020</a></span></h3>
+          <p><b>Niemals Solo-Inbetriebnahmen.</b> Ein Solo-Einsatz Anfang 2025 führte bei einem undokumentierten Maschinenzustand beinahe zu einem Sicherheitsvorfall. Jeder Einsatz mit mindestens zwei Personen — eine darf Junior sein, und als Neuzugang sind das oft Sie. Das ist in jedem Angebot eingepreist; bieten Sie nie an, darauf zu verzichten, um einen Auftrag zu gewinnen.</p>
+
+          <h3>Die Plattform, mit der Sie arbeiten <span class="sa-src">SRC: <a href="/de/demo.html">PRD-019</a>, <a href="/de/demo.html">PRD-008</a></span></h3>
+          <p>Siemens TIA Portal ist Standard für alle Neuprojekte (standardisiert im Februar 2025 — Kontextwechsel über drei Ökosysteme zerstörte die Bibliotheks-Wiederverwendung). Andere Plattformen nur, wenn der Anlagenbestand des Kunden es verlangt, entsprechend bepreist. Die Legacy-SCADA-Wartung läuft aus: Bestandsverträge bis zum Ende, keine neuen.</p>
+
+          <h3>Wer was entscheidet <span class="sa-src">SRC: <a href="/de/demo.html">OPS-005</a>, <a href="/de/demo.html">HIR-018</a></span></h3>
+          <ul>
+            <li><b>Projektentscheidungen</b> — Ihre Projektleiterin (intern befördert im Januar 2025; sie koordinierte zuvor die drei größten Projekte).</li>
+            <li><b>Preisausnahmen, Kundenabnahmen, alles rund um die Preisliste</b> — der Gründer, im Freitags-Decision-Review.</li>
+            <li><b>Alles, was hier nicht steht</b> — bringen Sie es ins 30-minütige Decision-Review am Freitag. Dort wächst dieses Ledger; eines Tages werden Ihre Entscheidungen Ihre Nachfolger einarbeiten.</li>
+          </ul>
+
+          <h3>Ihre ersten 30 Tage</h3>
+          <ol>
+            <li>Lesen Sie den Lesepfad mit 25 Entscheidungen im Ledger (Ihr Lead weist ihn zu — insgesamt ca. 90 Minuten).</li>
+            <li>Begleiten Sie ein laufendes Inbetriebnahme-Projekt als zweite Person (siehe Zwei-Personen-Regel oben).</li>
+            <li>Erfassen Sie Ihre erste Entscheidung in einem Freitags-Review — auch eine kleine. Das <em>Warum</em> aufzuschreiben ist die Gewohnheit, die alles oben wahr hält.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="sa-after">
+        <p>Dieses Dokument wurde aus 9 der 14 Einträge des Beispiel-Ledgers zusammengesetzt — nichts darin wurde separat geschrieben. Ändert sich eine Entscheidung, wird das Dokument neu generiert. <a href="/de/demo.html">Zum Ledger, aus dem es stammt →</a></p>
+        <a href="/de.html#book" class="btn btn-gold">Clarity-Audit buchen →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="ftr">
+    <div class="ftr-in">
+      <div class="ftr-legal">
+        <p>ADAMAS (All Decisions And Memory Archive System) ist ein Produkt der Falcon Intelligence Group LLC, aufgebaut auf dem Hermes-KI-Agenten. Hermes ist ein Drittanbieter-Tool und bleibt Eigentum seines jeweiligen Inhabers.</p>
+        <p>Local-first by Design: Ihr Vault und das Entscheidungs-Ledger laufen auf Hardware, die Ihnen gehört. ADAMAS sendet das Wissen Ihres Unternehmens nicht in Drittanbieter-Clouds — optionales hybrides Cloud-Routing wird nur für explizit von Ihnen freigegebene Aufgaben genutzt.</p>
+        <p>Die angezeigten Preise sind Richtwerte und können je nach Projektumfang variieren. Die Clarity-Audit-Gebühr wird bei Projektdurchführung angerechnet. Client-Hardware (z. B. Mac Mini M4) wird vom Kunden erworben und ist sein Eigentum.</p>
+        <p>Das auf dieser Seite gezeigte Dokument wurde aus Beispieldaten generiert — illustrativ und anonymisiert; es beschreibt keinen realen Kunden.</p>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-cols">
+        <div class="ftr-col">
+          <h5>ADAMAS</h5>
+          <a href="/de.html#problem">Das Problem</a>
+          <a href="/de/demo.html">Interaktive Demo</a>
+          <a href="/de/produkt.html">Produkt-Tour</a>
+          <a href="/de/docs/">Dokumentation</a>
+          <a href="/de.html#what">Was es ist</a>
+          <a href="/de.html#how">Wie es funktioniert</a>
+          <a href="/de.html#pricing">Preise</a>
+          <a href="/de.html#faq">FAQ</a>
+        </div>
+        <div class="ftr-col">
+          <h5>eBooks &amp; Leitfäden</h5>
+          <a href="/downloads/ADAMAS-Guide-Escaping-the-Knowledge-Bottleneck.pdf" download>Escaping the Knowledge Bottleneck</a>
+          <a href="/downloads/ADAMAS-Guide-Decision-Ledger-Playbook.pdf" download>The Decision Ledger Playbook</a>
+          <a href="/downloads/ADAMAS-Guide-Local-First-AI.pdf" download>Local-First AI for Founders</a>
+          <h5 class="ftr-sub">Kostenlose Tools</h5>
+          <a href="/scorecard.html">Knowledge-Trap Scorecard</a>
+          <a href="/calculator.html">Local-First AI Kostenrechner</a>
+          <a href="/checklist.html">Founder Succession Checklist</a>
+          <a href="/downloads/ADAMAS-Decision-Ledger-Starter-Kit.zip" download>Decision Ledger Starter Kit</a>
+        </div>
+        <div class="ftr-col">
+          <h5><a href="/integrations/">Integrationen</a></h5>
+          <a href="/integrations/monday.html">Monday.com</a>
+          <a href="/integrations/hubspot.html">HubSpot</a>
+          <a href="/integrations/pipedrive.html">Pipedrive</a>
+          <a href="/integrations/salesforce.html">Salesforce</a>
+          <a href="/integrations/notion.html">Notion</a>
+          <a href="/integrations/slack.html">Slack</a>
+          <a href="/integrations/">Alle Integrationen →</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Unternehmen</h5>
+          <a href="/de.html">Über ADAMAS</a>
+          <a href="/de/author/massimo-sahin/">Über den Gründer</a>
+          <a href="/de/partner/">Partner &amp; Unterstützer</a>
+          <a href="/de/blog/">Blog</a>
+          <a href="/de/kontakt.html">Kontakt</a>
+          <a href="/de/sicherheit.html">Sicherheit</a>
+          <a href="/de.html#why">Warum Local-First</a>
+          <a href="https://x.com/THEGRANDFALCON" target="_blank" rel="noopener noreferrer">X · @THEGRANDFALCON</a>
+        </div>
+        <div class="ftr-col">
+          <h5>Loslegen</h5>
+          <a href="/de.html#book">Clarity-Audit buchen</a>
+          <a href="mailto:hello@adamas-project.com">hello@adamas-project.com</a>
+          <a href="/de.html#compare">Warum ADAMAS</a>
+          <a href="/privacy.html">Datenschutz</a>
+        </div>
+      </div>
+      <hr class="ftr-rule">
+      <div class="ftr-bottom">
+        <span class="cpy">Copyright © 2026 Falcon Intelligence Group LLC. Alle Rechte vorbehalten.</span>
+        <nav class="ftr-links" aria-label="Rechtliches">
+          <a href="/privacy.html">Datenschutzerklärung</a>
+          <a href="/terms.html">Nutzungsbedingungen</a>
+          <a href="/impressum.html">Impressum</a>
+          <a href="/de/kontakt.html">Kontakt</a>
+        </nav>
+        <span class="ftr-region">Falcon Intelligence Group LLC · Delaware, USA</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/app.js" defer></script>
+  <script type="module">
+    if (window.innerWidth >= 760 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const load = () => import('/bg.js');
+      'requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 2000 }) : setTimeout(load, 500);
+    }
+  </script>
+</body>
+</html>
