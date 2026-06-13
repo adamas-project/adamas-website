@@ -75,6 +75,31 @@
       .pt-row.flip .pt-shot { order: 1; }
       .pt-row.flip .pt-ann { order: 2; }
     }
+    /* ── Asset-Katalog ── */
+    .pt-assets { margin: 84px 0 8px; }
+    .pa-head { max-width: 700px; margin: 0 0 32px; }
+    .pa-head h2 { font-family: var(--font-d); font-weight: 700; text-transform: uppercase; font-size: clamp(1.5rem, 4vw, 2.1rem); letter-spacing: -0.01em; line-height: 1.05; color: var(--text); margin: 10px 0 12px; }
+    .pa-head p { color: var(--muted); font-size: 15px; line-height: 1.7; margin: 0; }
+    .pa-head a { color: var(--accent); font-weight: 600; }
+    .pa-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(278px, 1fr)); gap: 16px; }
+    .pa-dept { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 22px 22px 16px; }
+    .pa-dept > header { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0 0 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-2); }
+    .pa-dept h3 { font-family: var(--font-d); font-weight: 700; font-size: 1.02rem; color: var(--text); margin: 0; }
+    .pa-dept > header .dom { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+    .pa-dept ul { list-style: none; margin: 0; padding: 0; }
+    .pa-dept li { font-size: 13.5px; line-height: 1.5; color: var(--muted); padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.045); display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .pa-dept li:last-child { border-bottom: 0; }
+    .pa-tag { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 8.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border-radius: 99px; }
+    .pa-tag.live { color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-line); }
+    .pa-tag.new { color: var(--faint); border: 1px solid var(--border); }
+    .pa-binder { margin: 16px 0 0; background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: var(--r-lg); padding: 26px 24px; }
+    .pa-binder > h3 { font-family: var(--font-d); font-weight: 700; font-size: 1.05rem; color: var(--text); margin: 0 0 6px; }
+    .pa-binder .pa-bsub { color: var(--muted); font-size: 13.5px; line-height: 1.65; margin: 0 0 18px; max-width: 740px; }
+    .pa-two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .pa-bcard h4 { font-size: 14px; color: var(--accent); margin: 0 0 5px; }
+    .pa-bcard p { font-size: 13px; line-height: 1.6; color: var(--muted); margin: 0; }
+    .pa-foot { font-size: 12px; color: var(--faint); margin: 16px 0 0; }
+    @media (max-width: 620px){ .pa-two { grid-template-columns: 1fr; } }
   </style>
   <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
 </head>
@@ -388,6 +413,95 @@
           <p>Lehnen Sie ab, läuft die Aufgabe stattdessen lokal. Der Standard ist immer: Nichts geht hinaus. <a href="/de/sicherheit.html">Alle Sicherheitsdetails →</a></p>
         </div>
       </div>
+
+      <!-- ============ ASSET-KATALOG ============ -->
+      <section class="pt-assets" id="assets" aria-labelledby="assets-h">
+        <div class="pa-head">
+          <div class="kicker">Was ADAMAS generiert</div>
+          <h2 id="assets-h">Jede Abteilung — aus einem Ledger.</h2>
+          <p>Jedes Asset wird aus Entscheidungen zusammengesetzt, die Sie bereits getroffen haben — rückverfolgbar bis zur Quell-Entscheidung und neu generiert, sobald sich diese ändert. Nichts wird erfunden. Die Abteilungen entsprechen den fünf Domänen der <a href="/de/demo.html">interaktiven Demo</a>.</p>
+        </div>
+
+        <div class="pa-grid">
+          <article class="pa-dept">
+            <header><h3>Personal &amp; Hiring</h3><span class="dom" style="color:#7fb5ff">Personal</span></header>
+            <ul>
+              <li>Onboarding-Dokument je Rolle <span class="pa-tag live">Live</span></li>
+              <li>Einstellungs-Entscheidungsrahmen <span class="pa-tag live">Live</span></li>
+              <li>Beförderungs- &amp; Gehaltslogik <span class="pa-tag new">Generierbar</span></li>
+              <li>Organisations-Memo <span class="pa-tag new">Generierbar</span></li>
+              <li>Zusagen- &amp; Absagen-Logbuch <span class="pa-tag new">Generierbar</span></li>
+            </ul>
+          </article>
+
+          <article class="pa-dept">
+            <header><h3>Vertrieb &amp; Umsatz</h3><span class="dom" style="color:var(--accent)">Vertrieb</span></header>
+            <ul>
+              <li>Deal-Qualifizierungs-Playbook <span class="pa-tag new">Generierbar</span></li>
+              <li>Preis- &amp; Tagessatz-Logik <span class="pa-tag new">Generierbar</span></li>
+              <li>Scope- &amp; Discovery-SOP <span class="pa-tag new">Generierbar</span></li>
+              <li>Win-/Loss-Entscheidungsreview <span class="pa-tag new">Generierbar</span></li>
+              <li>Kanal- &amp; Vertragsrichtlinie <span class="pa-tag new">Generierbar</span></li>
+            </ul>
+          </article>
+
+          <article class="pa-dept">
+            <header><h3>Produkt &amp; Lieferung</h3><span class="dom" style="color:#b89aff">Produkt</span></header>
+            <ul>
+              <li>Produkt- &amp; Roadmap-Logik <span class="pa-tag new">Generierbar</span></li>
+              <li>Tech-Stack-Entscheidungen (ADR) <span class="pa-tag new">Generierbar</span></li>
+              <li>Sunset-/End-of-Life-Richtlinie <span class="pa-tag new">Generierbar</span></li>
+              <li>Build-vs-Buy-Memo <span class="pa-tag new">Generierbar</span></li>
+            </ul>
+          </article>
+
+          <article class="pa-dept">
+            <header><h3>Finanzen</h3><span class="dom" style="color:var(--green)">Finanzen</span></header>
+            <ul>
+              <li>Kapitalallokations-Richtlinie <span class="pa-tag new">Generierbar</span></li>
+              <li>Preisuntergrenze &amp; Contingency-Modell <span class="pa-tag new">Generierbar</span></li>
+              <li>Abrechnungs- &amp; Cash-Cycle-SOP <span class="pa-tag new">Generierbar</span></li>
+              <li>Finanz-Entscheidungs-Memo-Paket <span class="pa-tag new">Generierbar</span></li>
+            </ul>
+          </article>
+
+          <article class="pa-dept">
+            <header><h3>Betrieb</h3><span class="dom" style="color:#ff9d7a">Betrieb</span></header>
+            <ul>
+              <li>Betriebs-Rhythmus &amp; Rituale <span class="pa-tag new">Generierbar</span></li>
+              <li>Übergabe- &amp; Kontinuitätsprotokoll <span class="pa-tag new">Generierbar</span></li>
+              <li>Sicherheits- &amp; Compliance-SOPs <span class="pa-tag new">Generierbar</span></li>
+              <li>Risikoregister <span class="pa-tag new">Generierbar</span></li>
+            </ul>
+          </article>
+
+          <article class="pa-dept">
+            <header><h3>Investoren &amp; Beirat</h3><span class="dom" style="color:var(--muted)">Domänenübergreifend</span></header>
+            <ul>
+              <li>Investoren-One-Pager <span class="pa-tag live">Live</span></li>
+              <li>Beirats-Entscheidungs-Digest <span class="pa-tag new">Generierbar</span></li>
+              <li>KPI- &amp; Zusagen-Tracker <span class="pa-tag new">Generierbar</span></li>
+              <li>Datenraum-Index <span class="pa-tag new">Generierbar</span></li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="pa-binder">
+          <h3>Die zwei Assets, die ein gründergeführtes Unternehmen lesbar machen</h3>
+          <p class="pa-bsub">Diese sind nicht abteilungsbezogen — sie setzen das gesamte Ledger zusammen. Es ist das, wonach ein Käufer, ein Beirat oder eine Bank fragt — und was die meisten gründergeführten Firmen mit 2–5 Mio. € Umsatz schlicht nicht auf Abruf liefern können.</p>
+          <div class="pa-two">
+            <div class="pa-bcard">
+              <h4>Der Decision-Diligence-Ordner</h4>
+              <p>Jede begründete Entscheidung, nach Abteilung, mit Owner und Trade-offs — als ein Dokument exportiert. Die Datei, nach der der Anwalt eines Käufers in der Due Diligence fragt.</p>
+            </div>
+            <div class="pa-bcard">
+              <h4>Das Gründer-Kontinuitäts-Dossier</h4>
+              <p>„Wenn der Gründer morgen ausfällt, hier ist jede Entscheidung und ihr Warum." Beantwortet direkt das Schlüsselpersonen-Risiko, das gründergeführte Bewertungen drückt.</p>
+            </div>
+          </div>
+          <p class="pa-foot">Live = im Generierungs-Panel oben gezeigt. Generierbar = von der Ledger-Struktur gestützt; erscheint, sobald Ihre Einträge anwachsen. <a href="/de/beispiel-asset.html" style="color:var(--accent);font-weight:600">Vollständiges generiertes Beispiel ansehen →</a></p>
+        </div>
+      </section>
 
       <div class="pt-cta">
         <p>Die Architektur hinter diesen Ansichten, in einem Diagramm: <a href="/de/how-it-works/architektur.html" style="color:var(--accent);font-weight:600">So funktioniert es →</a></p>

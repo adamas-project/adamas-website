@@ -75,6 +75,31 @@
       .pt-row.flip .pt-shot { order: 1; }
       .pt-row.flip .pt-ann { order: 2; }
     }
+    /* ── Asset catalogue ── */
+    .pt-assets { margin: 84px 0 8px; }
+    .pa-head { max-width: 700px; margin: 0 0 32px; }
+    .pa-head h2 { font-family: var(--font-d); font-weight: 700; text-transform: uppercase; font-size: clamp(1.5rem, 4vw, 2.1rem); letter-spacing: -0.01em; line-height: 1.05; color: var(--text); margin: 10px 0 12px; }
+    .pa-head p { color: var(--muted); font-size: 15px; line-height: 1.7; margin: 0; }
+    .pa-head a { color: var(--accent); font-weight: 600; }
+    .pa-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(278px, 1fr)); gap: 16px; }
+    .pa-dept { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 22px 22px 16px; }
+    .pa-dept > header { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0 0 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border-2); }
+    .pa-dept h3 { font-family: var(--font-d); font-weight: 700; font-size: 1.02rem; color: var(--text); margin: 0; }
+    .pa-dept > header .dom { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+    .pa-dept ul { list-style: none; margin: 0; padding: 0; }
+    .pa-dept li { font-size: 13.5px; line-height: 1.5; color: var(--muted); padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.045); display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .pa-dept li:last-child { border-bottom: 0; }
+    .pa-tag { flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 8.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border-radius: 99px; }
+    .pa-tag.live { color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-line); }
+    .pa-tag.new { color: var(--faint); border: 1px solid var(--border); }
+    .pa-binder { margin: 16px 0 0; background: var(--accent-soft); border: 1px solid var(--accent-line); border-radius: var(--r-lg); padding: 26px 24px; }
+    .pa-binder > h3 { font-family: var(--font-d); font-weight: 700; font-size: 1.05rem; color: var(--text); margin: 0 0 6px; }
+    .pa-binder .pa-bsub { color: var(--muted); font-size: 13.5px; line-height: 1.65; margin: 0 0 18px; max-width: 740px; }
+    .pa-two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .pa-bcard h4 { font-size: 14px; color: var(--accent); margin: 0 0 5px; }
+    .pa-bcard p { font-size: 13px; line-height: 1.6; color: var(--muted); margin: 0; }
+    .pa-foot { font-size: 12px; color: var(--faint); margin: 16px 0 0; }
+    @media (max-width: 620px){ .pa-two { grid-template-columns: 1fr; } }
   </style>
   <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
 </head>
@@ -396,6 +421,95 @@
           <p>Decline, and the task runs locally instead. The default is always: nothing leaves. <a href="/security.html">Full security details →</a></p>
         </div>
       </div>
+
+      <!-- ============ ASSET CATALOGUE ============ -->
+      <section class="pt-assets" id="assets" aria-labelledby="assets-h">
+        <div class="pa-head">
+          <div class="kicker">What ADAMAS Generates</div>
+          <h2 id="assets-h">Every department, from one ledger.</h2>
+          <p>Each asset is assembled from decisions you already made — traced to its source entries, and re-generated when those decisions change. Nothing is invented. The departments map to the five domains in the <a href="/demo.html">interactive demo</a>.</p>
+        </div>
+
+        <div class="pa-grid">
+          <article class="pa-dept">
+            <header><h3>Hiring &amp; People</h3><span class="dom" style="color:#7fb5ff">Hiring</span></header>
+            <ul>
+              <li>Role onboarding document <span class="pa-tag live">Live</span></li>
+              <li>Hiring decision framework <span class="pa-tag live">Live</span></li>
+              <li>Promotion &amp; comp-anchor rationale <span class="pa-tag new">Generatable</span></li>
+              <li>Org-design memo <span class="pa-tag new">Generatable</span></li>
+              <li>Offer &amp; rejection rationale log <span class="pa-tag new">Generatable</span></li>
+            </ul>
+          </article>
+
+          <article class="pa-dept">
+            <header><h3>Sales &amp; Revenue</h3><span class="dom" style="color:var(--accent)">Sales</span></header>
+            <ul>
+              <li>Deal-qualification playbook <span class="pa-tag new">Generatable</span></li>
+              <li>Pricing &amp; rate-card rationale <span class="pa-tag new">Generatable</span></li>
+              <li>Scope &amp; discovery SOP <span class="pa-tag new">Generatable</span></li>
+              <li>Win / loss decision review <span class="pa-tag new">Generatable</span></li>
+              <li>Channel &amp; contract policy <span class="pa-tag new">Generatable</span></li>
+            </ul>
+          </article>
+
+          <article class="pa-dept">
+            <header><h3>Product &amp; Delivery</h3><span class="dom" style="color:#b89aff">Product</span></header>
+            <ul>
+              <li>Product &amp; roadmap rationale <span class="pa-tag new">Generatable</span></li>
+              <li>Tech-stack decision (ADR) log <span class="pa-tag new">Generatable</span></li>
+              <li>Sunset / end-of-life policy <span class="pa-tag new">Generatable</span></li>
+              <li>Build-vs-buy memo <span class="pa-tag new">Generatable</span></li>
+            </ul>
+          </article>
+
+          <article class="pa-dept">
+            <header><h3>Finance</h3><span class="dom" style="color:var(--green)">Finance</span></header>
+            <ul>
+              <li>Capital-allocation policy <span class="pa-tag new">Generatable</span></li>
+              <li>Pricing-floor &amp; contingency model <span class="pa-tag new">Generatable</span></li>
+              <li>Billing &amp; cash-cycle SOP <span class="pa-tag new">Generatable</span></li>
+              <li>Financial decision memo pack <span class="pa-tag new">Generatable</span></li>
+            </ul>
+          </article>
+
+          <article class="pa-dept">
+            <header><h3>Operations</h3><span class="dom" style="color:#ff9d7a">Ops</span></header>
+            <ul>
+              <li>Operating cadence &amp; rituals doc <span class="pa-tag new">Generatable</span></li>
+              <li>Handover &amp; continuity protocol <span class="pa-tag new">Generatable</span></li>
+              <li>Safety &amp; compliance SOPs <span class="pa-tag new">Generatable</span></li>
+              <li>Risk register <span class="pa-tag new">Generatable</span></li>
+            </ul>
+          </article>
+
+          <article class="pa-dept">
+            <header><h3>Investor &amp; Board</h3><span class="dom" style="color:var(--muted)">Cross-domain</span></header>
+            <ul>
+              <li>Investor one-pager <span class="pa-tag live">Live</span></li>
+              <li>Board decision digest <span class="pa-tag new">Generatable</span></li>
+              <li>KPI &amp; commitments tracker <span class="pa-tag new">Generatable</span></li>
+              <li>Data-room index <span class="pa-tag new">Generatable</span></li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="pa-binder">
+          <h3>The two assets that make a founder-led company legible</h3>
+          <p class="pa-bsub">These aren't per-department — they assemble the entire ledger. They're what an acquirer, a board, or a bank asks for, and what most $2–5M founder-led firms simply cannot produce on demand.</p>
+          <div class="pa-two">
+            <div class="pa-bcard">
+              <h4>The Decision Diligence Binder</h4>
+              <p>Every reasoned decision, by department, with owners and trade-offs — exported as one document. The file a buyer's lawyer asks for during due diligence.</p>
+            </div>
+            <div class="pa-bcard">
+              <h4>The Founder-Continuity Dossier</h4>
+              <p>"If the founder steps away tomorrow, here is every decision and why." Directly answers the key-person risk that discounts founder-led valuations.</p>
+            </div>
+          </div>
+          <p class="pa-foot">Live = demonstrated in the generation panel above. Generatable = supported by the ledger structure; surfaced as your entries accumulate. <a href="/sample-asset.html" style="color:var(--accent);font-weight:600">See a full generated sample →</a></p>
+        </div>
+      </section>
 
       <div class="pt-cta">
         <p>The architecture behind these views, in one diagram: <a href="/how-it-works/architecture.html" style="color:var(--accent);font-weight:600">how it works →</a></p>
