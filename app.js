@@ -267,7 +267,7 @@ const root = document.documentElement;
     var a = e.target.closest ? e.target.closest('a[href]') : null;
     if (!a) return;
     var h = a.getAttribute('href') || '';
-    if (h.indexOf('calendar.app.google') > -1) fire('Book 30-min Call');
+    if (h.indexOf('calendar.app.google') > -1) fire('Book 30-min Call', { page: location.pathname });
     if (h.indexOf('x.com/THEGRANDFALCON') > -1) fire('X Profile Click');
   });
 })();
