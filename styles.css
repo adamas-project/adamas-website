@@ -686,3 +686,24 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 @media (max-width: 480px){
   .nav-social{display:none} /* X link stays in the footer; makes room for the language switch */
 }
+
+/* ============ pricing v2 — recurring-led tiers ============ */
+.price-grid.two   { grid-template-columns: repeat(2,1fr); max-width: 760px; margin-left:auto; margin-right:auto; }
+.price-grid.three { grid-template-columns: repeat(3,1fr); margin-top: 14px; }
+.price-grid.one   { grid-template-columns: 1fr; max-width: 380px; margin: 18px auto 0; }
+.price-grid.two, .price-grid.three { margin-bottom: 0; }
+.kicker.center { margin-top: 28px; }
+.price-sub { text-align:center; max-width: 640px; margin: 8px auto 4px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+.price-sub b { color: var(--text); }
+@media (max-width: 760px){
+  .price-grid.two, .price-grid.three { grid-template-columns: 1fr; }
+}
+
+/* ============ why-it-compounds section ============ */
+.cmp3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.cmp3-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--r-lg); padding:26px; transition:transform .25s ease,border-color .25s ease; }
+.cmp3-card:hover { transform:translateY(-2px); border-color:var(--accent-line); }
+.cmp3-card h4 { font-size:15px; font-weight:700; color:var(--text); margin:0 0 10px; }
+.cmp3-card p { font-size:14px; line-height:1.65; color:var(--muted); margin:0; }
+.cmp3-card em { color:var(--accent); font-style:normal; }
+@media (max-width:760px){ .cmp3{ grid-template-columns:1fr; } .cmp3-card:hover{transform:none;} }
