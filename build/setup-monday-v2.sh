@@ -18,9 +18,22 @@ set -uo pipefail   # NOTE: no -e; we handle errors per-call so one failure doesn
 API="https://api.monday.com/v2"
 command -v jq >/dev/null 2>&1 || { echo "==> installing jq"; brew install jq; }
 
-gql() {  # $1 = graphql; echoes raw JSON
-  curl -s "$API" -H "Authorization: $MONDAY_TOKEN" -H "Content-Type: application/json" \
-       -H "API-Version: 2024-10" -d "$(jq -nc --arg q "$1" '{query:$q}')"
+gql() {  # $1 = graphql; echoes raw JSON. Auto-waits + retries on Monday's
+         # per-minute complexity (rate) limit so big runs finish cleanly.
+  local q="$1" attempt=0 resp wait
+  while :; do
+    resp=$(curl -s "$API" -H "Authorization: $MONDAY_TOKEN" -H "Content-Type: application/json" \
+                -H "API-Version: 2024-10" -d "$(jq -nc --arg q "$q" '{query:$q}')")
+    if echo "$resp" | jq -e '.errors[]? | select(.extensions.code=="COMPLEXITY_BUDGET_EXHAUSTED")' >/dev/null 2>&1; then
+      attempt=$((attempt+1))
+      [ "$attempt" -gt 8 ] && { echo "$resp"; return; }
+      wait=$(echo "$resp" | jq -r '[.errors[].extensions.retry_in_seconds] | max // 20')
+      echo "    … Monday rate limit hit; waiting $((wait+2))s then retrying (attempt $attempt)" >&2
+      sleep "$((wait+2))"
+      continue
+    fi
+    echo "$resp"; return
+  done
 }
 
 echo "==> Discovering your boards (read-only)"
