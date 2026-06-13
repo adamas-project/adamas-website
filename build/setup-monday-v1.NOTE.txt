@@ -1,0 +1,1 @@
+# superseded by setup-monday-v2.sh (integrates with existing boards instead of creating a new workspace). Kept for reference.
