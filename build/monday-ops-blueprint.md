@@ -1,75 +1,52 @@
-# ADAMAS × Monday.com — Operational Blueprint
+# ADAMAS × Monday.com — Operational Structure (AS BUILT)
 
-> The exact structure I will create in your Monday account once you approve the
-> calls. Read this first; nothing is created until you say go. Principle: **Monday
-> holds operational STATE (pipeline, tasks, money, dates); Obsidian holds the
-> REASONING (the decision ledger).** They link, they don't overlap.
->
-> Integration rule: I create a **new dedicated workspace** ("ADAMAS Delivery") so
-> nothing touches your existing CRM/boards. Your current workspaces stay exactly
-> as they are; ADAMAS lives beside them.
+> This reflects what was actually implemented. The earlier plan (a brand-new
+> "ADAMAS Delivery" workspace with Engagements/Tasks boards) was **superseded** —
+> we integrated with your existing live boards instead, which is better: nothing
+> got duplicated and the live lead intake stayed put. The old `setup-monday.sh`
+> (v1, new-workspace) is kept only for reference; **`setup-monday-v2.sh` is canonical.**
 
-## What I read before building (read-only, your approval per call)
-1. `get_user_context` — who you are, plan tier, your most-used boards.
-2. `list_workspaces` — so the new workspace doesn't collide with an existing name.
-3. `get_board_info` on any existing CRM board you point me to — so the Engagements
-   board mirrors your column conventions (status labels, owner field) instead of
-   inventing new ones.
+Principle unchanged: **Monday holds operational STATE; Obsidian holds the REASONING.**
+Monday = pipeline, tasks, money, dates, decision *index*. Obsidian vault = the decision
+ledger itself (full context/trade-offs), local-first on the host Mac.
 
-## Workspace: "ADAMAS Delivery" (open kind)
+## The boards (existing + added)
 
-### Board 1 — Engagements (the delivery pipeline / CRM)
-One item per client. Groups = the 6-stage process chain, so an item physically
-moves down the board as the engagement progresses:
+### `1_Sales_Pipeline` — pipeline / CRM (EXISTING, live Netlify→Zapier intake)
+Strictly **added columns** (never renamed/deleted, so the zap kept working):
+Client Number, Client Name, Company*, Source* (Website Form / Direct Booking / Referral /
+Outbound), Contract Value, Clarity Audit Date, Client Board (link), Notes.
+(*Company and Source pre-existed.) Lead capture + field mapping → `integrations-map.md`.
 
-| Group (stage)        | Meaning                                  |
-|----------------------|------------------------------------------|
-| Lead                 | Interested, not yet closed               |
-| 1 · Clarity Audit    | Audit paid, interviews + report          |
-| 2 · Install          | Hardware + vault standup                 |
-| 3 · Build            | Ledger seeding + sources + assets        |
-| 4 · Handover         | Handover pack + training                 |
-| 5 · Aftercare (30d)  | Included support window                  |
-| Won / Closed         | Live + case study, or lost (with reason) |
+### `ADAMAS — Client-0 Installation` — per-client delivery board (EXISTING, restructured)
+Added 8 columns (Client Number, Phase, Start Date, Contract Value, Sales Pipeline Link,
+Support Status, Video Course Access, Next Review Date) and 5 workflow groups, each seeded
+with task items:
+1. **Pre-Onboarding (Discovery & Clarity Audit)** — discovery call, clarity audit, decision, contract
+2. **Environment & Access Setup** — provision env, install tools, verify ports/access
+3. **ADAMAS Build & Installation** — clone, deps, configure, migrations, start services, verify UI, e2e test
+4. **System Handoff** — credentials/configs, runbook, knowledge transfer
+5. **Training + Support** — video course, training, support window, feedback
 
-Columns:
-- **Stage status** (status) — same labels as the groups, for board-wide views.
-- **Geography** (status: `US — remote`, `DACH — on-site`) — drives delivery mode.
-- **Owner** (people) — you, for now.
-- **Audit invoice** (status: Not sent / Sent / Paid).
-- **Build invoice** (status: Not sent / Sent / Paid).
-- **Hardware** (status: Not ordered / Ordered / Arrived / Installed).
-- **Hybrid route** (status: Off / Client-enabled) — the security flag.
-- **Next action** (text) + **Next action due** (date).
-- **Vault link** (link) — to the engagement's vault folder / handover doc. THIS is
-  the bridge to the Obsidian knowledge layer.
-- **Audit report** (file) + **Handover pack** (file).
-- **Revenue** (numbers) — booked value, for a simple pipeline total.
+This board is the **template**: duplicate it per new client. Its phases map 1:1 to the
+delivery process chain in `/delivery` (Stages 1–5).
 
-### Board 2 — Delivery Tasks (the runbook, made executable)
-Linked to Engagements (board-relation). Each engagement gets the standard task
-set, seeded from the runbook checklists so nothing is improvised. Groups by stage;
-each task an item with: **Done** (status), **Owner**, **Due**, **Runbook ref**
-(text → e.g. `delivery/02 §3`). The seed task list (the "idiot-proof" spine):
+### `Decision Log` — company decision index (ADDED)
+11 columns matching the Decision Ledger Standard: Decision ID, Date, Domain (Hiring/Sales/
+Product/Finance/Ops), Title, Context, Decision, Owner, Trade-offs, Links, Sources, Status
+(Active/Superseded/Reversed). This is an **index/mirror** of the Obsidian ledger for
+at-a-glance ops review — the vault stays the source of truth. Don't dual-author: write
+decisions in the vault (full reasoning), mirror the headline + ID here when useful.
 
-- Stage 0: Order confirmation sent · Audit invoiced · DPA signed · Kickoff booked · Hardware list sent
-- Stage 1: Founder interview · Key-person interviews · Synthesis run · Clarity Report delivered · 20-decision list approved
-- Stage 2: Hardware arrived · macOS hardened (FileVault/firewall) · Engine installed · Vault bootstrapped · Backup verified
-- Stage 3: 20 decisions seeded · Weekly review live · First asset generated · Build QA passed · Baseline metric captured
-- Stage 4: Handover pack assembled · Training session done · Remote access disabled · Closing email sent
-- Stage 5: Wk1–4 check-ins · Case study drafted + approved · Retainer offered
+### `Dashboard and reporting` — master dashboard (EXISTING)
+Widgets are UI-only (Monday's API can't create them). Configure: Leads by Stage,
+Revenue Forecast (sum Contract Value), Active Installations, Support Load, Recent Leads.
 
-### Board 3 — (optional) Decisions Mirror
-NOT the ledger — the ledger stays in Obsidian. Optional lightweight board to track
-only FIG's own top-level company decisions for at-a-glance ops review, mirroring
-entry IDs (OPS-001 …) with a link back to the vault file. Skip unless you want the
-company-decisions view inside Monday. Recommend: skip for now, revisit after Client Zero.
+## The scripts (`build/`)
+- `setup-monday-v2.sh` — additive + idempotent build of the above (auto-retries on rate limit).
+- `audit-monday.sh` — read-only enumeration of workspaces/boards (run before deleting anything).
+- `cleanup-monday.sh` — deletes only empty leftover groups on the ADAMAS boards; dry-run by default.
+- `integrations-map.md` — website forms + calendar → pipeline field mapping and Zapier zaps.
 
-## Dashboard
-A "Delivery" dashboard over Board 1: pipeline by stage, revenue total, overdue
-next-actions. Created last, once the boards exist.
-
-## What I will NOT do
-- Touch, rename, or restructure any existing workspace or board.
-- Create automations that email clients without your sign-off.
-- Put any client's actual decision content in Monday — that's vault-only.
+## What the API can't do (manual, in the Monday UI)
+Dashboard widgets · automation recipes (e.g. Closed-Won → notify) · renaming/merging groups.

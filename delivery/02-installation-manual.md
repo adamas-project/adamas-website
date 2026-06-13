@@ -17,6 +17,12 @@ non-technical person (remote/US mode).
 - [ ] Any HDMI monitor + USB keyboard/mouse for setup day (can be borrowed; the machine
       runs headless afterwards).
 
+> **The Mac Mini is the client deliverable** — desktop, always-on, fanned (sustains AI
+> inference without thermal throttling), and headless-friendly. A **MacBook Air works for
+> Client Zero / dogfooding** but is fanless: long inference runs throttle, so size the
+> model to the RAM (§3) and expect it to be slower than a Mini under load. Don't ship a
+> client an Air as the vault host.
+
 ## 2. First boot (15 min) — remote mode: read this aloud to the client
 
 - [ ] Connect monitor, keyboard, mouse, Ethernet, power. Press the power button.
@@ -47,26 +53,33 @@ brew install --cask obsidian
 
 # 3. Start the runtime as a background service and pull the working model
 brew services start ollama
-ollama pull qwen2.5:32b          # default for 32GB machines; use qwen2.5:14b on 24GB
+# Pick the model by the machine's unified memory (check: About This Mac):
+#   32 GB+  -> ollama pull qwen2.5:32b   (Mac Mini default)
+#   24 GB   -> ollama pull qwen2.5:14b
+#   16 GB   -> ollama pull qwen2.5:14b   (close other apps) or qwen2.5:7b for headroom
+#   8 GB    -> ollama pull qwen2.5:7b    (e.g. base MacBook Air — Client Zero)
+ollama pull qwen2.5:14b          # <-- set this to match the table above
                                   # (verify current best local model at install time)
 
 # 4. Smoke test — must answer coherently and show GPU/Metal usage
-ollama run qwen2.5:32b "Summarize in one sentence why recording the reasoning behind business decisions matters."
+ollama run qwen2.5:14b "Summarize in one sentence why recording the reasoning behind business decisions matters."
 ```
 
-- [ ] Smoke test passed (coherent answer, no errors).
+- [ ] Smoke test passed (coherent answer, no errors). Match the model name in the smoke
+      test to whatever you pulled above.
 - [ ] `[HERMES]` Install and license the Hermes agent here; point it at the Ollama
       endpoint (`http://localhost:11434`) or its own runtime per its docs.
 
 ## 4. Create the vault (20 min)
 
+One command — the bootstrap script scaffolds the whole vault per the Decision Ledger
+Standard, pulls the schema + template, and writes the first seed entry (idempotent):
+
 ```bash
-mkdir -p ~/Vault/{ledger/{hiring,sales,product,finance,ops},inbox,assets,sources,_system}
-curl -o ~/Vault/_system/decision-ledger-standard.schema.json \
-  https://adamas-project.com/downloads/decision-ledger-standard.schema.json
-curl -o ~/Vault/_system/entry-template.md \
-  https://adamas-project.com/downloads/decision-ledger-entry-template.md
+cd ~/Downloads && curl -fsSLO https://raw.githubusercontent.com/adamas-project/adamas-website/main/build/bootstrap-vault.sh && bash bootstrap-vault.sh
 ```
+
+(Manual fallback if you can't fetch the script: `mkdir -p ~/Vault/{ledger/{hiring,sales,product,finance,ops},inbox,assets,sources,_system}` then `curl` the schema + entry template from `https://adamas-project.com/downloads/` into `~/Vault/_system/`.)
 
 - [ ] Open Obsidian → "Open folder as vault" → `~/Vault`.
 - [ ] Obsidian settings: turn **off** all sync/publish (local only); enable the Templates
