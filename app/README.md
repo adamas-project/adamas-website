@@ -64,14 +64,39 @@ npm run ci            # lint + typecheck + tests (the stage gate)
 ## Deploy (containerized)
 
 ```bash
+cd app
+npm install            # populates node_modules (baked into the image — see DECISIONS PRD-005)
 docker compose up --build
-# ADAMAS on http://localhost:8787  (default login: see docker-compose.yml)
+# ADAMAS on http://localhost:8787
 ```
 
-The container is self-contained and exposes **no inbound ports beyond the single
-app port you map**; the vault is a mounted volume on the host. See
-`DECISIONS.md` for the engineering decisions behind the build (recorded in the
-ADAMAS schema format).
+The compose file seeds the 14-decision sample ledger on first boot, mounts the
+vault as a host volume, and enables optional HTTP basic auth.
+
+**Default staging credentials** (override via env in `docker-compose.yml`):
+
+| URL | User | Password |
+|-----|------|----------|
+| http://localhost:8787 | `adamas` | `clarity-audit` |
+
+> Local-first by design: the container exposes **only the single app port you
+> map** — no other inbound ports. The vault lives on the host. There is no public
+> staging URL because ADAMAS runs on hardware the client owns and is not exposed
+> to the internet; "staging" is the same container running on a trusted machine.
+
+### Smoke-test a running instance
+
+```bash
+npm run smoke -- http://localhost:8787
+# with auth:
+ADAMAS_BASIC_USER=adamas ADAMAS_BASIC_PASS=clarity-audit npm run smoke -- http://localhost:8787
+```
+
+The smoke suite exercises the full Definition of Done against a live HTTP server
+(it also runs automatically in the test suite via `test/e2e.test.ts`).
+
+See `DECISIONS.md` for the engineering decisions behind the build (recorded in
+the ADAMAS schema format).
 
 ## Application surfaces
 

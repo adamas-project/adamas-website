@@ -88,3 +88,42 @@ decisions.
 - **links:** ["PRD-002"]
 - **sources:** ["spec:adamas-build-plan#asset-generation"]
 - **status:** active
+
+---
+
+### OPS-001 — Bake node_modules into the Docker image instead of `npm ci`
+
+- **date:** 2026-06-14
+- **context:** The build sandbox crashed `npm ci` repeatedly ("Exit handler never
+  called") under its resource limits, while the host install worked. The runtime
+  artifact and the web bundle build fine.
+- **decision:** The Dockerfile copies the host-installed `node_modules` into the
+  build stage rather than running `npm` inside the container. `npm ci` is the
+  norm in standard CI; the Dockerfile notes where to swap it back in.
+- **owner:** { role: "engineering-lead" }
+- **tradeoffs:** ["Requires `npm install` on the host before `docker build`",
+  "Slightly larger build context — accepted for a local-first, single-machine
+  deployment"]
+- **links:** ["PRD-001"]
+- **sources:** ["build-log:2026-06-14#docker-npm-ci"]
+- **status:** active
+
+---
+
+### FIN-001 — Pricing is fully config-driven; three tiers, never a $200 tier
+
+- **date:** 2026-06-14
+- **context:** Pricing must render identically across the English and German
+  surfaces (same tier names, amounts, team-size bands) differing only by currency
+  symbol, and must never show a $200/mo or self-serve tier.
+- **decision:** Encode pricing as a single source of truth (`config/pricing.ts`):
+  shared amounts, locale = currency symbol/code only. Three subscription tiers —
+  Foundation 300, Growth 600, Scale 1200 — plus the one-time Clarity Audit (1,000)
+  and Build (4,000). A smoke-test assertion fails the build if a 200 amount ever
+  appears anywhere.
+- **owner:** { role: "engineering-lead" }
+- **tradeoffs:** ["Locale copy beyond currency would need its own i18n layer
+  later — out of scope now"]
+- **links:** ["PRD-001"]
+- **sources:** ["spec:adamas-build-plan#pricing"]
+- **status:** active

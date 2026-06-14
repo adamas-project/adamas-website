@@ -1,0 +1,25 @@
+# ADAMAS — local-first staging deployment.
+# The vault is a host-mounted volume; nothing leaves the machine.
+services:
+  adamas:
+    build: .
+    image: adamas:latest
+    container_name: adamas
+    ports:
+      # Map only the single app port. No other inbound ports are exposed.
+      - "8787:8787"
+    environment:
+      ADAMAS_HOST: 0.0.0.0
+      ADAMAS_PORT: "8787"
+      ADAMAS_VAULT: /data/vault
+      # Seed the 14-decision sample ledger on first boot only (empty vault).
+      ADAMAS_SEED: "1"
+      # Optional simple auth for a shared LAN staging instance.
+      ADAMAS_BASIC_USER: "${ADAMAS_BASIC_USER:-adamas}"
+      ADAMAS_BASIC_PASS: "${ADAMAS_BASIC_PASS:-clarity-audit}"
+    volumes:
+      - adamas-vault:/data/vault
+    restart: unless-stopped
+
+volumes:
+  adamas-vault:
