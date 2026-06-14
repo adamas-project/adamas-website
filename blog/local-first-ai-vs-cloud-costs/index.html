@@ -225,17 +225,17 @@
       </header>
       <div class="bp-body">
 <p>
-    For the last few years, the default assumption has been that serious AI means cloud AI: a per-seat subscription for everyone, an API bill for everything else, and a line item that quietly grows every quarter. That assumption was correct when capable models only ran in data centers. It isn't correct anymore — and for a 5–50 person company, the economics have flipped harder than most founders realize. This post is the cost math, laid out honestly, including the parts where the cloud still wins.
+    For the last few years, the default assumption has been that serious AI means cloud AI: a per-seat subscription for everyone, an API bill for everything else, and a line item that quietly grows every quarter. That assumption was correct when capable models only ran in data centers. It isn't correct anymore — and for a 5–50 person company, the economics now favor running locally. This post is the cost math, laid out honestly, including the parts where the cloud still wins.
   </p>
 
   <h2>What changed: capable models on consumer hardware</h2>
 
   <p>
-    The thing that made cloud AI mandatory was scale: the models worth using needed hardware no small company would buy. That stopped being true. Open models you can run today on a consumer machine — the kind that sits on a shelf and costs less than a laptop — are genuinely good at the work most companies actually use AI for: summarizing meetings, drafting documents, extracting structure from messy text, answering questions over your own files. Not benchmarks. The boring, daily 80%.
+    The thing that made cloud AI mandatory was scale: the models worth using needed hardware no small company would buy. That stopped being true. Open models you can run today on a consumer machine — the kind that sits on a shelf and costs less than a laptop — are genuinely good at the work most companies actually use AI for: summarizing meetings, drafting documents, extracting structure from messy text, answering questions over your own files. Not benchmarks. The routine 80% of daily work.
   </p>
 
   <p>
-    That last number is not rhetorical. In a local-first setup like ADAMAS — which runs on a Mac Mini M4 the client buys and owns — roughly 80% of workloads run entirely on local hardware. The remaining slice is the genuinely heavy stuff, and we'll get to that, because pretending it doesn't exist is how vendors lose your trust.
+    That last number is not rhetorical. In a local-first setup like ADAMAS — which runs on a Mac Mini M4 the client buys and owns — roughly 80% of workloads run entirely on local hardware. The remaining slice is the genuinely heavy work, covered below — pretending it doesn't exist would be dishonest.
   </p>
 
   <h2>The cloud cost stack, itemized</h2>
@@ -251,7 +251,7 @@
   <h2>The local cost stack, itemized</h2>
 
   <p>
-    Local-first has a different shape: one-time hardware you own, plus electricity, plus an optional metered top-up for the rare tasks you deliberately send to a frontier cloud model. The hardware is a capital purchase, not a subscription — it doesn't care how many people are on your team. The electricity for a machine like a Mac Mini M4 running this kind of workload is typically around $2–3 a month. That is not a typo; small Apple Silicon machines are remarkably efficient. And because the hybrid route is opt-in and metered, you pay cloud rates for exceptions instead of paying subscriptions for everything. You can see exactly how that routing works in the <a href="/how-it-works/architecture.html">ADAMAS architecture overview</a>.
+    Local-first has a different shape: one-time hardware you own, plus electricity, plus an optional metered top-up for the rare tasks you deliberately send to a frontier cloud model. The hardware is a capital purchase, not a subscription — it doesn't care how many people are on your team. The electricity for a machine like a Mac Mini M4 running this kind of workload is typically around $2–3 a month. Small Apple Silicon machines draw very little power. And because the hybrid route is opt-in and metered, you pay cloud rates for exceptions instead of paying subscriptions for everything. You can see exactly how that routing works in the <a href="/how-it-works/architecture.html">ADAMAS architecture overview</a>.
   </p>
 
   <h2>A worked example — typical, not promised</h2>
@@ -269,7 +269,7 @@
   <h2>Where the cloud still wins — and what to do about it</h2>
 
   <p>
-    Honesty clause: frontier cloud models are still stronger than anything you can run locally. For rare, heavy tasks — long multi-document reasoning, the hardest analysis, frontier-grade generation — the gap is real, and anyone telling you otherwise is selling something. The wrong conclusion is "therefore pay for cloud everything." The right conclusion is a hybrid: run the routine 80% locally where the economics and privacy are unbeatable, and route the exceptional 20% to a frontier model — opt-in, task by task, metered. You get frontier capability when it actually matters and stop renting it for the Tuesday-afternoon summary that a local model handles fine.
+    To be clear: frontier cloud models are still stronger than anything you can run locally. For rare, heavy tasks — long multi-document reasoning, the hardest analysis, frontier-grade generation — the gap is real. The wrong conclusion is "therefore pay for cloud everything." The right conclusion is a hybrid: run the routine 80% locally, where the cost and privacy advantages are largest, and route the exceptional 20% to a frontier model — opt-in, task by task, metered. You get frontier capability when it matters and stop paying for it on routine work a local model handles fine.
   </p>
 
   <h2>FAQ</h2>
