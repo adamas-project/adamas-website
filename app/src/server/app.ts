@@ -3,6 +3,7 @@ import type { AppContext } from './context.js';
 import { registerLedgerRoutes } from './routes/ledger.js';
 import { registerInboxRoutes } from './routes/inbox.js';
 import { registerAssetRoutes } from './routes/assets.js';
+import { registerBoundaryRoutes } from './routes/boundary.js';
 
 export function buildApp(ctx: AppContext): FastifyInstance {
   const app = Fastify({ logger: false });
@@ -14,6 +15,7 @@ export function buildApp(ctx: AppContext): FastifyInstance {
   registerLedgerRoutes(app, ctx);
   registerInboxRoutes(app, ctx);
   registerAssetRoutes(app, ctx);
+  registerBoundaryRoutes(app, ctx);
 
   return app;
 }

@@ -5,12 +5,21 @@ import { exportVault } from '../../ledger/export.js';
 import { LedgerError } from '../../ledger/ledger.js';
 import { ValidationError } from '../../schema/validate.js';
 import { DOMAINS, STATUSES, type Domain, type Status } from '../../schema/decision.schema.js';
+import { canSee, filterForRole, DEFAULT_ROLE } from '../../security/rbac.js';
+import type { FastifyRequest } from 'fastify';
 
 function asDomain(v: unknown): Domain | undefined {
   return typeof v === 'string' && (DOMAINS as readonly string[]).includes(v) ? (v as Domain) : undefined;
 }
 function asStatus(v: unknown): Status | undefined {
   return typeof v === 'string' && (STATUSES as readonly string[]).includes(v) ? (v as Status) : undefined;
+}
+
+// Role for role-based visibility: query ?role=, header x-adamas-role, else owner.
+function roleOf(req: FastifyRequest): string {
+  const q = (req.query as Record<string, string>)?.role;
+  const h = req.headers['x-adamas-role'];
+  return q || (typeof h === 'string' ? h : undefined) || DEFAULT_ROLE;
 }
 
 export function registerLedgerRoutes(app: FastifyInstance, ctx: AppContext): void {
@@ -31,13 +40,18 @@ export function registerLedgerRoutes(app: FastifyInstance, ctx: AppContext): voi
     const s = asStatus(q.status);
     if (d) filter.domain = d;
     if (s) filter.status = s;
-    return { decisions: ledger.list(filter) };
+    const role = roleOf(req);
+    return { role, decisions: filterForRole(ledger.list(filter), role) };
   });
 
   app.get('/api/decisions/:id', async (req, reply) => {
     const { id } = req.params as { id: string };
     const decision = ledger.get(id);
     if (!decision) return reply.code(404).send({ error: `No decision ${id}` });
+    // Role-based visibility: restricted-domain entries are hidden, not leaked.
+    if (!canSee(roleOf(req), decision.domain)) {
+      return reply.code(403).send({ error: `Not visible to role`, restricted: true });
+    }
     return { decision, neighbors: neighbors(ledger, id) };
   });
 
