@@ -1,6 +1,7 @@
 import Fastify, { type FastifyInstance } from 'fastify';
 import type { AppContext } from './context.js';
 import { registerLedgerRoutes } from './routes/ledger.js';
+import { registerInboxRoutes } from './routes/inbox.js';
 
 export function buildApp(ctx: AppContext): FastifyInstance {
   const app = Fastify({ logger: false });
@@ -10,6 +11,7 @@ export function buildApp(ctx: AppContext): FastifyInstance {
   app.get('/api/health', async () => ({ ok: true }));
 
   registerLedgerRoutes(app, ctx);
+  registerInboxRoutes(app, ctx);
 
   return app;
 }
