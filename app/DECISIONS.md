@@ -91,6 +91,29 @@ decisions.
 
 ---
 
+### PRD-006 — Hermes Ollama provider (local model behind the LLM interface)
+
+- **date:** 2026-06-15
+- **context:** The build shipped Hermes as a deterministic heuristic standing in
+  for a local model. Operators want Hermes backed by a real local model (Ollama)
+  without breaking the local-first guarantee or the offline test suite.
+- **decision:** Add `OllamaLLMProvider` implementing the existing `LLMProvider`
+  interface with `location: 'local'` (Ollama runs on the same machine). Provider
+  selection is env-driven (`ADAMAS_HERMES_PROVIDER=local|ollama`,
+  `ADAMAS_OLLAMA_URL`, `ADAMAS_OLLAMA_MODEL`). On any error or unusable output it
+  falls back to the heuristic extractor, so capture never hard-fails. The active
+  provider is reported at `/api/meta`. Output is normalized and schema-validated
+  before it can become a candidate; nothing is invented.
+- **owner:** { role: "engineering-lead" }
+- **tradeoffs:** ["A real model is non-deterministic, so it is not used in the
+  test suite (the provider is unit-tested with a mocked Ollama response and the
+  fallback path instead)", "Prompt/JSON contract may need tuning per model"]
+- **links:** ["PRD-003"]
+- **sources:** ["request:2026-06-15#run-locally-with-ollama"]
+- **status:** active
+
+---
+
 ### OPS-001 — Bake node_modules into the Docker image instead of `npm ci`
 
 - **date:** 2026-06-14

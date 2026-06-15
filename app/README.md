@@ -61,6 +61,37 @@ npm test
 npm run ci            # lint + typecheck + tests (the stage gate)
 ```
 
+## Hermes & a local Ollama model
+
+Hermes (the evaluation agent) is pluggable behind one interface. By default it
+uses a built-in deterministic heuristic that needs no model and runs fully
+offline. To back it with a **local [Ollama](https://ollama.com) model** instead
+(still on-device — nothing leaves the machine):
+
+```bash
+# 1. install + start Ollama, then pull a model
+ollama pull llama3.1
+
+# 2. point Hermes at it (env vars, or copy .env.example -> .env)
+export ADAMAS_HERMES_PROVIDER=ollama
+export ADAMAS_OLLAMA_URL=http://127.0.0.1:11434   # default
+export ADAMAS_OLLAMA_MODEL=llama3.1               # any model you've pulled
+npm start
+```
+
+Verify the active provider:
+
+```bash
+curl -s http://localhost:8787/api/meta | grep -o '"hermes":{[^}]*}'
+# => "hermes":{"provider":"ollama","location":"local","ollamaUrl":"...","model":"llama3.1"}
+```
+
+If Ollama is unreachable or returns unusable output, Hermes logs a warning and
+falls back to the built-in heuristic so capture never hard-fails offline. See
+`.env.example` for all configuration. In Docker, set `ADAMAS_OLLAMA_URL` to
+`http://host.docker.internal:11434` (the compose file already does, and adds the
+`host.docker.internal` host mapping).
+
 ## Deploy (containerized)
 
 ```bash

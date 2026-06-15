@@ -31,6 +31,13 @@ export function registerLedgerRoutes(app: FastifyInstance, ctx: AppContext): voi
     version: ledger.version,
     domains: DOMAINS,
     statuses: STATUSES,
+    hermes: {
+      provider: ctx.hermes.provider,
+      location: ctx.localProvider.location,
+      ...(ctx.hermes.provider === 'ollama'
+        ? { ollamaUrl: ctx.hermes.ollamaUrl, model: ctx.hermes.ollamaModel }
+        : {}),
+    },
   }));
 
   app.get('/api/decisions', async (req) => {
