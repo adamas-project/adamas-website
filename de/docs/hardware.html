@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Hardware-Anforderungen — ADAMAS Docs</title>
-  <meta name="description" content="Worauf ADAMAS läuft: empfohlene Mac-Mini-M4-Konfiguration, unterstützte Alternativen und realistische Betriebskosten.">
+  <meta name="description" content="Worauf ADAMAS läuft: der empfohlene Mac mini M4 plus größere AMD- und NVIDIA-Optionen, und realistische Betriebskosten.">
   <link rel="canonical" href="https://adamas-project.com/de/docs/hardware.html">
   <link rel="alternate" hreflang="en" href="https://adamas-project.com/docs/hardware.html">
   <link rel="alternate" hreflang="de" href="https://adamas-project.com/de/docs/hardware.html">
@@ -14,14 +14,14 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ADAMAS">
   <meta property="og:title" content="Hardware-Anforderungen — ADAMAS Docs">
-  <meta property="og:description" content="Worauf ADAMAS läuft: empfohlene Mac-Mini-M4-Konfiguration, unterstützte Alternativen und realistische Betriebskosten.">
+  <meta property="og:description" content="Worauf ADAMAS läuft: der empfohlene Mac mini M4 plus größere AMD- und NVIDIA-Optionen, und realistische Betriebskosten.">
   <meta property="og:url" content="https://adamas-project.com/de/docs/hardware.html">
   <meta property="og:image" content="https://adamas-project.com/og/og-default.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Hardware-Anforderungen — ADAMAS Docs">
-  <meta name="twitter:description" content="Worauf ADAMAS läuft: empfohlene Mac-Mini-M4-Konfiguration, unterstützte Alternativen und realistische Betriebskosten.">
+  <meta name="twitter:description" content="Worauf ADAMAS läuft: der empfohlene Mac mini M4 plus größere AMD- und NVIDIA-Optionen, und realistische Betriebskosten.">
   <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -167,21 +167,56 @@
         </nav>
         <article class="dc-art">
 
-<h2>Empfohlen: Mac Mini M4</h2>
-<table>
-  <thead><tr><th>Komponente</th><th>Empfehlung</th><th>Anmerkung</th></tr></thead>
-  <tbody>
-    <tr><td><b>Maschine</b></td><td>Mac Mini M4, 24–32 GB Unified Memory</td><td>499–699 $ einmalig; der Sweet Spot für Hermes im 24/7-Betrieb</td></tr>
-    <tr><td><b>Speicher</b></td><td>mindestens 512 GB intern</td><td>Das Ledger selbst ist winzig; Quellarchive wachsen mit der Historie</td></tr>
-    <tr><td><b>Backup</b></td><td>Externe SSD (Time Machine) oder Ihr vorhandenes NAS</td><td>Lokal, verschlüsselt — Ihr Backup, Ihre Schlüssel</td></tr>
-    <tr><td><b>Netzwerk</b></td><td>Kabelgebundenes Ethernet, Büro-LAN</td><td>Keine eingehenden Ports nötig; der Vault ist nicht zum Internet exponiert</td></tr>
-    <tr><td><b>Strom</b></td><td>ca. 2–3 $/Monat bei 24/7-Betrieb</td><td>Gemessener Idle-lastiger Zyklus, EU/US-Durchschnittstarife</td></tr>
-  </tbody>
-</table>
-<h2>Unterstützte Alternativen</h2>
-<p>MacBook Air/Pro (M-Serie) funktionieren, wenn die Maschine vor Ort und am Strom bleibt. x86-Maschinen der ThinkPad/Surface-Klasse werden mit angepassten lokalen Modellkonfigurationen unterstützt — rechnen Sie mit etwas langsamerer Auswertung. Die exakte Konfiguration bestätigen wir im Audit; Sie kaufen die Maschine, sie gehört Ihnen.</p>
-<h2>Die Hybrid-Option</h2>
-<p>Rund 80 % der täglichen Aufgaben laufen vollständig lokal. Aktivieren Sie die Opt-in-Hybrid-Route für seltene, rechenintensive Aufgaben, planen Sie bei typischem Volumen etwa 20 $/Monat für Cloud-API-Nutzung — macht typische Gesamtbetriebskosten von rund 23 $/Monat. Vergleichen Sie das mit den 200–459 $/Monat Cloud-KI-Ausgaben, die ersetzt werden (<a href="/calculator.html">rechnen Sie selbst</a>).</p>
+<section class="hardware-options">
+  <h2>Empfohlene Hardware</h2>
+  <p>
+    ADAMAS läuft vollständig auf einer Maschine, die Ihnen gehört. Es ist
+    hardware-flexibel: Alles, was das lokale Hermes-Modell betreiben und rund um
+    die Uhr eingeschaltet bleiben kann, funktioniert. Nachfolgend drei von uns
+    getestete Konfigurationen, vom leisen Standard bis zur Option für große
+    Modelle. Das sind Beispiele, keine Voraussetzungen.
+  </p>
+
+  <h3>Apple Mac mini (M4), 24–32&nbsp;GB — empfohlen für die meisten Teams</h3>
+  <ul>
+    <li>Leiseste und energieeffizienteste Option; nahezu lautlos, wenige Dollar Strom pro Monat.</li>
+    <li>Betreibt Hermes mühelos für Capture, Auswertung und Asset-Generierung in den von ADAMAS genutzten Modellgrößen.</li>
+    <li>Am einfachsten einzurichten und zu warten — keine Treiberverwaltung.</li>
+  </ul>
+
+  <h3>AMD Ryzen AI Max+ 395 Mini-PC (z. B. GMKtec EVO-X2), 128&nbsp;GB — mehr lokaler Spielraum</h3>
+  <ul>
+    <li>128&nbsp;GB Unified Memory lassen Hermes größere Modelle der 70B-Klasse vollständig auf dem Gerät betreiben — für Assets höherer Güte.</li>
+    <li>x86/Linux; integriert sich in dieselbe lokale Pipeline.</li>
+    <li>Etwas mehr Erstkonfiguration (während Ihres Builds erledigt); Lüfter unter Last hörbar, aber nicht störend.</li>
+  </ul>
+
+  <h3>NVIDIA DGX Spark (GB10), 128&nbsp;GB — optional, für CUDA-/NVIDIA-Umgebungen</h3>
+  <ul>
+    <li>128&nbsp;GB Unified Memory mit dem vollen CUDA-Stack; stark für Prototyping und On-Device-Fine-Tuning.</li>
+    <li>Premium-Preis; für die Kern-Arbeitslast von ADAMAS (Capture und Generierung) ist es mehr, als die meisten Teams brauchen, und die Token-Geschwindigkeit großer Modelle ist bandbreitenbegrenzt.</li>
+  </ul>
+
+  <p>
+    Alle drei betreiben ADAMAS vollständig offline, exponieren keine eingehenden
+    Ports und halten Ledger, Quellmaterial, Embeddings und generierte Assets auf
+    der Maschine. Optionale Hybrid-Cloud-Aufgaben bleiben Opt-in und werden
+    protokolliert.
+  </p>
+
+  <p class="hardware-disclaimer">
+    Die Hardware-Namen dienen ausschließlich als Beispiele für von uns getestete
+    Konfigurationen. Sie sind keine Voraussetzungen, und ADAMAS ist
+    hardware-flexibel. Apple und Mac mini sind Marken von Apple Inc.; NVIDIA und
+    DGX Spark sind Marken der NVIDIA Corporation; AMD und Ryzen sind Marken von
+    Advanced Micro Devices, Inc.; weitere Namen sind Eigentum ihrer jeweiligen
+    Inhaber. ADAMAS und die Falcon Intelligence Group stehen in keiner Verbindung
+    zu Apple, NVIDIA, AMD, GMKtec oder einem anderen Hardware-Hersteller und werden
+    von diesen weder unterstützt, gesponsert noch in Partnerschaft betrieben. Die
+    Leistung hängt von Konfiguration, Modell und Arbeitslast ab; Angaben sind
+    Richtwerte und nicht garantiert.
+  </p>
+</section>
 
         </article>
       </div>
