@@ -77,15 +77,20 @@
     <div class="field">
       <label class="l"><span>Local host (one-time hardware)</span></label>
       <select id="hw">
-        <option value="599">Apple Mac mini M4 (base, 16GB) — $599</option>
-        <option value="999" selected>Apple Mac mini M4 (32GB) — $999</option>
-        <option value="1900">AMD Ryzen AI Max+ 395 mini PC (128GB) — $1,900</option>
-        <option value="3500">NVIDIA DGX Spark (GB10, 128GB) — $3,500</option>
-        <option value="1300">MacBook Air M3 — $1,300</option>
-        <option value="2300">MacBook Pro 14" M4 Pro — $2,300</option>
-        <option value="2000">ThinkPad X1 Carbon — $2,000</option>
-        <option value="0">I already have a suitable machine — $0</option>
+        <optgroup label="Recommended (tested examples)">
+          <option value="599">Apple Mac mini M4 (base, 16GB) — ~$599</option>
+          <option value="999" selected>Apple Mac mini M4 (32GB) — ~$999</option>
+          <option value="1900">AMD Ryzen AI Max+ 395 mini PC, 128GB — ~$1,900</option>
+          <option value="3500">NVIDIA DGX Spark (GB10), 128GB — ~$3,500</option>
+        </optgroup>
+        <optgroup label="Other machines (not tested by us)">
+          <option value="1300">Apple MacBook Air M3 — ~$1,300</option>
+          <option value="2300">Apple MacBook Pro 14&quot; M4 Pro — ~$2,300</option>
+          <option value="2000">Windows/Linux laptop (e.g. ThinkPad) — ~$2,000</option>
+          <option value="0">I already have a suitable machine — $0</option>
+        </optgroup>
       </select>
+      <p class="meta" style="margin-top:8px">Hardware names and prices are illustrative examples for estimating only — not endorsements, requirements, or guarantees of suitability. ADAMAS is hardware-flexible; we confirm a suitable configuration during the audit.</p>
     </div>
     <div class="field">
       <label class="chk"><input type="checkbox" id="sub" checked> Keep one cloud subscription for genuinely hard tasks (~$20/mo)</label>
@@ -113,7 +118,7 @@
       <button class="btn btn-ghost" onclick="window.print()">Save as PDF</button>
     </div>
   </div>
-  <div class="ftr">ADAMAS by Falcon Intelligence Group · adamas-project.com · Estimates for context only; not financial advice or a guarantee of results. Prices, tiers, and third-party hardware costs may change.</div>
+  <div class="ftr">ADAMAS by Falcon Intelligence Group · adamas-project.com · Estimates for context only — not financial advice or a guarantee of cost, savings, or results. Prices, tiers, and third-party hardware costs are set by third parties and may change. Hardware names are examples, not endorsements or requirements; all trademarks belong to their respective owners and their mention implies no affiliation. See our <a href="/disclaimer.html" style="color:var(--accent)">Legal Notice</a>.</div>
 </div>
 
 <script>
