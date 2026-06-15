@@ -1,0 +1,8 @@
+dist
+web-dist
+coverage
+vault
+*.log
+.git
+.DS_Store
+test
