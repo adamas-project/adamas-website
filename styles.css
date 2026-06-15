@@ -707,3 +707,7 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 .cmp3-card p { font-size:14px; line-height:1.65; color:var(--muted); margin:0; }
 .cmp3-card em { color:var(--accent); font-style:normal; }
 @media (max-width:760px){ .cmp3{ grid-template-columns:1fr; } .cmp3-card:hover{transform:none;} }
+
+/* ============ hardware-options (docs hardware page) ============ */
+.dc-art .hardware-options h3 { font-family: var(--font-d); font-weight: 700; font-size: 16px; line-height: 1.3; letter-spacing: -0.01em; color: var(--text); margin: 24px 0 8px; }
+.dc-art .hardware-disclaimer { margin: 28px 0 0; padding-top: 16px; border-top: 1px solid var(--border-2); font-size: 12px; line-height: 1.6; color: var(--faint); }
