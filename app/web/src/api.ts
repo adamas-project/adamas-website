@@ -69,10 +69,4 @@ export const api = {
   pricing: (locale: string) => req<{ pricing: any }>(`/api/pricing?locale=${locale}`),
 };
 
-export const DOMAIN_COLOR: Record<Domain, string> = {
-  hiring: '#7aa2ff',
-  sales: '#ffd479',
-  product: '#7ee0c0',
-  finance: '#ff9aa2',
-  ops: '#c79bff',
-};
+// Domain colors live as CSS tokens; see tokens.ts (domainColor / domainVar).

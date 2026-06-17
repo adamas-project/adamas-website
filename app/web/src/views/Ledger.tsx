@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { api, DOMAIN_COLOR, type Decision, type Domain } from '../api';
+import { api, type Decision, type Domain } from '../api';
+import { domainVar } from '../tokens';
 
 const DOMAINS: Domain[] = ['hiring', 'sales', 'product', 'finance', 'ops'];
 
@@ -73,8 +74,8 @@ export function LedgerView({ role, onChanged }: { role: string; onChanged: () =>
               className={`card ${selected === d.id ? 'selected' : ''}`}
               onClick={() => setSelected(d.id)}
             >
-              <div className="id">
-                <span className="dot" style={{ background: DOMAIN_COLOR[d.domain] }} />
+              <div className="id" style={{ color: 'var(--faint)' }}>
+                <span className="dot" style={{ color: domainVar(d.domain), background: domainVar(d.domain) }} />
                 {d.id} · {d.status ?? 'active'}
               </div>
               <div className="title">{d.title}</div>
@@ -110,7 +111,7 @@ function Detail({
       <div className="id mono">{d.id}</div>
       <h2 style={{ marginTop: 4 }}>{d.title}</h2>
       <dl className="kv">
-        <dt>Domain</dt><dd><span className="dot" style={{ background: DOMAIN_COLOR[d.domain] }} />{d.domain}</dd>
+        <dt>Domain</dt><dd><span className="dot" style={{ color: domainVar(d.domain), background: domainVar(d.domain) }} />{d.domain}</dd>
         <dt>Date</dt><dd>{d.date}</dd>
         <dt>Status</dt><dd>{d.status ?? 'active'}{d.superseded_by ? <> → <button className="linkbtn" onClick={() => onNavigate(d.superseded_by!)}>{d.superseded_by}</button></> : null}</dd>
         <dt>Owner</dt><dd>{d.owner.role}{d.owner.name ? ` (${d.owner.name})` : ''}</dd>
