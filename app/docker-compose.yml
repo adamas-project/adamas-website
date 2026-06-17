@@ -13,7 +13,8 @@ services:
       ADAMAS_PORT: "8787"
       ADAMAS_VAULT: /data/vault
       # Seed the 14-decision sample ledger on first boot only (empty vault).
-      ADAMAS_SEED: "1"
+      # Set to "0" to boot to an empty vault (0 decisions).
+      ADAMAS_SEED: "0"
       # Optional simple auth for a shared LAN staging instance.
       ADAMAS_BASIC_USER: "${ADAMAS_BASIC_USER:-adamas}"
       ADAMAS_BASIC_PASS: "${ADAMAS_BASIC_PASS:-clarity-audit}"
