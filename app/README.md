@@ -95,14 +95,32 @@ falls back to the built-in heuristic so capture never hard-fails offline. See
 ## Deploy (containerized)
 
 ```bash
-cd app
-npm install            # populates node_modules (baked into the image — see DECISIONS PRD-005)
-docker compose up --build
+git clone https://github.com/adamas-project/adamas-website.git
+cd adamas-website/app
+docker compose up -d --build   # self-contained: installs + builds inside the image
 # ADAMAS on http://localhost:8787
 ```
 
-The compose file seeds the 14-decision sample ledger on first boot, mounts the
-vault as a host volume, and enables optional HTTP basic auth.
+The image is self-contained (it runs `npm ci` internally), so a fresh clone runs
+with no host-side setup. `-d` runs it detached (no attached terminal). The
+compose file mounts the vault as a host volume and enables optional HTTP basic
+auth. `ADAMAS_SEED` defaults to `0` (empty vault); set it to `1` in
+`docker-compose.yml` to seed the 14-decision sample on first boot.
+
+### Everyday use — no terminal required
+
+ADAMAS is local-first: it runs as a background service on your own machine. After
+the one-time `docker compose up -d --build`:
+
+- The container is set to `restart: unless-stopped`, and Docker Desktop →
+  **Settings → General → "Start Docker Desktop when you sign in"** makes ADAMAS
+  **auto-start on every boot**. Just open **http://localhost:8787** (bookmark it).
+- Start/Stop from the Docker Desktop GUI — no commands.
+- Or use the double-click launchers in `app/`: **`start.command`** (starts ADAMAS
+  and opens the browser) and **`stop.command`** (stops it; data preserved).
+- **`reset-vault.sh`** wipes the vault back to empty (asks you to type `DELETE`).
+
+The terminal is a one-time setup step, not a daily necessity.
 
 **Default staging credentials** (override via env in `docker-compose.yml`):
 

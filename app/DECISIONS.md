@@ -127,8 +127,29 @@ decisions.
 - **tradeoffs:** ["Requires `npm install` on the host before `docker build`",
   "Slightly larger build context — accepted for a local-first, single-machine
   deployment"]
-- **links:** ["PRD-001"]
+- **links:** ["PRD-001", "OPS-002"]
 - **sources:** ["build-log:2026-06-14#docker-npm-ci"]
+- **status:** superseded
+- **superseded_by:** OPS-002
+
+---
+
+### OPS-002 — Dockerfile installs with `npm ci` inside the image (self-contained)
+
+- **date:** 2026-06-17
+- **context:** Baking host `node_modules` meant a fresh `git clone` could not
+  `docker compose up --build` without first running `npm install` — a footgun for
+  non-technical operators, who hit `COPY node_modules` build failures. Real
+  machines run `npm ci` in Docker fine (only the constrained build sandbox crashed).
+- **decision:** The build stage runs `npm ci` then `npm prune --omit=dev`; the
+  runtime stage copies the pruned `node_modules`. `node_modules` is back in
+  `.dockerignore`. A fresh clone now runs with a single `docker compose up --build`
+  and no host-side setup.
+- **owner:** { role: "engineering-lead" }
+- **tradeoffs:** ["The Docker `npm ci` step cannot be exercised in the original
+  build sandbox (npm crashes there); verified on real machines instead"]
+- **links:** ["PRD-001", "OPS-001"]
+- **sources:** ["support:2026-06-17#fresh-clone-just-works"]
 - **status:** active
 
 ---

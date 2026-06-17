@@ -1,17 +1,18 @@
 # syntax=docker/dockerfile:1
 
 # ---- Build stage: compile the server and bundle the web client ----
-# node_modules is provided from the build context (installed with `npm install`
-# on the host) to avoid running npm inside the build sandbox. `npm ci` works in
-# normal CI environments; swap the COPY for `RUN npm ci` there if preferred.
+# Self-contained: a fresh `git clone` + `docker compose up --build` just works,
+# no host-side `npm install` required.
 FROM node:22-bookworm-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
-COPY node_modules ./node_modules
+RUN npm ci
 COPY tsconfig.json tsconfig.web.json vite.config.ts ./
 COPY src ./src
 COPY web ./web
 RUN npm run build
+# Drop dev dependencies so the runtime image only carries what it needs.
+RUN npm prune --omit=dev
 
 # ---- Runtime stage ----
 FROM node:22-bookworm-slim AS runtime
