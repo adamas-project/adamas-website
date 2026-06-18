@@ -55,13 +55,23 @@ function inferOwnerRole(text: string, domain: Domain): { role: string; name?: st
   return { role: fallback[domain] };
 }
 
+/**
+ * Normalize a list of dissent/role strings to role slugs, dropping explanatory
+ * clauses (e.g. "founder, who thinks it slows us down" -> ["founder"]). Used by
+ * both the heuristic and the Ollama provider so dissent stays roles-only.
+ */
+export function cleanRoleList(roles: string[]): string[] {
+  return roles
+    .flatMap((r) => String(r).split(','))
+    .map((r) => r.trim().replace(/\s+/g, '-').toLowerCase())
+    .filter(Boolean)
+    .filter((r) => !/^(who|which|that|because|since|as|and|but)\b/.test(r) && r.split('-').length <= 4);
+}
+
 function inferDissent(text: string): string[] {
   const m = /dissent(?:ed by)?\s*[:-]\s*([a-z][a-z0-9 ,/-]+)/i.exec(text);
   if (!m || !m[1]) return [];
-  return m[1]
-    .split(/[,/]/)
-    .map((r) => r.trim().replace(/\s+/g, '-').toLowerCase())
-    .filter(Boolean);
+  return cleanRoleList(m[1].split(/[,/]/));
 }
 
 function toTitle(decisionSentence: string): string {

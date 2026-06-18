@@ -1,5 +1,5 @@
 import type { Candidate, CandidateDraft, LLMProvider, SourceDocument } from './provider.js';
-import { runHeuristicExtraction } from './extract.js';
+import { runHeuristicExtraction, cleanRoleList } from './extract.js';
 import { DOMAINS, type Domain } from '../schema/decision.schema.js';
 
 // OllamaLLMProvider — Hermes backed by a local Ollama model. Ollama runs on the
@@ -21,15 +21,21 @@ interface OllamaDraft {
 
 const PROMPT_INTRO = [
   'You are Hermes, the evaluation agent for ADAMAS, a decision ledger.',
-  'Extract the concrete BUSINESS DECISIONS from the document below.',
-  'For each decision capture: the exact choice made, the situation/why (context),',
-  'the owner ROLE (never a person name), any recorded dissent (roles), and trade-offs.',
-  'Return STRICT JSON only, shape:',
-  '{"decisions":[{"domain":"hiring|sales|product|finance|ops","title":"<=120 chars, the choice made",',
-  '"decision":"the exact, falsifiable choice","context":"the why","owner_role":"a-role-not-a-name",',
-  '"dissent":["role"],"tradeoffs":["..."]}]}',
-  'If the document contains no decision, return {"decisions":[]}. Output JSON only, no prose.',
-].join(' ');
+  'Read the document and extract the concrete BUSINESS DECISIONS that were made.',
+  'Return STRICT JSON only — no prose, no markdown — in exactly this shape:',
+  '{"decisions":[{"domain":"...","title":"...","decision":"...","context":"...","owner_role":"...","dissent":["..."],"tradeoffs":["..."]}]}',
+  'Rules:',
+  '- domain MUST be exactly one of: hiring, sales, product, finance, ops. Choose by what the decision is about, matching the owner\'s function: head of ops/operations -> ops; cfo/finance -> finance; head of sales/revenue -> sales; head of engineering/product/delivery -> product; hiring/people/recruiting -> hiring.',
+  '- title: <=120 chars, the choice made, with no leading "We decided to".',
+  '- decision: the exact, falsifiable choice.',
+  '- context: the situation / why.',
+  '- owner_role: a ROLE, never a person name (e.g. "head-of-ops").',
+  '- dissent: an array of ROLE names ONLY, e.g. ["cfo"]. Never include explanations, sentences, or "who ..." clauses. If none, use [].',
+  '- tradeoffs: short phrases. If none, use [].',
+  'Example input: "Quality slipped when we ran five builds at once. We decided to cap work-in-progress at three concurrent builds. Owner: head of ops. Dissent: head of sales, who wants more throughput."',
+  'Example output: {"decisions":[{"domain":"ops","title":"Cap work-in-progress at three concurrent builds","decision":"Cap concurrent builds at three; a fourth waits in a queue.","context":"Quality slipped when running five builds at once.","owner_role":"head-of-ops","dissent":["head-of-sales"],"tradeoffs":["lower throughput"]}]}',
+  'If the document contains no decision, return {"decisions":[]}.',
+].join('\n');
 
 function coerceDomain(value: string | undefined, fallbackText: string): Domain {
   const v = (value ?? '').trim().toLowerCase();
@@ -50,9 +56,7 @@ function normalize(raw: OllamaDraft, doc: SourceDocument): CandidateDraft | null
   if (!decision || !title) return null; // unusable — skip rather than invent
 
   const role = (raw.owner_role ?? '').trim().replace(/\s+/g, '-').toLowerCase();
-  const dissent = (raw.dissent ?? [])
-    .map((r) => String(r).trim().replace(/\s+/g, '-').toLowerCase())
-    .filter(Boolean);
+  const dissent = cleanRoleList(raw.dissent ?? []);
   const tradeoffs = (raw.tradeoffs ?? []).map((t) => String(t).trim()).filter(Boolean);
 
   const draft: CandidateDraft = {
