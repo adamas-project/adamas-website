@@ -119,6 +119,9 @@ the one-time `docker compose up -d --build`:
 - Or use the double-click launchers in `app/`: **`start.command`** (starts ADAMAS
   and opens the browser) and **`stop.command`** (stops it; data preserved).
 - **`reset-vault.sh`** wipes the vault back to empty (asks you to type `DELETE`).
+- **Native macOS app:** double-click `app/desktop/make-app.command` once to build
+  **`ADAMAS.app`** (with the ADAMAS logo icon) on your Desktop — then launch ADAMAS
+  from the Dock/Launchpad like any app. See `app/desktop/README.md`.
 
 The terminal is a one-time setup step, not a daily necessity.
 
