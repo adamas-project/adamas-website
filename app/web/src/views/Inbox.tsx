@@ -1,10 +1,21 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 
+const KINDS = ['doc', 'meeting', 'email', 'chat'] as const;
+const DOMAINS = ['hiring', 'sales', 'product', 'finance', 'ops'] as const;
+
 export function InboxView({ onChanged }: { onChanged: () => void }) {
   const [candidates, setCandidates] = useState<any[]>([]);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
+
+  // "Paste your own note" form state.
+  const today = new Date().toISOString().slice(0, 10);
+  const [noteText, setNoteText] = useState('');
+  const [noteTitle, setNoteTitle] = useState('');
+  const [noteKind, setNoteKind] = useState<(typeof KINDS)[number]>('meeting');
+  const [noteDate, setNoteDate] = useState(today);
+  const [noteDomain, setNoteDomain] = useState('');
 
   async function load() {
     setCandidates((await api.inbox('pending')).candidates);
@@ -13,12 +24,42 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
     void load();
   }, []);
 
-  async function ingest() {
+  async function ingestNote() {
+    if (!noteText.trim()) return;
+    setBusy(true);
+    setMsg('');
+    try {
+      const ref = `paste:${noteDate}#${Math.random().toString(36).slice(2, 8)}`;
+      const doc: Record<string, unknown> = {
+        ref,
+        kind: noteKind,
+        date: noteDate,
+        title: noteTitle.trim() || noteText.trim().split('\n')[0]!.slice(0, 80) || 'Pasted note',
+        text: noteText.trim(),
+      };
+      if (noteDomain) doc.domainHint = noteDomain;
+      const r = await api.ingestSources([doc]);
+      setMsg(
+        r.added > 0
+          ? `Hermes found ${r.added} candidate decision(s) in your note — review them below.`
+          : 'Hermes found no clear decision in that note. Try including the choice that was made (e.g. "We decided to…").',
+      );
+      if (r.added > 0) setNoteText('');
+      await load();
+      onChanged();
+    } catch (e) {
+      setMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function ingestSamples() {
     setBusy(true);
     setMsg('');
     try {
       const r = await api.ingest();
-      setMsg(`Hermes surfaced ${r.added} new candidate(s) from local sources.`);
+      setMsg(`Hermes surfaced ${r.added} new candidate(s) from the built-in sample notes.`);
       await load();
       onChanged();
     } finally {
@@ -41,16 +82,50 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
     <div className="panel">
       <h2>Capture Inbox</h2>
       <p className="muted">
-        Candidate decisions surfaced by Hermes from ingested sources. Nothing enters the ledger until you confirm it.
+        Paste a real meeting note, email, or memo. Hermes (your local model) reads it and proposes candidate
+        decisions. Nothing enters the ledger until you confirm it — and nothing leaves your machine.
       </p>
-      <div className="toolbar">
-        <button className="primary" onClick={ingest} disabled={busy}>
-          {busy ? 'Running Hermes…' : 'Run Hermes on local sources'}
-        </button>
-        {msg && <span className="ok">{msg}</span>}
+
+      <div className="section-title">Capture from your own note</div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <textarea
+          rows={6}
+          style={{ width: '100%', resize: 'vertical', fontFamily: 'var(--font-mono)', fontSize: 13 }}
+          placeholder={'Paste your note here. e.g.\n"In the Q3 review we decided to drop the hourly rate card and quote fixed-scope packages. Owner: head of sales. The trade-off is more estimation risk on us."'}
+          value={noteText}
+          onChange={(e) => setNoteText(e.target.value)}
+        />
+        <div className="toolbar" style={{ margin: 0 }}>
+          <input
+            style={{ flex: 1, minWidth: 180 }}
+            placeholder="Title (optional)"
+            value={noteTitle}
+            onChange={(e) => setNoteTitle(e.target.value)}
+          />
+          <select value={noteKind} onChange={(e) => setNoteKind(e.target.value as (typeof KINDS)[number])} aria-label="Source kind">
+            {KINDS.map((k) => <option key={k} value={k}>{k}</option>)}
+          </select>
+          <input type="date" value={noteDate} onChange={(e) => setNoteDate(e.target.value)} aria-label="Decision date" />
+          <select value={noteDomain} onChange={(e) => setNoteDomain(e.target.value)} aria-label="Domain hint">
+            <option value="">auto-detect domain</option>
+            {DOMAINS.map((d) => <option key={d} value={d}>{d}</option>)}
+          </select>
+          <button className="primary" onClick={ingestNote} disabled={busy || !noteText.trim()}>
+            {busy ? 'Reading…' : 'Extract decisions with Hermes'}
+          </button>
+        </div>
+        {msg && <div className="notice ok">{msg}</div>}
+        <div>
+          <button className="ghost" onClick={ingestSamples} disabled={busy}>
+            Or try the built-in sample notes
+          </button>
+        </div>
       </div>
 
-      {candidates.length === 0 && <p className="muted">No pending candidates. Run Hermes to surface some.</p>}
+      <div className="section-title">Pending candidates {candidates.length > 0 ? `(${candidates.length})` : ''}</div>
+      {candidates.length === 0 && (
+        <p className="muted">No pending candidates yet. Paste a note above and let Hermes read it.</p>
+      )}
 
       <div className="list" style={{ maxHeight: 'none' }}>
         {candidates.map((c) => (

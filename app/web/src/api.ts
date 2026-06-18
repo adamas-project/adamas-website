@@ -50,6 +50,11 @@ export const api = {
 
   inbox: (status = 'pending') => req<{ candidates: any[]; pending: number }>(`/api/inbox?status=${status}`),
   ingest: () => req<{ added: number; pending: number }>('/api/inbox/ingest', { method: 'POST', body: '{}' }),
+  ingestSources: (sources: any[]) =>
+    req<{ added: number; candidates: any[]; pending: number }>('/api/inbox/ingest', {
+      method: 'POST',
+      body: JSON.stringify({ sources }),
+    }),
   confirm: (id: string, overrides: any = {}) => req(`/api/inbox/${id}/confirm`, { method: 'POST', body: JSON.stringify(overrides) }),
   dismiss: (id: string) => req(`/api/inbox/${id}/dismiss`, { method: 'POST', body: '{}' }),
 
