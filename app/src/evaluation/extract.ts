@@ -85,10 +85,28 @@ function toTitle(decisionSentence: string): string {
   return t || 'Recorded decision';
 }
 
+/**
+ * Map an owner role to the business domain it belongs to. Used to file a
+ * decision by the owner's function (head-of-ops -> ops, cfo -> finance, …),
+ * which is far more reliable than a small model's domain guess. Returns
+ * undefined for generic roles (e.g. "founder"), so callers fall back.
+ */
+export function domainFromRole(role: string): Domain | undefined {
+  const r = role.toLowerCase();
+  if (/(^|[^a-z])(ops|operation|operations|logistics|supply|production|manufactur)/.test(r)) return 'ops';
+  if (/(cfo|finance|financial|controller|accounting|treasur|fp&a)/.test(r)) return 'finance';
+  if (/(sales|revenue|commercial|account-exec|business-development|^bd$|go-to-market|gtm)/.test(r)) return 'sales';
+  if (/(engineer|engineering|product|cto|^tech|technical|delivery|r&d|design)/.test(r)) return 'product';
+  if (/(hir|recruit|people|^hr$|talent|staffing)/.test(r)) return 'hiring';
+  return undefined;
+}
+
 export function runHeuristicExtraction(doc: SourceDocument, providerId: string): Omit<Candidate, 'candidateId'>[] {
   const sentences = splitSentences(doc.text);
-  const domain = inferDomain(doc.text, doc.domainHint);
-  const owner = inferOwnerRole(doc.text, domain);
+  const prelim = inferDomain(doc.text, doc.domainHint);
+  const owner = inferOwnerRole(doc.text, prelim);
+  // Prefer an explicit hint, then the owner's function, then keyword inference.
+  const domain = doc.domainHint ?? domainFromRole(owner.role) ?? prelim;
   const dissent = inferDissent(doc.text);
 
   const out: Omit<Candidate, 'candidateId'>[] = [];

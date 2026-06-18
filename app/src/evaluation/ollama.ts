@@ -1,5 +1,5 @@
 import type { Candidate, CandidateDraft, LLMProvider, SourceDocument } from './provider.js';
-import { runHeuristicExtraction, cleanRoleList } from './extract.js';
+import { runHeuristicExtraction, cleanRoleList, domainFromRole } from './extract.js';
 import { DOMAINS, type Domain } from '../schema/decision.schema.js';
 
 // OllamaLLMProvider — Hermes backed by a local Ollama model. Ollama runs on the
@@ -60,7 +60,8 @@ function normalize(raw: OllamaDraft, doc: SourceDocument): CandidateDraft | null
   const tradeoffs = (raw.tradeoffs ?? []).map((t) => String(t).trim()).filter(Boolean);
 
   const draft: CandidateDraft = {
-    domain: coerceDomain(raw.domain, `${doc.text} ${title} ${decision}`),
+    // File by the owner's function first (reliable), then a hint, then the model.
+    domain: doc.domainHint ?? domainFromRole(role) ?? coerceDomain(raw.domain, `${doc.text} ${title} ${decision}`),
     date: doc.date,
     title: clampTitle(title),
     context: (raw.context ?? '').trim() || doc.title || 'Captured from source; context to be confirmed.',

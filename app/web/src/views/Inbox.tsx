@@ -8,6 +8,7 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
   const [candidates, setCandidates] = useState<any[]>([]);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
+  const [engine, setEngine] = useState('');
 
   // "Paste your own note" form state.
   const today = new Date().toISOString().slice(0, 10);
@@ -22,6 +23,13 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
   }
   useEffect(() => {
     void load();
+    api
+      .meta()
+      .then((m: any) => {
+        const h = m.hermes;
+        setEngine(h?.provider === 'ollama' ? `ollama · ${h.model}` : 'built-in (offline)');
+      })
+      .catch(() => setEngine(''));
   }, []);
 
   async function ingestNote() {
@@ -80,8 +88,11 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
 
   return (
     <div className="panel">
-      <h2>Capture Inbox</h2>
-      <p className="muted">
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <h2 style={{ margin: 0, flex: 1 }}>Capture Inbox</h2>
+        {engine && <span className="badge gen" title="Active Hermes evaluation engine">Hermes: {engine}</span>}
+      </div>
+      <p className="muted" style={{ marginTop: 10 }}>
         Paste a real meeting note, email, or memo. Hermes (your local model) reads it and proposes candidate
         decisions. Nothing enters the ledger until you confirm it — and nothing leaves your machine.
       </p>
