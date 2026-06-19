@@ -10,6 +10,7 @@ import { registerInboxRoutes } from './routes/inbox.js';
 import { registerAssetRoutes } from './routes/assets.js';
 import { registerBoundaryRoutes } from './routes/boundary.js';
 import { registerPricingRoutes } from './routes/pricing.js';
+import { registerConnectorRoutes } from './routes/connectors.js';
 
 export function buildApp(ctx: AppContext): FastifyInstance {
   const app = Fastify({ logger: false, bodyLimit: 5 * 1024 * 1024 });
@@ -41,6 +42,7 @@ export function buildApp(ctx: AppContext): FastifyInstance {
   registerAssetRoutes(app, ctx);
   registerBoundaryRoutes(app, ctx);
   registerPricingRoutes(app);
+  registerConnectorRoutes(app, ctx);
 
   return app;
 }

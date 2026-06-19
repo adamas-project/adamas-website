@@ -24,11 +24,16 @@ services:
       ADAMAS_HERMES_PROVIDER: "${ADAMAS_HERMES_PROVIDER:-local}"
       ADAMAS_OLLAMA_URL: "${ADAMAS_OLLAMA_URL:-http://host.docker.internal:11434}"
       ADAMAS_OLLAMA_MODEL: "${ADAMAS_OLLAMA_MODEL:-llama3.1}"
+      # Read-only connectors: the local-folder connector reads source material
+      # from here. Drop notes/.eml files into ./sources on the host.
+      ADAMAS_SOURCES_DIR: /data/sources
     # Let the container reach an Ollama server running on the host machine.
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
       - adamas-vault:/data/vault
+      # Host folder ADAMAS reads source material from (read-only mount).
+      - ./sources:/data/sources:ro
     restart: unless-stopped
 
 volumes:
