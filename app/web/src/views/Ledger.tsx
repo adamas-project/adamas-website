@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { api, type Decision, type Domain } from '../api';
 import { domainVar } from '../tokens';
 import { DecisionDetail } from '../components/DecisionDetail';
+import { NewDecisionForm } from '../components/NewDecisionForm';
 
 const DOMAINS: Domain[] = ['hiring', 'sales', 'product', 'finance', 'ops'];
 
@@ -12,6 +13,7 @@ export function LedgerView({ role, onChanged }: { role: string; onChanged: () =>
   const [selected, setSelected] = useState<string | null>(null);
   const [detail, setDetail] = useState<{ decision: Decision; neighbors: string[] } | null>(null);
   const [error, setError] = useState('');
+  const [creating, setCreating] = useState(false);
 
   async function load() {
     setError('');
@@ -54,8 +56,11 @@ export function LedgerView({ role, onChanged }: { role: string; onChanged: () =>
   return (
     <div className="layout">
       <div className="panel">
-        <h2>The Ledger</h2>
-        <div className="toolbar">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <h2 style={{ margin: 0, flex: 1 }}>The Ledger</h2>
+          <button className="primary" onClick={() => setCreating(true)}>+ New decision</button>
+        </div>
+        <div className="toolbar" style={{ marginTop: 12 }}>
           <select value={domain} onChange={(e) => setDomain(e.target.value)} aria-label="Filter by domain">
             <option value="">All domains</option>
             {DOMAINS.map((d) => <option key={d} value={d}>{d}</option>)}
@@ -87,7 +92,17 @@ export function LedgerView({ role, onChanged }: { role: string; onChanged: () =>
       </div>
 
       <div className="panel">
-        {detail ? (
+        {creating ? (
+          <NewDecisionForm
+            onCancel={() => setCreating(false)}
+            onCreated={(id) => {
+              setCreating(false);
+              setSelected(id);
+              onChanged();
+              void load();
+            }}
+          />
+        ) : detail ? (
           <>
             <DecisionDetail data={detail} onNavigate={setSelected} onSupersede={supersede} />
             <div style={{ marginTop: 16 }}>
@@ -95,7 +110,7 @@ export function LedgerView({ role, onChanged }: { role: string; onChanged: () =>
             </div>
           </>
         ) : (
-          <p className="muted">Select a decision.</p>
+          <p className="muted">Select a decision, or add one with “+ New decision”.</p>
         )}
       </div>
     </div>

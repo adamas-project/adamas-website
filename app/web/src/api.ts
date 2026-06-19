@@ -47,6 +47,8 @@ export const api = {
   supersede: (id: string, successor: any) =>
     req(`/api/decisions/${id}/supersede`, { method: 'POST', body: JSON.stringify(typeof successor === 'string' ? { successorId: successor } : { successor }) }),
   update: (id: string, patch: any) => req(`/api/decisions/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
+  createDecision: (payload: any) =>
+    req<{ decision: Decision }>('/api/decisions', { method: 'POST', body: JSON.stringify(payload) }),
 
   inbox: (status = 'pending') => req<{ candidates: any[]; pending: number }>(`/api/inbox?status=${status}`),
   ingest: () => req<{ added: number; pending: number }>('/api/inbox/ingest', { method: 'POST', body: '{}' }),
