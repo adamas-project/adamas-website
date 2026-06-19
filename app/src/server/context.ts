@@ -9,8 +9,10 @@ import { AssetEngine } from '../assets/engine.js';
 import { BoundaryService } from '../boundary/boundary.js';
 import { ConnectorManager } from '../ingestion/manager.js';
 import { FilesystemConnector } from '../ingestion/filesystem.js';
+import { ImapConnector } from '../ingestion/imap.js';
+import type { Connector } from '../ingestion/connector.js';
 import { vaultPaths } from '../ledger/storage.js';
-import { hermesConfig, resolveSourcesDir, type HermesConfig } from '../config/env.js';
+import { hermesConfig, imapConfig, resolveSourcesDir, type HermesConfig } from '../config/env.js';
 
 // The application context wires together the services each route handler needs.
 export interface AppContext {
@@ -47,10 +49,12 @@ export async function createContext(root: string): Promise<AppContext> {
     cloudProvider,
   );
 
-  // Read-only ingestion connectors (inbound only). Local folder by default.
-  const connectors = await ConnectorManager.open(path.join(root, 'connectors.json'), [
-    new FilesystemConnector(resolveSourcesDir(root)),
-  ]);
+  // Read-only ingestion connectors (inbound only). Local folder always on; the
+  // IMAP email connector is opt-in (active only when IMAP env vars are set).
+  const connectorList: Connector[] = [new FilesystemConnector(resolveSourcesDir(root))];
+  const imap = imapConfig();
+  if (imap) connectorList.push(new ImapConnector(imap));
+  const connectors = await ConnectorManager.open(path.join(root, 'connectors.json'), connectorList);
 
   return { root, ledger, inbox, localProvider, cloudProvider, assets, boundary, connectors, hermes };
 }

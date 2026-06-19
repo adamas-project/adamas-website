@@ -24,6 +24,34 @@ export function resolveSourcesDir(root: string): string {
   return path.join(root, 'sources');
 }
 
+export interface ImapConfig {
+  host: string;
+  port: number;
+  user: string;
+  pass: string;
+  tls: boolean;
+  mailbox: string;
+  /** Max messages to pull per run (most recent first). */
+  max: number;
+}
+
+/** Read IMAP connector config from env; null when not configured (opt-in). */
+export function imapConfig(): ImapConfig | null {
+  const host = process.env.ADAMAS_IMAP_HOST?.trim();
+  const user = process.env.ADAMAS_IMAP_USER?.trim();
+  const pass = process.env.ADAMAS_IMAP_PASS;
+  if (!host || !user || !pass) return null;
+  return {
+    host,
+    port: Number(process.env.ADAMAS_IMAP_PORT ?? 993),
+    user,
+    pass,
+    tls: (process.env.ADAMAS_IMAP_TLS ?? 'true').toLowerCase() !== 'false',
+    mailbox: process.env.ADAMAS_IMAP_MAILBOX?.trim() || 'INBOX',
+    max: Number(process.env.ADAMAS_IMAP_MAX ?? 25),
+  };
+}
+
 export type HermesProviderKind = 'local' | 'ollama';
 
 export interface HermesConfig {
