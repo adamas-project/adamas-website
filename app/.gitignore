@@ -1,0 +1,13 @@
+node_modules/
+dist/
+web-dist/
+coverage/
+*.log
+
+# Runtime vault data (canonical data lives on the operator's machine, never in git)
+vault/
+!vault/.gitkeep
+
+# Local env
+.env
+.env.local
