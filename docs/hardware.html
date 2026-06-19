@@ -181,6 +181,7 @@
     <li>Quietest and most power-efficient option; near-silent, a few dollars a month in electricity.</li>
     <li>Runs Hermes comfortably for capture, evaluation, and asset generation at the model sizes ADAMAS uses.</li>
     <li>Simplest to set up and maintain — no driver management.</li>
+    <li><b>Approx. 2026 price:</b> ~$600–$1,000, depending on memory and storage.</li>
   </ul>
 
   <h3>AMD Ryzen AI Max+ 395 mini PC (e.g. GMKtec EVO-X2), 128&nbsp;GB — more local headroom</h3>
@@ -188,18 +189,22 @@
     <li>128&nbsp;GB of unified memory lets Hermes run larger 70B-class models entirely on-device for higher-fidelity assets.</li>
     <li>x86/Linux; integrates with the same local pipeline.</li>
     <li>Slightly more initial configuration (handled during your build); fan audible but not intrusive under load.</li>
+    <li><b>Approx. 2026 price:</b> ~$1,800–$2,000.</li>
   </ul>
 
   <h3>NVIDIA DGX Spark (GB10), 128&nbsp;GB — optional, for CUDA/NVIDIA environments</h3>
   <ul>
     <li>128&nbsp;GB unified memory with the full CUDA stack; strong for prototyping and on-device fine-tuning.</li>
     <li>Premium price; for ADAMAS's core capture-and-generate workload it is more than most teams need, and large-model token speed is bandwidth-limited.</li>
+    <li><b>Approx. 2026 price:</b> ~$3,000–$4,000.</li>
   </ul>
 
   <p>
     All three run ADAMAS fully offline, expose no inbound ports, and keep the
     ledger, source material, embeddings, and generated assets on the machine.
-    Optional hybrid-cloud tasks remain opt-in and are logged.
+    Optional hybrid-cloud tasks remain opt-in and are logged. A typical
+    local-first setup replaces roughly $200–459/month in cloud-AI subscriptions
+    (<a href="/calculator.html">run your own numbers</a>).
   </p>
 
   <p class="hardware-disclaimer">
@@ -226,8 +231,9 @@
       <div class="ftr-legal">
         <p>ADAMAS (All Decisions And Memory Archive System) is a product of Falcon Intelligence Group LLC, built on the Hermes AI agent. Hermes is a third-party tool and the property of its respective owner.</p>
         <p>Local-first by design: your vault and decision ledger run on hardware you own. ADAMAS does not send your company's knowledge to third-party clouds — optional hybrid cloud routing is used only for tasks you explicitly approve.</p>
-        <p>Pricing shown is indicative and may vary with scope. The Clarity Audit fee is credited toward your build if you proceed. Client hardware (e.g., Mac Mini M4) is purchased and owned by the client.</p>
+        <p>Pricing shown is indicative and may vary with scope. The Clarity Audit fee is credited toward your build if you proceed. Client hardware is purchased and owned by the client. The named devices are examples, not requirements — ADAMAS is hardware-flexible; as a 2026 reference, an Apple Mac mini M4 runs roughly $600–$1,000 and 128 GB AMD Ryzen AI Max+ or NVIDIA DGX Spark machines roughly $1,800–$4,000. A typical local-first setup replaces about $200–459/month in cloud-AI subscriptions.</p>
         <p>Market and industry figures cited on this site are drawn from third-party research and are provided for context only; they are not a guarantee of results.</p>
+        <p>ADAMAS is offered in early access. Nothing on this site is legal, financial, tax, or investment advice; AI-assisted outputs require human review; calculators and figures are illustrative estimates, not guarantees. Product, hardware, and integration names are trademarks of their respective owners, used for reference only and implying no affiliation or endorsement. See our <a href="/disclaimer.html">Legal Notice &amp; Disclaimers</a>.</p>
       </div>
       <hr class="ftr-rule">
       <div class="ftr-cols">
@@ -292,6 +298,7 @@
           <a href="/terms.html">Terms of Use</a>
           <a href="/impressum.html">Impressum</a>
           <a href="/contact.html">Contact</a>
+          <a href="/disclaimer.html">Legal Notice</a>
         </nav>
         <span class="ftr-region">Falcon Intelligence Group LLC · Delaware, USA</span>
       </div>

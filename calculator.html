@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<title>Local-First AI Cost Calculator — ADAMAS</title>
-<meta name="description" content="See what you'd save running AI locally on a Mac Mini vs cloud subscriptions — monthly savings, payback period, and 3-year net.">
+<title>Local-First AI Cost &amp; Amortization Calculator — ADAMAS</title>
+<meta name="description" content="See what you'd save running AI locally vs cloud subscriptions — monthly savings, plus an amortization view of how fast the AI bill you already pay covers the one-time ADAMAS build.">
 <style>
   @font-face{font-family:'D-DIN';src:url('fonts/D-DIN.woff2') format('woff2'),url('fonts/D-DIN.woff') format('woff');font-weight:400;font-style:normal;font-display:swap}
   @font-face{font-family:'D-DIN';src:url('fonts/D-DIN-Bold.woff2') format('woff2'),url('fonts/D-DIN-Bold.woff') format('woff');font-weight:700;font-style:normal;font-display:swap}
@@ -57,33 +57,58 @@
 <div class="wrap">
   <a class="back" href="index.html">← ADAMAS</a>
   <div class="eyebrow">● Free Resource · Cost calculator</div>
-  <h1>Local-First AI Cost Calculator</h1>
-  <p class="sub">Cloud-AI bills climb every month. A local machine runs ~80% of daily workflows for the price of electricity. See your number.</p>
+  <h1>Local-First AI Cost &amp; Amortization Calculator</h1>
+  <p class="sub">Cloud-AI subscriptions are metered and scale with every seat and token. ADAMAS swaps them for a fixed monthly subscription on a machine you own — plus a one-time build. The more you spend on cloud subscriptions today, the faster that build pays for itself.</p>
   <p class="meta">Estimates only, in USD. Nothing is sent anywhere.</p>
 
   <div class="card">
     <div class="field">
-      <label class="l"><span>Your current monthly cloud-AI spend</span><span class="val" id="spendV">$350</span></label>
-      <input type="range" id="spend" min="0" max="2000" step="10" value="350">
+      <label class="l"><span>Your current monthly AI spend (all subscriptions combined)</span><span class="val" id="spendV">$1,000</span></label>
+      <input type="range" id="spend" min="0" max="3000" step="10" value="1000">
+    </div>
+    <div class="field">
+      <label class="l"><span>Your ADAMAS Intelligence tier (by team size)</span></label>
+      <select id="tier">
+        <option value="300">Foundation — $300/mo (≈5–15 staff)</option>
+        <option value="600" selected>Growth — $600/mo (≈16–35 staff)</option>
+        <option value="1200">Scale — $1,200/mo (≈36–50+ staff)</option>
+      </select>
     </div>
     <div class="field">
       <label class="l"><span>Local host (one-time hardware)</span></label>
       <select id="hw">
-        <option value="499">Mac Mini M4 (base, 16GB) — $499</option>
-        <option value="699" selected>Mac Mini M4 (32GB) — $699</option>
-        <option value="1300">MacBook Air M3 — $1,300</option>
-        <option value="2300">MacBook Pro 14" M4 Pro — $2,300</option>
-        <option value="2000">ThinkPad X1 Carbon — $2,000</option>
-        <option value="0">I already have a suitable machine — $0</option>
+        <optgroup label="Recommended (tested examples)">
+          <option value="599">Apple Mac mini M4 (base, 16GB) — ~$599</option>
+          <option value="999" selected>Apple Mac mini M4 (32GB) — ~$999</option>
+          <option value="1900">AMD Ryzen AI Max+ 395 mini PC, 128GB — ~$1,900</option>
+          <option value="3500">NVIDIA DGX Spark (GB10), 128GB — ~$3,500</option>
+        </optgroup>
+        <optgroup label="Other machines (not tested by us)">
+          <option value="1300">Apple MacBook Air M3 — ~$1,300</option>
+          <option value="2300">Apple MacBook Pro 14&quot; M4 Pro — ~$2,300</option>
+          <option value="2000">Windows/Linux laptop (e.g. ThinkPad) — ~$2,000</option>
+          <option value="0">I already have a suitable machine — $0</option>
+        </optgroup>
       </select>
+      <p class="meta" style="margin-top:8px">Hardware names and prices are illustrative examples for estimating only — not endorsements, requirements, or guarantees of suitability. ADAMAS is hardware-flexible; we confirm a suitable configuration during the audit.</p>
     </div>
     <div class="field">
       <label class="chk"><input type="checkbox" id="sub" checked> Keep one cloud subscription for genuinely hard tasks (~$20/mo)</label>
-      <p class="meta" style="margin-top:8px">Local electricity to run a Mac Mini 24/7 is ~$3/month and is always included.</p>
+      <p class="meta" style="margin-top:8px">Local electricity to run a Mac mini 24/7 is ~$3/month and is always included.</p>
+    </div>
+    <div class="field">
+      <label class="chk"><input type="checkbox" id="build" checked> Include the one-time ADAMAS Build (+$4,000) in the amortization</label>
+      <p class="meta" style="margin-top:8px">The Build configures the vault, connects your sources, and seeds the ledger. The ADAMAS Intelligence subscription selected above is the recurring product fee.</p>
     </div>
   </div>
 
   <div class="results" id="results"></div>
+
+  <div class="card" id="amortCard">
+    <label class="l" style="margin-bottom:14px"><span>Amortization — cumulative cost over 3 years</span></label>
+    <div id="chart"></div>
+    <p class="meta" id="chartNote" style="margin-top:12px;line-height:1.6"></p>
+  </div>
 
   <div class="cta">
     <h2>Want the system that runs on it?</h2>
@@ -93,31 +118,78 @@
       <button class="btn btn-ghost" onclick="window.print()">Save as PDF</button>
     </div>
   </div>
-  <div class="ftr">ADAMAS by Falcon Intelligence Group · adamas-project.com · Estimates for context only; not a guarantee of results.</div>
+  <div class="ftr">ADAMAS by Falcon Intelligence Group · adamas-project.com · Estimates for context only — not financial advice or a guarantee of cost, savings, or results. Prices, tiers, and third-party hardware costs are set by third parties and may change. Hardware names are examples, not endorsements or requirements; all trademarks belong to their respective owners and their mention implies no affiliation. See our <a href="/disclaimer.html" style="color:var(--accent)">Legal Notice</a>.</div>
 </div>
 
 <script>
-  var ELEC = 3;
+  var ELEC = 3, BUILD = 4000, MONTHS = 36;
   var spend=document.getElementById('spend'), spendV=document.getElementById('spendV'),
-      hw=document.getElementById('hw'), sub=document.getElementById('sub'), out=document.getElementById('results');
+      tier=document.getElementById('tier'), hw=document.getElementById('hw'), sub=document.getElementById('sub'),
+      build=document.getElementById('build'), out=document.getElementById('results'),
+      chart=document.getElementById('chart'), chartNote=document.getElementById('chartNote');
   function money(n){ return '$' + Math.round(n).toLocaleString('en-US'); }
+  function moTxt(m){ return m + (m===1?' month':' months'); }
+
+  function drawChart(cur, mo, upfront, brk){
+    var W=600,H=220,padL=48,padR=14,padT=18,padB=30;
+    var max=Math.max(cur*MONTHS, upfront+mo*MONTHS, 1);
+    function X(m){ return padL + (m/MONTHS)*(W-padL-padR); }
+    function Y(v){ return H-padB - (v/max)*(H-padT-padB); }
+    var cloud=[], adamas=[];
+    for(var m=0;m<=MONTHS;m++){ cloud.push(X(m)+','+Y(cur*m)); adamas.push(X(m)+','+Y(upfront+mo*m)); }
+    var grid='';
+    for(var g=0; g<=3; g++){ var gv=max*g/3, gy=Y(gv);
+      grid+='<line x1="'+padL+'" y1="'+gy+'" x2="'+(W-padR)+'" y2="'+gy+'" stroke="rgba(255,255,255,.07)"/>'+
+            '<text x="'+(padL-6)+'" y="'+(gy+3)+'" text-anchor="end" font-size="9" fill="#6e6e73">'+money(gv)+'</text>'; }
+    var xl='';
+    [0,6,12,18,24,30,36].forEach(function(m){ xl+='<text x="'+X(m)+'" y="'+(H-12)+'" text-anchor="middle" font-size="9" fill="#6e6e73">'+m+'</text>'; });
+    var area='';
+    if(brk>0 && brk<MONTHS){
+      var a=[X(brk)+','+Y(cur*brk)];
+      for(var m=Math.ceil(brk);m<=MONTHS;m++) a.push(X(m)+','+Y(cur*m));
+      for(var m=MONTHS;m>=Math.ceil(brk);m--) a.push(X(m)+','+Y(upfront+mo*m));
+      area='<polygon points="'+a.join(' ')+'" fill="rgba(94,204,115,.13)"/>';
+    }
+    var mark='';
+    if(brk>0 && brk<=MONTHS){ var bx=X(brk);
+      mark='<line x1="'+bx+'" y1="'+padT+'" x2="'+bx+'" y2="'+(H-padB)+'" stroke="#5ecc73" stroke-dasharray="3 3" opacity=".75"/>'+
+           '<circle cx="'+bx+'" cy="'+Y(cur*brk)+'" r="4" fill="#5ecc73"/>'+
+           '<text x="'+bx+'" y="'+(padT+9)+'" text-anchor="middle" font-size="9.5" fill="#5ecc73">break-even ~'+Math.round(brk)+' mo</text>'; }
+    chart.innerHTML =
+      '<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;font-family:var(--font)">'+
+      grid+area+
+      '<polyline points="'+adamas.join(' ')+'" fill="none" stroke="#c9a84c" stroke-width="2"/>'+
+      '<polyline points="'+cloud.join(' ')+'" fill="none" stroke="#ff6b6b" stroke-width="2"/>'+
+      mark+xl+
+      '<text x="'+(W-padR)+'" y="'+(Y(cur*MONTHS)-6)+'" text-anchor="end" font-size="10" fill="#ff6b6b">Cloud — do nothing</text>'+
+      '<text x="'+(W-padR)+'" y="'+(Math.max(Y(upfront+mo*MONTHS),padT+22))+'" text-anchor="end" font-size="10" fill="#c9a84c">ADAMAS — build + subscription</text>'+
+      '<text x="'+padL+'" y="14" font-size="9" fill="#6e6e73">cumulative $ · months along the bottom</text>'+
+      '</svg>';
+  }
+
   function render(){
-    var cur=+spend.value, hardware=+hw.value, local=ELEC + (sub.checked?20:0);
+    var cur=+spend.value, hardware=+hw.value, tierV=+tier.value;
+    var mo = tierV + ELEC + (sub.checked?20:0);
+    var upfront = hardware + (build.checked?BUILD:0);
     spendV.textContent = money(cur);
-    var save = Math.max(0, cur - local);
-    var payback = (save>0 && hardware>0) ? Math.ceil(hardware/save) : 0;
-    var y1 = save*12 - hardware, y3 = save*36 - hardware;
-    var paybackTxt = hardware===0 ? 'Immediate' : (save<=0 ? '—' : payback + (payback===1?' month':' months'));
+    var save = Math.max(0, cur - mo);
+    var brk = (save>0) ? upfront/save : 0;
+    var brkTxt = upfront===0 ? 'Immediate' : (save<=0 ? '—' : moTxt(Math.ceil(brk)));
+    var net3 = save*MONTHS - upfront;
     out.innerHTML =
-      '<div class="res big"><div class="k">Monthly savings</div><div class="v">'+money(save)+'<span style="font-size:1rem;color:var(--muted)"> /mo</span></div><div class="n">Local cost ≈ '+money(local)+'/mo (electricity'+(sub.checked?' + 1 subscription':'')+') vs '+money(cur)+'/mo cloud.</div></div>'+
-      '<div class="res"><div class="k">Payback period</div><div class="v">'+paybackTxt+'</div><div class="n">to recover '+money(hardware)+' hardware</div></div>'+
-      '<div class="res"><div class="k">Net savings · year 1</div><div class="v">'+money(y1)+'</div><div class="n">after hardware</div></div>'+
-      '<div class="res"><div class="k">Net savings · 3 years</div><div class="v">'+money(y3)+'</div><div class="n">after hardware</div></div>'+
-      '<div class="res"><div class="k">Cloud cost · 3 years</div><div class="v">'+money(cur*36)+'</div><div class="n">if nothing changes</div></div>';
-    var body=encodeURIComponent("Hi Massimo,\n\nI ran the Local-First AI Cost Calculator: ~"+money(save)+"/mo saved, payback "+paybackTxt+". I'd like to talk about a Clarity Audit.\n\n");
+      '<div class="res big"><div class="k">Monthly savings</div><div class="v">'+money(save)+'<span style="font-size:1rem;color:var(--muted)"> /mo</span></div><div class="n">ADAMAS '+money(tierV)+'/mo + electricity'+(sub.checked?' + 1 retained subscription':'')+' = '+money(mo)+'/mo vs '+money(cur)+'/mo cloud.</div></div>'+
+      '<div class="res"><div class="k">One-time investment</div><div class="v">'+money(upfront)+'</div><div class="n">'+(build.checked?'ADAMAS Build '+money(BUILD)+' + ':'')+'hardware '+money(hardware)+'</div></div>'+
+      '<div class="res"><div class="k">Break-even</div><div class="v">'+brkTxt+'</div><div class="n">on the one-time cost</div></div>'+
+      '<div class="res"><div class="k">Net savings · 3 years</div><div class="v">'+money(net3)+'</div><div class="n">after the one-time cost</div></div>'+
+      '<div class="res"><div class="k">Cloud cost · 3 years</div><div class="v">'+money(cur*MONTHS)+'</div><div class="n">if nothing changes</div></div>';
+    drawChart(cur, mo, upfront, brk);
+    if(save<=0){ chartNote.textContent = 'At this spend, a fixed ADAMAS subscription costs about the same as your metered cloud bill — here the gain is ownership, privacy, and the decision ledger, not monthly dollars. Higher current spend tips it to clear savings.'; }
+    else if(brk>MONTHS){ chartNote.innerHTML = 'At this spend the one-time '+money(upfront)+' takes about '+moTxt(Math.ceil(brk))+' to pay back — beyond the 3-year window shown. Higher current cloud spend shortens it sharply.'; }
+    else { chartNote.innerHTML = 'Red is your metered cloud bill if nothing changes. Gold is ADAMAS: the one-time '+(build.checked?'build + hardware':'hardware')+' up front, then a fixed '+money(mo)+'/mo. They cross at break-even (~'+moTxt(Math.ceil(brk))+'); the shaded gap after that is money you keep — and you own the stack.'; }
+    var body=encodeURIComponent("Hi Massimo,\n\nI ran the amortization calculator: ~"+money(save)+"/mo saved, break-even "+brkTxt+" on a "+money(upfront)+" one-time investment. I'd like to talk about a Clarity Audit.\n\n");
     document.getElementById('bookBtn').href="mailto:hello@adamas-project.com?subject="+encodeURIComponent("Clarity Audit — saving "+money(save)+"/mo")+"&body="+body;
   }
-  [spend,hw,sub].forEach(function(el){ el.addEventListener('input',render); el.addEventListener('change',render); });
+  [spend,tier,hw,sub,build].forEach(function(el){ el.addEventListener('input',render); el.addEventListener('change',render); });
   render();
 </script>
 </body>
