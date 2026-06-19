@@ -8,6 +8,10 @@ coverage/
 vault/
 !vault/.gitkeep
 
+# Connector source material (the operator's private notes/emails) stays local
+sources/*
+!sources/README.md
+
 # Local env
 .env
 .env.local

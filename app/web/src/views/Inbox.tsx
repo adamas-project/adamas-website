@@ -9,6 +9,7 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
   const [engine, setEngine] = useState('');
+  const [connectors, setConnectors] = useState<any[]>([]);
 
   // "Paste your own note" form state.
   const today = new Date().toISOString().slice(0, 10);
@@ -30,7 +31,27 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
         setEngine(h?.provider === 'ollama' ? `ollama · ${h.model}` : 'built-in (offline)');
       })
       .catch(() => setEngine(''));
+    api.connectors().then((r) => setConnectors(r.connectors)).catch(() => setConnectors([]));
   }, []);
+
+  async function pullConnector(id: string) {
+    setBusy(true);
+    setMsg('');
+    try {
+      const r = await api.pullConnector(id);
+      setMsg(
+        r.newDocuments > 0
+          ? `Pulled ${r.newDocuments} new source(s) (${r.skipped} unchanged) → Hermes surfaced ${r.added} candidate(s).`
+          : `No new sources (${r.skipped} unchanged). Drop files into the folder and pull again.`,
+      );
+      await load();
+      onChanged();
+    } catch (e) {
+      setMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function ingestNote() {
     if (!noteText.trim()) return;
@@ -96,6 +117,32 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
         Paste a real meeting note, email, or memo. Hermes (your local model) reads it and proposes candidate
         decisions. Nothing enters the ledger until you confirm it — and nothing leaves your machine.
       </p>
+
+      {connectors.length > 0 && (
+        <>
+          <div className="section-title">Read-only connectors</div>
+          <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
+            Connectors pull source material onto this machine — read-only, inbound only. Nothing is sent out.
+          </p>
+          <div className="pill-row" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 8 }}>
+            {connectors.map((c) => (
+              <div key={c.id} className="card" style={{ cursor: 'default', display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ flex: 1 }}>
+                  <div className="title">{c.label}</div>
+                  <div className="id mono">{c.location}</div>
+                  <div className="pill-row" style={{ marginTop: 4 }}>
+                    <span className="badge live">read-only</span>
+                    <span className="badge">{c.network ? 'network' : 'local'}</span>
+                  </div>
+                </div>
+                <button className="primary" onClick={() => pullConnector(c.id)} disabled={busy}>
+                  {busy ? 'Pulling…' : 'Pull'}
+                </button>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
 
       <div className="section-title">Capture from your own note</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

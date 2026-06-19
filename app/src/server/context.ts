@@ -7,8 +7,10 @@ import { CloudLLMProvider } from '../evaluation/cloud.js';
 import type { LLMProvider } from '../evaluation/provider.js';
 import { AssetEngine } from '../assets/engine.js';
 import { BoundaryService } from '../boundary/boundary.js';
+import { ConnectorManager } from '../ingestion/manager.js';
+import { FilesystemConnector } from '../ingestion/filesystem.js';
 import { vaultPaths } from '../ledger/storage.js';
-import { hermesConfig, type HermesConfig } from '../config/env.js';
+import { hermesConfig, resolveSourcesDir, type HermesConfig } from '../config/env.js';
 
 // The application context wires together the services each route handler needs.
 export interface AppContext {
@@ -19,6 +21,7 @@ export interface AppContext {
   cloudProvider: CloudLLMProvider;
   assets: AssetEngine;
   boundary: BoundaryService;
+  connectors: ConnectorManager;
   hermes: HermesConfig;
 }
 
@@ -43,5 +46,11 @@ export async function createContext(root: string): Promise<AppContext> {
     localProvider,
     cloudProvider,
   );
-  return { root, ledger, inbox, localProvider, cloudProvider, assets, boundary, hermes };
+
+  // Read-only ingestion connectors (inbound only). Local folder by default.
+  const connectors = await ConnectorManager.open(path.join(root, 'connectors.json'), [
+    new FilesystemConnector(resolveSourcesDir(root)),
+  ]);
+
+  return { root, ledger, inbox, localProvider, cloudProvider, assets, boundary, connectors, hermes };
 }

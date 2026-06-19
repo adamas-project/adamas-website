@@ -17,6 +17,13 @@ export function serverHost(): string {
   return process.env.ADAMAS_HOST ?? '127.0.0.1';
 }
 
+/** Folder the local-folder connector reads source material from. */
+export function resolveSourcesDir(root: string): string {
+  const fromEnv = process.env.ADAMAS_SOURCES_DIR;
+  if (fromEnv && fromEnv.trim()) return path.resolve(fromEnv.trim());
+  return path.join(root, 'sources');
+}
+
 export type HermesProviderKind = 'local' | 'ollama';
 
 export interface HermesConfig {

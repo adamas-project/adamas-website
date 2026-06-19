@@ -60,6 +60,13 @@ export const api = {
   confirm: (id: string, overrides: any = {}) => req(`/api/inbox/${id}/confirm`, { method: 'POST', body: JSON.stringify(overrides) }),
   dismiss: (id: string) => req(`/api/inbox/${id}/dismiss`, { method: 'POST', body: '{}' }),
 
+  connectors: () => req<{ connectors: any[] }>('/api/connectors'),
+  pullConnector: (id: string) =>
+    req<{ scanned: number; skipped: number; newDocuments: number; added: number; pending: number }>(
+      `/api/connectors/${id}/pull`,
+      { method: 'POST', body: '{}' },
+    ),
+
   assets: () => req<{ assets: any[]; autoRegenerate: boolean }>('/api/assets'),
   asset: (id: string) => req<{ entry: any; asset: any }>(`/api/assets/${id}`),
   generate: (id: string) => req<{ asset: any }>(`/api/assets/${id}/generate`, { method: 'POST', body: '{}' }),
