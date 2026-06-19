@@ -92,6 +92,24 @@ falls back to the built-in heuristic so capture never hard-fails offline. See
 `http://host.docker.internal:11434` (the compose file already does, and adds the
 `host.docker.internal` host mapping).
 
+## Read-only connectors (ingestion)
+
+Connectors pull source material onto the machine — **read-only and inbound
+only**; they never write to the source system and never send vault content out.
+Pulled material flows through Hermes into the Capture Inbox (nothing enters the
+ledger unreviewed). Use them in **Capture Inbox → Read-only connectors → Pull**.
+
+- **Local folder** (always on, fully local): reads `.md`/`.txt`/`.eml` from
+  `ADAMAS_SOURCES_DIR` (Docker: the host `./sources` folder, mounted read-only).
+  Incremental (only new/changed files); a domain subfolder (e.g.
+  `finance/budget.md`) sets a domain hint.
+- **Email (IMAP, opt-in)**: read-only IMAP — opens the mailbox read-only, never
+  marks messages seen, pulls only new mail (incremental by UID). Enable by
+  setting `ADAMAS_IMAP_HOST/USER/PASS` (see `.env.example`). For Gmail, use an
+  **App Password** (Google Account → Security → 2-Step Verification → App
+  passwords), host `imap.gmail.com`. The connector appears automatically once
+  configured.
+
 ## Deploy (containerized)
 
 ```bash
