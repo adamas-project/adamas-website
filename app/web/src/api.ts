@@ -60,6 +60,12 @@ export const api = {
   confirm: (id: string, overrides: any = {}) => req(`/api/inbox/${id}/confirm`, { method: 'POST', body: JSON.stringify(overrides) }),
   dismiss: (id: string) => req(`/api/inbox/${id}/dismiss`, { method: 'POST', body: '{}' }),
 
+  transcript: (payload: { text: string; filename?: string; title?: string; date?: string; summarize?: boolean }) =>
+    req<{ summarized: boolean; summary: string; added: number; candidates: any[]; pending: number }>(
+      '/api/inbox/transcript',
+      { method: 'POST', body: JSON.stringify(payload) },
+    ),
+
   connectors: () => req<{ connectors: any[] }>('/api/connectors'),
   pullConnector: (id: string) =>
     req<{ scanned: number; skipped: number; newDocuments: number; added: number; pending: number }>(

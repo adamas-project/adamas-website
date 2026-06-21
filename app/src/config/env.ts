@@ -35,6 +35,18 @@ export interface ImapConfig {
   max: number;
 }
 
+export interface IcsConfig {
+  url: string;
+  name: string;
+}
+
+/** Read Google Calendar (iCal feed) config from env; null when unset (opt-in). */
+export function icsConfig(): IcsConfig | null {
+  const url = process.env.ADAMAS_ICS_URL?.trim();
+  if (!url) return null;
+  return { url, name: process.env.ADAMAS_ICS_NAME?.trim() || 'Calendar' };
+}
+
 /** Read IMAP connector config from env; null when not configured (opt-in). */
 export function imapConfig(): ImapConfig | null {
   const host = process.env.ADAMAS_IMAP_HOST?.trim();

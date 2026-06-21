@@ -33,6 +33,9 @@ services:
       ADAMAS_IMAP_PASS: "${ADAMAS_IMAP_PASS:-}"
       ADAMAS_IMAP_MAILBOX: "${ADAMAS_IMAP_MAILBOX:-INBOX}"
       ADAMAS_IMAP_MAX: "${ADAMAS_IMAP_MAX:-25}"
+      # Optional read-only Google Calendar (iCal feed) connector.
+      ADAMAS_ICS_URL: "${ADAMAS_ICS_URL:-}"
+      ADAMAS_ICS_NAME: "${ADAMAS_ICS_NAME:-Calendar}"
     # Let the container reach an Ollama server running on the host machine.
     extra_hosts:
       - "host.docker.internal:host-gateway"

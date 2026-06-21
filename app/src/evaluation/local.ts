@@ -1,5 +1,5 @@
 import type { Candidate, LLMProvider, SourceDocument } from './provider.js';
-import { runHeuristicExtraction } from './extract.js';
+import { runHeuristicExtraction, heuristicSummarize } from './extract.js';
 
 // LocalLLMProvider — the default, local-first evaluation provider (Hermes).
 // Runs entirely on the local machine; a real on-device model (e.g. via Ollama)
@@ -10,5 +10,9 @@ export class LocalLLMProvider implements LLMProvider {
 
   async extractCandidates(doc: SourceDocument): Promise<Omit<Candidate, 'candidateId'>[]> {
     return runHeuristicExtraction(doc, this.id);
+  }
+
+  async summarize(text: string): Promise<string> {
+    return heuristicSummarize(text);
   }
 }

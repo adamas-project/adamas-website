@@ -1,5 +1,5 @@
 import type { Candidate, CandidateDraft, LLMProvider, SourceDocument } from './provider.js';
-import { runHeuristicExtraction, cleanRoleList, domainFromRole } from './extract.js';
+import { runHeuristicExtraction, cleanRoleList, domainFromRole, heuristicSummarize } from './extract.js';
 import { DOMAINS, type Domain } from '../schema/decision.schema.js';
 
 // OllamaLLMProvider — Hermes backed by a local Ollama model. Ollama runs on the
@@ -117,6 +117,35 @@ export class OllamaLLMProvider implements LLMProvider {
     } catch (err) {
       console.warn(`[hermes:ollama] ${(err as Error).message} — falling back to local heuristic for ${doc.ref}`);
       return runHeuristicExtraction(doc, this.id);
+    }
+  }
+
+  async summarize(text: string): Promise<string> {
+    const prompt =
+      'Summarize this meeting transcript into the concrete DECISIONS and OUTCOMES only, ' +
+      'as short bullet points. For each, note the choice made, who owned it (a role), and any trade-off. ' +
+      'Plain text bullets, no preamble.\n\n--- TRANSCRIPT ---\n' +
+      text;
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), this.timeoutMs);
+      try {
+        const res = await fetch(`${this.url}/api/generate`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ model: this.model, prompt, stream: false, options: { temperature: 0.2 } }),
+          signal: controller.signal,
+        });
+        if (!res.ok) throw new Error(`Ollama responded ${res.status}`);
+        const body = (await res.json()) as { response?: string };
+        const summary = (body.response ?? '').trim();
+        return summary || heuristicSummarize(text);
+      } finally {
+        clearTimeout(timer);
+      }
+    } catch (err) {
+      console.warn(`[hermes:ollama] summarize failed (${(err as Error).message}) — using local summary`);
+      return heuristicSummarize(text);
     }
   }
 }

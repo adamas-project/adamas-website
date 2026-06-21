@@ -109,6 +109,20 @@ ledger unreviewed). Use them in **Capture Inbox → Read-only connectors → Pul
   **App Password** (Google Account → Security → 2-Step Verification → App
   passwords), host `imap.gmail.com`. The connector appears automatically once
   configured.
+- **Calendar (Google, opt-in)**: read-only iCal feed. In Google Calendar →
+  Settings → your calendar → copy the **"Secret address in iCal format"** and set
+  `ADAMAS_ICS_URL`. ADAMAS only fetches the feed (no OAuth) and surfaces recent +
+  upcoming meetings.
+
+### Capturing meeting outcomes & transcripts
+
+A calendar event tells you a meeting happened; the *decision* usually isn't in the
+invite. In **Capture Inbox** you can:
+- **Log a meeting outcome** by hand (title, date, attendees, what was decided) when
+  there's no recording — Hermes turns it into a candidate decision.
+- **Upload or paste a transcript** (`.txt`/`.md`/`.vtt`/`.srt`). ADAMAS
+  **summarizes it locally first**, then extracts candidate decisions from the
+  summary. Nothing enters the ledger until you confirm.
 
 ## Deploy (containerized)
 

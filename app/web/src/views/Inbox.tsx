@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import { MeetingCapture } from '../components/MeetingCapture';
 
 const KINDS = ['doc', 'meeting', 'email', 'chat'] as const;
 const DOMAINS = ['hiring', 'sales', 'product', 'finance', 'ops'] as const;
@@ -143,6 +144,13 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
           </div>
         </>
       )}
+
+      <MeetingCapture
+        onChanged={() => {
+          void load();
+          onChanged();
+        }}
+      />
 
       <div className="section-title">Capture from your own note</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

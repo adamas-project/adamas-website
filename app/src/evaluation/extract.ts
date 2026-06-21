@@ -101,6 +101,22 @@ export function domainFromRole(role: string): Domain | undefined {
   return undefined;
 }
 
+/**
+ * Extractive summary used as the offline fallback: keep the sentences that look
+ * like decisions/trade-offs (plus the opener for context), capped for length.
+ */
+export function heuristicSummarize(text: string): string {
+  const sentences = splitSentences(text);
+  if (sentences.length <= 6) return text.trim();
+  const picked: string[] = [];
+  if (sentences[0]) picked.push(sentences[0]);
+  for (const s of sentences) {
+    if (picked.length >= 14) break;
+    if ((DECISION_CUE.test(s) || TRADEOFF_CUE.test(s)) && !picked.includes(s)) picked.push(s);
+  }
+  return picked.map((s) => `- ${s}`).join('\n');
+}
+
 export function runHeuristicExtraction(doc: SourceDocument, providerId: string): Omit<Candidate, 'candidateId'>[] {
   const sentences = splitSentences(doc.text);
   const prelim = inferDomain(doc.text, doc.domainHint);

@@ -47,4 +47,6 @@ export interface LLMProvider {
   readonly location: ProviderLocation;
   /** Extract candidate decisions ("the why / who / trade-offs") from a source. */
   extractCandidates(doc: SourceDocument): Promise<Omit<Candidate, 'candidateId'>[]>;
+  /** Condense a long source (e.g. a meeting transcript) before extraction. */
+  summarize?(text: string): Promise<string>;
 }
