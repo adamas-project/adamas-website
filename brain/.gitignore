@@ -1,0 +1,20 @@
+# brain/ — keep the STRUCTURE in git, keep PRIVATE CONTENT out.
+# Folders survive via committed .gitkeep / README files; their private
+# contents are ignored. This mirrors how app/vault is handled.
+
+# --- Private content: never committed ---
+00_inbox/*
+40_archive/*
+10_projects/personal/*
+10_projects/clients/*
+
+# --- But keep the scaffolding so the structure clones cleanly ---
+!**/.gitkeep
+!10_projects/personal/README.md
+!10_projects/clients/.gitkeep
+!10_projects/clients/_client-template/
+!10_projects/clients/_client-template/**
+
+# Obsidian local workspace state
+.obsidian/
+.trash/

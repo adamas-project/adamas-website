@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://adamas-project.com/downloads/decision-ledger-standard.schema.json",
+  "title": "Decision Ledger Standard — Entry",
+  "description": "An open schema for recording business decisions with their reasoning. Version 1.0 (June 2026). Published by Falcon Intelligence Group LLC under CC BY 4.0 — use it with or without ADAMAS.",
+  "type": "object",
+  "required": ["id", "domain", "date", "title", "context", "decision", "owner"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}-[0-9]{3,}$",
+      "description": "Stable identifier: three-letter domain prefix + sequence number, e.g. SAL-021."
+    },
+    "domain": {
+      "type": "string",
+      "enum": ["hiring", "sales", "product", "finance", "ops"],
+      "description": "The business domain the decision belongs to."
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "The date the decision was made (not when it was recorded)."
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "One line stating the decision, phrased as the choice made."
+    },
+    "context": {
+      "type": "string",
+      "description": "The situation at the time of the call: constraints, pressures, what was known and not known. Written so a reader five years later understands why this was hard."
+    },
+    "decision": {
+      "type": "string",
+      "description": "The exact choice made, stated precisely enough to be falsifiable."
+    },
+    "owner": {
+      "type": "object",
+      "required": ["role"],
+      "properties": {
+        "role": { "type": "string", "description": "The role that made the call (role, not just a name — accountability must survive staff changes)." },
+        "name": { "type": "string", "description": "Optional: the person, for internal use." },
+        "dissent": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Roles that disagreed at the time. Recording dissent is a feature: knowing who disagreed and why is gold later."
+        }
+      }
+    },
+    "tradeoffs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "What was knowingly given up, risked, or accepted. The most valuable field — it is what nobody writes down."
+    },
+    "links": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[A-Z]{3}-[0-9]{3,}$" },
+      "description": "IDs of related decisions. Links are bi-directional: if A links B, B links A."
+    },
+    "sources": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Where the decision actually happened, as traceable references, e.g. 'email:2025-04-02#thread-114' or 'meeting:2025-04-11#weekly-review'."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "superseded", "reversed"],
+      "default": "active",
+      "description": "Decisions are never deleted. A reversed decision stays in the ledger with status 'reversed' and a link to its successor."
+    },
+    "superseded_by": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}-[0-9]{3,}$",
+      "description": "If status is 'superseded' or 'reversed': the ID of the decision that replaced it."
+    }
+  },
+  "additionalProperties": false
+}
