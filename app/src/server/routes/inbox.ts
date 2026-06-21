@@ -1,6 +1,8 @@
+import { createHash } from 'node:crypto';
 import type { FastifyInstance } from 'fastify';
 import type { AppContext } from '../context.js';
 import { SAMPLE_SOURCES } from '../../evaluation/fixtures.js';
+import type { SourceDocument } from '../../evaluation/provider.js';
 import { ValidationError } from '../../schema/validate.js';
 import { LedgerError } from '../../ledger/ledger.js';
 
@@ -19,6 +21,43 @@ export function registerInboxRoutes(app: FastifyInstance, ctx: AppContext): void
     const docs = body.sources ?? SAMPLE_SOURCES;
     const added = await inbox.ingest(localProvider, docs);
     return { added: added.length, candidates: added, pending: inbox.pendingCount };
+  });
+
+  // Upload/paste a meeting transcript: ADAMAS summarizes it (locally) into the
+  // key outcomes, then extracts candidate decisions from that summary. Nothing
+  // enters the ledger until confirmed.
+  app.post('/api/inbox/transcript', async (req, reply) => {
+    const body = (req.body ?? {}) as {
+      text?: string;
+      filename?: string;
+      title?: string;
+      date?: string;
+      summarize?: boolean;
+    };
+    const text = (body.text ?? '').trim();
+    if (!text) return reply.code(400).send({ error: 'Transcript text is empty.' });
+
+    const date = body.date && /^\d{4}-\d{2}-\d{2}$/.test(body.date) ? body.date : new Date().toISOString().slice(0, 10);
+    const title = (body.title?.trim() || body.filename?.replace(/\.[^.]+$/, '') || 'Meeting transcript').slice(0, 120);
+
+    // Summarize first (when the provider supports it and the text is long enough).
+    let summary = text;
+    let summarized = false;
+    if (body.summarize !== false && localProvider.summarize && text.length > 400) {
+      summary = await localProvider.summarize(text);
+      summarized = true;
+    }
+
+    const hash = createHash('sha1').update(`${title}|${text}`).digest('hex').slice(0, 8);
+    const doc: SourceDocument = {
+      ref: `transcript:${date}#${hash}`,
+      kind: 'meeting',
+      date,
+      title,
+      text: summary,
+    };
+    const added = await inbox.ingest(localProvider, [doc]);
+    return { summarized, summary, added: added.length, candidates: added, pending: inbox.pendingCount };
   });
 
   app.post('/api/inbox/:id/confirm', async (req, reply) => {

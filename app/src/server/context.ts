@@ -10,9 +10,10 @@ import { BoundaryService } from '../boundary/boundary.js';
 import { ConnectorManager } from '../ingestion/manager.js';
 import { FilesystemConnector } from '../ingestion/filesystem.js';
 import { ImapConnector } from '../ingestion/imap.js';
+import { CalendarConnector } from '../ingestion/calendar.js';
 import type { Connector } from '../ingestion/connector.js';
 import { vaultPaths } from '../ledger/storage.js';
-import { hermesConfig, imapConfig, resolveSourcesDir, type HermesConfig } from '../config/env.js';
+import { hermesConfig, icsConfig, imapConfig, resolveSourcesDir, type HermesConfig } from '../config/env.js';
 
 // The application context wires together the services each route handler needs.
 export interface AppContext {
@@ -54,6 +55,8 @@ export async function createContext(root: string): Promise<AppContext> {
   const connectorList: Connector[] = [new FilesystemConnector(resolveSourcesDir(root))];
   const imap = imapConfig();
   if (imap) connectorList.push(new ImapConnector(imap));
+  const ics = icsConfig();
+  if (ics) connectorList.push(new CalendarConnector(ics.url, ics.name));
   const connectors = await ConnectorManager.open(path.join(root, 'connectors.json'), connectorList);
 
   return { root, ledger, inbox, localProvider, cloudProvider, assets, boundary, connectors, hermes };
