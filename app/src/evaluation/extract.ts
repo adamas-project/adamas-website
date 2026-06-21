@@ -76,6 +76,7 @@ function inferDissent(text: string): string[] {
 
 function toTitle(decisionSentence: string): string {
   let t = decisionSentence
+    .replace(/^[\s>*•-]+/, '')
     .replace(/^we\s+/i, '')
     .replace(/^(have\s+)?(decided to|decided that|chose to|agreed to|opted to|resolved to|committed to|will|are going to|going to)\s+/i, '')
     .trim();
@@ -112,7 +113,7 @@ export function heuristicSummarize(text: string): string {
   if (sentences[0]) picked.push(sentences[0]);
   for (const s of sentences) {
     if (picked.length >= 14) break;
-    if ((DECISION_CUE.test(s) || TRADEOFF_CUE.test(s)) && !picked.includes(s)) picked.push(s);
+    if ((DECISION_CUE.test(s) || TRADEOFF_CUE.test(s) || /\b(owner|dissent)\s*:/i.test(s)) && !picked.includes(s)) picked.push(s);
   }
   return picked.map((s) => `- ${s}`).join('\n');
 }

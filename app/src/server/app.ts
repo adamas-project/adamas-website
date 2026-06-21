@@ -4,6 +4,7 @@ import { timingSafeEqual } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import fastifyStatic from '@fastify/static';
+import fastifyMultipart from '@fastify/multipart';
 import type { AppContext } from './context.js';
 import { registerLedgerRoutes } from './routes/ledger.js';
 import { registerInboxRoutes } from './routes/inbox.js';
@@ -14,6 +15,9 @@ import { registerConnectorRoutes } from './routes/connectors.js';
 
 export function buildApp(ctx: AppContext): FastifyInstance {
   const app = Fastify({ logger: false, bodyLimit: 5 * 1024 * 1024 });
+
+  // Multipart for audio/video recording uploads (transcribed on-device).
+  app.register(fastifyMultipart, { limits: { fileSize: 500 * 1024 * 1024, files: 1 } });
 
   // Optional HTTP basic auth for a shared LAN/staging instance. Disabled unless
   // both env vars are set (so local single-operator use and tests need no auth).

@@ -35,6 +35,19 @@ export interface ImapConfig {
   max: number;
 }
 
+export interface TranscribeConfig {
+  /** Shell command template with {input} (audio path) and optional {output}. */
+  cmd: string;
+  timeoutMs: number;
+}
+
+/** Local speech-to-text command config; null when unset (opt-in, on-device). */
+export function transcribeConfig(): TranscribeConfig | null {
+  const cmd = process.env.ADAMAS_TRANSCRIBE_CMD?.trim();
+  if (!cmd) return null;
+  return { cmd, timeoutMs: Number(process.env.ADAMAS_TRANSCRIBE_TIMEOUT_MS ?? 600000) };
+}
+
 export interface IcsConfig {
   url: string;
   name: string;

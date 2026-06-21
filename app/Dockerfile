@@ -22,6 +22,12 @@ ENV NODE_ENV=production \
     ADAMAS_VAULT=/data/vault
 WORKDIR /app
 
+# ffmpeg lets a configured on-device transcription engine decode common audio/
+# video formats. (The speech-to-text engine itself is provided by the operator
+# via ADAMAS_TRANSCRIBE_CMD; see README.)
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
+  && rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/web-dist ./web-dist

@@ -22,6 +22,12 @@ export function MeetingCapture({ onChanged }: { onChanged: () => void }) {
   const [tDate, setTDate] = useState(today);
   const [tText, setTText] = useState('');
 
+  // Audio / video recording
+  const audioRef = useRef<HTMLInputElement>(null);
+  const [aFile, setAFile] = useState<File | null>(null);
+  const [aTitle, setATitle] = useState('');
+  const [aDate, setADate] = useState(today);
+
   async function logOutcome() {
     if (!mTitle.trim() || !mOutcome.trim()) return;
     setBusy(true);
@@ -85,6 +91,31 @@ export function MeetingCapture({ onChanged }: { onChanged: () => void }) {
     }
   }
 
+  async function uploadRecording() {
+    if (!aFile) return;
+    setBusy(true);
+    setMsg('');
+    setSummary('');
+    try {
+      const r = await api.uploadAudio(aFile, { title: aTitle || undefined, date: aDate });
+      if (r.summary) setSummary(r.summary);
+      setMsg(
+        r.added > 0
+          ? `Transcribed locally and Hermes surfaced ${r.added} decision(s) — review them below.`
+          : 'Transcribed, but no clear decision was found. You can log the outcome manually above.',
+      );
+      if (r.added > 0) {
+        setAFile(null);
+        if (audioRef.current) audioRef.current.value = '';
+      }
+      onChanged();
+    } catch (e) {
+      setMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <>
       <div className="section-title">Log a meeting outcome (no recording needed)</div>
@@ -130,6 +161,20 @@ export function MeetingCapture({ onChanged }: { onChanged: () => void }) {
             {busy ? 'Summarizing…' : 'Summarize & extract decisions'}
           </button>
         </div>
+      </div>
+
+      <div className="section-title">Drop a recording (audio / video)</div>
+      <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
+        Transcribed on-device, then summarized and extracted. Requires a local transcription engine
+        (set <span className="mono">ADAMAS_TRANSCRIBE_CMD</span>; see the README) — otherwise use a text transcript above.
+      </p>
+      <div className="toolbar" style={{ margin: 0 }}>
+        <input style={{ flex: 1, minWidth: 180 }} placeholder="Meeting title (optional)" value={aTitle} onChange={(e) => setATitle(e.target.value)} />
+        <input type="date" value={aDate} onChange={(e) => setADate(e.target.value)} aria-label="Recording date" />
+        <input ref={audioRef} type="file" accept="audio/*,video/*" onChange={(e) => setAFile(e.target.files?.[0] ?? null)} />
+        <button className="primary" onClick={uploadRecording} disabled={busy || !aFile}>
+          {busy ? 'Transcribing…' : 'Transcribe & extract'}
+        </button>
       </div>
 
       {msg && <div className="notice ok" style={{ marginTop: 10 }}>{msg}</div>}
