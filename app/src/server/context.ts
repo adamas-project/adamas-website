@@ -12,8 +12,9 @@ import { FilesystemConnector } from '../ingestion/filesystem.js';
 import { ImapConnector } from '../ingestion/imap.js';
 import { CalendarConnector } from '../ingestion/calendar.js';
 import type { Connector } from '../ingestion/connector.js';
+import { CommandTranscriber, type Transcriber } from '../ingestion/transcribe.js';
 import { vaultPaths } from '../ledger/storage.js';
-import { hermesConfig, icsConfig, imapConfig, resolveSourcesDir, type HermesConfig } from '../config/env.js';
+import { hermesConfig, icsConfig, imapConfig, resolveSourcesDir, transcribeConfig, type HermesConfig } from '../config/env.js';
 
 // The application context wires together the services each route handler needs.
 export interface AppContext {
@@ -25,6 +26,7 @@ export interface AppContext {
   assets: AssetEngine;
   boundary: BoundaryService;
   connectors: ConnectorManager;
+  transcriber: Transcriber | null;
   hermes: HermesConfig;
 }
 
@@ -59,5 +61,8 @@ export async function createContext(root: string): Promise<AppContext> {
   if (ics) connectorList.push(new CalendarConnector(ics.url, ics.name));
   const connectors = await ConnectorManager.open(path.join(root, 'connectors.json'), connectorList);
 
-  return { root, ledger, inbox, localProvider, cloudProvider, assets, boundary, connectors, hermes };
+  const tcfg = transcribeConfig();
+  const transcriber: Transcriber | null = tcfg ? new CommandTranscriber(tcfg.cmd, tcfg.timeoutMs) : null;
+
+  return { root, ledger, inbox, localProvider, cloudProvider, assets, boundary, connectors, transcriber, hermes };
 }

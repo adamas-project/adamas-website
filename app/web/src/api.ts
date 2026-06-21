@@ -66,6 +66,24 @@ export const api = {
       { method: 'POST', body: JSON.stringify(payload) },
     ),
 
+  uploadAudio: async (file: File, fields: { title?: string; date?: string } = {}) => {
+    const fd = new FormData();
+    if (fields.title) fd.append('title', fields.title);
+    if (fields.date) fd.append('date', fields.date);
+    fd.append('file', file);
+    const res = await fetch('/api/inbox/audio', { method: 'POST', body: fd });
+    if (!res.ok) {
+      let msg = res.statusText;
+      try {
+        msg = (await res.json()).error ?? msg;
+      } catch {
+        /* ignore */
+      }
+      throw new Error(msg);
+    }
+    return res.json() as Promise<{ transcript: string; summarized: boolean; summary: string; added: number; pending: number }>;
+  },
+
   connectors: () => req<{ connectors: any[] }>('/api/connectors'),
   pullConnector: (id: string) =>
     req<{ scanned: number; skipped: number; newDocuments: number; added: number; pending: number }>(

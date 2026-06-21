@@ -36,6 +36,8 @@ services:
       # Optional read-only Google Calendar (iCal feed) connector.
       ADAMAS_ICS_URL: "${ADAMAS_ICS_URL:-}"
       ADAMAS_ICS_NAME: "${ADAMAS_ICS_NAME:-Calendar}"
+      # Optional on-device speech-to-text command for dropped recordings.
+      ADAMAS_TRANSCRIBE_CMD: "${ADAMAS_TRANSCRIBE_CMD:-}"
     # Let the container reach an Ollama server running on the host machine.
     extra_hosts:
       - "host.docker.internal:host-gateway"
