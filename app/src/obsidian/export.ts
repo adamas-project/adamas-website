@@ -134,9 +134,13 @@ export async function buildObsidianVault(
   outDir: string,
 ): Promise<ObsidianExportResult> {
   const { ledger, knowledge, assets } = deps;
-  // Regenerate fresh (derived view).
-  await fs.rm(outDir, { recursive: true, force: true });
+  // Regenerate fresh (derived view). Clear the folder's *contents* rather than
+  // removing the folder itself: in Docker the output dir is a bind-mount, and
+  // rmdir on a mount point fails with EBUSY. Removing children avoids that.
   await fs.mkdir(outDir, { recursive: true });
+  for (const entry of await fs.readdir(outDir)) {
+    await fs.rm(path.join(outDir, entry), { recursive: true, force: true });
+  }
 
   let files = 0;
   const write = async (rel: string, content: string) => {

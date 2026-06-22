@@ -1,4 +1,4 @@
-import { extractFromHtml, inferType } from './extract.js';
+import { extractFromHtml, extractTweetId, inferType, parseTweetResult } from './extract.js';
 import type { KnowledgeType } from './schema.js';
 
 export interface FetchedResource {
@@ -6,6 +6,29 @@ export interface FetchedResource {
   text: string;
   author?: string;
   type: KnowledgeType;
+}
+
+// X/Twitter render the tweet client-side, so a plain fetch returns only page
+// chrome (login prompts, web-component CSS). Their public syndication endpoint —
+// the one the embed widget uses — returns clean tweet JSON with no auth or JS.
+// The token is derived from the id the same way the widget computes it.
+function tweetToken(id: string): string {
+  return ((Number(id) / 1e15) * Math.PI).toString(36).replace(/(0+|\.)/g, '');
+}
+
+async function fetchTweet(id: string, signal: AbortSignal): Promise<FetchedResource | null> {
+  const url = `https://cdn.syndication.twimg.com/tweet-result?id=${id}&lang=en&token=${tweetToken(id)}`;
+  try {
+    const res = await fetch(url, {
+      signal,
+      headers: { 'user-agent': 'Mozilla/5.0 (compatible; ADAMAS/1.0; +local)', accept: 'application/json' },
+    });
+    if (!res.ok) return null;
+    const parsed = parseTweetResult(await res.json());
+    return parsed ? { ...parsed, type: 'post' } : null;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -26,6 +49,13 @@ export async function fetchResource(url: string, timeoutMs = 20000): Promise<Fet
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
+    // X/Twitter: pull the actual tweet via the syndication endpoint, not the SPA shell.
+    const tweetId = extractTweetId(url);
+    if (tweetId) {
+      const tweet = await fetchTweet(tweetId, controller.signal);
+      if (tweet) return tweet;
+    }
+
     const res = await fetch(url, {
       redirect: 'follow',
       signal: controller.signal,

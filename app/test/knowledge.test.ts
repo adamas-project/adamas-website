@@ -3,7 +3,7 @@ import path from 'node:path';
 import type { FastifyInstance } from 'fastify';
 import { KnowledgeStore } from '../src/knowledge/store.js';
 import { validateKnowledge } from '../src/knowledge/schema.js';
-import { extractFromHtml, inferType } from '../src/knowledge/extract.js';
+import { extractFromHtml, extractTweetId, inferType, parseTweetResult } from '../src/knowledge/extract.js';
 import { summarizeKnowledge, extractTags } from '../src/knowledge/summarize.js';
 import { LocalLLMProvider } from '../src/evaluation/local.js';
 import { createContext } from '../src/server/context.js';
@@ -59,6 +59,36 @@ describe('html extraction + type inference', () => {
     expect(text).toMatch(/A short description/);
     expect(text).toMatch(/First paragraph/);
     expect(text).not.toMatch(/ignore\(\)/);
+  });
+
+  it('strips leaked web-component CSS and shadow-DOM templates (X/Twitter SPA chrome)', () => {
+    const html = `<html><head><title>CyrilXBT on X</title>
+      <meta property="og:description" content="Article Loops: the quiet skill behind every AI system that scales."/>
+      </head><body>
+      <template shadowrootmode="open"><style>.x{color:red}</style><span>hidden</span></template>
+      <p>:host{display:inline-block;direction:ltr}span{display:inline-block} 117.1K Views</p>
+      <p>:where(number-flow-react){line-height:1} Read 27 replies</p>
+      </body></html>`;
+    const { text } = extractFromHtml(html);
+    expect(text).toMatch(/Article Loops/);
+    expect(text).not.toMatch(/display:inline-block/);
+    expect(text).not.toMatch(/number-flow-react/);
+    expect(text).not.toMatch(/hidden/); // shadow-DOM template removed
+  });
+
+  it('parses a tweet status id and the syndication JSON', () => {
+    expect(extractTweetId('https://x.com/cyrilXBT/status/2068850474384609543')).toBe('2068850474384609543');
+    expect(extractTweetId('https://twitter.com/a/status/123')).toBe('123');
+    expect(extractTweetId('https://example.com/page')).toBeNull();
+
+    const parsed = parseTweetResult({
+      text: 'Article Loops: the quiet skill behind every AI system that actually scales.',
+      user: { name: 'CyrilXBT', screen_name: 'cyrilXBT' },
+    });
+    expect(parsed?.text).toMatch(/Article Loops/);
+    expect(parsed?.author).toBe('CyrilXBT (@cyrilXBT)');
+    expect(parsed?.title).toMatch(/CyrilXBT on X/);
+    expect(parseTweetResult({})).toBeNull();
   });
 
   it('infers resource type from the URL', () => {

@@ -26,6 +26,15 @@ function meta(html: string, name: string): string | undefined {
   return undefined;
 }
 
+// Strip CSS that leaks into the text of JS-heavy pages (e.g. inline web-component
+// styles like `:host{display:inline-block}` from X/Twitter). Removes `selector
+// { ... }` rule blocks; run twice to catch simple nested at-rules.
+function stripCssNoise(s: string): string {
+  let out = s;
+  for (let i = 0; i < 2; i++) out = out.replace(/[^{}<>]*\{[^{}]*\}/g, ' ');
+  return out;
+}
+
 export function extractFromHtml(html: string): { title: string; text: string; author?: string } {
   const title =
     meta(html, 'og:title') ||
@@ -35,15 +44,46 @@ export function extractFromHtml(html: string): { title: string; text: string; au
   const description = meta(html, 'og:description') || meta(html, 'description') || '';
 
   const body = html
+    .replace(/<!--[\s\S]*?-->/g, ' ')
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
     .replace(/<noscript[\s\S]*?<\/noscript>/gi, ' ')
+    // Declarative shadow DOM (`<template shadowrootmode>`) carries component
+    // styles/markup that otherwise leak in as CSS text.
+    .replace(/<template[\s\S]*?<\/template>/gi, ' ')
     .replace(/<\/(p|div|li|h[1-6]|br|section|article)>/gi, '\n')
     .replace(/<[^>]+>/g, ' ');
-  const text = decodeEntities(body).replace(/[ \t]+/g, ' ').replace(/\n\s*\n+/g, '\n\n').trim();
+  const text = stripCssNoise(decodeEntities(body))
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n\s*\n+/g, '\n\n')
+    .trim();
 
-  const combined = [description, text].filter(Boolean).join('\n\n').slice(0, 20000);
+  // For JS-only pages the body is mostly chrome; the clean signal is the
+  // og:description. Prefer it, and only append body text when it adds length.
+  const combined = (text.length > description.length ? [description, text] : [description])
+    .filter(Boolean)
+    .join('\n\n')
+    .slice(0, 20000);
   return { title, text: combined || description || title, ...(author ? { author } : {}) };
+}
+
+/** Extract a tweet/X status id from a URL, or null if it isn't one. */
+export function extractTweetId(url: string): string | null {
+  const m = /(?:^|[/.])(?:twitter|x)\.com\/[^/]+\/status(?:es)?\/(\d+)/i.exec(url);
+  return m ? m[1]! : null;
+}
+
+/** Parse Twitter's public syndication (`tweet-result`) JSON into a resource. */
+export function parseTweetResult(data: unknown): { title: string; text: string; author?: string } | null {
+  const d = data as { text?: string; full_text?: string; user?: { name?: string; screen_name?: string } } | null;
+  const text = (d?.full_text || d?.text || '').trim();
+  if (!d || !text) return null;
+  const name = d.user?.name?.trim();
+  const handle = d.user?.screen_name?.trim();
+  const author = name ? (handle ? `${name} (@${handle})` : name) : handle ? `@${handle}` : undefined;
+  const firstLine = text.split('\n').map((l) => l.trim()).find(Boolean) ?? text;
+  const title = `${firstLine.slice(0, 80)}${firstLine.length > 80 ? '…' : ''}${name ? ` — ${name} on X` : ' — X post'}`;
+  return { title, text, ...(author ? { author } : {}) };
 }
 
 export function inferType(url: string): KnowledgeType {
