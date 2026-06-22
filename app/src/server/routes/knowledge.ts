@@ -49,7 +49,8 @@ export function registerKnowledgeRoutes(app: FastifyInstance, ctx: AppContext): 
       const tags = [...new Set([...(body.tags ?? []).map((t) => t.trim()).filter(Boolean), ...kn.tags])].slice(0, 10);
 
       const entry = await knowledge.create({
-        title: (title || 'Untitled').slice(0, 300),
+        // Prefer a user/source title; otherwise use the synthesized one.
+        title: (title || kn.title || 'Untitled').slice(0, 300),
         source: url || 'manual',
         type: type ?? (url ? 'link' : 'note'),
         summary: kn.summary,

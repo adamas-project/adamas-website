@@ -1,4 +1,4 @@
-import type { Candidate, CandidateDraft, LLMProvider, SourceDocument } from './provider.js';
+import type { Candidate, CandidateDraft, KnowledgeSynthesis, LLMProvider, SourceDocument } from './provider.js';
 import { runHeuristicExtraction, cleanRoleList, domainFromRole, heuristicSummarize } from './extract.js';
 import { DOMAINS, type Domain } from '../schema/decision.schema.js';
 
@@ -151,6 +151,52 @@ export class OllamaLLMProvider implements LLMProvider {
     } catch (err) {
       console.warn(`[hermes:ollama] summarize failed (${(err as Error).message}) — using local summary`);
       return heuristicSummarize(text);
+    }
+  }
+
+  async synthesizeKnowledge(text: string): Promise<KnowledgeSynthesis> {
+    const prompt = [
+      'You are the synthesis engine for ADAMAS, a decision-support system for a company founder/operator.',
+      'You turn a captured resource into a STRUCTURED memory note that helps the team make future decisions',
+      'faster — technical when useful, but never overwhelming. Write so a busy operator gets the value in seconds.',
+      'Return STRICT JSON only — no prose, no markdown — in exactly this shape:',
+      '{"title":"...","summary":"...","takeaways":["..."],"tags":["..."]}',
+      'Rules:',
+      '- title: a specific, descriptive title (<=90 chars). Never "Untitled".',
+      '- summary: 2-3 sentences that SYNTHESIZE what this is and why it matters to an operator.',
+      '  Resolve vague references (no "the second group" without saying which) — each sentence must stand alone.',
+      '- takeaways: 3-6 crisp, self-contained, actionable insights. No dangling pronouns; no copied raw sentences.',
+      '- tags: 3-6 meaningful topic tags, lowercase, hyphenated (e.g. "ai-agents", "permissions"). No generic',
+      '  filler like "work", "thing", "list", "file".',
+      'Summarize ONLY the text between the markers. Do not ask questions or mention links/access/AI.',
+      '\n--- CONTENT ---\n' + text,
+    ].join('\n');
+    // Errors propagate to the caller (summarizeKnowledge), which falls back to
+    // the deterministic synthesis path.
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), this.timeoutMs);
+    try {
+      const res = await fetch(`${this.url}/api/generate`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ model: this.model, prompt, stream: false, format: 'json', options: { temperature: 0.2 } }),
+        signal: controller.signal,
+      });
+      if (!res.ok) throw new Error(`Ollama responded ${res.status}`);
+      const body = (await res.json()) as { response?: string };
+      const parsed = JSON.parse(body.response ?? '{}') as Partial<KnowledgeSynthesis>;
+      const summary = (parsed.summary ?? '').trim();
+      if (!summary) throw new Error('empty synthesis');
+      const clean = (arr: unknown): string[] =>
+        Array.isArray(arr) ? arr.map((x) => String(x).trim()).filter(Boolean).slice(0, 6) : [];
+      return {
+        title: (parsed.title ?? '').trim() || undefined,
+        summary,
+        takeaways: clean(parsed.takeaways),
+        tags: clean(parsed.tags).map((t) => t.toLowerCase().replace(/\s+/g, '-')),
+      };
+    } finally {
+      clearTimeout(timer);
     }
   }
 }

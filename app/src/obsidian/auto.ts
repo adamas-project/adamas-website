@@ -41,7 +41,6 @@ export class ObsidianAutoExporter {
     this.timer = setTimeout(() => {
       this.timer = null;
       this.runNow().catch((err) => {
-        // eslint-disable-next-line no-console
         console.warn(`[obsidian] auto-export failed: ${(err as Error).message}`);
       });
     }, this.debounceMs);
