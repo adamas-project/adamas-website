@@ -1,12 +1,16 @@
 import type { LLMProvider } from '../evaluation/provider.js';
 import { heuristicSummarize } from '../evaluation/extract.js';
 
+// Generic words that make useless tags — they describe nothing retrievable.
 const STOPWORDS = new Set(
   ('the a an and or but if then else for to of in on at by with from as is are was were be been being this that ' +
     'these those it its their our your they we you he she him her his them about into over under more most than ' +
     'have has had will would can could should may might must not no yes do does did done how what when where which ' +
     'who whom why your you’re we’re they’re i’m there here also just like get got make made use used using one two ' +
-    'three new now out up down off so very much many lot really able into per via etc')
+    'three new now out up down off so very much many lot really able into per via etc ' +
+    // Generic filler that kept surfacing as noise tags.
+    'work works working thing things stuff list lists file files item items way ways part parts kind sort type ' +
+    'good bad better best need needs want wants today people group second first next last whole entire')
     .split(/\s+/),
 );
 
@@ -25,6 +29,7 @@ export function extractTags(text: string, max = 6): string[] {
 }
 
 export interface KnowledgeSummary {
+  title?: string;
   summary: string;
   takeaways: string[];
   tags: string[];
@@ -56,7 +61,41 @@ function looksLikeRefusal(s: string): boolean {
   );
 }
 
-/** Summarize a resource locally into a summary + key takeaways + tags. */
+/** Derive a readable title from the first strong sentence of the text. */
+function deriveTitle(text: string): string {
+  const first = text
+    .replace(/https?:\/\/\S+/g, ' ')
+    .split(/(?<=[.!?])\s+|\n+/)
+    .map((s) => s.trim())
+    .find((s) => s.length >= 12);
+  if (!first) return 'Untitled note';
+  const clipped = first.length > 90 ? `${first.slice(0, 87).trimEnd()}…` : first;
+  return clipped.replace(/[.!?]+$/, '');
+}
+
+/** Deterministic fallback synthesis when no LLM (or the LLM is unusable). */
+function heuristicSynthesis(text: string): KnowledgeSummary {
+  let raw = heuristicSummarize(text);
+  if (!raw.trim()) raw = text;
+  const takeaways = [
+    ...new Set(
+      raw
+        .split('\n')
+        .map((l) => l.replace(/^[\s>*•\d.-]+/, '').trim())
+        .filter((l) => l.length > 0),
+    ),
+  ].slice(0, 6);
+  const summary =
+    takeaways.length > 0 ? takeaways.slice(0, 3).join(' ') : raw.trim().slice(0, 600) || text.slice(0, 600);
+  return { title: deriveTitle(text), summary: summary.slice(0, 1500), takeaways, tags: extractTags(text) };
+}
+
+/**
+ * Synthesize a knowledge entry: a specific title, a synthesized summary, crisp
+ * takeaways, and meaningful tags — structured so the memory vault is retrievable
+ * and helps future decisions, not a verbatim dump. Uses the provider's
+ * structured synthesis when available, with a deterministic fallback.
+ */
 export async function summarizeKnowledge(provider: LLMProvider, text: string): Promise<KnowledgeSummary> {
   // Nothing meaningful to summarize (e.g. a post that's just a link). Don't hand
   // an empty page to the model — small models tend to "chat" back a refusal.
@@ -64,19 +103,41 @@ export async function summarizeKnowledge(provider: LLMProvider, text: string): P
     return { summary: NO_CONTENT, takeaways: [], tags: extractTags(text) };
   }
 
-  let raw = provider.summarize ? await provider.summarize(text, { kind: 'article' }) : heuristicSummarize(text);
-  // If the model chatted back instead of summarizing, fall back to the
-  // deterministic extractive summary of the actual text.
-  if (!raw.trim() || looksLikeRefusal(raw)) raw = heuristicSummarize(text);
+  // Preferred path: a single structured synthesis call.
+  if (provider.synthesizeKnowledge) {
+    try {
+      const s = await provider.synthesizeKnowledge(text);
+      if (s.summary.trim() && !looksLikeRefusal(s.summary)) {
+        const fb = heuristicSynthesis(text);
+        return {
+          title: s.title?.trim() || fb.title,
+          summary: s.summary.trim().slice(0, 1500),
+          takeaways: s.takeaways.length ? s.takeaways.slice(0, 6) : fb.takeaways,
+          tags: (s.tags.length ? s.tags : fb.tags).slice(0, 8),
+        };
+      }
+    } catch {
+      /* fall through to deterministic synthesis */
+    }
+    return heuristicSynthesis(text);
+  }
 
-  const takeaways = raw
-    .split('\n')
-    .map((l) => l.replace(/^[\s>*•\d.-]+/, '').trim())
-    .filter((l) => l.length > 0)
-    .slice(0, 6);
-
-  const summary =
-    takeaways.length > 0 ? takeaways.slice(0, 3).join(' ') : raw.trim().slice(0, 600) || text.slice(0, 600);
-
-  return { summary: summary.slice(0, 1500), takeaways, tags: extractTags(text) };
+  // Fallback path: prose summarizer (if any) cleaned up, else heuristic.
+  const fb = heuristicSynthesis(text);
+  if (provider.summarize) {
+    const raw = await provider.summarize(text, { kind: 'article' });
+    if (raw.trim() && !looksLikeRefusal(raw)) {
+      const takeaways = [
+        ...new Set(
+          raw
+            .split('\n')
+            .map((l) => l.replace(/^[\s>*•\d.-]+/, '').trim())
+            .filter((l) => l.length > 0),
+        ),
+      ].slice(0, 6);
+      const summary = takeaways.length ? takeaways.slice(0, 3).join(' ') : raw.trim().slice(0, 600);
+      return { title: fb.title, summary: summary.slice(0, 1500), takeaways, tags: fb.tags };
+    }
+  }
+  return fb;
 }

@@ -192,12 +192,16 @@ the ADAMAS schema format).
 
 ## Knowledge base
 
-A separate ledger for what you *learn* (distinct from decisions). In the
-**Knowledge** tab, paste a link (article, post, video, blog) or raw text; ADAMAS
-fetches the page, **summarizes it locally** (Hermes), and saves an entry with a
-summary, key takeaways, tags, and a link back to the source. Entries are stored as
-portable Markdown + JSON under `vault/knowledge/`. Fetching a URL is an inbound
-pull of public content — no vault data is sent out; summarization is on-device.
+A separate ledger for what you *learn* (distinct from decisions) — the **memory
+vault** that makes future decisions faster. In the **Knowledge** tab, paste a
+link (article, post, video, blog) or raw text; ADAMAS fetches the page and
+**synthesizes it locally** (Hermes) into a structured note: a specific title, a
+2–3 sentence synthesis (not a verbatim dump), crisp self-contained takeaways,
+meaningful topic tags, and a link back to the source. Synthesis is best with a
+local Ollama model (see above); without one it falls back to a deterministic
+extract. Entries are stored as portable Markdown + JSON under `vault/knowledge/`
+and flow into the Obsidian data room. Fetching a URL is an inbound pull of public
+content — no vault data is sent out; synthesis is on-device.
 X/Twitter posts are fetched via the public syndication endpoint, so the actual
 tweet text is captured (not the JS app shell). (No JS rendering otherwise: for
 paywalled or video-only pages, paste the text/transcript.)

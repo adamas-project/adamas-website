@@ -39,6 +39,18 @@ export interface Candidate {
 export type ProviderLocation = 'local' | 'cloud';
 
 /**
+ * A structured synthesis of a knowledge resource — not an extract. Built so the
+ * memory vault is retrievable: a specific title, a synthesized summary, crisp
+ * self-contained takeaways, and meaningful topic tags.
+ */
+export interface KnowledgeSynthesis {
+  title?: string;
+  summary: string;
+  takeaways: string[];
+  tags: string[];
+}
+
+/**
  * Hermes is a pluggable evaluation provider. The default runs entirely on the
  * local machine; an optional cloud provider is gated behind per-task approval.
  */
@@ -49,4 +61,6 @@ export interface LLMProvider {
   extractCandidates(doc: SourceDocument): Promise<Omit<Candidate, 'candidateId'>[]>;
   /** Condense a long source before extraction (meeting transcript or article). */
   summarize?(text: string, opts?: { kind?: 'meeting' | 'article' }): Promise<string>;
+  /** Synthesize a knowledge entry (title, summary, takeaways, tags) from text. */
+  synthesizeKnowledge?(text: string): Promise<KnowledgeSynthesis>;
 }

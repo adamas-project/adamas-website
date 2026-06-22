@@ -133,6 +133,41 @@ describe('summarizeKnowledge (local provider)', () => {
     expect(kn.summary).not.toMatch(/don'?t have access|could you paste/i);
     expect(kn.summary.length).toBeGreaterThan(0);
   });
+
+  it('uses a provider structured synthesis (title, summary, takeaways, tags)', async () => {
+    const provider = {
+      synthesizeKnowledge: async () => ({
+        title: 'Running Claude Code with guardrails',
+        summary: 'A note on balancing autonomy and safety when running an AI coding agent unattended.',
+        takeaways: ['Use a deny list to protect secrets', 'Keep a human in the loop for risky actions'],
+        tags: ['ai-agents', 'permissions', 'safety'],
+      }),
+    };
+    const longText =
+      'A detailed note about running an AI coding agent unattended overnight. The tradeoff is autonomy versus ' +
+      'safety, and a deny list plus a human in the loop keeps risky actions from causing damage to the codebase.';
+    const kn = await summarizeKnowledge(provider as never, longText);
+    expect(kn.title).toBe('Running Claude Code with guardrails');
+    expect(kn.tags).toContain('ai-agents');
+    expect(kn.takeaways.length).toBe(2);
+  });
+
+  it('derives a real title in the deterministic fallback (never "Untitled")', async () => {
+    const text =
+      'Letting an AI agent run unattended trades safety for leverage. A deny list keeps it from editing secrets. ' +
+      'Keeping a human in the loop catches risky actions before they happen.';
+    const kn = await summarizeKnowledge(new LocalLLMProvider(), text);
+    expect(kn.title && kn.title.length).toBeGreaterThan(0);
+    expect(kn.title).not.toBe('Untitled');
+  });
+
+  it('drops generic filler from auto tags', () => {
+    const tags = extractTags('The file file work work list list thing thing kubernetes kubernetes scaling scaling.');
+    expect(tags).toContain('kubernetes');
+    expect(tags).not.toContain('file');
+    expect(tags).not.toContain('work');
+    expect(tags).not.toContain('list');
+  });
 });
 
 describe('knowledge API', () => {
