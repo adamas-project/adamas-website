@@ -1,10 +1,37 @@
 import type { FastifyInstance } from 'fastify';
 import type { AppContext } from '../context.js';
+import { connectorPullMinutes } from '../../config/env.js';
 
 export function registerConnectorRoutes(app: FastifyInstance, ctx: AppContext): void {
   const { connectors, inbox, localProvider } = ctx;
 
-  app.get('/api/connectors', async () => ({ connectors: connectors.list() }));
+  app.get('/api/connectors', async () => ({
+    connectors: connectors.list(),
+    autoPullMinutes: connectorPullMinutes(),
+  }));
+
+  // Pull every connector once (used manually or by the background scheduler).
+  app.post('/api/connectors/pull-all', async () => {
+    const result = ctx.connectorScheduler
+      ? await ctx.connectorScheduler.runOnce()
+      : await pullAll();
+    return { ...result, pending: inbox.pendingCount };
+  });
+
+  async function pullAll(): Promise<{ pulled: number; added: number }> {
+    let pulled = 0;
+    let added = 0;
+    for (const info of connectors.list()) {
+      try {
+        const result = await connectors.pull(info.id);
+        pulled += result.documents.length;
+        added += (await inbox.ingest(localProvider, result.documents)).length;
+      } catch {
+        /* skip a failing connector; others still run */
+      }
+    }
+    return { pulled, added };
+  }
 
   // Pull new/changed source material from a connector (read-only) and run it
   // through Hermes into the Capture Inbox. Nothing enters the ledger here.

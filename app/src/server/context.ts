@@ -13,10 +13,12 @@ import { ImapConnector } from '../ingestion/imap.js';
 import { CalendarConnector } from '../ingestion/calendar.js';
 import type { Connector } from '../ingestion/connector.js';
 import { CommandTranscriber, type Transcriber } from '../ingestion/transcribe.js';
+import { ConnectorScheduler } from '../ingestion/scheduler.js';
 import { KnowledgeStore } from '../knowledge/store.js';
 import { ObsidianAutoExporter } from '../obsidian/auto.js';
 import { vaultPaths } from '../ledger/storage.js';
 import {
+  connectorPullMinutes,
   hermesConfig,
   icsConfig,
   imapConfig,
@@ -40,6 +42,7 @@ export interface AppContext {
   transcriber: Transcriber | null;
   knowledge: KnowledgeStore;
   obsidianAuto: ObsidianAutoExporter | null;
+  connectorScheduler: ConnectorScheduler | null;
   hermes: HermesConfig;
 }
 
@@ -86,6 +89,15 @@ export async function createContext(root: string): Promise<AppContext> {
     obsidianAuto.start();
   }
 
+  // Optional: periodically pull connectors so the inbox fills itself (opt-in via
+  // ADAMAS_CONNECTOR_PULL_MINUTES). Read-only; nothing enters the ledger unreviewed.
+  let connectorScheduler: ConnectorScheduler | null = null;
+  const pullMinutes = connectorPullMinutes();
+  if (pullMinutes > 0) {
+    connectorScheduler = new ConnectorScheduler(connectors, inbox, localProvider, pullMinutes * 60_000);
+    connectorScheduler.start();
+  }
+
   return {
     root,
     ledger,
@@ -98,6 +110,7 @@ export async function createContext(root: string): Promise<AppContext> {
     transcriber,
     knowledge,
     obsidianAuto,
+    connectorScheduler,
     hermes,
   };
 }

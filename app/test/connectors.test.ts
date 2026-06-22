@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { FilesystemConnector } from '../src/ingestion/filesystem.js';
 import { ConnectorManager } from '../src/ingestion/manager.js';
+import { ConnectorScheduler } from '../src/ingestion/scheduler.js';
 import { Ledger } from '../src/ledger/ledger.js';
 import { CaptureInbox } from '../src/evaluation/inbox.js';
 import { LocalLLMProvider } from '../src/evaluation/local.js';
@@ -116,5 +117,27 @@ describe('connector manager + inbox gate', () => {
     expect(added.length).toBeGreaterThan(0);
     expect(inbox.pendingCount).toBe(added.length);
     expect(ledger.count).toBe(0); // nothing enters the ledger unreviewed
+  });
+});
+
+describe('connector scheduler — auto-pull into the inbox', () => {
+  it('runOnce pulls all connectors and ingests new documents', async () => {
+    const dir = tempDir();
+    await write(dir, 'a.md', 'We decided to cap concurrent builds at three. Owner: head of ops.');
+    const v = tempVault();
+    cleanups.push(v.cleanup);
+    const ledger = await Ledger.open(v.root);
+    const inbox = await CaptureInbox.open(path.join(v.root, 'candidates.json'), ledger);
+    const manager = await ConnectorManager.open(path.join(v.root, 'connectors.json'), [new FilesystemConnector(dir)]);
+
+    const scheduler = new ConnectorScheduler(manager, inbox, new LocalLLMProvider(), 0);
+    const first = await scheduler.runOnce();
+    expect(first.pulled).toBeGreaterThan(0);
+    expect(first.added).toBeGreaterThan(0);
+    expect(ledger.count).toBe(0); // still gated through the inbox
+
+    // Incremental: a second cycle finds nothing new.
+    const second = await scheduler.runOnce();
+    expect(second.pulled).toBe(0);
   });
 });

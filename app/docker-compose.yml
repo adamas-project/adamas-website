@@ -41,6 +41,8 @@ services:
       # Optional read-only Google Calendar (iCal feed) connector.
       ADAMAS_ICS_URL: "${ADAMAS_ICS_URL:-}"
       ADAMAS_ICS_NAME: "${ADAMAS_ICS_NAME:-Calendar}"
+      # Auto-pull connectors every N minutes so the inbox fills itself (0 = off).
+      ADAMAS_CONNECTOR_PULL_MINUTES: "${ADAMAS_CONNECTOR_PULL_MINUTES:-0}"
       # On-device speech-to-text for dropped recordings. Defaults to the baked-in
       # whisper.cpp engine; override to point at a different local engine.
       ADAMAS_TRANSCRIBE_CMD: "${ADAMAS_TRANSCRIBE_CMD:-adamas-transcribe {input}}"
