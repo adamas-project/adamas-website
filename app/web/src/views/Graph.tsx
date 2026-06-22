@@ -1,15 +1,18 @@
 import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState, type ReactNode, type ReactElement } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import { api, type Decision, type Domain } from '../api';
-import { domainColor, token } from '../tokens';
+import { memoryNodeColor, token } from '../tokens';
 import { DecisionDetail } from '../components/DecisionDetail';
 
 const Graph3D = lazy(() => import('./Graph3D'));
 
+export type GKind = 'decision' | 'knowledge' | 'hub';
 export interface GNode {
   id: string;
   title: string;
-  domain: Domain;
+  kind: GKind;
+  group: string;
+  domain?: Domain;
   status: string;
   degree: number;
   x?: number;
@@ -18,7 +21,14 @@ export interface GNode {
 export interface GLink {
   source: string | GNode;
   target: string | GNode;
+  kind: 'link' | 'hub' | 'cross';
   supersedes: boolean;
+}
+
+/** Node radius — hubs are big anchors, then scale by connectivity. */
+export function nodeRadius(n: GNode): number {
+  if (n.kind === 'hub') return 9 + Math.min(10, n.degree * 0.5);
+  return 4 + Math.min(11, n.degree * 1.7);
 }
 
 const DOMAINS: Domain[] = ['hiring', 'sales', 'product', 'finance', 'ops'];
@@ -47,23 +57,30 @@ export function GraphView() {
   const reduced = useReducedMotion();
 
   const [nodesAll, setNodesAll] = useState<GNode[]>([]);
-  const [edges, setEdges] = useState<Array<{ source: string; target: string; supersedes: boolean }>>([]);
+  const [edges, setEdges] = useState<Array<{ source: string; target: string; kind: GLink['kind']; supersedes: boolean }>>([]);
   const [dims, setDims] = useState({ w: 800, h: 620 });
   const [domainFilter, setDomainFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [detail, setDetail] = useState<{ decision: Decision; neighbors: string[] } | null>(null);
+  const [knDetail, setKnDetail] = useState<any | null>(null);
   const [pulses, setPulses] = useState(!reduced);
-  const [mode, setMode] = useState<'2d' | '3d'>('2d');
+  const [mode, setMode] = useState<'2d' | '3d'>('3d');
 
-  // Load graph; seed initial positions clustered by domain (brain-region feel).
+  // Load the combined memory graph; seed positions clustered by group so
+  // departments and the knowledge cluster settle into distinct regions.
   useEffect(() => {
-    api.graph().then((g) => {
+    api.graphMemory().then((g) => {
+      const groupAngle = (group: string): number => {
+        if (group === 'hub') return 0;
+        if (group === 'knowledge') return Math.PI; // opposite the decision core
+        const di = DOMAINS.indexOf(group as Domain);
+        return ((di < 0 ? 0 : di) / DOMAINS.length) * Math.PI * 2;
+      };
       const nodes: GNode[] = (g.nodes as GNode[]).map((n) => {
-        const di = DOMAINS.indexOf(n.domain);
-        const ang = (di / DOMAINS.length) * Math.PI * 2;
-        const R = 200;
+        const ang = groupAngle(n.group);
+        const R = n.kind === 'hub' ? 0 : 200;
         return {
           ...n,
           x: Math.cos(ang) * R + (Math.random() - 0.5) * 140,
@@ -71,7 +88,7 @@ export function GraphView() {
         };
       });
       setNodesAll(nodes);
-      setEdges(g.edges.map((e: any) => ({ source: e.source, target: e.target, supersedes: e.supersedes })));
+      setEdges(g.edges.map((e: any) => ({ source: e.source, target: e.target, kind: e.kind, supersedes: e.supersedes })));
     });
   }, []);
 
@@ -99,7 +116,11 @@ export function GraphView() {
   }, [edges]);
 
   const visible = useCallback(
-    (n: GNode) => (!domainFilter || n.domain === domainFilter) && (!statusFilter || n.status === statusFilter),
+    (n: GNode) => {
+      // Domain/status filters apply to decisions; hubs and knowledge always show.
+      if (n.kind !== 'decision') return true;
+      return (!domainFilter || n.domain === domainFilter) && (!statusFilter || n.status === statusFilter);
+    },
     [domainFilter, statusFilter],
   );
 
@@ -110,7 +131,7 @@ export function GraphView() {
     const ok = new Set(nodes.map((n) => n.id));
     const links: GLink[] = edges
       .filter((e) => ok.has(e.source) && ok.has(e.target))
-      .map((e) => ({ source: e.source, target: e.target, supersedes: e.supersedes }));
+      .map((e) => ({ source: e.source, target: e.target, kind: e.kind, supersedes: e.supersedes }));
     return { nodes, links };
   }, [nodesAll, edges, visible]);
 
@@ -136,9 +157,19 @@ export function GraphView() {
   const openNode = useCallback(
     (id: string) => {
       setSelectedId(id);
-      api.decision(id).then(setDetail).catch(() => setDetail(null));
-      const fg = fgRef.current;
       const node = nodesAll.find((n) => n.id === id);
+      // Open the right detail for the node kind; hubs just center.
+      if (node?.kind === 'decision') {
+        setKnDetail(null);
+        api.decision(id).then(setDetail).catch(() => setDetail(null));
+      } else if (node?.kind === 'knowledge') {
+        setDetail(null);
+        api.knowledgeGet(id).then((r) => setKnDetail(r.entry)).catch(() => setKnDetail(null));
+      } else {
+        setDetail(null);
+        setKnDetail(null);
+      }
+      const fg = fgRef.current;
       if (fg && node && node.x != null && node.y != null) fg.centerAt?.(node.x, node.y, 600);
     },
     [nodesAll],
@@ -146,11 +177,11 @@ export function GraphView() {
 
   const drawNode = useCallback(
     (node: GNode, ctx: CanvasRenderingContext2D, globalScale: number) => {
-      const color = domainColor(node.domain);
+      const color = memoryNodeColor(node);
       const isFocus = highlight?.focus === node.id;
       const inFocus = !highlight || highlight.nodes.has(node.id);
       const superseded = node.status !== 'active';
-      const r = 4 + Math.min(11, node.degree * 1.7);
+      const r = nodeRadius(node);
       const x = node.x ?? 0;
       const y = node.y ?? 0;
 
@@ -184,11 +215,11 @@ export function GraphView() {
         ctx.stroke();
       }
 
-      // Labels only on hover/focus or when zoomed in (avoid clutter).
-      if ((isFocus || globalScale > 2.2) && inFocus) {
-        const label = node.id;
+      // Hubs are always labelled (anchors); others on hover/focus or zoom-in.
+      if ((node.kind === 'hub' || isFocus || globalScale > 2.2) && inFocus) {
+        const label = node.kind === 'hub' ? node.title : node.id;
         ctx.globalAlpha = 1;
-        ctx.font = `${Math.max(9, 11 / globalScale * 1.4)}px ui-monospace, monospace`;
+        ctx.font = `${node.kind === 'hub' ? 'bold ' : ''}${Math.max(9, 11 / globalScale * 1.4)}px ui-monospace, monospace`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'bottom';
         ctx.fillStyle = textCol;
@@ -200,7 +231,7 @@ export function GraphView() {
   );
 
   const nodePointerArea = useCallback((node: GNode, color: string, ctx: CanvasRenderingContext2D) => {
-    const r = 4 + Math.min(11, node.degree * 1.7);
+    const r = nodeRadius(node);
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.arc(node.x ?? 0, node.y ?? 0, r + 2, 0, Math.PI * 2);
@@ -225,6 +256,7 @@ export function GraphView() {
         setPulses={setPulses}
         reduced={reduced}
         detail={detail}
+        knDetail={knDetail}
         onNavigate={openNode}
       >
         <div className="graph-wrap" ref={wrapRef} style={{ height: dims.h }}>
@@ -234,10 +266,12 @@ export function GraphView() {
               width={dims.w}
               height={dims.h}
               reduced={reduced}
+              nodeColor={memoryNodeColor}
               onNodeClick={(n: GNode) => openNode(n.id)}
             />
           </Suspense>
           <Legend />
+          <div className="graph-hint">drag a node: neighbors follow · click: open · scroll: zoom · drag bg: rotate</div>
         </div>
       </GraphChrome>
     );
@@ -255,6 +289,7 @@ export function GraphView() {
       setPulses={setPulses}
       reduced={reduced}
       detail={detail}
+      knDetail={knDetail}
       onNavigate={openNode}
     >
       <div className="graph-wrap" ref={wrapRef} style={{ height: dims.h }}>
@@ -307,6 +342,14 @@ function Legend() {
           {d}
         </span>
       ))}
+      <span>
+        <span className="dot" style={{ color: 'var(--accent-lt)', background: 'var(--accent-lt)' }} />
+        knowledge
+      </span>
+      <span>
+        <span className="dot" style={{ color: 'var(--text)', background: 'var(--text)' }} />
+        hub
+      </span>
       <span>· dashed = superseded/reversed</span>
     </div>
   );
@@ -323,6 +366,7 @@ function GraphChrome(props: {
   setPulses: (v: boolean) => void;
   reduced: boolean;
   detail: { decision: Decision; neighbors: string[] } | null;
+  knDetail: { id: string; title: string; type: string; summary: string; takeaways?: string[]; tags?: string[]; source?: string } | null;
   onNavigate: (id: string) => void;
   children: ReactNode;
 }) {
@@ -356,8 +400,28 @@ function GraphChrome(props: {
       <div className="panel">
         {props.detail ? (
           <DecisionDetail data={props.detail} onNavigate={props.onNavigate} />
+        ) : props.knDetail ? (
+          <div>
+            <div className="muted mono" style={{ fontSize: 12 }}>{props.knDetail.id} · {props.knDetail.type}</div>
+            <h3 style={{ margin: '4px 0 8px' }}>{props.knDetail.title}</h3>
+            <p style={{ marginTop: 0 }}>{props.knDetail.summary}</p>
+            {props.knDetail.takeaways?.length ? (
+              <ul style={{ paddingLeft: 18 }}>
+                {props.knDetail.takeaways.map((t, i) => <li key={i}>{t}</li>)}
+              </ul>
+            ) : null}
+            {props.knDetail.tags?.length ? (
+              <div className="tagrow">{props.knDetail.tags.map((t) => <span key={t} className="tag">{t}</span>)}</div>
+            ) : null}
+            {props.knDetail.source && props.knDetail.source !== 'manual' ? (
+              <p className="muted" style={{ fontSize: 12, wordBreak: 'break-all' }}>{props.knDetail.source}</p>
+            ) : null}
+          </div>
         ) : (
-          <p className="muted">Click a node to open its decision. Hover to highlight its neighborhood; heavily-linked decisions render as brighter hubs.</p>
+          <p className="muted">
+            Your second brain: decisions (by department) and knowledge, linked. Click a node to open it; hover to
+            highlight its neighborhood. Drag any node and its connections follow.
+          </p>
         )}
       </div>
     </div>
