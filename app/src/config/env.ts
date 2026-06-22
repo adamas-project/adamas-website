@@ -24,6 +24,12 @@ export function resolveObsidianDir(root: string): string {
   return path.join(root, 'obsidian');
 }
 
+/** Whether to auto-refresh the Obsidian vault on every change (default on). */
+export function obsidianAutoEnabled(): boolean {
+  const raw = (process.env.ADAMAS_OBSIDIAN_AUTO ?? '1').trim().toLowerCase();
+  return raw !== '0' && raw !== 'false' && raw !== 'off';
+}
+
 /** Folder the local-folder connector reads source material from. */
 export function resolveSourcesDir(root: string): string {
   const fromEnv = process.env.ADAMAS_SOURCES_DIR;

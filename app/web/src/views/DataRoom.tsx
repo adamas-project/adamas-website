@@ -77,7 +77,14 @@ export function DataRoomView() {
             {busy ? 'Generating…' : 'Generate / refresh Obsidian vault'}
           </button>
           {info?.exists ? <span className="badge live">built</span> : <span className="badge">not built yet</span>}
+          {info?.auto && <span className="badge live">auto-sync on</span>}
         </div>
+        {info?.auto && (
+          <p className="muted" style={{ fontSize: 13, marginTop: 8 }}>
+            The vault refreshes automatically whenever a decision or knowledge entry changes — you rarely need this
+            button. Use it to force an immediate rebuild.
+          </p>
+        )}
         {msg && <div className="notice ok">{msg}</div>}
 
         {info?.dir && (

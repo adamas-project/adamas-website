@@ -29,6 +29,9 @@ services:
       ADAMAS_SOURCES_DIR: /data/sources
       # Generated Obsidian data-room vault (host folder ./obsidian → open in Obsidian).
       ADAMAS_OBSIDIAN_DIR: /data/obsidian
+      # Auto-refresh the Obsidian vault on every change (default on). Set "0" to
+      # only rebuild when you click Generate in the Data Room tab.
+      ADAMAS_OBSIDIAN_AUTO: "${ADAMAS_OBSIDIAN_AUTO:-1}"
       # Optional read-only email connector (set these in a .env file to enable).
       ADAMAS_IMAP_HOST: "${ADAMAS_IMAP_HOST:-}"
       ADAMAS_IMAP_USER: "${ADAMAS_IMAP_USER:-}"

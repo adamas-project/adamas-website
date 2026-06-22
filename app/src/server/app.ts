@@ -52,6 +52,11 @@ export function buildApp(ctx: AppContext): FastifyInstance {
   registerKnowledgeRoutes(app, ctx);
   registerObsidianRoutes(app, ctx);
 
+  // Stop the background Obsidian auto-exporter cleanly on shutdown.
+  app.addHook('onClose', async () => {
+    ctx.obsidianAuto?.stop();
+  });
+
   return app;
 }
 
