@@ -198,7 +198,9 @@ fetches the page, **summarizes it locally** (Hermes), and saves an entry with a
 summary, key takeaways, tags, and a link back to the source. Entries are stored as
 portable Markdown + JSON under `vault/knowledge/`. Fetching a URL is an inbound
 pull of public content — no vault data is sent out; summarization is on-device.
-(No JS rendering: for paywalled or video-only pages, paste the text/transcript.)
+X/Twitter posts are fetched via the public syndication endpoint, so the actual
+tweet text is captured (not the JS app shell). (No JS rendering otherwise: for
+paywalled or video-only pages, paste the text/transcript.)
 
 ## Obsidian data room (the "second brain")
 
