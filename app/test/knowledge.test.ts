@@ -115,6 +115,24 @@ describe('summarizeKnowledge (local provider)', () => {
     expect(Array.isArray(kn.takeaways)).toBe(true);
     expect(kn.tags).toContain('local-first');
   });
+
+  it('does not summarize link-only / empty content (no chatbot refusal stored)', async () => {
+    // A post that is basically just a link: the model should never be asked.
+    const provider = { summarize: async () => 'Sure! Could you please paste the content of the article?' };
+    const kn = await summarizeKnowledge(provider as never, 'https://t.co/SVowI3vLbO');
+    expect(kn.summary).toMatch(/not enough readable text/i);
+    expect(kn.takeaways).toEqual([]);
+  });
+
+  it('discards a chatbot refusal and falls back to the deterministic summary', async () => {
+    const realText =
+      'We adopted milestone billing to protect cash flow. Invoices are split 50/40/10 across the project. ' +
+      'This shortens the cash cycle and lowers the risk of a late final payment.';
+    const refusing = { summarize: async () => "I'm sorry, I don't have access to that link. Could you paste the text?" };
+    const kn = await summarizeKnowledge(refusing as never, realText);
+    expect(kn.summary).not.toMatch(/don'?t have access|could you paste/i);
+    expect(kn.summary.length).toBeGreaterThan(0);
+  });
 });
 
 describe('knowledge API', () => {

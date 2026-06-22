@@ -75,14 +75,31 @@ export function extractTweetId(url: string): string | null {
 
 /** Parse Twitter's public syndication (`tweet-result`) JSON into a resource. */
 export function parseTweetResult(data: unknown): { title: string; text: string; author?: string } | null {
-  const d = data as { text?: string; full_text?: string; user?: { name?: string; screen_name?: string } } | null;
-  const text = (d?.full_text || d?.text || '').trim();
+  const d = data as {
+    text?: string;
+    full_text?: string;
+    // Long-form ("note") tweets carry their full body here.
+    note_tweet?: { note_tweet_results?: { result?: { text?: string } } };
+    user?: { name?: string; screen_name?: string };
+  } | null;
+  const longForm = d?.note_tweet?.note_tweet_results?.result?.text;
+  const text = (longForm || d?.full_text || d?.text || '').trim();
   if (!d || !text) return null;
   const name = d.user?.name?.trim();
   const handle = d.user?.screen_name?.trim();
   const author = name ? (handle ? `${name} (@${handle})` : name) : handle ? `@${handle}` : undefined;
-  const firstLine = text.split('\n').map((l) => l.trim()).find(Boolean) ?? text;
-  const title = `${firstLine.slice(0, 80)}${firstLine.length > 80 ? '…' : ''}${name ? ` — ${name} on X` : ' — X post'}`;
+  const who = name || (handle ? `@${handle}` : '');
+
+  // Build a readable title from the prose, ignoring a bare leading link (common
+  // when a post is just a link to an article/thread).
+  const prose = text.replace(/https?:\/\/\S+/g, ' ').replace(/\s+/g, ' ').trim();
+  const firstLine = prose.split('\n').map((l) => l.trim()).find(Boolean) ?? '';
+  const snippet = firstLine ? `${firstLine.slice(0, 80)}${firstLine.length > 80 ? '…' : ''}` : '';
+  const title = snippet
+    ? `${snippet}${who ? ` — ${who} on X` : ' — X post'}`
+    : who
+      ? `Post by ${who} on X`
+      : 'X post';
   return { title, text, ...(author ? { author } : {}) };
 }
 
