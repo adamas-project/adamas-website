@@ -234,6 +234,14 @@ ADAMAS (immutable, sourced — the audit trail buyers want); the **Knowledge bas
 is the living brain**; Obsidian is the fast browse/graph/edit layer over the same
 material.
 
+**Write-back (two-way):** the export never touches two folders — Obsidian's own
+`.obsidian` settings, and a dedicated `_Inbox/`. Drop or write notes in
+`obsidian/_Inbox/` from inside Obsidian and ADAMAS imports each into the
+Knowledge base (summarized, tagged), then moves the file to `_Inbox/Imported/`.
+It runs automatically (when auto-sync is on) and on demand via **Data Room →
+Import from _Inbox** (`POST /api/obsidian/import`). Everything else in the vault
+is regenerated, so this inbox is the safe place to add things from Obsidian.
+
 ## Application surfaces
 
 - **The Ledger** — list/detail/filter of decisions; context, decision, owner,

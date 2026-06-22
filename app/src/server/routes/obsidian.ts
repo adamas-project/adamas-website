@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { existsSync } from 'node:fs';
 import type { AppContext } from '../context.js';
 import { buildObsidianVault } from '../../obsidian/export.js';
+import { importObsidianInbox } from '../../obsidian/import.js';
 import { computeReadiness } from '../../obsidian/readiness.js';
 import { resolveObsidianDir } from '../../config/env.js';
 
@@ -23,6 +24,15 @@ export function registerObsidianRoutes(app: FastifyInstance, ctx: AppContext): v
         ? await ctx.obsidianAuto.runNow()
         : await buildObsidianVault({ ledger: ctx.ledger, knowledge: ctx.knowledge, assets: ctx.assets }, dir);
       return result;
+    } catch (err) {
+      return reply.code(500).send({ error: (err as Error).message });
+    }
+  });
+
+  // Write-back: import notes the operator dropped into obsidian/_Inbox/.
+  app.post('/api/obsidian/import', async (_req, reply) => {
+    try {
+      return await importObsidianInbox({ knowledge: ctx.knowledge, provider: ctx.localProvider }, dir);
     } catch (err) {
       return reply.code(500).send({ error: (err as Error).message });
     }

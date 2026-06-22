@@ -55,6 +55,7 @@ export function buildApp(ctx: AppContext): FastifyInstance {
   // Stop background services cleanly on shutdown.
   app.addHook('onClose', async () => {
     ctx.obsidianAuto?.stop();
+    ctx.obsidianInbox?.stop();
     ctx.connectorScheduler?.stop();
   });
 
