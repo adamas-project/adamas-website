@@ -112,7 +112,10 @@ export function registerLedgerRoutes(app: FastifyInstance, ctx: AppContext): voi
 
   // Combined "second brain" graph: decisions + knowledge, structured like the
   // Obsidian vault (hubs + bi-links + topic cross-links). Powers the 3D view.
-  app.get('/api/graph/memory', async () => buildMemoryGraph(ledger, ctx.knowledge));
+  app.get('/api/graph/memory', async (req) => {
+    const topics = (req.query as Record<string, string>)?.topics === '1';
+    return buildMemoryGraph(ledger, ctx.knowledge, { topics });
+  });
 
   app.get('/api/export', async (_req, reply) => {
     reply.header('content-disposition', 'attachment; filename="adamas-vault.json"');

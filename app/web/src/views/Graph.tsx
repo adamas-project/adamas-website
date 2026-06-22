@@ -6,7 +6,7 @@ import { DecisionDetail } from '../components/DecisionDetail';
 
 const Graph3D = lazy(() => import('./Graph3D'));
 
-export type GKind = 'decision' | 'knowledge' | 'hub';
+export type GKind = 'decision' | 'knowledge' | 'hub' | 'tag';
 export interface GNode {
   id: string;
   title: string;
@@ -25,9 +25,10 @@ export interface GLink {
   supersedes: boolean;
 }
 
-/** Node radius — hubs are big anchors, then scale by connectivity. */
+/** Node radius — hubs are big anchors, tags small meta-nodes, then by connectivity. */
 export function nodeRadius(n: GNode): number {
   if (n.kind === 'hub') return 9 + Math.min(10, n.degree * 0.5);
+  if (n.kind === 'tag') return 3 + Math.min(6, n.degree * 0.7);
   return 4 + Math.min(11, n.degree * 1.7);
 }
 
@@ -67,14 +68,18 @@ export function GraphView() {
   const [knDetail, setKnDetail] = useState<any | null>(null);
   const [pulses, setPulses] = useState(!reduced);
   const [mode, setMode] = useState<'2d' | '3d'>('3d');
+  const [topics, setTopics] = useState(false);
+  const [focusMode, setFocusMode] = useState(false);
+  const [focusId, setFocusId] = useState<string | null>(null);
 
   // Load the combined memory graph; seed positions clustered by group so
   // departments and the knowledge cluster settle into distinct regions.
   useEffect(() => {
-    api.graphMemory().then((g) => {
+    api.graphMemory(topics).then((g) => {
       const groupAngle = (group: string): number => {
         if (group === 'hub') return 0;
         if (group === 'knowledge') return Math.PI; // opposite the decision core
+        if (group === 'topic') return Math.PI / 2;
         const di = DOMAINS.indexOf(group as Domain);
         return ((di < 0 ? 0 : di) / DOMAINS.length) * Math.PI * 2;
       };
@@ -89,8 +94,9 @@ export function GraphView() {
       });
       setNodesAll(nodes);
       setEdges(g.edges.map((e: any) => ({ source: e.source, target: e.target, kind: e.kind, supersedes: e.supersedes })));
+      setFocusId(null);
     });
-  }, []);
+  }, [topics]);
 
   // Responsive canvas sizing.
   useEffect(() => {
@@ -127,13 +133,15 @@ export function GraphView() {
   // Build graphData. Keep node object identity stable (positions persist); make
   // fresh link objects each time so the library's mutation never corrupts edges.
   const graphData = useMemo(() => {
-    const nodes = nodesAll.filter(visible);
+    // Focus mode: isolate the selected node's immediate neighborhood.
+    const focusSet = focusId ? new Set<string>([focusId, ...(adj.get(focusId) ?? [])]) : null;
+    const nodes = nodesAll.filter((n) => visible(n) && (!focusSet || focusSet.has(n.id)));
     const ok = new Set(nodes.map((n) => n.id));
     const links: GLink[] = edges
       .filter((e) => ok.has(e.source) && ok.has(e.target))
       .map((e) => ({ source: e.source, target: e.target, kind: e.kind, supersedes: e.supersedes }));
     return { nodes, links };
-  }, [nodesAll, edges, visible]);
+  }, [nodesAll, edges, visible, focusId, adj]);
 
   // Tune forces so domains loosely cluster but stay connected.
   useEffect(() => {
@@ -158,7 +166,7 @@ export function GraphView() {
     (id: string) => {
       setSelectedId(id);
       const node = nodesAll.find((n) => n.id === id);
-      // Open the right detail for the node kind; hubs just center.
+      // Open the right detail for the node kind; hubs/tags just center.
       if (node?.kind === 'decision') {
         setKnDetail(null);
         api.decision(id).then(setDetail).catch(() => setDetail(null));
@@ -169,10 +177,12 @@ export function GraphView() {
         setDetail(null);
         setKnDetail(null);
       }
+      // Focus mode: isolate this node's neighborhood.
+      if (focusMode) setFocusId(id);
       const fg = fgRef.current;
       if (fg && node && node.x != null && node.y != null) fg.centerAt?.(node.x, node.y, 600);
     },
-    [nodesAll],
+    [nodesAll, focusMode],
   );
 
   const drawNode = useCallback(
@@ -217,7 +227,7 @@ export function GraphView() {
 
       // Hubs are always labelled (anchors); others on hover/focus or zoom-in.
       if ((node.kind === 'hub' || isFocus || globalScale > 2.2) && inFocus) {
-        const label = node.kind === 'hub' ? node.title : node.id;
+        const label = node.kind === 'hub' || node.kind === 'tag' ? node.title : node.id;
         ctx.globalAlpha = 1;
         ctx.font = `${node.kind === 'hub' ? 'bold ' : ''}${Math.max(9, 11 / globalScale * 1.4)}px ui-monospace, monospace`;
         ctx.textAlign = 'center';
@@ -254,6 +264,12 @@ export function GraphView() {
         setStatusFilter={setStatusFilter}
         pulses={pulses}
         setPulses={setPulses}
+        topics={topics}
+        setTopics={setTopics}
+        focusMode={focusMode}
+        setFocusMode={setFocusMode}
+        focused={!!focusId}
+        clearFocus={() => setFocusId(null)}
         reduced={reduced}
         detail={detail}
         knDetail={knDetail}
@@ -287,6 +303,12 @@ export function GraphView() {
       setStatusFilter={setStatusFilter}
       pulses={pulses}
       setPulses={setPulses}
+      topics={topics}
+      setTopics={setTopics}
+      focusMode={focusMode}
+      setFocusMode={setFocusMode}
+      focused={!!focusId}
+      clearFocus={() => setFocusId(null)}
       reduced={reduced}
       detail={detail}
       knDetail={knDetail}
@@ -319,7 +341,7 @@ export function GraphView() {
           linkDirectionalParticleSpeed={0.005}
           onNodeHover={((n: GNode | null) => setHoverId(n?.id ?? null)) as any}
           onNodeClick={((n: GNode) => openNode(n.id)) as any}
-          onBackgroundClick={(() => setHoverId(null)) as any}
+          onBackgroundClick={(() => { setHoverId(null); setFocusId(null); }) as any}
           cooldownTicks={reduced ? 0 : 200}
           warmupTicks={reduced ? 120 : 0}
           d3AlphaDecay={reduced ? 0.3 : 0.0150}
@@ -347,6 +369,10 @@ function Legend() {
         knowledge
       </span>
       <span>
+        <span className="dot" style={{ color: '#5fb8a8', background: '#5fb8a8' }} />
+        topic
+      </span>
+      <span>
         <span className="dot" style={{ color: 'var(--text)', background: 'var(--text)' }} />
         hub
       </span>
@@ -364,6 +390,12 @@ function GraphChrome(props: {
   setStatusFilter: (v: string) => void;
   pulses: boolean;
   setPulses: (v: boolean) => void;
+  topics: boolean;
+  setTopics: (v: boolean) => void;
+  focusMode: boolean;
+  setFocusMode: (v: boolean) => void;
+  focused: boolean;
+  clearFocus: () => void;
   reduced: boolean;
   detail: { decision: Decision; neighbors: string[] } | null;
   knDetail: { id: string; title: string; type: string; summary: string; takeaways?: string[]; tags?: string[]; source?: string } | null;
@@ -385,6 +417,13 @@ function GraphChrome(props: {
             <option value="superseded">superseded</option>
             <option value="reversed">reversed</option>
           </select>
+          <label className="rolebox" title="Show shared topics as their own nodes (like Obsidian tags)">
+            <input type="checkbox" checked={props.topics} onChange={(e) => props.setTopics(e.target.checked)} /> topics
+          </label>
+          <label className="rolebox" title="Click a node to isolate its local neighborhood">
+            <input type="checkbox" checked={props.focusMode} onChange={(e) => props.setFocusMode(e.target.checked)} /> focus
+          </label>
+          {props.focused && <button onClick={props.clearFocus}>clear focus</button>}
           {!props.reduced && (
             <label className="rolebox" title="Animate synapse pulses along links">
               <input type="checkbox" checked={props.pulses} onChange={(e) => props.setPulses(e.target.checked)} /> pulses

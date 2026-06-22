@@ -59,7 +59,7 @@ export function buildGraph(ledger: Ledger): DecisionGraph {
 
 // --- Memory graph: decisions + knowledge, structured like an Obsidian vault ---
 
-export type MemoryNodeKind = 'decision' | 'knowledge' | 'hub';
+export type MemoryNodeKind = 'decision' | 'knowledge' | 'hub' | 'tag';
 
 export interface MemoryNode {
   id: string;
@@ -105,7 +105,11 @@ function knowledgeTerms(tags: string[] | undefined, title: string): string[] {
  * decisions (and other notes) it relates to. Mirrors the Obsidian graph so the
  * in-app 3D view reads the same.
  */
-export function buildMemoryGraph(ledger: Ledger, knowledge?: KnowledgeStore): MemoryGraph {
+export function buildMemoryGraph(
+  ledger: Ledger,
+  knowledge?: KnowledgeStore,
+  opts: { topics?: boolean } = {},
+): MemoryGraph {
   const decisions = ledger.list();
   const knEntries = knowledge?.list() ?? [];
   const degree = new Map<string, number>();
@@ -136,33 +140,62 @@ export function buildMemoryGraph(ledger: Ledger, knowledge?: KnowledgeStore): Me
     }
   }
 
-  // Knowledge→hub membership + topic cross-links to relevant decisions.
+  // Knowledge→hub membership.
+  for (const e of knEntries) if (knowledge) addEdge(KN_HUB, e.id, 'hub');
+
   const decHaystacks = decisions.map((d) => ({
     id: d.id,
     text: `${d.title} ${d.context} ${d.decision} ${(d.tradeoffs ?? []).join(' ')} ${d.domain}`.toLowerCase(),
   }));
-  for (const e of knEntries) {
-    if (knowledge) addEdge(KN_HUB, e.id, 'hub');
-    const terms = knowledgeTerms(e.tags, e.title);
-    if (!terms.length) continue;
-    const scored = decHaystacks
-      .map((h) => ({ id: h.id, score: terms.reduce((n, t) => n + (h.text.includes(t) ? 1 : 0), 0) }))
-      .filter((s) => s.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 4);
-    for (const s of scored) addEdge(e.id, s.id, 'cross');
-  }
 
-  // Knowledge↔knowledge: shared tag (cap to keep it readable).
-  for (let i = 0; i < knEntries.length; i++) {
-    const a = knEntries[i]!;
-    const aTags = new Set((a.tags ?? []).map((t) => t.toLowerCase()));
-    let made = 0;
-    for (let j = i + 1; j < knEntries.length && made < 3; j++) {
-      const b = knEntries[j]!;
-      if ((b.tags ?? []).some((t) => aTags.has(t.toLowerCase()))) {
-        addEdge(a.id, b.id, 'cross');
-        made++;
+  // Tag node ids created in topics mode (so we can emit them as nodes later).
+  const tagNodes = new Map<string, string>(); // tag -> node id
+
+  if (opts.topics) {
+    // Topics view: shared themes become their own nodes (like Obsidian tags),
+    // linking the knowledge and decisions that share them.
+    const byTag = new Map<string, { kn: string[]; dec: Set<string> }>();
+    for (const e of knEntries) {
+      for (const tag of e.tags ?? []) {
+        const key = tag.toLowerCase().trim();
+        if (!key) continue;
+        const bucket = byTag.get(key) ?? byTag.set(key, { kn: [], dec: new Set() }).get(key)!;
+        bucket.kn.push(e.id);
+        const terms = key.split(/[\s-]+/).filter((w) => w.length >= 4);
+        for (const h of decHaystacks) {
+          if (terms.some((t) => h.text.includes(t))) bucket.dec.add(h.id);
+        }
+      }
+    }
+    for (const [tag, b] of byTag) {
+      if (b.kn.length + b.dec.size < 2) continue; // skip singletons
+      const tagId = `#tag:${tag}`;
+      tagNodes.set(tag, tagId);
+      for (const knId of b.kn) addEdge(tagId, knId, 'cross');
+      for (const decId of [...b.dec].slice(0, 6)) addEdge(tagId, decId, 'cross');
+    }
+  } else {
+    // Default view: direct topic cross-links (knowledge→decision, knowledge↔knowledge).
+    for (const e of knEntries) {
+      const terms = knowledgeTerms(e.tags, e.title);
+      if (!terms.length) continue;
+      const scored = decHaystacks
+        .map((h) => ({ id: h.id, score: terms.reduce((n, t) => n + (h.text.includes(t) ? 1 : 0), 0) }))
+        .filter((s) => s.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 4);
+      for (const s of scored) addEdge(e.id, s.id, 'cross');
+    }
+    for (let i = 0; i < knEntries.length; i++) {
+      const a = knEntries[i]!;
+      const aTags = new Set((a.tags ?? []).map((t) => t.toLowerCase()));
+      let made = 0;
+      for (let j = i + 1; j < knEntries.length && made < 3; j++) {
+        const b = knEntries[j]!;
+        if ((b.tags ?? []).some((t) => aTags.has(t.toLowerCase()))) {
+          addEdge(a.id, b.id, 'cross');
+          made++;
+        }
       }
     }
   }
@@ -190,6 +223,14 @@ export function buildMemoryGraph(ledger: Ledger, knowledge?: KnowledgeStore): Me
       group: 'knowledge',
       status: 'active',
       degree: degree.get(e.id) ?? 0,
+    })),
+    ...[...tagNodes.entries()].map(([tag, id]): MemoryNode => ({
+      id,
+      title: `#${tag}`,
+      kind: 'tag',
+      group: 'topic',
+      status: 'active',
+      degree: degree.get(id) ?? 0,
     })),
   ];
 

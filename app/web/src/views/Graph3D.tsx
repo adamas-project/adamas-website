@@ -31,9 +31,9 @@ export default function Graph3D({
       height={height}
       backgroundColor="rgba(0,0,0,0)"
       nodeColor={((n: GNode) => nodeColor(n)) as any}
-      nodeVal={((n: GNode) => (n.kind === 'hub' ? 8 + n.degree * 0.5 : 1 + n.degree)) as any}
+      nodeVal={((n: GNode) => (n.kind === 'hub' ? 8 + n.degree * 0.5 : n.kind === 'tag' ? 0.6 : 1 + n.degree)) as any}
       nodeOpacity={0.92}
-      nodeLabel={((n: GNode) => (n.kind === 'hub' ? n.title : `${n.id} — ${n.title}`)) as any}
+      nodeLabel={((n: GNode) => (n.kind === 'hub' || n.kind === 'tag' ? n.title : `${n.id} — ${n.title}`)) as any}
       linkColor={((l: GLink) => (l.kind === 'cross' ? 'rgba(227,201,119,0.5)' : 'rgba(201,168,76,0.32)')) as any}
       linkOpacity={0.5}
       linkWidth={((l: GLink) => (l.kind === 'hub' ? 0.6 : 0.4)) as any}
