@@ -30,9 +30,44 @@ export interface KnowledgeSummary {
   tags: string[];
 }
 
+const NO_CONTENT =
+  'Saved the link, but there was not enough readable text on the page to summarize automatically ' +
+  '(some sites — e.g. X/Twitter long-form articles or paywalled pages — only expose a link). ' +
+  'Open the source, or paste the article text here to generate a summary.';
+
+/** How much real prose (letters, not URLs/markup) we need before summarizing. */
+const MIN_PROSE = 80;
+
+/** Letters-only length of the text, with URLs removed — gauges real content. */
+function proseLength(text: string): number {
+  return text
+    .replace(/https?:\/\/\S+/g, ' ')
+    .replace(/[^\p{L}]+/gu, ' ')
+    .trim().length;
+}
+
+/**
+ * Detect a chatbot-style non-answer (e.g. "I don't have access to the link,
+ * please paste the content") so we never store a refusal as a summary.
+ */
+function looksLikeRefusal(s: string): boolean {
+  return /\b(i (?:do not|don'?t|cannot|can'?t|am unable to|am not able to) (?:have )?access|could you (?:please )?(?:copy|paste|provide|share)|paste the (?:content|article|text|link)|as an ai\b|i'?m (?:sorry|unable)|i don'?t have (?:the )?(?:ability|access))/i.test(
+    s,
+  );
+}
+
 /** Summarize a resource locally into a summary + key takeaways + tags. */
 export async function summarizeKnowledge(provider: LLMProvider, text: string): Promise<KnowledgeSummary> {
-  const raw = provider.summarize ? await provider.summarize(text, { kind: 'article' }) : heuristicSummarize(text);
+  // Nothing meaningful to summarize (e.g. a post that's just a link). Don't hand
+  // an empty page to the model — small models tend to "chat" back a refusal.
+  if (proseLength(text) < MIN_PROSE) {
+    return { summary: NO_CONTENT, takeaways: [], tags: extractTags(text) };
+  }
+
+  let raw = provider.summarize ? await provider.summarize(text, { kind: 'article' }) : heuristicSummarize(text);
+  // If the model chatted back instead of summarizing, fall back to the
+  // deterministic extractive summary of the actual text.
+  if (!raw.trim() || looksLikeRefusal(raw)) raw = heuristicSummarize(text);
 
   const takeaways = raw
     .split('\n')

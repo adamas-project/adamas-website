@@ -123,8 +123,10 @@ export class OllamaLLMProvider implements LLMProvider {
   async summarize(text: string, opts?: { kind?: 'meeting' | 'article' }): Promise<string> {
     const prompt =
       opts?.kind === 'article'
-        ? 'Summarize this article/post for a personal knowledge base. Give the key takeaways as short bullet ' +
-          'points — faithful to the source, no added opinions, no preamble.\n\n--- CONTENT ---\n' + text
+        ? 'Summarize ONLY the text provided below for a personal knowledge base. Give the key takeaways as short ' +
+          'bullet points — faithful to the source, no added opinions, no preamble. Do not ask questions. Do not ' +
+          'mention links, access, or that you are an AI. Summarize strictly the text between the markers.\n\n' +
+          '--- CONTENT ---\n' + text
         : 'Summarize this meeting transcript into the concrete DECISIONS and OUTCOMES only, ' +
           'as short bullet points. For each, note the choice made, who owned it (a role), and any trade-off. ' +
           'Plain text bullets, no preamble.\n\n--- TRANSCRIPT ---\n' +
