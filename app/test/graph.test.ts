@@ -44,6 +44,24 @@ describe('buildMemoryGraph', () => {
     expect(g.edges.some((e) => e.kind === 'cross' && (e.source === knEntry.id || e.target === knEntry.id))).toBe(true);
   });
 
+  it('emits shared topics as tag nodes in topics mode', async () => {
+    const v = tempVault();
+    cleanups.push(v.cleanup);
+    const ledger = await seedVault(v.root);
+    const knowledge = await KnowledgeStore.open(path.join(v.root, 'knowledge'));
+    await knowledge.create({ title: 'Margin note A', source: 'manual', type: 'note', summary: 's', tags: ['margin', 'pricing'] });
+    await knowledge.create({ title: 'Margin note B', source: 'manual', type: 'note', summary: 's', tags: ['margin'] });
+
+    const g = buildMemoryGraph(ledger, knowledge, { topics: true });
+    const tagNode = g.nodes.find((n) => n.kind === 'tag' && n.id === '#tag:margin');
+    expect(tagNode).toBeTruthy();
+    // The tag connects both knowledge notes (shared) — and any margin decisions.
+    const edges = g.edges.filter((e) => e.source === '#tag:margin' || e.target === '#tag:margin');
+    expect(edges.length).toBeGreaterThanOrEqual(2);
+    // Default mode has no tag nodes.
+    expect(buildMemoryGraph(ledger, knowledge).nodes.some((n) => n.kind === 'tag')).toBe(false);
+  });
+
   it('omits the knowledge hub when there is no knowledge', async () => {
     const v = tempVault();
     cleanups.push(v.cleanup);
