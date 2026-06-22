@@ -26,12 +26,26 @@ WORKDIR /opt
 RUN git clone --depth 1 https://github.com/ggerganov/whisper.cpp.git
 WORKDIR /opt/whisper.cpp
 # Static build so the single binary is self-contained in the runtime image.
-RUN cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=ON \
-  && cmake --build build -j --config Release \
-  && cp build/bin/whisper-cli /usr/local/bin/whisper-cli
+# GGML_NATIVE=OFF disables -march=native: portable codegen that avoids the
+# aarch64/GCC fp16 NEON "always_inline target mismatch" (vfmaq_f16/vaddq_f16)
+# that breaks the build on Apple-Silicon under Docker.
+# The whole step is non-fatal: if whisper fails to compile (or the model can't be
+# fetched), we drop in a stub so the runtime COPY always succeeds and the app
+# image still builds — transcription degrades gracefully (the recording-upload
+# path returns a clear "transcription unavailable" error instead of breaking the
+# entire build).
+RUN (cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DGGML_NATIVE=OFF \
+        -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=ON \
+      && cmake --build build -j --config Release \
+      && cp build/bin/whisper-cli /usr/local/bin/whisper-cli) \
+  || (echo 'WARNING: whisper.cpp build failed — installing stub (transcription disabled).' >&2 \
+      && printf '%s\n' '#!/bin/sh' 'echo "whisper unavailable in this image" >&2' 'exit 1' \
+           > /usr/local/bin/whisper-cli \
+      && chmod +x /usr/local/bin/whisper-cli)
 RUN mkdir -p /models \
-  && curl -fsSL -o /models/ggml-base.en.bin \
-       https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin
+  && (curl -fsSL -o /models/ggml-base.en.bin \
+        https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin \
+      || echo 'WARNING: whisper model download failed — set ADAMAS_WHISPER_MODEL to a local model.' >&2)
 
 # ---- Runtime stage ----
 FROM node:22-bookworm-slim AS runtime
