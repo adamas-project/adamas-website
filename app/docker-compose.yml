@@ -27,6 +27,8 @@ services:
       # Read-only connectors: the local-folder connector reads source material
       # from here. Drop notes/.eml files into ./sources on the host.
       ADAMAS_SOURCES_DIR: /data/sources
+      # Generated Obsidian data-room vault (host folder ./obsidian → open in Obsidian).
+      ADAMAS_OBSIDIAN_DIR: /data/obsidian
       # Optional read-only email connector (set these in a .env file to enable).
       ADAMAS_IMAP_HOST: "${ADAMAS_IMAP_HOST:-}"
       ADAMAS_IMAP_USER: "${ADAMAS_IMAP_USER:-}"
@@ -46,6 +48,8 @@ services:
       - adamas-vault:/data/vault
       # Host folder ADAMAS reads source material from (read-only mount).
       - ./sources:/data/sources:ro
+      # Host folder ADAMAS writes the generated Obsidian vault into (open in Obsidian).
+      - ./obsidian:/data/obsidian
     restart: unless-stopped
 
 volumes:

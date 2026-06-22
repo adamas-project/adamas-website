@@ -15,3 +15,7 @@ sources/*
 # Local env
 .env
 .env.local
+
+# Generated Obsidian data-room vault (derived view)
+obsidian/*
+!obsidian/.gitkeep
