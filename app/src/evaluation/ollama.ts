@@ -120,12 +120,15 @@ export class OllamaLLMProvider implements LLMProvider {
     }
   }
 
-  async summarize(text: string): Promise<string> {
+  async summarize(text: string, opts?: { kind?: 'meeting' | 'article' }): Promise<string> {
     const prompt =
-      'Summarize this meeting transcript into the concrete DECISIONS and OUTCOMES only, ' +
-      'as short bullet points. For each, note the choice made, who owned it (a role), and any trade-off. ' +
-      'Plain text bullets, no preamble.\n\n--- TRANSCRIPT ---\n' +
-      text;
+      opts?.kind === 'article'
+        ? 'Summarize this article/post for a personal knowledge base. Give the key takeaways as short bullet ' +
+          'points — faithful to the source, no added opinions, no preamble.\n\n--- CONTENT ---\n' + text
+        : 'Summarize this meeting transcript into the concrete DECISIONS and OUTCOMES only, ' +
+          'as short bullet points. For each, note the choice made, who owned it (a role), and any trade-off. ' +
+          'Plain text bullets, no preamble.\n\n--- TRANSCRIPT ---\n' +
+          text;
     try {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), this.timeoutMs);

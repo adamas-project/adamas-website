@@ -102,6 +102,15 @@ export const api = {
   approve: (taskId: string) => req<{ route: string; added: any[] }>(`/api/boundary/${taskId}/approve`, { method: 'POST', body: '{}' }),
   decline: (taskId: string) => req<{ route: string; added: any[] }>(`/api/boundary/${taskId}/decline`, { method: 'POST', body: '{}' }),
 
+  knowledge: (params: { q?: string; tag?: string; type?: string } = {}) => {
+    const qs = new URLSearchParams(params as Record<string, string>).toString();
+    return req<{ entries: any[]; tags: string[]; count: number }>(`/api/knowledge${qs ? `?${qs}` : ''}`);
+  },
+  knowledgeGet: (id: string) => req<{ entry: any }>(`/api/knowledge/${id}`),
+  addKnowledge: (payload: { url?: string; text?: string; title?: string; type?: string; tags?: string[] }) =>
+    req<{ entry: any }>('/api/knowledge', { method: 'POST', body: JSON.stringify(payload) }),
+  deleteKnowledge: (id: string) => req(`/api/knowledge/${id}`, { method: 'DELETE' }),
+
   security: () => req<any>('/api/security'),
   backup: (passphrase: string) => req<{ file: string }>('/api/backup', { method: 'POST', body: JSON.stringify({ passphrase }) }),
   pricing: (locale: string) => req<{ pricing: any }>(`/api/pricing?locale=${locale}`),

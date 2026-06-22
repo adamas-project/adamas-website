@@ -12,7 +12,7 @@ export class LocalLLMProvider implements LLMProvider {
     return runHeuristicExtraction(doc, this.id);
   }
 
-  async summarize(text: string): Promise<string> {
+  async summarize(text: string, _opts?: { kind?: 'meeting' | 'article' }): Promise<string> {
     return heuristicSummarize(text);
   }
 }

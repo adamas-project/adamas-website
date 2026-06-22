@@ -6,14 +6,16 @@ import { GraphView } from './views/Graph';
 import { AssetsView } from './views/Assets';
 import { BoundaryView } from './views/Boundary';
 import { OnboardingView } from './views/Onboarding';
+import { KnowledgeView } from './views/Knowledge';
 
-type Tab = 'ledger' | 'inbox' | 'graph' | 'assets' | 'boundary' | 'onboarding';
+type Tab = 'ledger' | 'inbox' | 'graph' | 'assets' | 'knowledge' | 'boundary' | 'onboarding';
 
 const TABS: Array<{ id: Tab; label: string }> = [
   { id: 'ledger', label: 'The Ledger' },
   { id: 'inbox', label: 'Capture Inbox' },
   { id: 'graph', label: 'Decision Graph' },
   { id: 'assets', label: 'Asset Generation' },
+  { id: 'knowledge', label: 'Knowledge' },
   { id: 'boundary', label: 'Boundary & Security' },
   { id: 'onboarding', label: 'Onboarding & Pricing' },
 ];
@@ -74,6 +76,7 @@ export function App() {
         {tab === 'inbox' && <InboxView onChanged={refresh} />}
         {tab === 'graph' && <GraphView />}
         {tab === 'assets' && <AssetsView />}
+        {tab === 'knowledge' && <KnowledgeView />}
         {tab === 'boundary' && <BoundaryView onChanged={refresh} />}
         {tab === 'onboarding' && <OnboardingView />}
       </main>
