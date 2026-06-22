@@ -14,8 +14,18 @@ import { CalendarConnector } from '../ingestion/calendar.js';
 import type { Connector } from '../ingestion/connector.js';
 import { CommandTranscriber, type Transcriber } from '../ingestion/transcribe.js';
 import { KnowledgeStore } from '../knowledge/store.js';
+import { ObsidianAutoExporter } from '../obsidian/auto.js';
 import { vaultPaths } from '../ledger/storage.js';
-import { hermesConfig, icsConfig, imapConfig, resolveSourcesDir, transcribeConfig, type HermesConfig } from '../config/env.js';
+import {
+  hermesConfig,
+  icsConfig,
+  imapConfig,
+  obsidianAutoEnabled,
+  resolveObsidianDir,
+  resolveSourcesDir,
+  transcribeConfig,
+  type HermesConfig,
+} from '../config/env.js';
 
 // The application context wires together the services each route handler needs.
 export interface AppContext {
@@ -29,6 +39,7 @@ export interface AppContext {
   connectors: ConnectorManager;
   transcriber: Transcriber | null;
   knowledge: KnowledgeStore;
+  obsidianAuto: ObsidianAutoExporter | null;
   hermes: HermesConfig;
 }
 
@@ -67,5 +78,26 @@ export async function createContext(root: string): Promise<AppContext> {
   const transcriber: Transcriber | null = tcfg ? new CommandTranscriber(tcfg.cmd, tcfg.timeoutMs) : null;
   const knowledge = await KnowledgeStore.open(path.join(root, 'knowledge'));
 
-  return { root, ledger, inbox, localProvider, cloudProvider, assets, boundary, connectors, transcriber, knowledge, hermes };
+  // Keep the derived Obsidian data-room vault in sync with every change (opt-out
+  // via ADAMAS_OBSIDIAN_AUTO=0). The manual Data Room → Generate still works.
+  let obsidianAuto: ObsidianAutoExporter | null = null;
+  if (obsidianAutoEnabled()) {
+    obsidianAuto = new ObsidianAutoExporter({ ledger, knowledge, assets }, resolveObsidianDir(root));
+    obsidianAuto.start();
+  }
+
+  return {
+    root,
+    ledger,
+    inbox,
+    localProvider,
+    cloudProvider,
+    assets,
+    boundary,
+    connectors,
+    transcriber,
+    knowledge,
+    obsidianAuto,
+    hermes,
+  };
 }

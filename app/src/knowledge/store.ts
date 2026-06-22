@@ -43,8 +43,20 @@ export type KnowledgeInput = Omit<KnowledgeEntry, 'id' | 'date'> & { id?: string
 /** Local-first knowledge base: one Markdown+JSON file per entry. */
 export class KnowledgeStore {
   private map = new Map<string, { entry: KnowledgeEntry; fileName: string }>();
+  private listeners: Array<() => void> = [];
 
   private constructor(private readonly dir: string) {}
+
+  /** Subscribe to create/remove changes (e.g. to refresh derived views). */
+  onChange(listener: () => void): () => void {
+    this.listeners.push(listener);
+    return () => {
+      this.listeners = this.listeners.filter((l) => l !== listener);
+    };
+  }
+  private emit(): void {
+    for (const l of this.listeners) l();
+  }
 
   static async open(dir: string): Promise<KnowledgeStore> {
     const store = new KnowledgeStore(dir);
@@ -97,6 +109,7 @@ export class KnowledgeStore {
     const fileName = `${id}_${slugify(entry.title)}.md`;
     await atomicWrite(path.join(this.dir, fileName), serialize(entry));
     this.map.set(id, { entry, fileName });
+    this.emit();
     return entry;
   }
 
@@ -105,6 +118,7 @@ export class KnowledgeStore {
     if (!v) return false;
     await removeFile(path.join(this.dir, v.fileName));
     this.map.delete(id);
+    this.emit();
     return true;
   }
 }

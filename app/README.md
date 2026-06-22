@@ -209,15 +209,20 @@ files as the source of truth and, on demand, generates a clean **Obsidian-native
 vault** — YAML frontmatter, `[[wikilinks]]`, MOC indexes — structured as an
 **M&A data room** (Decisions by department, a Diligence section with the diligence
 binder / founder-continuity dossier / risk register, Knowledge, Company/People,
-and a **Valuation Readiness** scorecard). Generate it from the **Data Room** tab
-(or `POST /api/obsidian/export`); it's written to `ADAMAS_OBSIDIAN_DIR` (Docker:
-the host `./obsidian` folder). Open that folder in Obsidian → start at
+and a **Valuation Readiness** scorecard). It's written to `ADAMAS_OBSIDIAN_DIR`
+(Docker: the host `./obsidian` folder). Open that folder in Obsidian → start at
 `00 - Index.md`.
+
+**Auto-sync (default on):** the vault refreshes automatically (debounced)
+whenever a decision or knowledge entry changes, so it always mirrors the source
+of truth — no need to click anything. The **Data Room** tab still has a
+**Generate / refresh** button (and `POST /api/obsidian/export`) to force an
+immediate rebuild. Turn auto-sync off with `ADAMAS_OBSIDIAN_AUTO=0`.
 
 Division of roles: the **decision ledger stays governed and append-only** in
 ADAMAS (immutable, sourced — the audit trail buyers want); the **Knowledge base
 is the living brain**; Obsidian is the fast browse/graph/edit layer over the same
-material. Re-run the export to refresh.
+material.
 
 ## Application surfaces
 

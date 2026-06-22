@@ -6,6 +6,7 @@ import { KnowledgeStore } from '../src/knowledge/store.js';
 import { seedVault } from '../src/seed/seed.js';
 import { vaultPaths } from '../src/ledger/storage.js';
 import { buildObsidianVault } from '../src/obsidian/export.js';
+import { ObsidianAutoExporter } from '../src/obsidian/auto.js';
 import { computeReadiness } from '../src/obsidian/readiness.js';
 import { tempVault } from './helpers.js';
 
@@ -77,5 +78,36 @@ describe('obsidian export', () => {
     const a = await buildObsidianVault({ ledger, knowledge, assets }, out);
     const b = await buildObsidianVault({ ledger, knowledge, assets }, out);
     expect(b.files).toBe(a.files);
+  });
+});
+
+describe('obsidian auto-exporter', () => {
+  it('rebuilds the vault when a knowledge entry changes (debounced)', async () => {
+    const { root, ledger, assets, knowledge } = await setup();
+    const out = path.join(root, 'obsidian-auto');
+    const auto = new ObsidianAutoExporter({ ledger, knowledge, assets }, out, 5);
+    auto.start(); // schedules an initial export
+
+    // Initial mirror lands.
+    await new Promise((r) => setTimeout(r, 60));
+    const before = (await fs.readFile(path.join(out, 'Knowledge', 'Knowledge MOC.md'), 'utf8')).includes('KNW-001');
+    expect(before).toBe(false);
+
+    // A change triggers a debounced refresh that now includes the entry.
+    await knowledge.create({ title: 'Idea', source: 'manual', type: 'note', summary: 's' });
+    await new Promise((r) => setTimeout(r, 60));
+    const moc = await fs.readFile(path.join(out, 'Knowledge', 'Knowledge MOC.md'), 'utf8');
+    expect(moc).toMatch(/KNW-001/);
+
+    auto.stop();
+  });
+
+  it('serializes concurrent exports without throwing', async () => {
+    const { root, ledger, assets, knowledge } = await setup();
+    const out = path.join(root, 'obsidian-serial');
+    const auto = new ObsidianAutoExporter({ ledger, knowledge, assets }, out, 50);
+    const [a, b] = await Promise.all([auto.runNow(), auto.runNow()]);
+    expect(a.files).toBe(b.files);
+    auto.stop();
   });
 });
