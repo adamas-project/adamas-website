@@ -14,19 +14,54 @@ RUN npm run build
 # Drop dev dependencies so the runtime image only carries what it needs.
 RUN npm prune --omit=dev
 
+# ---- Whisper stage: build whisper.cpp (static) + fetch a base model ----
+# This is what makes "drop a recording" work out of the box (on-device, CPU).
+# It's a heavy one-time build; first `docker compose up --build` will take a few
+# minutes and download ~140MB. Override the model with ADAMAS_WHISPER_MODEL.
+FROM node:22-bookworm-slim AS whisper
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      git build-essential cmake ca-certificates curl \
+  && rm -rf /var/lib/apt/lists/*
+WORKDIR /opt
+RUN git clone --depth 1 https://github.com/ggerganov/whisper.cpp.git
+WORKDIR /opt/whisper.cpp
+# Static build so the single binary is self-contained in the runtime image.
+RUN cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DWHISPER_BUILD_TESTS=OFF -DWHISPER_BUILD_EXAMPLES=ON \
+  && cmake --build build -j --config Release \
+  && cp build/bin/whisper-cli /usr/local/bin/whisper-cli
+RUN mkdir -p /models \
+  && curl -fsSL -o /models/ggml-base.en.bin \
+       https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin
+
 # ---- Runtime stage ----
 FROM node:22-bookworm-slim AS runtime
 ENV NODE_ENV=production \
     ADAMAS_HOST=0.0.0.0 \
     ADAMAS_PORT=8787 \
-    ADAMAS_VAULT=/data/vault
+    ADAMAS_VAULT=/data/vault \
+    ADAMAS_WHISPER_MODEL=/models/ggml-base.en.bin \
+    ADAMAS_TRANSCRIBE_CMD="adamas-transcribe {input}"
 WORKDIR /app
 
-# ffmpeg lets a configured on-device transcription engine decode common audio/
-# video formats. (The speech-to-text engine itself is provided by the operator
-# via ADAMAS_TRANSCRIBE_CMD; see README.)
+# ffmpeg decodes common audio/video formats; whisper.cpp (baked in below) does the
+# speech-to-text. Both run on-device — nothing leaves the machine.
 RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
   && rm -rf /var/lib/apt/lists/*
+
+# On-device speech-to-text: the whisper.cpp binary, a base model, and a wrapper
+# that normalizes any audio/video to 16kHz WAV (ffmpeg) then transcribes to stdout.
+COPY --from=whisper /usr/local/bin/whisper-cli /usr/local/bin/whisper-cli
+COPY --from=whisper /models /models
+RUN printf '%s\n' \
+      '#!/bin/sh' \
+      'set -e' \
+      'in="$1"' \
+      'wav="$(mktemp).wav"' \
+      'ffmpeg -nostdin -loglevel error -y -i "$in" -ar 16000 -ac 1 -f wav "$wav"' \
+      'whisper-cli -m "${ADAMAS_WHISPER_MODEL:-/models/ggml-base.en.bin}" -f "$wav" -nt 2>/dev/null' \
+      'rm -f "$wav"' \
+    > /usr/local/bin/adamas-transcribe \
+  && chmod +x /usr/local/bin/adamas-transcribe
 
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
