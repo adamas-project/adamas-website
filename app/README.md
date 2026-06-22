@@ -123,14 +123,14 @@ invite. In **Capture Inbox** you can:
 - **Upload or paste a transcript** (`.txt`/`.md`/`.vtt`/`.srt`). ADAMAS
   **summarizes it locally first**, then extracts candidate decisions from the
   summary. Nothing enters the ledger until you confirm.
-- **Drop a recording (audio/video)** — transcribed **on-device**, then summarized
-  and extracted. ADAMAS doesn't bundle a model; it drives a local engine you point
-  it at via `ADAMAS_TRANSCRIBE_CMD` (`{input}` = the file; `{output}` optional).
-  `ffmpeg` is in the image; make a whisper engine available in the container
-  (bind-mount the binary + model, or build a custom image `FROM adamas`), e.g.
-  `ADAMAS_TRANSCRIBE_CMD=whisper-cli -m /models/ggml-base.en.bin -f {input} -nt`.
-  No engine configured? Transcribe on your Mac and use the text-transcript box
-  above. Nothing ever leaves the machine.
+- **Drop a recording (audio/video)** — transcribed **on-device** (whisper.cpp is
+  baked into the image), then summarized and extracted. Works out of the box; the
+  engine is pluggable via `ADAMAS_TRANSCRIBE_CMD` (`{input}` = file, `{output}`
+  optional) if you'd rather use a different local engine, and the model is set by
+  `ADAMAS_WHISPER_MODEL` (default `ggml-base.en`). Nothing leaves the machine.
+  Note: the first `docker compose up --build` is heavier (it compiles whisper.cpp
+  and downloads ~140MB), and transcription in Docker is CPU-only, so long
+  recordings take a while — for speed, transcribe on the host and paste the text.
 
 ## Deploy (containerized)
 
