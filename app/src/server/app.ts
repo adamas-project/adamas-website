@@ -13,6 +13,7 @@ import { registerBoundaryRoutes } from './routes/boundary.js';
 import { registerPricingRoutes } from './routes/pricing.js';
 import { registerConnectorRoutes } from './routes/connectors.js';
 import { registerKnowledgeRoutes } from './routes/knowledge.js';
+import { registerObsidianRoutes } from './routes/obsidian.js';
 
 export function buildApp(ctx: AppContext): FastifyInstance {
   const app = Fastify({ logger: false, bodyLimit: 5 * 1024 * 1024 });
@@ -49,6 +50,7 @@ export function buildApp(ctx: AppContext): FastifyInstance {
   registerPricingRoutes(app);
   registerConnectorRoutes(app, ctx);
   registerKnowledgeRoutes(app, ctx);
+  registerObsidianRoutes(app, ctx);
 
   return app;
 }

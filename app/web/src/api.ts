@@ -111,6 +111,9 @@ export const api = {
     req<{ entry: any }>('/api/knowledge', { method: 'POST', body: JSON.stringify(payload) }),
   deleteKnowledge: (id: string) => req(`/api/knowledge/${id}`, { method: 'DELETE' }),
 
+  obsidian: () => req<{ dir: string; exists: boolean; readiness: any }>('/api/obsidian'),
+  obsidianExport: () => req<{ path: string; decisions: number; knowledge: number; files: number; readiness: any }>('/api/obsidian/export', { method: 'POST', body: '{}' }),
+
   security: () => req<any>('/api/security'),
   backup: (passphrase: string) => req<{ file: string }>('/api/backup', { method: 'POST', body: JSON.stringify({ passphrase }) }),
   pricing: (locale: string) => req<{ pricing: any }>(`/api/pricing?locale=${locale}`),

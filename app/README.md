@@ -200,6 +200,23 @@ portable Markdown + JSON under `vault/knowledge/`. Fetching a URL is an inbound
 pull of public content — no vault data is sent out; summarization is on-device.
 (No JS rendering: for paywalled or video-only pages, paste the text/transcript.)
 
+## Obsidian data room (the "second brain")
+
+ADAMAS is the cockpit; **Obsidian is the memory**. ADAMAS keeps its validated
+files as the source of truth and, on demand, generates a clean **Obsidian-native
+vault** — YAML frontmatter, `[[wikilinks]]`, MOC indexes — structured as an
+**M&A data room** (Decisions by department, a Diligence section with the diligence
+binder / founder-continuity dossier / risk register, Knowledge, Company/People,
+and a **Valuation Readiness** scorecard). Generate it from the **Data Room** tab
+(or `POST /api/obsidian/export`); it's written to `ADAMAS_OBSIDIAN_DIR` (Docker:
+the host `./obsidian` folder). Open that folder in Obsidian → start at
+`00 - Index.md`.
+
+Division of roles: the **decision ledger stays governed and append-only** in
+ADAMAS (immutable, sourced — the audit trail buyers want); the **Knowledge base
+is the living brain**; Obsidian is the fast browse/graph/edit layer over the same
+material. Re-run the export to refresh.
+
 ## Application surfaces
 
 - **The Ledger** — list/detail/filter of decisions; context, decision, owner,
