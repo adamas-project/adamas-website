@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import type { AppContext } from '../context.js';
-import { buildGraph, neighbors } from '../../ledger/graph.js';
+import { buildGraph, buildMemoryGraph, neighbors } from '../../ledger/graph.js';
 import { exportVault } from '../../ledger/export.js';
 import { LedgerError } from '../../ledger/ledger.js';
 import { ValidationError } from '../../schema/validate.js';
@@ -109,6 +109,10 @@ export function registerLedgerRoutes(app: FastifyInstance, ctx: AppContext): voi
   });
 
   app.get('/api/graph', async () => buildGraph(ledger));
+
+  // Combined "second brain" graph: decisions + knowledge, structured like the
+  // Obsidian vault (hubs + bi-links + topic cross-links). Powers the 3D view.
+  app.get('/api/graph/memory', async () => buildMemoryGraph(ledger, ctx.knowledge));
 
   app.get('/api/export', async (_req, reply) => {
     reply.header('content-disposition', 'attachment; filename="adamas-vault.json"');

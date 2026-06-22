@@ -234,7 +234,11 @@ material.
   trade-offs, links, sources, status.
 - **Capture Inbox** — candidate decisions surfaced by Hermes; confirm or dismiss.
   Nothing enters the ledger unreviewed.
-- **Decision Graph** — bi-directional links between decisions.
+- **Decision Graph** — a force-directed "second brain" graph (2D or 3D) of the
+  whole memory: decisions by department and knowledge entries, hung off MOC hubs,
+  with decision↔decision bi-links and topic cross-links from knowledge to the
+  decisions it relates to — the same structure as the Obsidian vault, in the
+  ADAMAS colorway. Drag a node and its neighbors follow.
 - **Asset Generation** — pick an asset, see source decisions, generate, view
   SRC-traced output, see stale/regeneration status.
 - **Boundary / Hybrid Approval** — the per-task opt-in flow.

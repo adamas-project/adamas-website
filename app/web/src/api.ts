@@ -44,6 +44,7 @@ export const api = {
   decision: (id: string, role?: string) =>
     req<{ decision: Decision; neighbors: string[] }>(`/api/decisions/${id}${role ? `?role=${role}` : ''}`),
   graph: () => req<{ nodes: any[]; edges: any[] }>('/api/graph'),
+  graphMemory: () => req<{ nodes: any[]; edges: any[] }>('/api/graph/memory'),
   supersede: (id: string, successor: any) =>
     req(`/api/decisions/${id}/supersede`, { method: 'POST', body: JSON.stringify(typeof successor === 'string' ? { successorId: successor } : { successor }) }),
   update: (id: string, patch: any) => req(`/api/decisions/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
