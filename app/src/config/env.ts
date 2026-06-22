@@ -30,6 +30,12 @@ export function obsidianAutoEnabled(): boolean {
   return raw !== '0' && raw !== 'false' && raw !== 'off';
 }
 
+/** Minutes between automatic connector pulls; 0 (default) disables auto-pull. */
+export function connectorPullMinutes(): number {
+  const n = Number(process.env.ADAMAS_CONNECTOR_PULL_MINUTES ?? 0);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
 /** Folder the local-folder connector reads source material from. */
 export function resolveSourcesDir(root: string): string {
   const fromEnv = process.env.ADAMAS_SOURCES_DIR;

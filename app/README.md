@@ -114,6 +114,12 @@ ledger unreviewed). Use them in **Capture Inbox → Read-only connectors → Pul
   `ADAMAS_ICS_URL`. ADAMAS only fetches the feed (no OAuth) and surfaces recent +
   upcoming meetings.
 
+**Auto-pull (opt-in):** set `ADAMAS_CONNECTOR_PULL_MINUTES` to a number of
+minutes and ADAMAS pulls every connector on that interval in the background, so
+the Capture Inbox fills itself — no clicking. Still read-only and inbound only;
+nothing enters the ledger unreviewed. `0` (default) keeps pulls manual. There's
+also `POST /api/connectors/pull-all` to pull everything once on demand.
+
 ### Capturing meeting outcomes & transcripts
 
 A calendar event tells you a meeting happened; the *decision* usually isn't in the
