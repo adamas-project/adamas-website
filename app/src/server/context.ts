@@ -13,6 +13,7 @@ import { ImapConnector } from '../ingestion/imap.js';
 import { CalendarConnector } from '../ingestion/calendar.js';
 import type { Connector } from '../ingestion/connector.js';
 import { CommandTranscriber, type Transcriber } from '../ingestion/transcribe.js';
+import { KnowledgeStore } from '../knowledge/store.js';
 import { vaultPaths } from '../ledger/storage.js';
 import { hermesConfig, icsConfig, imapConfig, resolveSourcesDir, transcribeConfig, type HermesConfig } from '../config/env.js';
 
@@ -27,6 +28,7 @@ export interface AppContext {
   boundary: BoundaryService;
   connectors: ConnectorManager;
   transcriber: Transcriber | null;
+  knowledge: KnowledgeStore;
   hermes: HermesConfig;
 }
 
@@ -63,6 +65,7 @@ export async function createContext(root: string): Promise<AppContext> {
 
   const tcfg = transcribeConfig();
   const transcriber: Transcriber | null = tcfg ? new CommandTranscriber(tcfg.cmd, tcfg.timeoutMs) : null;
+  const knowledge = await KnowledgeStore.open(path.join(root, 'knowledge'));
 
-  return { root, ledger, inbox, localProvider, cloudProvider, assets, boundary, connectors, transcriber, hermes };
+  return { root, ledger, inbox, localProvider, cloudProvider, assets, boundary, connectors, transcriber, knowledge, hermes };
 }
