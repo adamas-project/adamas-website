@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import { useLang } from '../i18n';
 
 const GROUP_LABEL: Record<string, string> = {
   hiring: 'Hiring & People',
@@ -13,6 +14,7 @@ const GROUP_LABEL: Record<string, string> = {
 const GROUP_ORDER = ['hiring', 'sales', 'product', 'finance', 'ops', 'investor-board', 'whole-ledger'];
 
 export function AssetsView() {
+  const { t } = useLang();
   const [assets, setAssets] = useState<any[]>([]);
   const [auto, setAuto] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
@@ -60,15 +62,15 @@ export function AssetsView() {
     <div className="layout">
       <div className="panel">
         <div className="toolbar">
-          <h2 style={{ margin: 0, flex: 1 }}>Asset Registry</h2>
+          <h2 style={{ margin: 0, flex: 1 }}>{t('Asset Registry')}</h2>
           <label className="rolebox">
-            <input type="checkbox" checked={auto} onChange={toggleAuto} /> auto-regenerate
+            <input type="checkbox" checked={auto} onChange={toggleAuto} /> {t('auto-regenerate')}
           </label>
         </div>
-        <p className="muted">Assets are assembled only from existing ledger decisions, with section-level SRC traceability.</p>
+        <p className="muted">{t('Assets are assembled only from existing ledger decisions, with section-level SRC traceability.')}</p>
         {GROUP_ORDER.filter((g) => byGroup[g]).map((g) => (
           <div key={g}>
-            <div className="group-label">{GROUP_LABEL[g] ?? g}</div>
+            <div className="group-label">{t(GROUP_LABEL[g] ?? g)}</div>
             <div className="grid-assets">
               {(byGroup[g] ?? []).map((a) => (
                 <div key={a.id} className={`asset-card ${selected === a.id ? 'selected' : ''}`}>
@@ -81,9 +83,9 @@ export function AssetsView() {
                   <p className="muted" style={{ fontSize: 13, margin: '4px 0' }}>{a.summary}</p>
                   <div>
                     <button className="primary" disabled={busy} onClick={() => gen(a.id, a.generated)}>
-                      {a.generated ? (a.stale ? 'Regenerate' : 'Regenerate') : 'Generate'}
+                      {a.generated ? t('Regenerate') : t('Generate')}
                     </button>{' '}
-                    {a.generated && <button className="ghost" onClick={() => setSelected(a.id)}>View</button>}
+                    {a.generated && <button className="ghost" onClick={() => setSelected(a.id)}>{t('View')}</button>}
                   </div>
                 </div>
               ))}
@@ -93,19 +95,19 @@ export function AssetsView() {
       </div>
 
       <div className="panel">
-        <h2>Generated asset</h2>
-        {!doc && <p className="muted">Generate or select an asset to view its SRC-traced output.</p>}
+        <h2>{t('Generated asset')}</h2>
+        {!doc && <p className="muted">{t('Generate or select an asset to view its SRC-traced output.')}</p>}
         {doc && (
           <div>
             <div className="toolbar">
               <strong>{doc.title}</strong>
               {doc.stale ? <span className="badge stale">stale</span> : <span className="badge live">fresh</span>}
-              <a href={`/api/assets/${doc.assetId}/markdown`} download={`${doc.assetId}.md`}>download .md</a>
+              <a href={`/api/assets/${doc.assetId}/markdown`} download={`${doc.assetId}.md`}>{t('download .md')}</a>
             </div>
             {doc.stale && (
               <div className="notice warn" style={{ marginBottom: 10 }}>
-                {doc.staleReason} Affected sections: {doc.staleSections.join(', ') || '—'}.{' '}
-                <button onClick={() => gen(doc.assetId, true)}>Regenerate now</button>
+                {doc.staleReason} {t('Affected sections:')} {doc.staleSections.join(', ') || '—'}.{' '}
+                <button onClick={() => gen(doc.assetId, true)}>{t('Regenerate now')}</button>
               </div>
             )}
             <p className="muted" style={{ fontSize: 13 }}>

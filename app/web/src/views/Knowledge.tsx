@@ -18,9 +18,13 @@ export function KnowledgeView() {
   const [msg, setMsg] = useState('');
 
   async function load() {
-    const r = await api.knowledge({ q: q || undefined, tag: tag || undefined });
-    setEntries(r.entries);
-    setTags(r.tags);
+    try {
+      const r = await api.knowledge({ q: q || undefined, tag: tag || undefined });
+      setEntries(r.entries);
+      setTags(r.tags);
+    } catch (e) {
+      setMsg((e as Error).message);
+    }
   }
   useEffect(() => {
     void load();
@@ -43,6 +47,8 @@ export function KnowledgeView() {
       setTitle('');
       setNewTags('');
       setSelected(r.entry);
+      // Show it immediately (like People), then refresh from the server.
+      setEntries((prev) => [r.entry, ...prev.filter((e) => e.id !== r.entry.id)]);
       await load();
     } catch (e) {
       setMsg((e as Error).message);

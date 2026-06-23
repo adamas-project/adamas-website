@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { api, type Domain } from '../api';
+import { useLang } from '../i18n';
 
 const DOMAINS: Domain[] = ['hiring', 'sales', 'product', 'finance', 'ops'];
 
@@ -15,6 +16,7 @@ export function NewDecisionForm({
   onCreated: (id: string) => void;
   onCancel: () => void;
 }) {
+  const { t } = useLang();
   const today = new Date().toISOString().slice(0, 10);
   const [domain, setDomain] = useState<Domain>('sales');
   const [date, setDate] = useState(today);
@@ -64,59 +66,59 @@ export function NewDecisionForm({
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <h2 style={{ margin: 0, flex: 1 }}>New decision</h2>
-        <button className="ghost" onClick={onCancel}>Cancel</button>
+        <h2 style={{ margin: 0, flex: 1 }}>{t('New decision')}</h2>
+        <button className="ghost" onClick={onCancel}>{t('Cancel')}</button>
       </div>
-      <p className="muted">The ID is assigned automatically from the domain. Required fields are marked *.</p>
+      <p className="muted">{t('The ID is assigned automatically from the domain. Required fields are marked *.')}</p>
 
       <div className="toolbar" style={{ margin: '4px 0 0' }}>
-        <label className="rolebox">domain*
+        <label className="rolebox">{t('domain')}*
           <select value={domain} onChange={(e) => setDomain(e.target.value as Domain)}>
             {DOMAINS.map((d) => <option key={d} value={d}>{d}</option>)}
           </select>
         </label>
-        <label className="rolebox">date*
+        <label className="rolebox">{t('date')}*
           <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
         </label>
       </div>
 
-      <div className="section-title">Title* (the choice made, ≤120 chars)</div>
+      <div className="section-title">{t('Title* (the choice made, ≤120 chars)')}</div>
       <input style={{ width: '100%' }} maxLength={120} value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Decline the automotive OEM frame contract" />
 
-      <div className="section-title">Context* (the why)</div>
+      <div className="section-title">{t('Context* (the why)')}</div>
       <textarea style={{ width: '100%', resize: 'vertical' }} rows={3} value={context} onChange={(e) => setContext(e.target.value)} placeholder="Situation at the time: constraints, pressures, what was known." />
 
-      <div className="section-title">Decision* (exact, falsifiable choice)</div>
+      <div className="section-title">{t('Decision* (exact, falsifiable choice)')}</div>
       <textarea style={{ width: '100%', resize: 'vertical' }} rows={2} value={decision} onChange={(e) => setDecision(e.target.value)} />
 
       <div className="toolbar" style={{ marginTop: 12 }}>
-        <label className="rolebox">owner role*
+        <label className="rolebox">{t('owner role')}*
           <input value={role} onChange={(e) => setRole(e.target.value)} placeholder="head-of-sales" />
         </label>
-        <label className="rolebox">owner name
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="optional" />
+        <label className="rolebox">{t('owner name')}
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t('optional')} />
         </label>
       </div>
 
-      <div className="section-title">Dissent (roles, comma-separated)</div>
+      <div className="section-title">{t('Dissent (roles, comma-separated)')}</div>
       <input style={{ width: '100%' }} value={dissent} onChange={(e) => setDissent(e.target.value)} placeholder="head-of-ops, cfo" />
 
-      <div className="section-title">Trade-offs (one per line)</div>
+      <div className="section-title">{t('Trade-offs (one per line)')}</div>
       <textarea style={{ width: '100%', resize: 'vertical' }} rows={2} value={tradeoffs} onChange={(e) => setTradeoffs(e.target.value)} />
 
-      <div className="section-title">Links (decision IDs, comma-separated)</div>
+      <div className="section-title">{t('Links (decision IDs, comma-separated)')}</div>
       <input style={{ width: '100%' }} value={links} onChange={(e) => setLinks(e.target.value)} placeholder="FIN-016, SAL-017" />
 
-      <div className="section-title">Sources (one per line)</div>
+      <div className="section-title">{t('Sources (one per line)')}</div>
       <textarea style={{ width: '100%', resize: 'vertical' }} rows={2} value={sources} onChange={(e) => setSources(e.target.value)} placeholder="meeting:2026-06-18#weekly-review" />
 
       {error && <div className="notice danger" style={{ marginTop: 12 }}>{error}</div>}
 
       <div style={{ marginTop: 14 }}>
         <button className="primary" onClick={save} disabled={busy || !ready}>
-          {busy ? 'Saving…' : 'Save decision'}
+          {busy ? t('Saving…') : t('Save decision')}
         </button>{' '}
-        <button className="ghost" onClick={onCancel}>Cancel</button>
+        <button className="ghost" onClick={onCancel}>{t('Cancel')}</button>
       </div>
     </div>
   );

@@ -381,14 +381,6 @@ function Legend() {
         {t('records')}
       </span>
       <span>
-        <span className="dot" style={{ color: '#e0a3ff', background: '#e0a3ff' }} />
-        people
-      </span>
-      <span>
-        <span className="dot" style={{ color: '#7aa2ff', background: '#7aa2ff' }} />
-        records
-      </span>
-      <span>
         <span className="dot" style={{ color: '#5fb8a8', background: '#5fb8a8' }} />
         {t('topic')}
       </span>
