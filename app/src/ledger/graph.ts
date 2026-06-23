@@ -1,6 +1,17 @@
 import type { Ledger } from './ledger.js';
 import type { KnowledgeStore } from '../knowledge/store.js';
+import type { PeopleStore } from '../people/store.js';
+import type { RecordStore } from '../records/store.js';
+import { RECORD_CATEGORY_LABEL } from '../records/schema.js';
 import type { Domain, Status } from '../schema/decision.schema.js';
+
+const DOMAIN_LABEL: Record<Domain, string> = {
+  hiring: 'Hiring & People',
+  sales: 'Sales & Revenue',
+  product: 'Product & Delivery',
+  finance: 'Finance',
+  ops: 'Operations',
+};
 
 export interface GraphNode {
   id: string;
@@ -59,7 +70,7 @@ export function buildGraph(ledger: Ledger): DecisionGraph {
 
 // --- Memory graph: decisions + knowledge, structured like an Obsidian vault ---
 
-export type MemoryNodeKind = 'decision' | 'knowledge' | 'hub' | 'tag';
+export type MemoryNodeKind = 'decision' | 'knowledge' | 'hub' | 'tag' | 'person' | 'record';
 
 export interface MemoryNode {
   id: string;
@@ -108,10 +119,12 @@ function knowledgeTerms(tags: string[] | undefined, title: string): string[] {
 export function buildMemoryGraph(
   ledger: Ledger,
   knowledge?: KnowledgeStore,
-  opts: { topics?: boolean } = {},
+  opts: { topics?: boolean; people?: PeopleStore; records?: RecordStore } = {},
 ): MemoryGraph {
   const decisions = ledger.list();
   const knEntries = knowledge?.list() ?? [];
+  const peopleEntries = opts.people?.list() ?? [];
+  const recordEntries = opts.records?.list() ?? [];
   const degree = new Map<string, number>();
   const bump = (id: string) => degree.set(id, (degree.get(id) ?? 0) + 1);
   const edges: MemoryEdge[] = [];
@@ -129,10 +142,15 @@ export function buildMemoryGraph(
 
   const DEC_HUB = '#decisions';
   const KN_HUB = '#knowledge';
+  const PPL_HUB = '#people';
+  const DR_HUB = '#dataroom';
+  const normRole = (s: string) => s.trim().toLowerCase().replace(/\s+/g, '-');
 
-  // Decision↔decision bi-links + decision→hub membership.
+  // Decisions → department sub-hubs → decisions, plus decision↔decision bi-links.
+  const domainsPresent = new Set(decisions.map((d) => d.domain));
+  for (const dom of domainsPresent) addEdge(DEC_HUB, `#dom:${dom}`, 'hub');
   for (const d of decisions) {
-    addEdge(DEC_HUB, d.id, 'hub');
+    addEdge(`#dom:${d.domain}`, d.id, 'hub');
     for (const target of d.links ?? []) {
       if (!ledger.has(target)) continue;
       const supersedes = d.superseded_by === target || ledger.get(target)?.superseded_by === d.id;
@@ -142,6 +160,20 @@ export function buildMemoryGraph(
 
   // Knowledge→hub membership.
   for (const e of knEntries) if (knowledge) addEdge(KN_HUB, e.id, 'hub');
+
+  // People → hub, and each person → the decisions they own (name or role match).
+  for (const p of peopleEntries) {
+    addEdge(PPL_HUB, p.id, 'hub');
+    for (const d of decisions) {
+      const owns = d.owner.name?.toLowerCase() === p.name.toLowerCase() || normRole(d.owner.role) === normRole(p.role);
+      if (owns) addEdge(p.id, d.id, 'cross');
+    }
+  }
+
+  // Data-room records → category sub-hubs → records.
+  const catsPresent = new Set(recordEntries.map((r) => r.category));
+  for (const cat of catsPresent) addEdge(DR_HUB, `#rec:${cat}`, 'hub');
+  for (const r of recordEntries) addEdge(`#rec:${r.category}`, r.id, 'hub');
 
   const decHaystacks = decisions.map((d) => ({
     id: d.id,
@@ -200,13 +232,29 @@ export function buildMemoryGraph(
     }
   }
 
-  if (knEntries.length) addEdge(DEC_HUB, KN_HUB, 'hub'); // one connected core
+  // One connected core: link the top-level MOC hubs together (like 00 - Index).
+  if (knEntries.length) addEdge(DEC_HUB, KN_HUB, 'hub');
+  if (peopleEntries.length) addEdge(DEC_HUB, PPL_HUB, 'hub');
+  if (recordEntries.length) addEdge(DEC_HUB, DR_HUB, 'hub');
+
+  const hub = (id: string, title: string, group = 'hub'): MemoryNode => ({
+    id,
+    title,
+    kind: 'hub',
+    group,
+    status: 'active',
+    degree: degree.get(id) ?? 0,
+  });
 
   const nodes: MemoryNode[] = [
-    { id: DEC_HUB, title: 'Decisions', kind: 'hub', group: 'hub', status: 'active', degree: degree.get(DEC_HUB) ?? 0 },
-    ...(knEntries.length
-      ? [{ id: KN_HUB, title: 'Knowledge', kind: 'hub' as const, group: 'hub', status: 'active' as const, degree: degree.get(KN_HUB) ?? 0 }]
-      : []),
+    hub(DEC_HUB, 'Decisions'),
+    ...(knEntries.length ? [hub(KN_HUB, 'Knowledge')] : []),
+    ...(peopleEntries.length ? [hub(PPL_HUB, 'Company / People')] : []),
+    ...(recordEntries.length ? [hub(DR_HUB, 'Data Room')] : []),
+    // Department sub-hubs (cluster with their decisions).
+    ...[...domainsPresent].map((dom) => hub(`#dom:${dom}`, DOMAIN_LABEL[dom], dom)),
+    // Data-room category sub-hubs.
+    ...[...catsPresent].map((cat) => hub(`#rec:${cat}`, RECORD_CATEGORY_LABEL[cat], 'dataroom')),
     ...decisions.map((d): MemoryNode => ({
       id: d.id,
       title: d.title,
@@ -223,6 +271,22 @@ export function buildMemoryGraph(
       group: 'knowledge',
       status: 'active',
       degree: degree.get(e.id) ?? 0,
+    })),
+    ...peopleEntries.map((p): MemoryNode => ({
+      id: p.id,
+      title: p.name,
+      kind: 'person',
+      group: 'people',
+      status: 'active',
+      degree: degree.get(p.id) ?? 0,
+    })),
+    ...recordEntries.map((r): MemoryNode => ({
+      id: r.id,
+      title: r.title,
+      kind: 'record',
+      group: 'dataroom',
+      status: 'active',
+      degree: degree.get(r.id) ?? 0,
     })),
     ...[...tagNodes.entries()].map(([tag, id]): MemoryNode => ({
       id,

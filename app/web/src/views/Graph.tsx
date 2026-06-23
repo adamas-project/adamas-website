@@ -6,7 +6,7 @@ import { DecisionDetail } from '../components/DecisionDetail';
 
 const Graph3D = lazy(() => import('./Graph3D'));
 
-export type GKind = 'decision' | 'knowledge' | 'hub' | 'tag';
+export type GKind = 'decision' | 'knowledge' | 'hub' | 'tag' | 'person' | 'record';
 export interface GNode {
   id: string;
   title: string;
@@ -78,7 +78,9 @@ export function GraphView() {
     api.graphMemory(topics).then((g) => {
       const groupAngle = (group: string): number => {
         if (group === 'hub') return 0;
-        if (group === 'knowledge') return Math.PI; // opposite the decision core
+        if (group === 'knowledge') return Math.PI;
+        if (group === 'people') return Math.PI * 0.66;
+        if (group === 'dataroom') return Math.PI * 1.33;
         if (group === 'topic') return Math.PI / 2;
         const di = DOMAINS.indexOf(group as Domain);
         return ((di < 0 ? 0 : di) / DOMAINS.length) * Math.PI * 2;
@@ -367,6 +369,14 @@ function Legend() {
       <span>
         <span className="dot" style={{ color: 'var(--accent-lt)', background: 'var(--accent-lt)' }} />
         knowledge
+      </span>
+      <span>
+        <span className="dot" style={{ color: '#e0a3ff', background: '#e0a3ff' }} />
+        people
+      </span>
+      <span>
+        <span className="dot" style={{ color: '#7aa2ff', background: '#7aa2ff' }} />
+        records
       </span>
       <span>
         <span className="dot" style={{ color: '#5fb8a8', background: '#5fb8a8' }} />

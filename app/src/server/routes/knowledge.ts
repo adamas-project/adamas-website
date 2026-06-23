@@ -35,31 +35,47 @@ export function registerKnowledgeRoutes(app: FastifyInstance, ctx: AppContext): 
     let type = asType(body.type);
 
     try {
+      let fetchFailed = false;
       if (url && !text) {
-        const fetched = await fetchResource(url);
-        text = fetched.text;
-        title = title || fetched.title;
-        author = fetched.author;
-        type = type || fetched.type;
+        try {
+          const fetched = await fetchResource(url);
+          text = fetched.text;
+          title = title || fetched.title;
+          author = fetched.author;
+          type = type || fetched.type;
+        } catch {
+          // Couldn't fetch (paywall, bot-block, network) — still save the link.
+          fetchFailed = true;
+        }
       }
-      if (!text) return reply.code(400).send({ error: 'Provide a URL or some text to capture.' });
+      if (!url && !text) return reply.code(400).send({ error: 'Provide a URL or some text to capture.' });
       if (url && !type) type = inferType(url);
 
-      const kn = await summarizeKnowledge(localProvider, text);
+      // Summarize when we have real text; otherwise save a clear placeholder so
+      // the link is never lost (the user can open it or paste the text later).
+      const kn = text
+        ? await summarizeKnowledge(localProvider, text)
+        : {
+            title: title || url || 'Saved link',
+            summary:
+              'Saved the link, but ADAMAS could not fetch its content automatically ' +
+              '(paywalled, login-only, or blocked). Open the source, or paste the text here to summarize it.',
+            takeaways: [] as string[],
+            tags: [] as string[],
+          };
       const tags = [...new Set([...(body.tags ?? []).map((t) => t.trim()).filter(Boolean), ...kn.tags])].slice(0, 10);
 
       const entry = await knowledge.create({
-        // Prefer a user/source title; otherwise use the synthesized one.
-        title: (title || kn.title || 'Untitled').slice(0, 300),
+        title: (title || kn.title || url || 'Untitled').slice(0, 300),
         source: url || 'manual',
         type: type ?? (url ? 'link' : 'note'),
         summary: kn.summary,
         takeaways: kn.takeaways,
         tags,
         ...(author ? { author } : {}),
-        excerpt: text.slice(0, 500),
+        ...(text ? { excerpt: text.slice(0, 500) } : {}),
       });
-      return reply.code(201).send({ entry });
+      return reply.code(201).send({ entry, fetchFailed });
     } catch (err) {
       return reply.code(422).send({ error: (err as Error).message });
     }

@@ -115,7 +115,7 @@ export function registerLedgerRoutes(app: FastifyInstance, ctx: AppContext): voi
   // Obsidian vault (hubs + bi-links + topic cross-links). Powers the 3D view.
   app.get('/api/graph/memory', async (req) => {
     const topics = (req.query as Record<string, string>)?.topics === '1';
-    return buildMemoryGraph(ledger, ctx.knowledge, { topics });
+    return buildMemoryGraph(ledger, ctx.knowledge, { topics, people: ctx.people, records: ctx.records });
   });
 
   app.get('/api/export', async (_req, reply) => {
