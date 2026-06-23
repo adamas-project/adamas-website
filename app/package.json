@@ -15,6 +15,7 @@
     "build:web": "vite build",
     "start": "node dist/index.js",
     "seed": "tsx src/seed/seed.ts",
+    "eval": "tsx eval/run.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.web.json --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
