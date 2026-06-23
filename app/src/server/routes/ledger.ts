@@ -34,6 +34,7 @@ export function registerLedgerRoutes(app: FastifyInstance, ctx: AppContext): voi
     hermes: {
       provider: ctx.hermes.provider,
       location: ctx.localProvider.location,
+      router: ctx.hermes.provider === 'ollama' && ctx.hermes.router,
       ...(ctx.hermes.provider === 'ollama'
         ? { ollamaUrl: ctx.hermes.ollamaUrl, model: ctx.hermes.ollamaModel }
         : {}),

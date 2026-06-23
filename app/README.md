@@ -92,6 +92,15 @@ falls back to the built-in heuristic so capture never hard-fails offline. See
 `http://host.docker.internal:11434` (the compose file already does, and adds the
 `host.docker.internal` host mapping).
 
+### Model router (cheap-first, escalate when unsure)
+
+When Ollama is configured, Hermes routes **cheap-first**: the free deterministic
+heuristic handles the easy majority, and the model is called **only** when the
+heuristic isn't confident enough (`ADAMAS_ROUTER_MIN_CONFIDENCE`, default `0.75`)
+— fewer model calls for the same result. Both tiers are local, so nothing crosses
+the boundary. On by default; set `ADAMAS_HERMES_ROUTER=0` to always use the model.
+Measure the trade-off with `npm run eval`.
+
 ## Read-only connectors (ingestion)
 
 Connectors pull source material onto the machine — **read-only and inbound
