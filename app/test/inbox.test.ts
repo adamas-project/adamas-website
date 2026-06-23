@@ -29,6 +29,25 @@ describe('evaluation — extraction', () => {
     expect(added.length).toBeGreaterThanOrEqual(SAMPLE_SOURCES.length);
   });
 
+  it('autopilot auto-confirms high-confidence candidates and is reversible', async () => {
+    const { inbox, ledger, provider } = await setup();
+    await inbox.ingest(provider, SAMPLE_SOURCES);
+    const pendingBefore = inbox.pendingCount;
+    expect(pendingBefore).toBeGreaterThan(0);
+    expect(ledger.count).toBe(0);
+
+    const { confirmed } = await inbox.autoConfirm(0.8);
+    expect(confirmed.length).toBeGreaterThan(0);
+    expect(ledger.count).toBe(confirmed.length); // filed into the ledger
+    expect(inbox.pendingCount).toBeLessThan(pendingBefore);
+    // Confirmed decisions exist and are governed (reversible, not deleted).
+    expect(ledger.get(confirmed[0]!.id)).toBeTruthy();
+
+    // A threshold of 0 is a no-op (everything stays in review).
+    const none = await inbox.autoConfirm(0);
+    expect(none.confirmed.length).toBe(0);
+  });
+
   it('every extracted draft maps to a schema-valid decision', async () => {
     const { inbox, provider } = await setup();
     await inbox.ingest(provider, SAMPLE_SOURCES);

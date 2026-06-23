@@ -105,6 +105,27 @@ export class CaptureInbox {
   }
 
   /**
+   * Autopilot: confirm every pending candidate at or above `threshold`
+   * confidence, highest first. Invalid drafts are skipped (left pending), never
+   * fatal. Returns what was filed and how many were skipped. Confirmed decisions
+   * remain fully reversible (principle #1: never deleted, only superseded).
+   */
+  async autoConfirm(threshold: number): Promise<{ confirmed: Decision[]; skipped: number }> {
+    if (!(threshold > 0)) return { confirmed: [], skipped: 0 };
+    const confirmed: Decision[] = [];
+    let skipped = 0;
+    for (const c of this.list('pending')) {
+      if (c.confidence < threshold) continue;
+      try {
+        confirmed.push(await this.confirm(c.candidateId));
+      } catch {
+        skipped += 1; // invalid draft — leave it pending for human review
+      }
+    }
+    return { confirmed, skipped };
+  }
+
+  /**
    * Confirm a candidate into the ledger. Optional `overrides` let the reviewer
    * edit the draft before it is written. The draft is validated by the ledger on
    * write; an invalid draft throws and nothing is created.

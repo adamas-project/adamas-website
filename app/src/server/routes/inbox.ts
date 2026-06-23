@@ -8,6 +8,7 @@ import { SAMPLE_SOURCES } from '../../evaluation/fixtures.js';
 import type { SourceDocument } from '../../evaluation/provider.js';
 import { ValidationError } from '../../schema/validate.js';
 import { LedgerError } from '../../ledger/ledger.js';
+import { autoConfirmConfidence } from '../../config/env.js';
 
 export function registerInboxRoutes(app: FastifyInstance, ctx: AppContext): void {
   const { inbox, localProvider } = ctx;
@@ -84,6 +85,15 @@ export function registerInboxRoutes(app: FastifyInstance, ctx: AppContext): void
     } finally {
       await fs.rm(inputPath, { force: true }).catch(() => {});
     }
+  });
+
+  // Autopilot: auto-file every pending candidate at/above a confidence threshold
+  // (body.threshold, else the configured default). Reversible like any decision.
+  app.post('/api/inbox/auto-confirm', async (req) => {
+    const body = (req.body ?? {}) as { threshold?: number };
+    const threshold = typeof body.threshold === 'number' ? body.threshold : autoConfirmConfidence();
+    const { confirmed, skipped } = await inbox.autoConfirm(threshold);
+    return { confirmed: confirmed.map((d) => d.id), confirmedCount: confirmed.length, skipped, pending: inbox.pendingCount, threshold };
   });
 
   app.post('/api/inbox/:id/confirm', async (req, reply) => {

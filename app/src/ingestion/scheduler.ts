@@ -19,6 +19,8 @@ export class ConnectorScheduler {
     private readonly inbox: CaptureInbox,
     private readonly provider: LLMProvider,
     private readonly intervalMs: number,
+    /** Autopilot: auto-confirm candidates at/above this confidence (0 = off). */
+    private readonly autoConfirmThreshold = 0,
   ) {}
 
   start(): void {
@@ -32,8 +34,8 @@ export class ConnectorScheduler {
   }
 
   /** Pull every connector once, ingesting new documents. Serialized (no overlap). */
-  async runOnce(): Promise<{ pulled: number; added: number }> {
-    if (this.running) return { pulled: 0, added: 0 };
+  async runOnce(): Promise<{ pulled: number; added: number; confirmed: number }> {
+    if (this.running) return { pulled: 0, added: 0, confirmed: 0 };
     this.running = true;
     let pulled = 0;
     let added = 0;
@@ -48,10 +50,12 @@ export class ConnectorScheduler {
           console.warn(`[connectors] auto-pull ${info.id} failed: ${(err as Error).message}`);
         }
       }
+      // Autopilot: file high-confidence candidates without a click (reversible).
+      const { confirmed } = await this.inbox.autoConfirm(this.autoConfirmThreshold);
+      return { pulled, added, confirmed: confirmed.length };
     } finally {
       this.running = false;
     }
-    return { pulled, added };
   }
 
   stop(): void {

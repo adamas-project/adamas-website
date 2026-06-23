@@ -43,6 +43,9 @@ services:
       ADAMAS_ICS_NAME: "${ADAMAS_ICS_NAME:-Calendar}"
       # Auto-pull connectors every N minutes so the inbox fills itself (0 = off).
       ADAMAS_CONNECTOR_PULL_MINUTES: "${ADAMAS_CONNECTOR_PULL_MINUTES:-0}"
+      # Autopilot: auto-file candidates at/above this confidence (0..1, 0 = review
+      # everything by hand). ~0.8 = hands-off; decisions stay reversible & logged.
+      ADAMAS_AUTO_CONFIRM_CONFIDENCE: "${ADAMAS_AUTO_CONFIRM_CONFIDENCE:-0}"
       # On-device speech-to-text for dropped recordings. Defaults to the baked-in
       # whisper.cpp engine; override to point at a different local engine.
       ADAMAS_TRANSCRIBE_CMD: "${ADAMAS_TRANSCRIBE_CMD:-adamas-transcribe {input}}"
