@@ -129,6 +129,14 @@ export const api = {
   }) => req<{ entry: any }>('/api/people', { method: 'POST', body: JSON.stringify(payload) }),
   deletePerson: (id: string) => req(`/api/people/${id}`, { method: 'DELETE' }),
 
+  records: (params: { q?: string; category?: string } = {}) => {
+    const qs = new URLSearchParams(params as Record<string, string>).toString();
+    return req<{ records: any[]; categories: string[]; count: number }>(`/api/records${qs ? `?${qs}` : ''}`);
+  },
+  addRecord: (payload: Record<string, unknown>) =>
+    req<{ entry: any }>('/api/records', { method: 'POST', body: JSON.stringify(payload) }),
+  deleteRecord: (id: string) => req(`/api/records/${id}`, { method: 'DELETE' }),
+
   obsidian: () => req<{ dir: string; exists: boolean; readiness: any }>('/api/obsidian'),
   obsidianExport: () => req<{ path: string; decisions: number; knowledge: number; files: number; readiness: any }>('/api/obsidian/export', { method: 'POST', body: '{}' }),
   obsidianImport: () => req<{ imported: number; titles: string[] }>('/api/obsidian/import', { method: 'POST', body: '{}' }),

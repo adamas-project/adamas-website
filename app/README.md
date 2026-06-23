@@ -223,6 +223,17 @@ rendered into the Obsidian data room (Company → People, with profiles + decisi
 owned), and factored into the **Valuation Readiness** scorecard (a dedicated
 *Team & key-person documentation* component).
 
+## Diligence records (customers, financials, risk, IP)
+
+The commercial facts a buyer underwrites, captured in the **Data Room** tab as
+records in four categories: **Customers & contracts** (ARR, recurring vs one-off,
+renewal dates), **Financial KPIs** (metric/value/period with a source), **Risk
+register** (severity, owner, mitigation, status), and **IP & assets** (patents,
+trademarks, licenses, domains with expiry). Stored as portable Markdown + JSON
+under `vault/records/`, grouped into the Obsidian data room, and scored in
+**Valuation Readiness** (a *Diligence records* component rewards breadth across
+all four categories). API: `/api/records`.
+
 ## Obsidian data room (the "second brain")
 
 ADAMAS is the cockpit; **Obsidian is the memory**. ADAMAS keeps its validated
