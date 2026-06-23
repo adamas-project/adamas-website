@@ -116,9 +116,17 @@ ledger unreviewed). Use them in **Capture Inbox → Read-only connectors → Pul
 
 **Auto-pull (opt-in):** set `ADAMAS_CONNECTOR_PULL_MINUTES` to a number of
 minutes and ADAMAS pulls every connector on that interval in the background, so
-the Capture Inbox fills itself — no clicking. Still read-only and inbound only;
-nothing enters the ledger unreviewed. `0` (default) keeps pulls manual. There's
-also `POST /api/connectors/pull-all` to pull everything once on demand.
+the Capture Inbox fills itself — no clicking. Still read-only and inbound only.
+`0` (default) keeps pulls manual. There's also `POST /api/connectors/pull-all`.
+
+**Autopilot (opt-in):** set `ADAMAS_AUTO_CONFIRM_CONFIDENCE` (e.g. `0.8`) and
+ADAMAS auto-files candidates at/above that confidence into the ledger — so with
+auto-pull on too, the whole chain (pull → evaluate → file → refresh Obsidian)
+runs with **zero clicks**. Decisions stay governed and **reversible** (principle
+#1: never deleted, only superseded), so autopilot is safe to leave on; low-
+confidence items still wait for review. `0` (default) reviews everything by hand.
+You can also click **⚡ Auto-file high-confidence** in the Capture Inbox, or call
+`POST /api/inbox/auto-confirm`.
 
 ### Capturing meeting outcomes & transcripts
 

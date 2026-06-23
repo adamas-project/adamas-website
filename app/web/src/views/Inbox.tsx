@@ -97,6 +97,19 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
     }
   }
 
+  async function autoFile() {
+    setBusy(true);
+    setMsg('');
+    try {
+      const r = await api.autoConfirm(0.8);
+      setMsg(r.confirmedCount ? `Auto-filed ${r.confirmedCount} high-confidence decision(s). ${r.pending} left to review.` : 'Nothing met the auto-file confidence bar; review the rest below.');
+      await load();
+      onChanged();
+    } finally {
+      setBusy(false);
+    }
+  }
+
   async function confirm(id: string) {
     await api.confirm(id);
     await load();
@@ -189,6 +202,13 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
       </div>
 
       <div className="section-title">Pending candidates {candidates.length > 0 ? `(${candidates.length})` : ''}</div>
+      {candidates.length > 0 && (
+        <div className="toolbar" style={{ margin: '0 0 8px' }}>
+          <button onClick={autoFile} disabled={busy} title="Auto-file every high-confidence candidate (reversible)">
+            ⚡ Auto-file high-confidence
+          </button>
+        </div>
+      )}
       {candidates.length === 0 && (
         <p className="muted">No pending candidates yet. Paste a note above and let Hermes read it.</p>
       )}

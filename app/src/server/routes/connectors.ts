@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import type { AppContext } from '../context.js';
-import { connectorPullMinutes } from '../../config/env.js';
+import { autoConfirmConfidence, connectorPullMinutes } from '../../config/env.js';
 
 export function registerConnectorRoutes(app: FastifyInstance, ctx: AppContext): void {
   const { connectors, inbox, localProvider } = ctx;
@@ -8,6 +8,7 @@ export function registerConnectorRoutes(app: FastifyInstance, ctx: AppContext): 
   app.get('/api/connectors', async () => ({
     connectors: connectors.list(),
     autoPullMinutes: connectorPullMinutes(),
+    autoConfirmConfidence: autoConfirmConfidence(),
   }));
 
   // Pull every connector once (used manually or by the background scheduler).
@@ -18,7 +19,7 @@ export function registerConnectorRoutes(app: FastifyInstance, ctx: AppContext): 
     return { ...result, pending: inbox.pendingCount };
   });
 
-  async function pullAll(): Promise<{ pulled: number; added: number }> {
+  async function pullAll(): Promise<{ pulled: number; added: number; confirmed: number }> {
     let pulled = 0;
     let added = 0;
     for (const info of connectors.list()) {
@@ -30,22 +31,26 @@ export function registerConnectorRoutes(app: FastifyInstance, ctx: AppContext): 
         /* skip a failing connector; others still run */
       }
     }
-    return { pulled, added };
+    const { confirmed } = await inbox.autoConfirm(autoConfirmConfidence());
+    return { pulled, added, confirmed: confirmed.length };
   }
 
   // Pull new/changed source material from a connector (read-only) and run it
-  // through Hermes into the Capture Inbox. Nothing enters the ledger here.
+  // through Hermes into the Capture Inbox. With autopilot on, high-confidence
+  // candidates are auto-filed; otherwise they wait in the inbox for review.
   app.post('/api/connectors/:id/pull', async (req, reply) => {
     const { id } = req.params as { id: string };
     try {
       const result = await connectors.pull(id);
       const added = await inbox.ingest(localProvider, result.documents);
+      const { confirmed } = await inbox.autoConfirm(autoConfirmConfidence());
       return {
         connector: id,
         scanned: result.scanned,
         skipped: result.skipped,
         newDocuments: result.documents.length,
         added: added.length,
+        confirmed: confirmed.length,
         pending: inbox.pendingCount,
       };
     } catch (err) {

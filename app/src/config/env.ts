@@ -36,6 +36,16 @@ export function connectorPullMinutes(): number {
   return Number.isFinite(n) && n > 0 ? n : 0;
 }
 
+/**
+ * Autopilot: confidence threshold (0..1) at or above which captured candidates
+ * are auto-confirmed into the ledger without a click. 0 (default) keeps every
+ * candidate in the review inbox. Recommended ~0.8 for hands-off operation.
+ */
+export function autoConfirmConfidence(): number {
+  const n = Number(process.env.ADAMAS_AUTO_CONFIRM_CONFIDENCE ?? 0);
+  return Number.isFinite(n) && n > 0 && n <= 1 ? n : 0;
+}
+
 /** Folder the local-folder connector reads source material from. */
 export function resolveSourcesDir(root: string): string {
   const fromEnv = process.env.ADAMAS_SOURCES_DIR;

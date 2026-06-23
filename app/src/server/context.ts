@@ -21,6 +21,7 @@ import { ObsidianAutoExporter } from '../obsidian/auto.js';
 import { ObsidianInboxWatcher } from '../obsidian/import.js';
 import { vaultPaths } from '../ledger/storage.js';
 import {
+  autoConfirmConfidence,
   connectorPullMinutes,
   hermesConfig,
   icsConfig,
@@ -107,7 +108,13 @@ export async function createContext(root: string): Promise<AppContext> {
   let connectorScheduler: ConnectorScheduler | null = null;
   const pullMinutes = connectorPullMinutes();
   if (pullMinutes > 0) {
-    connectorScheduler = new ConnectorScheduler(connectors, inbox, localProvider, pullMinutes * 60_000);
+    connectorScheduler = new ConnectorScheduler(
+      connectors,
+      inbox,
+      localProvider,
+      pullMinutes * 60_000,
+      autoConfirmConfidence(),
+    );
     connectorScheduler.start();
   }
 

@@ -60,6 +60,11 @@ export const api = {
     }),
   confirm: (id: string, overrides: any = {}) => req(`/api/inbox/${id}/confirm`, { method: 'POST', body: JSON.stringify(overrides) }),
   dismiss: (id: string) => req(`/api/inbox/${id}/dismiss`, { method: 'POST', body: '{}' }),
+  autoConfirm: (threshold?: number) =>
+    req<{ confirmedCount: number; skipped: number; pending: number; threshold: number }>('/api/inbox/auto-confirm', {
+      method: 'POST',
+      body: JSON.stringify(threshold != null ? { threshold } : {}),
+    }),
 
   transcript: (payload: { text: string; filename?: string; title?: string; date?: string; summarize?: boolean }) =>
     req<{ summarized: boolean; summary: string; added: number; candidates: any[]; pending: number }>(
