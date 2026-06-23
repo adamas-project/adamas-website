@@ -92,6 +92,15 @@ falls back to the built-in heuristic so capture never hard-fails offline. See
 `http://host.docker.internal:11434` (the compose file already does, and adds the
 `host.docker.internal` host mapping).
 
+### Feedback learning loop (smarter over time)
+
+Every decision you **confirm** (with your edits) or **dismiss** is remembered as
+an example under `vault/learning/`. On future captures, a strong match to a
+confirmed example nudges the extracted decision toward the domain/owner **you**
+chose — so ADAMAS improves from your own corrections, on-device, with no training
+run. It's deterministic and conservative (only acts on strong matches) and shows
+up as a rising `npm run eval` score. On by default; `ADAMAS_LEARNING=0` disables.
+
 ### Model router (cheap-first, escalate when unsure)
 
 When Ollama is configured, Hermes routes **cheap-first**: the free deterministic
