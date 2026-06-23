@@ -126,33 +126,32 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
   return (
     <div className="panel">
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <h2 style={{ margin: 0, flex: 1 }}>Capture Inbox</h2>
+        <h2 style={{ margin: 0, flex: 1 }}>{t('Capture Inbox')}</h2>
         {engine && <span className="badge gen" title="Active Hermes evaluation engine">Hermes: {engine}</span>}
       </div>
       <p className="muted" style={{ marginTop: 10 }}>
-        Paste a real meeting note, email, or memo. Hermes (your local model) reads it and proposes candidate
-        decisions. Nothing enters the ledger until you confirm it — and nothing leaves your machine.
+        {t('Paste a real meeting note, email, or memo. Hermes (your local model) reads it and proposes candidate decisions. Nothing enters the ledger until you confirm it — and nothing leaves your machine.')}
       </p>
 
       {connectors.length > 0 && (
         <>
-          <div className="section-title">Read-only connectors</div>
+          <div className="section-title">{t('Read-only connectors')}</div>
           <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
-            Connectors pull source material onto this machine — read-only, inbound only. Nothing is sent out.
+            {t('Connectors pull source material onto this machine — read-only, inbound only. Nothing is sent out.')}
           </p>
           <div className="pill-row" style={{ flexDirection: 'column', alignItems: 'stretch', gap: 8 }}>
             {connectors.map((c) => (
               <div key={c.id} className="card" style={{ cursor: 'default', display: 'flex', alignItems: 'center', gap: 10 }}>
                 <div style={{ flex: 1 }}>
-                  <div className="title">{c.label}</div>
-                  <div className="id mono">{c.location}</div>
+                  <div className="title">{t(c.label)}</div>
+                  <div className="id mono">{t(c.location)}</div>
                   <div className="pill-row" style={{ marginTop: 4 }}>
-                    <span className="badge live">read-only</span>
-                    <span className="badge">{c.network ? 'network' : 'local'}</span>
+                    <span className="badge live">{t('read-only')}</span>
+                    <span className="badge">{c.network ? t('network') : t('local')}</span>
                   </div>
                 </div>
                 <button className="primary" onClick={() => pullConnector(c.id)} disabled={busy}>
-                  {busy ? 'Pulling…' : 'Pull'}
+                  {busy ? t('Pulling…') : t('Pull')}
                 </button>
               </div>
             ))}
@@ -167,28 +166,28 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
         }}
       />
 
-      <div className="section-title">Capture from your own note</div>
+      <div className="section-title">{t('Capture from your own note')}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         <textarea
           rows={6}
           style={{ width: '100%', resize: 'vertical', fontFamily: 'var(--font-mono)', fontSize: 13 }}
-          placeholder={'Paste your note here. e.g.\n"In the Q3 review we decided to drop the hourly rate card and quote fixed-scope packages. Owner: head of sales. The trade-off is more estimation risk on us."'}
+          placeholder={t('Paste your note here. e.g. "In the Q3 review we decided to drop the hourly rate card and quote fixed-scope packages. Owner: head of sales. The trade-off is more estimation risk on us."')}
           value={noteText}
           onChange={(e) => setNoteText(e.target.value)}
         />
         <div className="toolbar" style={{ margin: 0 }}>
           <input
             style={{ flex: 1, minWidth: 180 }}
-            placeholder="Title (optional)"
+            placeholder={t('Title (optional)')}
             value={noteTitle}
             onChange={(e) => setNoteTitle(e.target.value)}
           />
           <select value={noteKind} onChange={(e) => setNoteKind(e.target.value as (typeof KINDS)[number])} aria-label="Source kind">
-            {KINDS.map((k) => <option key={k} value={k}>{k}</option>)}
+            {KINDS.map((k) => <option key={k} value={k}>{t(k)}</option>)}
           </select>
           <input type="date" value={noteDate} onChange={(e) => setNoteDate(e.target.value)} aria-label="Decision date" />
           <select value={noteDomain} onChange={(e) => setNoteDomain(e.target.value)} aria-label="Domain hint">
-            <option value="">auto-detect domain</option>
+            <option value="">{t('auto-detect domain')}</option>
             {DOMAINS.map((d) => <option key={d} value={d}>{d}</option>)}
           </select>
           <button className="primary" onClick={ingestNote} disabled={busy || !noteText.trim()}>
@@ -219,14 +218,14 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
         {candidates.map((c) => (
           <div key={c.candidateId} className="card" style={{ cursor: 'default' }}>
             <div className="id">
-              {c.draft.domain} · confidence {(c.confidence * 100).toFixed(0)}% · from <span className="mono">{c.source.ref}</span>
+              {c.draft.domain} · {t('confidence')} {(c.confidence * 100).toFixed(0)}% · {t('from')} <span className="mono">{c.source.ref}</span>
             </div>
             <div className="title">{c.draft.title}</div>
             <p className="muted" style={{ margin: '6px 0' }}>{c.draft.decision}</p>
             <div className="pill-row">
-              <span className="tag">owner: {c.draft.owner.role}</span>
-              {c.draft.owner.dissent?.length ? <span className="tag">dissent: {c.draft.owner.dissent.join(', ')}</span> : null}
-              {(c.draft.tradeoffs ?? []).length ? <span className="tag">{c.draft.tradeoffs.length} trade-off(s)</span> : null}
+              <span className="tag">{t('owner')}: {c.draft.owner.role}</span>
+              {c.draft.owner.dissent?.length ? <span className="tag">{t('dissent')}: {c.draft.owner.dissent.join(', ')}</span> : null}
+              {(c.draft.tradeoffs ?? []).length ? <span className="tag">{c.draft.tradeoffs.length} {t('trade-off(s)')}</span> : null}
             </div>
             <div style={{ marginTop: 8 }}>
               <button className="primary" onClick={() => confirm(c.candidateId)}>{t('Confirm into ledger')}</button>{' '}

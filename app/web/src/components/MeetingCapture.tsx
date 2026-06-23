@@ -130,7 +130,7 @@ export function MeetingCapture({ onChanged }: { onChanged: () => void }) {
         <textarea
           rows={3}
           style={{ width: '100%', resize: 'vertical' }}
-          placeholder={'What was decided? e.g. "We decided to move standups to Mondays only. Owner: head of ops. Trade-off: less mid-week visibility."'}
+          placeholder={t('What was decided? e.g. "We decided to move standups to Mondays only. Owner: head of ops. Trade-off: less mid-week visibility."')}
           value={mOutcome}
           onChange={(e) => setMOutcome(e.target.value)}
         />
