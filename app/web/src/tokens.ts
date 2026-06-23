@@ -54,10 +54,12 @@ export function domainVar(domain: Domain): string {
   return `var(--domain-${domain})`;
 }
 
-/** Color for a memory-graph node by kind (decision domain / knowledge / hub / tag). */
+/** Color for a memory-graph node by kind (decision / knowledge / people / records / hub / tag). */
 export function memoryNodeColor(node: { kind?: string; domain?: Domain }): string {
   if (node.kind === 'hub') return token('--text', '#f5f5f7');
   if (node.kind === 'knowledge') return token('--accent-lt', '#e3c977');
   if (node.kind === 'tag') return '#5fb8a8'; // teal — meta/topic nodes
+  if (node.kind === 'person') return '#e0a3ff'; // lilac — team
+  if (node.kind === 'record') return '#7aa2ff'; // blue — diligence records
   return node.domain ? domainColor(node.domain) : token('--accent', '#c9a84c');
 }
