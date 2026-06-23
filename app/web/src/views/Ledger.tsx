@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { api, type Decision, type Domain } from '../api';
 import { domainVar } from '../tokens';
+import { useLang } from '../i18n';
 import { DecisionDetail } from '../components/DecisionDetail';
 import { NewDecisionForm } from '../components/NewDecisionForm';
 
 const DOMAINS: Domain[] = ['hiring', 'sales', 'product', 'finance', 'ops'];
 
 export function LedgerView({ role, onChanged }: { role: string; onChanged: () => void }) {
+  const { t } = useLang();
   const [decisions, setDecisions] = useState<Decision[]>([]);
   const [domain, setDomain] = useState('');
   const [status, setStatus] = useState('');
@@ -57,19 +59,19 @@ export function LedgerView({ role, onChanged }: { role: string; onChanged: () =>
     <div className="layout">
       <div className="panel">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <h2 style={{ margin: 0, flex: 1 }}>The Ledger</h2>
-          <button className="primary" onClick={() => setCreating(true)}>+ New decision</button>
+          <h2 style={{ margin: 0, flex: 1 }}>{t('The Ledger')}</h2>
+          <button className="primary" onClick={() => setCreating(true)}>{t('+ New decision')}</button>
         </div>
         <div className="toolbar" style={{ marginTop: 12 }}>
           <select value={domain} onChange={(e) => setDomain(e.target.value)} aria-label="Filter by domain">
-            <option value="">All domains</option>
+            <option value="">{t('all domains')}</option>
             {DOMAINS.map((d) => <option key={d} value={d}>{d}</option>)}
           </select>
           <select value={status} onChange={(e) => setStatus(e.target.value)} aria-label="Filter by status">
-            <option value="">All statuses</option>
-            <option value="active">active</option>
-            <option value="superseded">superseded</option>
-            <option value="reversed">reversed</option>
+            <option value="">{t('all statuses')}</option>
+            <option value="active">{t('active')}</option>
+            <option value="superseded">{t('superseded')}</option>
+            <option value="reversed">{t('reversed')}</option>
           </select>
         </div>
         {error && <p className="err">{error}</p>}
@@ -87,7 +89,7 @@ export function LedgerView({ role, onChanged }: { role: string; onChanged: () =>
               <div className="title">{d.title}</div>
             </button>
           ))}
-          {decisions.length === 0 && <p className="muted">No decisions visible for this filter / role.</p>}
+          {decisions.length === 0 && <p className="muted">{t('No decisions visible for this filter / role.')}</p>}
         </div>
       </div>
 
@@ -106,11 +108,11 @@ export function LedgerView({ role, onChanged }: { role: string; onChanged: () =>
           <>
             <DecisionDetail data={detail} onNavigate={setSelected} onSupersede={supersede} />
             <div style={{ marginTop: 16 }}>
-              <a href="/api/export" download>Export full vault (Markdown + JSON)</a>
+              <a href="/api/export" download>{t('Export full vault (Markdown + JSON)')}</a>
             </div>
           </>
         ) : (
-          <p className="muted">Select a decision, or add one with “+ New decision”.</p>
+          <p className="muted">{t('Select a decision, or add one with “+ New decision”.')}</p>
         )}
       </div>
     </div>

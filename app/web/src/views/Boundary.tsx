@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import { useLang } from '../i18n';
 
 export function BoundaryView({ onChanged }: { onChanged: () => void }) {
+  const { t } = useLang();
   const [preview, setPreview] = useState<any | null>(null);
   const [status, setStatus] = useState<any | null>(null);
   const [security, setSecurity] = useState<any | null>(null);
@@ -49,57 +51,56 @@ export function BoundaryView({ onChanged }: { onChanged: () => void }) {
   return (
     <div className="layout">
       <div className="panel">
-        <h2>Hybrid-cloud approval (per task)</h2>
+        <h2>{t('Hybrid-cloud approval (per task)')}</h2>
         <p className="muted">
-          ADAMAS is local-first by default — nothing leaves the machine. A cloud route is opt-in per task: you see exactly
-          what would be transmitted before anything is sent.
+          {t('ADAMAS is local-first by default — nothing leaves the machine. A cloud route is opt-in per task: you see exactly what would be transmitted before anything is sent.')}
         </p>
-        {!preview && <button className="primary" onClick={prepare}>Prepare a cloud evaluation task…</button>}
+        {!preview && <button className="primary" onClick={prepare}>{t('Prepare a cloud evaluation task…')}</button>}
         {result && <div className="notice ok" style={{ marginTop: 10 }}>{result}</div>}
 
         {preview && (
           <div className="notice warn" style={{ marginTop: 12 }}>
-            <h3 style={{ marginTop: 0 }}>This is exactly what would be transmitted</h3>
+            <h3 style={{ marginTop: 0 }}>{t('This is exactly what would be transmitted')}</h3>
             <p className="muted">
               {preview.documents.length} document(s) · {preview.totalChars} characters → cloud provider
             </p>
             <pre className="doc" style={{ maxHeight: 260 }}>{preview.exactContent.join('\n\n— — —\n\n')}</pre>
             <div style={{ marginTop: 10 }}>
-              <button className="primary" onClick={approve}>Approve & send to cloud</button>{' '}
-              <button onClick={decline}>Decline — run locally instead</button>
+              <button className="primary" onClick={approve}>{t('Approve & send to cloud')}</button>{' '}
+              <button onClick={decline}>{t('Decline — run locally instead')}</button>
             </div>
           </div>
         )}
       </div>
 
       <div className="panel">
-        <h2>Security & data ownership</h2>
+        <h2>{t('Security & data ownership')}</h2>
         {security && (
           <dl className="kv">
-            <dt>Local-first</dt><dd className="ok">{String(security.localFirst)}</dd>
-            <dt>External telemetry</dt><dd className="ok">{String(security.externalTelemetry)}</dd>
-            <dt>Tracking cookies</dt><dd className="ok">{String(security.trackingCookies)}</dd>
-            <dt>Restricted domains</dt><dd>{security.restrictedDomains.join(', ')}</dd>
-            <dt>Cloud transmissions</dt><dd>{security.cloudTransmissions}</dd>
+            <dt>{t('Local-first')}</dt><dd className="ok">{String(security.localFirst)}</dd>
+            <dt>{t('External telemetry')}</dt><dd className="ok">{String(security.externalTelemetry)}</dd>
+            <dt>{t('Tracking cookies')}</dt><dd className="ok">{String(security.trackingCookies)}</dd>
+            <dt>{t('Restricted domains')}</dt><dd>{security.restrictedDomains.join(', ')}</dd>
+            <dt>{t('Cloud transmissions')}</dt><dd>{security.cloudTransmissions}</dd>
           </dl>
         )}
 
-        <div className="section-title">Encrypted local backup</div>
+        <div className="section-title">{t('Encrypted local backup')}</div>
         <div className="toolbar">
           <input
             type="password"
-            placeholder="passphrase (min 8 chars)"
+            placeholder={t('passphrase (min 8 chars)')}
             value={passphrase}
             onChange={(e) => setPassphrase(e.target.value)}
           />
-          <button onClick={backup} disabled={passphrase.length < 8}>Create backup</button>
-          <a href="/api/export" download>Export vault (MD+JSON)</a>
+          <button onClick={backup} disabled={passphrase.length < 8}>{t('Create backup')}</button>
+          <a href="/api/export" download>{t('Export vault (MD+JSON)')}</a>
         </div>
         {backupMsg && <p className="muted">{backupMsg}</p>}
 
-        <div className="section-title">Route log (recorded in the vault)</div>
+        <div className="section-title">{t('Route log (recorded in the vault)')}</div>
         <table>
-          <thead><tr><th>route</th><th>purpose</th><th>approved</th><th>chars sent</th><th>when</th></tr></thead>
+          <thead><tr><th>{t('route')}</th><th>{t('purpose')}</th><th>{t('approved')}</th><th>{t('chars sent')}</th><th>{t('when')}</th></tr></thead>
           <tbody>
             {(status?.log ?? []).slice().reverse().map((e: any, i: number) => (
               <tr key={i}>
@@ -110,7 +111,7 @@ export function BoundaryView({ onChanged }: { onChanged: () => void }) {
                 <td>{new Date(e.at).toLocaleTimeString()}</td>
               </tr>
             ))}
-            {(!status?.log || status.log.length === 0) && <tr><td colSpan={5} className="muted">No routes yet.</td></tr>}
+            {(!status?.log || status.log.length === 0) && <tr><td colSpan={5} className="muted">{t('No routes yet.')}</td></tr>}
           </tbody>
         </table>
       </div>

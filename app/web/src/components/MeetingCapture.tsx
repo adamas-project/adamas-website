@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react';
 import { api } from '../api';
+import { useLang } from '../i18n';
 
 // Two ways to capture a meeting's decisions when there's no recording link:
 // (1) type the outcome by hand, or (2) upload/paste a transcript that ADAMAS
 // summarizes locally before extracting candidate decisions.
 export function MeetingCapture({ onChanged }: { onChanged: () => void }) {
+  const { t } = useLang();
   const today = new Date().toISOString().slice(0, 10);
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -118,13 +120,13 @@ export function MeetingCapture({ onChanged }: { onChanged: () => void }) {
 
   return (
     <>
-      <div className="section-title">Log a meeting outcome (no recording needed)</div>
+      <div className="section-title">{t('Log a meeting outcome (no recording needed)')}</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div className="toolbar" style={{ margin: 0 }}>
-          <input style={{ flex: 1, minWidth: 200 }} placeholder="Meeting title" value={mTitle} onChange={(e) => setMTitle(e.target.value)} />
+          <input style={{ flex: 1, minWidth: 200 }} placeholder={t('Meeting title')} value={mTitle} onChange={(e) => setMTitle(e.target.value)} />
           <input type="date" value={mDate} onChange={(e) => setMDate(e.target.value)} aria-label="Meeting date" />
         </div>
-        <input style={{ width: '100%' }} placeholder="Attendees (optional, comma-separated)" value={mAttendees} onChange={(e) => setMAttendees(e.target.value)} />
+        <input style={{ width: '100%' }} placeholder={t('Attendees (optional, comma-separated)')} value={mAttendees} onChange={(e) => setMAttendees(e.target.value)} />
         <textarea
           rows={3}
           style={{ width: '100%', resize: 'vertical' }}
@@ -134,53 +136,52 @@ export function MeetingCapture({ onChanged }: { onChanged: () => void }) {
         />
         <div>
           <button className="primary" onClick={logOutcome} disabled={busy || !mTitle.trim() || !mOutcome.trim()}>
-            {busy ? 'Working…' : 'Capture outcome'}
+            {busy ? t('Working…') : t('Capture outcome')}
           </button>
         </div>
       </div>
 
-      <div className="section-title">Upload or paste a meeting transcript</div>
+      <div className="section-title">{t('Upload or paste a meeting transcript')}</div>
       <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
-        ADAMAS summarizes it locally first, then extracts decisions. Text files only (.txt, .md, .vtt, .srt).
+        {t('ADAMAS summarizes it locally first, then extracts decisions. Text files only (.txt, .md, .vtt, .srt).')}
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div className="toolbar" style={{ margin: 0 }}>
-          <input style={{ flex: 1, minWidth: 200 }} placeholder="Meeting title (optional)" value={tTitle} onChange={(e) => setTTitle(e.target.value)} />
+          <input style={{ flex: 1, minWidth: 200 }} placeholder={t('Meeting title (optional)')} value={tTitle} onChange={(e) => setTTitle(e.target.value)} />
           <input type="date" value={tDate} onChange={(e) => setTDate(e.target.value)} aria-label="Transcript date" />
           <input ref={fileRef} type="file" accept=".txt,.md,.markdown,.vtt,.srt,.text,text/plain" onChange={onFile} />
         </div>
         <textarea
           rows={5}
           style={{ width: '100%', resize: 'vertical', fontFamily: 'var(--font-mono)', fontSize: 13 }}
-          placeholder="…or paste the transcript text here."
+          placeholder={t('…or paste the transcript text here.')}
           value={tText}
           onChange={(e) => setTText(e.target.value)}
         />
         <div>
           <button className="primary" onClick={summarizeTranscript} disabled={busy || !tText.trim()}>
-            {busy ? 'Summarizing…' : 'Summarize & extract decisions'}
+            {busy ? t('Summarizing…') : t('Summarize & extract decisions')}
           </button>
         </div>
       </div>
 
-      <div className="section-title">Drop a recording (audio / video)</div>
+      <div className="section-title">{t('Drop a recording (audio / video)')}</div>
       <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
-        Transcribed on-device, then summarized and extracted. Requires a local transcription engine
-        (set <span className="mono">ADAMAS_TRANSCRIBE_CMD</span>; see the README) — otherwise use a text transcript above.
+        {t('Transcribed on-device, then summarized and extracted. Requires a local transcription engine (set ADAMAS_TRANSCRIBE_CMD; see the README) — otherwise use a text transcript above.')}
       </p>
       <div className="toolbar" style={{ margin: 0 }}>
-        <input style={{ flex: 1, minWidth: 180 }} placeholder="Meeting title (optional)" value={aTitle} onChange={(e) => setATitle(e.target.value)} />
+        <input style={{ flex: 1, minWidth: 180 }} placeholder={t('Meeting title (optional)')} value={aTitle} onChange={(e) => setATitle(e.target.value)} />
         <input type="date" value={aDate} onChange={(e) => setADate(e.target.value)} aria-label="Recording date" />
         <input ref={audioRef} type="file" accept="audio/*,video/*" onChange={(e) => setAFile(e.target.files?.[0] ?? null)} />
         <button className="primary" onClick={uploadRecording} disabled={busy || !aFile}>
-          {busy ? 'Transcribing…' : 'Transcribe & extract'}
+          {busy ? t('Transcribing…') : t('Transcribe & extract')}
         </button>
       </div>
 
       {msg && <div className="notice ok" style={{ marginTop: 10 }}>{msg}</div>}
       {summary && (
         <>
-          <div className="section-title">Summary (used for extraction)</div>
+          <div className="section-title">{t('Summary (used for extraction)')}</div>
           <pre className="doc" style={{ maxHeight: 220 }}>{summary}</pre>
         </>
       )}
