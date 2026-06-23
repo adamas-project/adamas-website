@@ -2,6 +2,8 @@ import { DOMAINS, type Domain } from '../schema/decision.schema.js';
 import type { Ledger } from '../ledger/ledger.js';
 import type { KnowledgeStore } from '../knowledge/store.js';
 import type { PeopleStore } from '../people/store.js';
+import type { RecordStore } from '../records/store.js';
+import { RECORD_CATEGORIES } from '../records/schema.js';
 
 // A simple, explainable "M&A / valuation readiness" scorecard. The things that
 // make a scale-up evaluate higher in diligence: domain coverage, traceable
@@ -20,10 +22,17 @@ export interface Readiness {
   people: number;
   peopleWithCv: number;
   keyPeople: number;
+  records: number;
+  recordCategories: number;
   components: Array<{ label: string; points: number; max: number }>;
 }
 
-export function computeReadiness(ledger: Ledger, knowledge: KnowledgeStore, people?: PeopleStore): Readiness {
+export function computeReadiness(
+  ledger: Ledger,
+  knowledge: KnowledgeStore,
+  people?: PeopleStore,
+  records?: RecordStore,
+): Readiness {
   const all = ledger.list();
   const total = all.length;
   const byDomain = Object.fromEntries(DOMAINS.map((d) => [d, 0])) as Record<Domain, number>;
@@ -45,22 +54,28 @@ export function computeReadiness(ledger: Ledger, knowledge: KnowledgeStore, peop
   const peopleWithCv = peopleList.filter((p) => (p.summary ?? '').trim().length > 40).length;
   const keyPeople = peopleList.filter((p) => p.keyPerson).length;
 
-  const coverage = ((DOMAINS.length - domainGaps.length) / DOMAINS.length) * 25;
-  const traceability = (traceabilityPct / 100) * 30;
+  // Diligence records: commercial / financial / risk / IP coverage.
+  const recCount = records?.count ?? 0;
+  const recCategories = records?.categories().length ?? 0;
+
+  const coverage = ((DOMAINS.length - domainGaps.length) / DOMAINS.length) * 20;
+  const traceability = (traceabilityPct / 100) * 25;
   const volume = Math.min(total / 20, 1) * 10;
   const knowledgePts = Math.min(knowledge.count / 10, 1) * 10;
-  // 25 pts: roster depth (15) + CV coverage (10), with a small floor once any
-  // key person is flagged (succession/continuity is documented at all).
-  const roster = Math.min(peopleCount / 5, 1) * 15;
-  const cvCoverage = peopleCount ? (peopleWithCv / peopleCount) * 10 : 0;
+  // 15 pts: roster depth (9) + CV coverage (6).
+  const roster = Math.min(peopleCount / 5, 1) * 9;
+  const cvCoverage = peopleCount ? (peopleWithCv / peopleCount) * 6 : 0;
   const teamPts = roster + cvCoverage;
+  // 20 pts: breadth across the 4 diligence categories (customers/financials/risk/IP).
+  const dataRoomPts = (recCategories / RECORD_CATEGORIES.length) * 20;
 
   const components = [
-    { label: 'Domain coverage (all 5 areas documented)', points: Math.round(coverage), max: 25 },
-    { label: 'Traceability (decisions cite their sources)', points: Math.round(traceability), max: 30 },
+    { label: 'Domain coverage (all 5 areas documented)', points: Math.round(coverage), max: 20 },
+    { label: 'Traceability (decisions cite their sources)', points: Math.round(traceability), max: 25 },
     { label: 'Decision volume / depth', points: Math.round(volume), max: 10 },
     { label: 'Knowledge base depth', points: Math.round(knowledgePts), max: 10 },
-    { label: 'Team & key-person documentation (CVs on file)', points: Math.round(teamPts), max: 25 },
+    { label: 'Team & key-person documentation (CVs on file)', points: Math.round(teamPts), max: 15 },
+    { label: 'Diligence records (customers, financials, risk, IP)', points: Math.round(dataRoomPts), max: 20 },
   ];
   const score = components.reduce((n, c) => n + c.points, 0);
 
@@ -77,6 +92,8 @@ export function computeReadiness(ledger: Ledger, knowledge: KnowledgeStore, peop
     people: peopleCount,
     peopleWithCv,
     keyPeople,
+    records: recCount,
+    recordCategories: recCategories,
     components,
   };
 }

@@ -5,6 +5,8 @@ import type { Ledger } from '../ledger/ledger.js';
 import type { KnowledgeStore } from '../knowledge/store.js';
 import type { PeopleStore } from '../people/store.js';
 import type { PersonEntry } from '../people/schema.js';
+import type { RecordStore } from '../records/store.js';
+import { RECORD_CATEGORIES, RECORD_CATEGORY_LABEL, type RecordEntry } from '../records/schema.js';
 import type { AssetEngine } from '../assets/engine.js';
 import { atomicWrite } from '../ledger/storage.js';
 import { computeReadiness, type Readiness } from './readiness.js';
@@ -123,6 +125,39 @@ function personNote(p: PersonEntry, ownedDecisions: string[]): string {
   return fm + body.join('\n') + '\n';
 }
 
+function recordNote(r: RecordEntry): string {
+  const fm = frontmatter({
+    id: r.id,
+    aliases: [r.id],
+    type: 'record',
+    category: r.category,
+    status: r.status,
+    owner: r.owner,
+    amount: r.amount,
+    currency: r.currency,
+    recurring: r.recurring,
+    metric: r.metric,
+    period: r.period,
+    severity: r.severity,
+    due_date: r.dueDate,
+    source: r.source,
+    tags: ['record', r.category, ...(r.tags ?? [])],
+  });
+  const facts: string[] = [];
+  if (r.owner) facts.push(`**Owner:** ${r.owner}`);
+  if (r.status) facts.push(`**Status:** ${r.status}`);
+  if (r.amount != null) facts.push(`**Value:** ${r.currency ?? ''}${r.amount.toLocaleString()}${r.recurring ? '/yr (recurring)' : ''}`);
+  if (r.metric) facts.push(`**Metric:** ${r.metric}${r.period ? ` (${r.period})` : ''}`);
+  if (r.severity) facts.push(`**Severity:** ${r.severity}`);
+  if (r.dueDate) facts.push(`**Due/renewal:** ${r.dueDate}`);
+  const body: string[] = [`# ${r.title}`, '', `_${RECORD_CATEGORY_LABEL[r.category]}_`, ''];
+  if (facts.length) body.push(facts.join(' · '), '');
+  body.push(r.summary, '');
+  if (r.mitigation) body.push(`**Mitigation.** ${r.mitigation}`, '');
+  if (r.source) body.push(`**Source.** ${r.source}`, '');
+  return fm + body.join('\n') + '\n';
+}
+
 function readinessNote(r: Readiness): string {
   const rows = r.components.map((c) => `| ${c.label} | ${c.points} / ${c.max} |`).join('\n');
   const gaps = r.domainGaps.length ? r.domainGaps.map((d) => DOMAIN_FOLDER[d]).join(', ') : 'none';
@@ -136,6 +171,7 @@ function readinessNote(r: Readiness): string {
     `- Traceability: **${r.traceabilityPct}%** of decisions cite their sources (${r.withSources}/${r.decisions})`,
     `- Dissent recorded on ${r.withDissent} decision(s); ${r.superseded} superseded/reversed (active management)`,
     `- Team: **${r.people}** documented · ${r.peopleWithCv} with CVs · ${r.keyPeople} flagged key-person`,
+    `- Diligence records: **${r.records}** across ${r.recordCategories}/4 categories (customers, financials, risk, IP)`,
     `- Domain gaps: ${gaps}`,
     '',
     '| Component | Score |',
@@ -156,10 +192,10 @@ export interface ObsidianExportResult {
 }
 
 export async function buildObsidianVault(
-  deps: { ledger: Ledger; knowledge: KnowledgeStore; assets: AssetEngine; people?: PeopleStore },
+  deps: { ledger: Ledger; knowledge: KnowledgeStore; assets: AssetEngine; people?: PeopleStore; records?: RecordStore },
   outDir: string,
 ): Promise<ObsidianExportResult> {
-  const { ledger, knowledge, assets, people } = deps;
+  const { ledger, knowledge, assets, people, records } = deps;
   // Regenerate fresh (derived view). Clear the folder's *contents* rather than
   // removing the folder itself: in Docker the output dir is a bind-mount, and
   // rmdir on a mount point fails with EBUSY. Removing children avoids that.
@@ -179,7 +215,7 @@ export async function buildObsidianVault(
   };
 
   const decisions = ledger.list();
-  const readiness = computeReadiness(ledger, knowledge, people);
+  const readiness = computeReadiness(ledger, knowledge, people, records);
 
   // Decisions by domain + MOC.
   const decMoc: string[] = [frontmatter({ type: 'moc', tags: ['decisions'] }), '# Decisions', ''];
@@ -253,6 +289,20 @@ export async function buildObsidianVault(
   if (roleMap.size === 0) companyDoc.push('_No roles recorded yet._');
   await write(path.join('Company', 'People.md'), companyDoc.join('\n'));
 
+  // Data room: commercial / financial / risk / IP records, grouped by category.
+  const recordList = records?.list() ?? [];
+  const recMoc: string[] = [frontmatter({ type: 'moc', tags: ['dataroom'] }), '# Data Room records', ''];
+  for (const category of RECORD_CATEGORIES) {
+    const inCat = recordList.filter((r) => r.category === category);
+    recMoc.push(`## ${RECORD_CATEGORY_LABEL[category]} (${inCat.length})`);
+    for (const r of inCat) {
+      await write(path.join('Data Room', RECORD_CATEGORY_LABEL[category], `${r.id} — ${fsSafe(r.title)}.md`), recordNote(r));
+      recMoc.push(`- [[${r.id}]] — ${r.title}${r.status ? ` _(${r.status})_` : ''}`);
+    }
+    recMoc.push('');
+  }
+  await write(path.join('Data Room', 'Data Room MOC.md'), recMoc.join('\n'));
+
   // Readiness scorecard + top-level index/MOC (the cockpit).
   await write('Valuation Readiness.md', readinessNote(readiness));
   const index = [
@@ -266,8 +316,9 @@ export async function buildObsidianVault(
     '## Sections',
     '- [[Decisions MOC|Decisions]] — the governed, immutable decision ledger by department',
     '- [[Diligence MOC|Diligence]] — diligence binder, founder-continuity dossier, risk register, data-room index',
+    '- [[Data Room MOC|Data Room records]] — customers, financials, risk, IP & assets',
     '- [[Knowledge MOC|Knowledge]] — the living knowledge base',
-    '- [[People|Company / People]] — roles referenced across decisions',
+    '- [[People|Company / People]] — team profiles (CVs) + roles across decisions',
     '',
     '_This is a read-only view derived from ADAMAS. Edit decisions in ADAMAS (governed, append-only); use the Knowledge base for the living brain._',
     '',

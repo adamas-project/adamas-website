@@ -16,6 +16,7 @@ import { CommandTranscriber, type Transcriber } from '../ingestion/transcribe.js
 import { ConnectorScheduler } from '../ingestion/scheduler.js';
 import { KnowledgeStore } from '../knowledge/store.js';
 import { PeopleStore } from '../people/store.js';
+import { RecordStore } from '../records/store.js';
 import { ObsidianAutoExporter } from '../obsidian/auto.js';
 import { ObsidianInboxWatcher } from '../obsidian/import.js';
 import { vaultPaths } from '../ledger/storage.js';
@@ -44,6 +45,7 @@ export interface AppContext {
   transcriber: Transcriber | null;
   knowledge: KnowledgeStore;
   people: PeopleStore;
+  records: RecordStore;
   obsidianAuto: ObsidianAutoExporter | null;
   obsidianInbox: ObsidianInboxWatcher | null;
   connectorScheduler: ConnectorScheduler | null;
@@ -85,6 +87,7 @@ export async function createContext(root: string): Promise<AppContext> {
   const transcriber: Transcriber | null = tcfg ? new CommandTranscriber(tcfg.cmd, tcfg.timeoutMs) : null;
   const knowledge = await KnowledgeStore.open(path.join(root, 'knowledge'));
   const people = await PeopleStore.open(path.join(root, 'people'));
+  const records = await RecordStore.open(path.join(root, 'records'));
 
   // Keep the derived Obsidian data-room vault in sync with every change (opt-out
   // via ADAMAS_OBSIDIAN_AUTO=0). The manual Data Room → Generate still works.
@@ -92,7 +95,7 @@ export async function createContext(root: string): Promise<AppContext> {
   let obsidianInbox: ObsidianInboxWatcher | null = null;
   if (obsidianAutoEnabled()) {
     const obsidianDir = resolveObsidianDir(root);
-    obsidianAuto = new ObsidianAutoExporter({ ledger, knowledge, assets, people }, obsidianDir);
+    obsidianAuto = new ObsidianAutoExporter({ ledger, knowledge, assets, people, records }, obsidianDir);
     obsidianAuto.start();
     // Write-back: import notes dropped into obsidian/_Inbox/ (two-way sync).
     obsidianInbox = new ObsidianInboxWatcher({ knowledge, provider: localProvider }, obsidianDir);
@@ -120,6 +123,7 @@ export async function createContext(root: string): Promise<AppContext> {
     transcriber,
     knowledge,
     people,
+    records,
     obsidianAuto,
     obsidianInbox,
     connectorScheduler,

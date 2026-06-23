@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 
+const CATEGORIES: Array<{ id: string; label: string }> = [
+  { id: 'customer', label: 'Customers & contracts' },
+  { id: 'financial', label: 'Financial KPIs' },
+  { id: 'risk', label: 'Risk register' },
+  { id: 'ip', label: 'IP & assets' },
+];
+
 export function DataRoomView() {
   const [info, setInfo] = useState<any | null>(null);
   const [busy, setBusy] = useState(false);
@@ -51,6 +58,7 @@ export function DataRoomView() {
 
   return (
     <div className="layout">
+      <RecordsManager onChanged={load} />
       <div className="panel">
         <h2>Data Room — valuation readiness</h2>
         <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
@@ -121,6 +129,136 @@ export function DataRoomView() {
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+function RecordsManager({ onChanged }: { onChanged: () => void }) {
+  const [records, setRecords] = useState<any[]>([]);
+  const [category, setCategory] = useState('customer');
+  const [form, setForm] = useState<Record<string, any>>({});
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState('');
+
+  async function load() {
+    try {
+      setRecords((await api.records()).records);
+    } catch (e) {
+      setMsg((e as Error).message);
+    }
+  }
+  useEffect(() => {
+    void load();
+  }, []);
+
+  const set = (k: string, v: any) => setForm((f) => ({ ...f, [k]: v }));
+
+  async function add() {
+    if (!form.title?.trim()) {
+      setMsg('Title is required.');
+      return;
+    }
+    setBusy(true);
+    setMsg('');
+    try {
+      await api.addRecord({ ...form, category });
+      setForm({});
+      setMsg('Added.');
+      await load();
+      onChanged();
+    } catch (e) {
+      setMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function remove(id: string) {
+    await api.deleteRecord(id);
+    await load();
+    onChanged();
+  }
+
+  return (
+    <div className="panel" style={{ gridColumn: '1 / -1' }}>
+      <h2 style={{ marginTop: 0 }}>Diligence records</h2>
+      <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
+        The commercial, financial, risk and IP facts a buyer underwrites. Each category you fill in raises the
+        valuation-readiness score and appears in the Obsidian data room.
+      </p>
+      <div className="toolbar" style={{ flexWrap: 'wrap' }}>
+        {CATEGORIES.map((c) => (
+          <button key={c.id} className={category === c.id ? 'primary' : ''} onClick={() => setCategory(c.id)}>{c.label}</button>
+        ))}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 10 }}>
+        <input placeholder="Title *" value={form.title ?? ''} onChange={(e) => set('title', e.target.value)} />
+        <input placeholder="Owner (role or name)" value={form.owner ?? ''} onChange={(e) => set('owner', e.target.value)} />
+        {category === 'customer' && (
+          <>
+            <input placeholder="ARR / contract value" value={form.amount ?? ''} onChange={(e) => set('amount', e.target.value)} />
+            <input placeholder="Renewal date (YYYY-MM-DD)" value={form.dueDate ?? ''} onChange={(e) => set('dueDate', e.target.value)} />
+            <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <input type="checkbox" checked={!!form.recurring} onChange={(e) => set('recurring', e.target.checked)} /> recurring revenue
+            </label>
+          </>
+        )}
+        {category === 'financial' && (
+          <>
+            <input placeholder="Metric (e.g. Gross margin)" value={form.metric ?? ''} onChange={(e) => set('metric', e.target.value)} />
+            <input placeholder="Value (e.g. 62%)" value={form.amount ?? ''} onChange={(e) => set('amount', e.target.value)} />
+            <input placeholder="Period (e.g. FY2025)" value={form.period ?? ''} onChange={(e) => set('period', e.target.value)} />
+          </>
+        )}
+        {category === 'risk' && (
+          <>
+            <select value={form.severity ?? ''} onChange={(e) => set('severity', e.target.value)}>
+              <option value="">severity…</option>
+              <option value="low">low</option>
+              <option value="medium">medium</option>
+              <option value="high">high</option>
+            </select>
+            <input placeholder="Mitigation" value={form.mitigation ?? ''} onChange={(e) => set('mitigation', e.target.value)} />
+          </>
+        )}
+        {category === 'ip' && (
+          <input placeholder="Expiry / renewal date" value={form.dueDate ?? ''} onChange={(e) => set('dueDate', e.target.value)} />
+        )}
+        <input placeholder="Status" value={form.status ?? ''} onChange={(e) => set('status', e.target.value)} />
+        <input placeholder="Source (where this is evidenced)" value={form.source ?? ''} onChange={(e) => set('source', e.target.value)} />
+      </div>
+      <textarea
+        style={{ marginTop: 8 }}
+        rows={2}
+        placeholder="Description / notes"
+        value={form.summary ?? ''}
+        onChange={(e) => set('summary', e.target.value)}
+      />
+      <div className="toolbar" style={{ marginTop: 8 }}>
+        <button className="primary" onClick={add} disabled={busy}>{busy ? 'Adding…' : `Add ${CATEGORIES.find((c) => c.id === category)?.label}`}</button>
+        {msg && <span className="muted" style={{ fontSize: 13 }}>{msg}</span>}
+      </div>
+
+      {CATEGORIES.map((c) => {
+        const inCat = records.filter((r) => r.category === c.id);
+        if (!inCat.length) return null;
+        return (
+          <div key={c.id} style={{ marginTop: 12 }}>
+            <div className="section-title">{c.label} ({inCat.length})</div>
+            {inCat.map((r) => (
+              <div key={r.id} style={{ display: 'flex', alignItems: 'baseline', gap: 8, padding: '4px 0' }}>
+                <strong>{r.title}</strong>
+                {r.status && <span className="badge">{r.status}</span>}
+                {r.severity && <span className="badge">{r.severity}</span>}
+                {r.amount != null && <span className="muted" style={{ fontSize: 13 }}>{r.currency ?? ''}{Number(r.amount).toLocaleString()}{r.recurring ? '/yr' : ''}</span>}
+                <span style={{ flex: 1 }} />
+                <button className="tag linkbtn" onClick={() => remove(r.id)}>remove</button>
+              </div>
+            ))}
+          </div>
+        );
+      })}
     </div>
   );
 }
