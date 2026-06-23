@@ -63,6 +63,34 @@ export const de: Record<string, string> = {
   'Extract decisions with Hermes': 'Entscheidungen mit Hermes extrahieren',
   'Reading…': 'Lese…',
   'Or try the built-in sample notes': 'Oder probiere die eingebauten Beispielnotizen',
+  'Paste a real meeting note, email, or memo. Hermes (your local model) reads it and proposes candidate decisions. Nothing enters the ledger until you confirm it — and nothing leaves your machine.':
+    'Füge eine echte Meeting-Notiz, E-Mail oder ein Memo ein. Hermes (dein lokales Modell) liest es und schlägt Entscheidungs-Kandidaten vor. Nichts gelangt ins Hauptbuch, bis du es bestätigst — und nichts verlässt dein Gerät.',
+  'Read-only connectors': 'Schreibgeschützte Konnektoren',
+  'Connectors pull source material onto this machine — read-only, inbound only. Nothing is sent out.':
+    'Konnektoren holen Quellmaterial auf dieses Gerät — schreibgeschützt, nur eingehend. Nichts wird gesendet.',
+  'Local folder': 'Lokaler Ordner',
+  'Calendar (Calendar)': 'Kalender',
+  'iCal feed (read-only)': 'iCal-Feed (schreibgeschützt)',
+  'read-only': 'schreibgeschützt',
+  network: 'Netzwerk',
+  local: 'lokal',
+  Pull: 'Abrufen',
+  'Pulling…': 'Rufe ab…',
+  'Capture from your own note': 'Aus eigener Notiz erfassen',
+  'Paste your note here. e.g. "In the Q3 review we decided to drop the hourly rate card and quote fixed-scope packages. Owner: head of sales. The trade-off is more estimation risk on us."':
+    'Füge hier deine Notiz ein. z. B. „Im Q3-Review haben wir entschieden, die Stundensatz-Karte abzuschaffen und Festumfang-Pakete anzubieten. Verantwortlich: Vertriebsleitung. Der Kompromiss: mehr Schätzrisiko bei uns.“',
+  'auto-detect domain': 'Bereich automatisch erkennen',
+  confidence: 'Konfidenz',
+  from: 'aus',
+  owner: 'Verantwortliche/r',
+  dissent: 'Widerspruch',
+  'trade-off(s)': 'Kompromiss(e)',
+  doc: 'Dokument',
+  meeting: 'Meeting',
+  email: 'E-Mail',
+  chat: 'Chat',
+  'What was decided? e.g. "We decided to move standups to Mondays only. Owner: head of ops. Trade-off: less mid-week visibility."':
+    'Was wurde entschieden? z. B. „Wir haben entschieden, Standups nur noch montags abzuhalten. Verantwortlich: Betriebsleitung. Kompromiss: weniger Sichtbarkeit unter der Woche.“',
 
   // ── Knowledge ─────────────────────────────────────────────
   'Drop a link (article, post, video, blog) or paste text. ADAMAS summarizes it locally and saves an entry linked to the source.':
