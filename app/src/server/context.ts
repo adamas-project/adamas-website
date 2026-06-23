@@ -5,6 +5,8 @@ import { LocalLLMProvider } from '../evaluation/local.js';
 import { OllamaLLMProvider } from '../evaluation/ollama.js';
 import { RouterLLMProvider } from '../evaluation/router.js';
 import { CloudLLMProvider } from '../evaluation/cloud.js';
+import { LearningStore } from '../learning/store.js';
+import { LearningProvider } from '../learning/provider.js';
 import type { LLMProvider } from '../evaluation/provider.js';
 import { AssetEngine } from '../assets/engine.js';
 import { BoundaryService } from '../boundary/boundary.js';
@@ -25,6 +27,7 @@ import {
   autoConfirmConfidence,
   connectorPullMinutes,
   hermesConfig,
+  learningEnabled,
   icsConfig,
   imapConfig,
   obsidianAutoEnabled,
@@ -48,6 +51,7 @@ export interface AppContext {
   knowledge: KnowledgeStore;
   people: PeopleStore;
   records: RecordStore;
+  learning: LearningStore;
   obsidianAuto: ObsidianAutoExporter | null;
   obsidianInbox: ObsidianInboxWatcher | null;
   connectorScheduler: ConnectorScheduler | null;
@@ -57,7 +61,11 @@ export interface AppContext {
 export async function createContext(root: string): Promise<AppContext> {
   const ledger = await Ledger.open(root);
   const paths = vaultPaths(root);
-  const inbox = await CaptureInbox.open(path.join(root, 'candidates.json'), ledger);
+  // The feedback learning loop: confirmations/dismissals are recorded here and
+  // fed back into extraction (opt out with ADAMAS_LEARNING=0).
+  const learning = await LearningStore.open(path.join(root, 'learning'));
+  const learningOn = learningEnabled();
+  const inbox = await CaptureInbox.open(path.join(root, 'candidates.json'), ledger, learningOn ? learning : undefined);
   const assets = await AssetEngine.open(ledger, paths.assets);
 
   // Hermes (local evaluation) is pluggable and runs on-device. When an Ollama
@@ -74,6 +82,8 @@ export async function createContext(root: string): Promise<AppContext> {
   } else {
     localProvider = new LocalLLMProvider();
   }
+  // Apply learned corrections on top of whatever provider is active.
+  if (learningOn) localProvider = new LearningProvider(localProvider, learning);
 
   const cloudProvider = new CloudLLMProvider();
   const boundary = await BoundaryService.open(
@@ -139,6 +149,7 @@ export async function createContext(root: string): Promise<AppContext> {
     knowledge,
     people,
     records,
+    learning,
     obsidianAuto,
     obsidianInbox,
     connectorScheduler,

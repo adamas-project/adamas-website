@@ -6,6 +6,11 @@ import type { Candidate, CandidateDraft, LLMProvider, SourceDocument } from './p
 
 export type CandidateStatus = 'pending' | 'confirmed' | 'dismissed';
 
+/** Sink for feedback signals — confirmations/dismissals teach future extraction. */
+export interface LearningRecorder {
+  record(ex: { text: string; domain: string; ownerRole?: string; label: 'confirmed' | 'dismissed' }): Promise<void>;
+}
+
 export interface StoredCandidate extends Candidate {
   status: CandidateStatus;
   createdId?: string; // ledger id once confirmed
@@ -32,12 +37,18 @@ export class CaptureInbox {
   private constructor(
     private readonly filePath: string,
     private readonly ledger: Ledger,
+    private readonly learner?: LearningRecorder,
   ) {}
 
-  static async open(filePath: string, ledger: Ledger): Promise<CaptureInbox> {
-    const inbox = new CaptureInbox(filePath, ledger);
+  static async open(filePath: string, ledger: Ledger, learner?: LearningRecorder): Promise<CaptureInbox> {
+    const inbox = new CaptureInbox(filePath, ledger, learner);
     await inbox.load();
     return inbox;
+  }
+
+  /** Text signal we learn from: the decision in its context. */
+  private learnText(draft: CandidateDraft): string {
+    return `${draft.title} ${draft.decision} ${draft.context}`;
   }
 
   private async load(): Promise<void> {
@@ -101,6 +112,8 @@ export class CaptureInbox {
     c.status = 'dismissed';
     c.decidedAt = new Date().toISOString();
     await this.save();
+    // Negative signal: this wasn't a real decision (learned for future tuning).
+    await this.learner?.record({ text: this.learnText(c.draft), domain: c.draft.domain, ownerRole: c.draft.owner.role, label: 'dismissed' });
     return c;
   }
 
@@ -151,6 +164,8 @@ export class CaptureInbox {
     c.createdId = created.id;
     c.decidedAt = new Date().toISOString();
     await this.save();
+    // Positive signal: learn from the *final* draft (your edits included).
+    await this.learner?.record({ text: this.learnText(draft), domain: draft.domain, ownerRole: draft.owner.role, label: 'confirmed' });
     return created;
   }
 }

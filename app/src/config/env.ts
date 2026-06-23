@@ -36,6 +36,12 @@ export function connectorPullMinutes(): number {
   return Number.isFinite(n) && n > 0 ? n : 0;
 }
 
+/** Whether the feedback learning loop is active (default on). */
+export function learningEnabled(): boolean {
+  const raw = (process.env.ADAMAS_LEARNING ?? '1').trim().toLowerCase();
+  return raw !== '0' && raw !== 'false' && raw !== 'off';
+}
+
 /**
  * Autopilot: confidence threshold (0..1) at or above which captured candidates
  * are auto-confirmed into the ledger without a click. 0 (default) keeps every
