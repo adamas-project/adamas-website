@@ -249,4 +249,74 @@ export const de: Record<string, string> = {
   'Transcribe & extract': 'Transkribieren & extrahieren',
   'Transcribing…': 'Transkribiere…',
   'Summary (used for extraction)': 'Zusammenfassung (für die Extraktion verwendet)',
+
+  // ── Data Room (readiness + obsidian + records) ────────────
+  'A diligence-ready view of the vault: how complete and traceable your decision record is. Higher = lower perceived risk in an M&A / fundraise evaluation.':
+    'Eine due-diligence-fähige Sicht auf den Tresor: wie vollständig und nachverfolgbar deine Entscheidungshistorie ist. Höher = geringeres wahrgenommenes Risiko bei einer M&A-/Finanzierungsbewertung.',
+  readiness: 'Reife',
+  sourced: 'mit Quelle',
+  Component: 'Komponente',
+  Score: 'Punktzahl',
+  'Coverage gap: no decisions yet in': 'Abdeckungslücke: noch keine Entscheidungen in',
+  'Capturing a few there raises the score.': 'Ein paar dort zu erfassen hebt die Punktzahl.',
+  'ADAMAS stays the source of truth; this generates a clean Obsidian data-room vault (YAML frontmatter, [[wikilinks]], MOC indexes) — your durable “second brain.”':
+    'ADAMAS bleibt die Quelle der Wahrheit; dies erzeugt einen sauberen Obsidian-Datenraum-Tresor (YAML-Frontmatter, [[Wikilinks]], MOC-Indizes) — dein dauerhaftes „zweites Gehirn“.',
+  'Import notes you wrote into obsidian/_Inbox/': 'Notizen importieren, die du in obsidian/_Inbox/ geschrieben hast',
+  'The vault refreshes automatically whenever a decision or knowledge entry changes — you rarely need this button. Use it to force an immediate rebuild.':
+    'Der Tresor aktualisiert sich automatisch, sobald sich eine Entscheidung oder ein Wissenseintrag ändert — diesen Knopf brauchst du selten. Nutze ihn für eine sofortige Neuerstellung.',
+  'Vault location': 'Tresor-Speicherort',
+  'Open in Obsidian': 'In Obsidian öffnen',
+  'In Docker, this is the host folder mapped to': 'In Docker ist dies der Host-Ordner, der verbunden ist mit',
+  'e.g.': 'z. B.',
+  'Open folder as vault': 'Ordner als Tresor öffnen',
+  'choose that folder.': 'diesen Ordner wählen.',
+  Open: 'Öffne',
+  'that’s the cockpit MOC.': 'das ist die Cockpit-MOC.',
+  'Decisions are read-only here (governed in ADAMAS); use the vault for browsing, the graph, and the living knowledge base. Re-run the export to refresh after changes.':
+    'Entscheidungen sind hier schreibgeschützt (in ADAMAS verwaltet); nutze den Tresor zum Stöbern, für den Graphen und die lebendige Wissensbasis. Führe den Export erneut aus, um nach Änderungen zu aktualisieren.',
+  'The commercial, financial, risk and IP facts a buyer underwrites. Each category you fill in raises the valuation-readiness score and appears in the Obsidian data room.':
+    'Die kommerziellen, finanziellen, Risiko- und IP-Fakten, die ein Käufer prüft. Jede ausgefüllte Kategorie hebt die Bewertungsreife und erscheint im Obsidian-Datenraum.',
+  'Title *': 'Titel *',
+  'Owner (role or name)': 'Verantwortliche/r (Rolle oder Name)',
+  'ARR / contract value': 'ARR / Vertragswert',
+  'Renewal date (YYYY-MM-DD)': 'Verlängerungsdatum (JJJJ-MM-TT)',
+  'recurring revenue': 'wiederkehrender Umsatz',
+  'Metric (e.g. Gross margin)': 'Kennzahl (z. B. Bruttomarge)',
+  'Value (e.g. 62%)': 'Wert (z. B. 62 %)',
+  'Period (e.g. FY2025)': 'Zeitraum (z. B. GJ2025)',
+  'severity…': 'Schweregrad…',
+  low: 'niedrig',
+  medium: 'mittel',
+  high: 'hoch',
+  Mitigation: 'Gegenmaßnahme',
+  'Expiry / renewal date': 'Ablauf-/Verlängerungsdatum',
+  'Source (where this is evidenced)': 'Quelle (wo belegt)',
+  'Description / notes': 'Beschreibung / Notizen',
+  Add: 'Hinzufügen',
+  remove: 'entfernen',
+
+  // ── Knowledge placeholders ────────────────────────────────
+  'Paste a URL (article / post / video / blog)…': 'Eine URL einfügen (Artikel / Post / Video / Blog)…',
+  '…or paste the text directly (for paywalled pages or a video transcript).':
+    '…oder den Text direkt einfügen (für Bezahlinhalte oder ein Video-Transkript).',
+
+  // ── People ────────────────────────────────────────────────
+  'The team a buyer underwrites. Each person’s CV is summarized on-device into a bio, highlights, and skills, and linked to the decisions they own. Flag key people so key-person risk is documented.':
+    'Das Team, das ein Käufer prüft. Der Lebenslauf jeder Person wird lokal zu Kurzbio, Highlights und Fähigkeiten zusammengefasst und mit den Entscheidungen verknüpft, die sie verantwortet. Markiere Schlüsselpersonen, damit das Schlüsselpersonen-Risiko dokumentiert ist.',
+  'key person': 'Schlüsselperson',
+  'Paste the CV or a bio here…': 'Lebenslauf oder Kurzbio hier einfügen…',
+  founder: 'Gründer/in',
+  employee: 'Mitarbeiter/in',
+  advisor: 'Berater/in',
+  board: 'Beirat',
+  contractor: 'Auftragnehmer/in',
+
+  // ── Graph hints / panel ───────────────────────────────────
+  'Loading 3D view…': '3D-Ansicht wird geladen…',
+  'drag a node: neighbors follow · click: open · scroll: zoom · drag bg: rotate':
+    'Knoten ziehen: Nachbarn folgen · Klick: öffnen · Scrollen: zoomen · Hintergrund ziehen: drehen',
+  'hover: focus · click: open · scroll: zoom · drag: pan':
+    'überfahren: fokussieren · Klick: öffnen · Scrollen: zoomen · ziehen: verschieben',
+  'Your second brain: decisions (by department) and knowledge, linked. Click a node to open it; hover to highlight its neighborhood. Drag any node and its connections follow.':
+    'Dein zweites Gehirn: Entscheidungen (nach Abteilung) und Wissen, verknüpft. Klicke einen Knoten zum Öffnen; überfahre ihn, um seine Nachbarschaft hervorzuheben. Ziehe einen beliebigen Knoten und seine Verbindungen folgen.',
 };

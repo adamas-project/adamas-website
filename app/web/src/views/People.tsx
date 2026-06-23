@@ -71,8 +71,7 @@ export function PeopleView() {
       <div className="panel">
         <h2 style={{ marginTop: 0 }}>{t('People')} ({people.length})</h2>
         <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
-          The team a buyer underwrites. Each person’s CV is summarized on-device into a bio, highlights, and skills, and
-          linked to the decisions they own. Flag <strong>key people</strong> so key-person risk is documented.
+          {t('The team a buyer underwrites. Each person’s CV is summarized on-device into a bio, highlights, and skills, and linked to the decisions they own. Flag key people so key-person risk is documented.')}
         </p>
         {people.length === 0 && <p className="muted">{t('No team members yet. Add your first on the right.')}</p>}
         {people.map((p) => (
@@ -80,10 +79,10 @@ export function PeopleView() {
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
               <strong>{p.name}</strong>
               <span className="muted" style={{ fontSize: 13 }}>{p.role}</span>
-              <span className="badge">{p.kind}</span>
-              {p.keyPerson && <span className="badge live">key person</span>}
+              <span className="badge">{t(p.kind)}</span>
+              {p.keyPerson && <span className="badge live">{t('key person')}</span>}
               <span style={{ flex: 1 }} />
-              <button className="tag linkbtn" onClick={() => remove(p.id)}>remove</button>
+              <button className="tag linkbtn" onClick={() => remove(p.id)}>{t('remove')}</button>
             </div>
             <p style={{ margin: '6px 0', fontSize: 14 }}>{p.summary}</p>
             {p.skills?.length ? (
@@ -103,7 +102,7 @@ export function PeopleView() {
           <div style={{ flex: 1 }}>
             <label>{t('Type')}</label>
             <select value={kind} onChange={(e) => setKind(e.target.value)}>
-              {KINDS.map((k) => <option key={k} value={k}>{k}</option>)}
+              {KINDS.map((k) => <option key={k} value={k}>{t(k)}</option>)}
             </select>
           </div>
           <div style={{ flex: 1 }}>
@@ -114,7 +113,7 @@ export function PeopleView() {
         <label>{t('Location')}</label>
         <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Berlin, DE" />
         <label>{t('CV / résumé (paste text — summarized on-device)')}</label>
-        <textarea rows={8} value={cv} onChange={(e) => setCv(e.target.value)} placeholder="Paste the CV or a bio here…" />
+        <textarea rows={8} value={cv} onChange={(e) => setCv(e.target.value)} placeholder={t('Paste the CV or a bio here…')} />
         <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8 }}>
           <input type="checkbox" checked={keyPerson} onChange={(e) => setKeyPerson(e.target.checked)} />
           {t('Key person (departure is a material risk)')}
