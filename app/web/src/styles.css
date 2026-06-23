@@ -360,3 +360,9 @@ th { color: var(--faint); font-weight: 700; text-transform: uppercase; letter-sp
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 999px; border: 2px solid transparent; background-clip: content-box; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border); background-clip: content-box; }
+
+/* Language switch (EN/DE) — mirrors the marketing site's lang-switch. */
+.lang-switch { display: inline-flex; align-items: center; gap: 2px; padding: 3px; border: 1px solid var(--border); border-radius: 99px; background: var(--surface); margin-left: 8px; }
+.lang-switch .lang-opt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; line-height: 1; color: var(--text-muted); padding: 5px 9px; border-radius: 99px; background: transparent; border: 0; cursor: pointer; transition: color 0.2s, background 0.2s; }
+.lang-switch .lang-opt:hover { color: var(--text); }
+.lang-switch .lang-opt.on { color: var(--accent); background: var(--accent-soft); }

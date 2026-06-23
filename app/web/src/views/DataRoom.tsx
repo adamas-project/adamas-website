@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import { useLang } from '../i18n';
 
 const CATEGORIES: Array<{ id: string; label: string }> = [
   { id: 'customer', label: 'Customers & contracts' },
@@ -9,6 +10,7 @@ const CATEGORIES: Array<{ id: string; label: string }> = [
 ];
 
 export function DataRoomView() {
+  const { t } = useLang();
   const [info, setInfo] = useState<any | null>(null);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
@@ -60,7 +62,7 @@ export function DataRoomView() {
     <div className="layout">
       <RecordsManager onChanged={load} />
       <div className="panel">
-        <h2>Data Room — valuation readiness</h2>
+        <h2>{t('Data Room — valuation readiness')}</h2>
         <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
           A diligence-ready view of the vault: how complete and traceable your decision record is. Higher = lower
           perceived risk in an M&A / fundraise evaluation.
@@ -89,19 +91,19 @@ export function DataRoomView() {
       </div>
 
       <div className="panel">
-        <h2>Obsidian vault</h2>
+        <h2>{t('Obsidian vault')}</h2>
         <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
           ADAMAS stays the source of truth; this generates a clean **Obsidian** data-room vault (YAML frontmatter,
           <span className="mono"> [[wikilinks]]</span>, MOC indexes) — your durable “second brain.”
         </p>
         <div className="toolbar">
           <button className="primary" onClick={exportVault} disabled={busy}>
-            {busy ? 'Generating…' : 'Generate / refresh Obsidian vault'}
+            {busy ? t('Generating…') : t('Generate / refresh Obsidian vault')}
           </button>
-          {info?.exists ? <span className="badge live">built</span> : <span className="badge">not built yet</span>}
-          {info?.auto && <span className="badge live">auto-sync on</span>}
+          {info?.exists ? <span className="badge live">{t('built')}</span> : <span className="badge">{t('not built yet')}</span>}
+          {info?.auto && <span className="badge live">{t('auto-sync on')}</span>}
           <button onClick={importInbox} disabled={busy} title="Import notes you wrote into obsidian/_Inbox/">
-            Import from _Inbox
+            {t('Import from _Inbox')}
           </button>
         </div>
         {info?.auto && (
@@ -134,6 +136,7 @@ export function DataRoomView() {
 }
 
 function RecordsManager({ onChanged }: { onChanged: () => void }) {
+  const { t } = useLang();
   const [records, setRecords] = useState<any[]>([]);
   const [category, setCategory] = useState('customer');
   const [form, setForm] = useState<Record<string, any>>({});
@@ -181,14 +184,14 @@ function RecordsManager({ onChanged }: { onChanged: () => void }) {
 
   return (
     <div className="panel" style={{ gridColumn: '1 / -1' }}>
-      <h2 style={{ marginTop: 0 }}>Diligence records</h2>
+      <h2 style={{ marginTop: 0 }}>{t('Diligence records')}</h2>
       <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
         The commercial, financial, risk and IP facts a buyer underwrites. Each category you fill in raises the
         valuation-readiness score and appears in the Obsidian data room.
       </p>
       <div className="toolbar" style={{ flexWrap: 'wrap' }}>
         {CATEGORIES.map((c) => (
-          <button key={c.id} className={category === c.id ? 'primary' : ''} onClick={() => setCategory(c.id)}>{c.label}</button>
+          <button key={c.id} className={category === c.id ? 'primary' : ''} onClick={() => setCategory(c.id)}>{t(c.label)}</button>
         ))}
       </div>
 
@@ -245,7 +248,7 @@ function RecordsManager({ onChanged }: { onChanged: () => void }) {
         if (!inCat.length) return null;
         return (
           <div key={c.id} style={{ marginTop: 12 }}>
-            <div className="section-title">{c.label} ({inCat.length})</div>
+            <div className="section-title">{t(c.label)} ({inCat.length})</div>
             {inCat.map((r) => (
               <div key={r.id} style={{ display: 'flex', alignItems: 'baseline', gap: 8, padding: '4px 0' }}>
                 <strong>{r.title}</strong>

@@ -2,6 +2,7 @@ import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState, type
 import ForceGraph2D from 'react-force-graph-2d';
 import { api, type Decision, type Domain } from '../api';
 import { memoryNodeColor, token } from '../tokens';
+import { useLang } from '../i18n';
 import { DecisionDetail } from '../components/DecisionDetail';
 
 const Graph3D = lazy(() => import('./Graph3D'));
@@ -358,6 +359,7 @@ export function GraphView() {
 }
 
 function Legend() {
+  const { t } = useLang();
   return (
     <div className="graph-legend" aria-hidden>
       {DOMAINS.map((d) => (
@@ -368,7 +370,15 @@ function Legend() {
       ))}
       <span>
         <span className="dot" style={{ color: 'var(--accent-lt)', background: 'var(--accent-lt)' }} />
-        knowledge
+        {t('knowledge')}
+      </span>
+      <span>
+        <span className="dot" style={{ color: '#e0a3ff', background: '#e0a3ff' }} />
+        {t('people')}
+      </span>
+      <span>
+        <span className="dot" style={{ color: '#7aa2ff', background: '#7aa2ff' }} />
+        {t('records')}
       </span>
       <span>
         <span className="dot" style={{ color: '#e0a3ff', background: '#e0a3ff' }} />
@@ -380,11 +390,11 @@ function Legend() {
       </span>
       <span>
         <span className="dot" style={{ color: '#5fb8a8', background: '#5fb8a8' }} />
-        topic
+        {t('topic')}
       </span>
       <span>
         <span className="dot" style={{ color: 'var(--text)', background: 'var(--text)' }} />
-        hub
+        {t('hub')}
       </span>
       <span>· dashed = superseded/reversed</span>
     </div>
@@ -412,31 +422,32 @@ function GraphChrome(props: {
   onNavigate: (id: string) => void;
   children: ReactNode;
 }) {
+  const { t } = useLang();
   return (
     <div className="layout" style={{ gridTemplateColumns: '1fr 360px' }}>
       <div className="panel">
         <div className="toolbar">
-          <h2 style={{ margin: 0, flex: 1 }}>Decision Graph</h2>
+          <h2 style={{ margin: 0, flex: 1 }}>{t('Decision Graph')}</h2>
           <select value={props.domainFilter} onChange={(e) => props.setDomainFilter(e.target.value)} aria-label="Filter by domain">
-            <option value="">all domains</option>
+            <option value="">{t('all domains')}</option>
             {DOMAINS.map((d) => <option key={d} value={d}>{d}</option>)}
           </select>
           <select value={props.statusFilter} onChange={(e) => props.setStatusFilter(e.target.value)} aria-label="Filter by status">
-            <option value="">all statuses</option>
-            <option value="active">active</option>
-            <option value="superseded">superseded</option>
-            <option value="reversed">reversed</option>
+            <option value="">{t('all statuses')}</option>
+            <option value="active">{t('active')}</option>
+            <option value="superseded">{t('superseded')}</option>
+            <option value="reversed">{t('reversed')}</option>
           </select>
           <label className="rolebox" title="Show shared topics as their own nodes (like Obsidian tags)">
-            <input type="checkbox" checked={props.topics} onChange={(e) => props.setTopics(e.target.checked)} /> topics
+            <input type="checkbox" checked={props.topics} onChange={(e) => props.setTopics(e.target.checked)} /> {t('topics')}
           </label>
           <label className="rolebox" title="Click a node to isolate its local neighborhood">
-            <input type="checkbox" checked={props.focusMode} onChange={(e) => props.setFocusMode(e.target.checked)} /> focus
+            <input type="checkbox" checked={props.focusMode} onChange={(e) => props.setFocusMode(e.target.checked)} /> {t('focus')}
           </label>
-          {props.focused && <button onClick={props.clearFocus}>clear focus</button>}
+          {props.focused && <button onClick={props.clearFocus}>{t('clear focus')}</button>}
           {!props.reduced && (
             <label className="rolebox" title="Animate synapse pulses along links">
-              <input type="checkbox" checked={props.pulses} onChange={(e) => props.setPulses(e.target.checked)} /> pulses
+              <input type="checkbox" checked={props.pulses} onChange={(e) => props.setPulses(e.target.checked)} /> {t('pulses')}
             </label>
           )}
           <button className={props.mode === '3d' ? 'primary' : ''} onClick={() => props.setMode(props.mode === '2d' ? '3d' : '2d')}>

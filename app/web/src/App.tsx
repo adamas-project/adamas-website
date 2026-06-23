@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from './api';
+import { useLang } from './i18n';
 import { LedgerView } from './views/Ledger';
 import { InboxView } from './views/Inbox';
 import { GraphView } from './views/Graph';
@@ -27,6 +28,7 @@ const TABS: Array<{ id: Tab; label: string }> = [
 const ROLES = ['owner', 'cfo', 'head-of-sales', 'member'];
 
 export function App() {
+  const { t, lang, setLang } = useLang();
   const [tab, setTab] = useState<Tab>('ledger');
   const [role, setRole] = useState('owner');
   const [meta, setMeta] = useState<{ count: number; version: number } | null>(null);
@@ -48,30 +50,34 @@ export function App() {
     <div className="app">
       <header className="topbar">
         <div className="brand">
-          ADAMAS<small>All Decisions And Memory Archive System</small>
+          ADAMAS<small>{t('All Decisions And Memory Archive System')}</small>
         </div>
         <nav className="nav" aria-label="Primary">
-          {TABS.map((t) => (
+          {TABS.map((tb) => (
             <button
-              key={t.id}
-              className={tab === t.id ? 'active' : ''}
-              aria-current={tab === t.id ? 'page' : undefined}
-              onClick={() => setTab(t.id)}
+              key={tb.id}
+              className={tab === tb.id ? 'active' : ''}
+              aria-current={tab === tb.id ? 'page' : undefined}
+              onClick={() => setTab(tb.id)}
             >
-              {t.label}
-              {t.id === 'inbox' && pending > 0 ? <span className="badge" style={{ marginLeft: 6 }}>{pending}</span> : null}
+              {t(tb.label)}
+              {tb.id === 'inbox' && pending > 0 ? <span className="badge" style={{ marginLeft: 6 }}>{pending}</span> : null}
             </button>
           ))}
         </nav>
         <div className="spacer" />
         <div className="rolebox">
-          <span>local-first · {meta ? `${meta.count} decisions` : '…'}</span>
-          <label htmlFor="role">role</label>
+          <span>{t('local-first')} · {meta ? `${meta.count} ${t('decisions')}` : '…'}</span>
+          <label htmlFor="role">{t('role')}</label>
           <select id="role" value={role} onChange={(e) => setRole(e.target.value)}>
             {ROLES.map((r) => (
               <option key={r} value={r}>{r}</option>
             ))}
           </select>
+          <div className="lang-switch" role="group" aria-label="Language">
+            <button className={`lang-opt ${lang === 'en' ? 'on' : ''}`} onClick={() => setLang('en')}>EN</button>
+            <button className={`lang-opt ${lang === 'de' ? 'on' : ''}`} onClick={() => setLang('de')}>DE</button>
+          </div>
         </div>
       </header>
 

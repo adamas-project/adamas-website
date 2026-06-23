@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import { useLang } from '../i18n';
 import { MeetingCapture } from '../components/MeetingCapture';
 
 const KINDS = ['doc', 'meeting', 'email', 'chat'] as const;
 const DOMAINS = ['hiring', 'sales', 'product', 'finance', 'ops'] as const;
 
 export function InboxView({ onChanged }: { onChanged: () => void }) {
+  const { t } = useLang();
   const [candidates, setCandidates] = useState<any[]>([]);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
@@ -190,27 +192,27 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
             {DOMAINS.map((d) => <option key={d} value={d}>{d}</option>)}
           </select>
           <button className="primary" onClick={ingestNote} disabled={busy || !noteText.trim()}>
-            {busy ? 'Reading…' : 'Extract decisions with Hermes'}
+            {busy ? t('Reading…') : t('Extract decisions with Hermes')}
           </button>
         </div>
         {msg && <div className="notice ok">{msg}</div>}
         <div>
           <button className="ghost" onClick={ingestSamples} disabled={busy}>
-            Or try the built-in sample notes
+            {t('Or try the built-in sample notes')}
           </button>
         </div>
       </div>
 
-      <div className="section-title">Pending candidates {candidates.length > 0 ? `(${candidates.length})` : ''}</div>
+      <div className="section-title">{t('Pending candidates')} {candidates.length > 0 ? `(${candidates.length})` : ''}</div>
       {candidates.length > 0 && (
         <div className="toolbar" style={{ margin: '0 0 8px' }}>
           <button onClick={autoFile} disabled={busy} title="Auto-file every high-confidence candidate (reversible)">
-            ⚡ Auto-file high-confidence
+            {t('⚡ Auto-file high-confidence')}
           </button>
         </div>
       )}
       {candidates.length === 0 && (
-        <p className="muted">No pending candidates yet. Paste a note above and let Hermes read it.</p>
+        <p className="muted">{t('No pending candidates yet. Paste a note above and let Hermes read it.')}</p>
       )}
 
       <div className="list" style={{ maxHeight: 'none' }}>
@@ -227,8 +229,8 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
               {(c.draft.tradeoffs ?? []).length ? <span className="tag">{c.draft.tradeoffs.length} trade-off(s)</span> : null}
             </div>
             <div style={{ marginTop: 8 }}>
-              <button className="primary" onClick={() => confirm(c.candidateId)}>Confirm into ledger</button>{' '}
-              <button className="ghost" onClick={() => dismiss(c.candidateId)}>Dismiss</button>
+              <button className="primary" onClick={() => confirm(c.candidateId)}>{t('Confirm into ledger')}</button>{' '}
+              <button className="ghost" onClick={() => dismiss(c.candidateId)}>{t('Dismiss')}</button>
             </div>
           </div>
         ))}
