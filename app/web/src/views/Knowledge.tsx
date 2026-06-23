@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import { useLang } from '../i18n';
 
 export function KnowledgeView() {
+  const { t } = useLang();
   const [entries, setEntries] = useState<any[]>([]);
   const [tags, setTags] = useState<string[]>([]);
   const [q, setQ] = useState('');
@@ -59,10 +61,9 @@ export function KnowledgeView() {
   return (
     <div className="layout">
       <div className="panel">
-        <h2>Knowledge</h2>
+        <h2>{t('Knowledge')}</h2>
         <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
-          Drop a link (article, post, video, blog) or paste text. ADAMAS summarizes it locally and saves an entry
-          linked to the source.
+          {t('Drop a link (article, post, video, blog) or paste text. ADAMAS summarizes it locally and saves an entry linked to the source.')}
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -75,19 +76,19 @@ export function KnowledgeView() {
             onChange={(e) => setText(e.target.value)}
           />
           <div className="toolbar" style={{ margin: 0 }}>
-            <input style={{ flex: 1, minWidth: 160 }} placeholder="Title (optional)" value={title} onChange={(e) => setTitle(e.target.value)} />
-            <input style={{ flex: 1, minWidth: 160 }} placeholder="Tags (comma-separated)" value={newTags} onChange={(e) => setNewTags(e.target.value)} />
+            <input style={{ flex: 1, minWidth: 160 }} placeholder={t('Title (optional)')} value={title} onChange={(e) => setTitle(e.target.value)} />
+            <input style={{ flex: 1, minWidth: 160 }} placeholder={t('Tags (comma-separated)')} value={newTags} onChange={(e) => setNewTags(e.target.value)} />
             <button className="primary" onClick={add} disabled={busy || (!url.trim() && !text.trim())}>
-              {busy ? 'Summarizing…' : 'Summarize & save'}
+              {busy ? t('Summarizing…') : t('Summarize & save')}
             </button>
           </div>
           {msg && <div className="notice ok">{msg}</div>}
         </div>
 
         <div className="toolbar" style={{ marginTop: 16 }}>
-          <input style={{ flex: 1 }} placeholder="Search knowledge…" value={q} onChange={(e) => setQ(e.target.value)} />
+          <input style={{ flex: 1 }} placeholder={t('Search knowledge…')} value={q} onChange={(e) => setQ(e.target.value)} />
           <select value={tag} onChange={(e) => setTag(e.target.value)} aria-label="Filter by tag">
-            <option value="">all tags</option>
+            <option value="">{t('all tags')}</option>
             {tags.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
@@ -100,7 +101,7 @@ export function KnowledgeView() {
               {e.tags?.length ? <div className="pill-row" style={{ marginTop: 4 }}>{e.tags.slice(0, 4).map((t: string) => <span key={t} className="tag">{t}</span>)}</div> : null}
             </button>
           ))}
-          {entries.length === 0 && <p className="muted">No knowledge yet. Add a link or some text above.</p>}
+          {entries.length === 0 && <p className="muted">{t('No knowledge yet. Add a link or some text above.')}</p>}
         </div>
       </div>
 
@@ -120,29 +121,29 @@ export function KnowledgeView() {
               )}
             </div>
 
-            <div className="section-title">Summary</div>
+            <div className="section-title">{t('Summary')}</div>
             <p>{selected.summary}</p>
 
             {selected.takeaways?.length ? (
               <>
-                <div className="section-title">Key takeaways</div>
+                <div className="section-title">{t('Key takeaways')}</div>
                 <ul>{selected.takeaways.map((t: string, i: number) => <li key={i}>{t}</li>)}</ul>
               </>
             ) : null}
 
             {selected.tags?.length ? (
               <>
-                <div className="section-title">Tags</div>
-                <div className="pill-row">{selected.tags.map((t: string) => <span key={t} className="tag">{t}</span>)}</div>
+                <div className="section-title">{t('Tags')}</div>
+                <div className="pill-row">{selected.tags.map((tg: string) => <span key={tg} className="tag">{tg}</span>)}</div>
               </>
             ) : null}
 
             <div style={{ marginTop: 16 }}>
-              <button className="ghost" onClick={() => remove(selected.id)}>Remove</button>
+              <button className="ghost" onClick={() => remove(selected.id)}>{t('Remove')}</button>
             </div>
           </div>
         ) : (
-          <p className="muted">Select an entry, or add a link/text to build your knowledge base.</p>
+          <p className="muted">{t('Select an entry, or add a link/text to build your knowledge base.')}</p>
         )}
       </div>
     </div>

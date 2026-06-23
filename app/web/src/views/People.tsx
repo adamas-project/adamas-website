@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import { useLang } from '../i18n';
 
 const KINDS = ['founder', 'employee', 'advisor', 'board', 'contractor'];
 
 export function PeopleView() {
+  const { t } = useLang();
   const [people, setPeople] = useState<any[]>([]);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
@@ -67,12 +69,12 @@ export function PeopleView() {
   return (
     <div className="layout" style={{ gridTemplateColumns: '1fr 420px' }}>
       <div className="panel">
-        <h2 style={{ marginTop: 0 }}>People ({people.length})</h2>
+        <h2 style={{ marginTop: 0 }}>{t('People')} ({people.length})</h2>
         <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
           The team a buyer underwrites. Each person’s CV is summarized on-device into a bio, highlights, and skills, and
           linked to the decisions they own. Flag <strong>key people</strong> so key-person risk is documented.
         </p>
-        {people.length === 0 && <p className="muted">No team members yet. Add your first on the right.</p>}
+        {people.length === 0 && <p className="muted">{t('No team members yet. Add your first on the right.')}</p>}
         {people.map((p) => (
           <div key={p.id} className="card" style={{ marginBottom: 10 }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
@@ -92,33 +94,33 @@ export function PeopleView() {
       </div>
 
       <div className="panel">
-        <h3 style={{ marginTop: 0 }}>Add a team member</h3>
-        <label>Name</label>
+        <h3 style={{ marginTop: 0 }}>{t('Add a team member')}</h3>
+        <label>{t('Name')}</label>
         <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Jane Doe" />
-        <label>Role / title</label>
+        <label>{t('Role / title')}</label>
         <input value={role} onChange={(e) => setRole(e.target.value)} placeholder="Head of Engineering" />
         <div style={{ display: 'flex', gap: 8 }}>
           <div style={{ flex: 1 }}>
-            <label>Type</label>
+            <label>{t('Type')}</label>
             <select value={kind} onChange={(e) => setKind(e.target.value)}>
               {KINDS.map((k) => <option key={k} value={k}>{k}</option>)}
             </select>
           </div>
           <div style={{ flex: 1 }}>
-            <label>Since</label>
+            <label>{t('Since')}</label>
             <input value={startDate} onChange={(e) => setStartDate(e.target.value)} placeholder="2021-03" />
           </div>
         </div>
-        <label>Location</label>
+        <label>{t('Location')}</label>
         <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Berlin, DE" />
-        <label>CV / résumé (paste text — summarized on-device)</label>
+        <label>{t('CV / résumé (paste text — summarized on-device)')}</label>
         <textarea rows={8} value={cv} onChange={(e) => setCv(e.target.value)} placeholder="Paste the CV or a bio here…" />
         <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8 }}>
           <input type="checkbox" checked={keyPerson} onChange={(e) => setKeyPerson(e.target.checked)} />
-          Key person (departure is a material risk)
+          {t('Key person (departure is a material risk)')}
         </label>
         <div className="toolbar" style={{ marginTop: 10 }}>
-          <button className="primary" onClick={add} disabled={busy}>{busy ? 'Adding…' : 'Add team member'}</button>
+          <button className="primary" onClick={add} disabled={busy}>{busy ? t('Adding…') : t('Add team member')}</button>
         </div>
         {msg && <div className="notice ok" style={{ marginTop: 10 }}>{msg}</div>}
       </div>
