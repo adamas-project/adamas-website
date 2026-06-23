@@ -3,6 +3,8 @@ import { promises as fs } from 'node:fs';
 import { DOMAINS, type Decision, type Domain } from '../schema/decision.schema.js';
 import type { Ledger } from '../ledger/ledger.js';
 import type { KnowledgeStore } from '../knowledge/store.js';
+import type { PeopleStore } from '../people/store.js';
+import type { PersonEntry } from '../people/schema.js';
 import type { AssetEngine } from '../assets/engine.js';
 import { atomicWrite } from '../ledger/storage.js';
 import { computeReadiness, type Readiness } from './readiness.js';
@@ -99,6 +101,28 @@ function knowledgeNote(e: {
   return fm + body.join('\n') + '\n';
 }
 
+function personNote(p: PersonEntry, ownedDecisions: string[]): string {
+  const fm = frontmatter({
+    id: p.id,
+    aliases: [p.name],
+    type: 'person',
+    role: p.role,
+    kind: p.kind,
+    key_person: p.keyPerson ?? false,
+    start_date: p.startDate,
+    location: p.location,
+    skills: p.skills ?? [],
+    tags: ['person', p.kind, ...(p.keyPerson ? ['key-person'] : [])],
+  });
+  const body: string[] = [`# ${p.name}`, ''];
+  body.push(`**${p.role}** · ${p.kind}${p.keyPerson ? ' · ⚠️ key person' : ''}`, '');
+  body.push('## Bio', '', p.summary, '');
+  if (p.highlights?.length) body.push('## Highlights', '', ...p.highlights.map((t) => `- ${t}`), '');
+  if (p.skills?.length) body.push('## Skills', '', p.skills.join(', '), '');
+  if (ownedDecisions.length) body.push('## Decisions owned', '', ...ownedDecisions.map((id) => `- [[${id}]]`), '');
+  return fm + body.join('\n') + '\n';
+}
+
 function readinessNote(r: Readiness): string {
   const rows = r.components.map((c) => `| ${c.label} | ${c.points} / ${c.max} |`).join('\n');
   const gaps = r.domainGaps.length ? r.domainGaps.map((d) => DOMAIN_FOLDER[d]).join(', ') : 'none';
@@ -111,6 +135,7 @@ function readinessNote(r: Readiness): string {
     `- Decisions on record: **${r.decisions}** · Knowledge entries: **${r.knowledge}**`,
     `- Traceability: **${r.traceabilityPct}%** of decisions cite their sources (${r.withSources}/${r.decisions})`,
     `- Dissent recorded on ${r.withDissent} decision(s); ${r.superseded} superseded/reversed (active management)`,
+    `- Team: **${r.people}** documented · ${r.peopleWithCv} with CVs · ${r.keyPeople} flagged key-person`,
     `- Domain gaps: ${gaps}`,
     '',
     '| Component | Score |',
@@ -131,10 +156,10 @@ export interface ObsidianExportResult {
 }
 
 export async function buildObsidianVault(
-  deps: { ledger: Ledger; knowledge: KnowledgeStore; assets: AssetEngine },
+  deps: { ledger: Ledger; knowledge: KnowledgeStore; assets: AssetEngine; people?: PeopleStore },
   outDir: string,
 ): Promise<ObsidianExportResult> {
-  const { ledger, knowledge, assets } = deps;
+  const { ledger, knowledge, assets, people } = deps;
   // Regenerate fresh (derived view). Clear the folder's *contents* rather than
   // removing the folder itself: in Docker the output dir is a bind-mount, and
   // rmdir on a mount point fails with EBUSY. Removing children avoids that.
@@ -154,7 +179,7 @@ export async function buildObsidianVault(
   };
 
   const decisions = ledger.list();
-  const readiness = computeReadiness(ledger, knowledge);
+  const readiness = computeReadiness(ledger, knowledge, people);
 
   // Decisions by domain + MOC.
   const decMoc: string[] = [frontmatter({ type: 'moc', tags: ['decisions'] }), '# Decisions', ''];
@@ -194,19 +219,39 @@ export async function buildObsidianVault(
   }
   await write(path.join('Diligence', 'Diligence MOC.md'), diMoc.join('\n'));
 
-  // Company / People — roles referenced as owners or dissenters across decisions.
+  // Company / People — team-member profiles (CVs) + the role map from decisions.
   const roleMap = new Map<string, string[]>();
   for (const d of decisions) {
     for (const role of [d.owner.role, ...(d.owner.dissent ?? [])]) {
       (roleMap.get(role) ?? roleMap.set(role, []).get(role)!).push(d.id);
     }
   }
-  const people = [frontmatter({ type: 'company', tags: ['company', 'people'] }), '# People & roles', ''];
-  for (const [role, ids] of [...roleMap.entries()].sort()) {
-    people.push(`- **${role}** — ${ids.map((i) => `[[${i}]]`).join(', ')}`);
+  const peopleList = people?.list() ?? [];
+  // Decisions a person owns: match their name or role against decision owners.
+  const decisionsFor = (p: PersonEntry): string[] => {
+    const role = p.role.toLowerCase();
+    return decisions
+      .filter((d) => d.owner.name?.toLowerCase() === p.name.toLowerCase() || d.owner.role.toLowerCase() === role)
+      .map((d) => d.id);
+  };
+  for (const p of peopleList) {
+    await write(path.join('Company', 'People', `${fsSafe(p.name)}.md`), personNote(p, decisionsFor(p)));
   }
-  if (roleMap.size === 0) people.push('_No roles recorded yet._');
-  await write(path.join('Company', 'People.md'), people.join('\n'));
+
+  const companyDoc = [frontmatter({ type: 'company', tags: ['company', 'people'] }), '# Company — People', ''];
+  if (peopleList.length) {
+    companyDoc.push('## Team', '');
+    for (const p of peopleList) {
+      companyDoc.push(`- [[${fsSafe(p.name)}|${p.name}]] — ${p.role} _(${p.kind}${p.keyPerson ? ', key person' : ''})_`);
+    }
+    companyDoc.push('');
+  }
+  companyDoc.push('## Roles referenced in decisions', '');
+  for (const [role, ids] of [...roleMap.entries()].sort()) {
+    companyDoc.push(`- **${role}** — ${ids.map((i) => `[[${i}]]`).join(', ')}`);
+  }
+  if (roleMap.size === 0) companyDoc.push('_No roles recorded yet._');
+  await write(path.join('Company', 'People.md'), companyDoc.join('\n'));
 
   // Readiness scorecard + top-level index/MOC (the cockpit).
   await write('Valuation Readiness.md', readinessNote(readiness));

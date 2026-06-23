@@ -1,5 +1,6 @@
 import type { Ledger } from '../ledger/ledger.js';
 import type { KnowledgeStore } from '../knowledge/store.js';
+import type { PeopleStore } from '../people/store.js';
 import type { AssetEngine } from '../assets/engine.js';
 import { buildObsidianVault, type ObsidianExportResult } from './export.js';
 
@@ -7,6 +8,7 @@ export interface ObsidianAutoDeps {
   ledger: Ledger;
   knowledge: KnowledgeStore;
   assets: AssetEngine;
+  people?: PeopleStore;
 }
 
 /**
@@ -31,6 +33,7 @@ export class ObsidianAutoExporter {
   start(): void {
     this.unsubscribers.push(this.deps.ledger.onChange(() => this.schedule()));
     this.unsubscribers.push(this.deps.knowledge.onChange(() => this.schedule()));
+    if (this.deps.people) this.unsubscribers.push(this.deps.people.onChange(() => this.schedule()));
     // Mirror current state on boot so the vault exists and is fresh.
     this.schedule();
   }

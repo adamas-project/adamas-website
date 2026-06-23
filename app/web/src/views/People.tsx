@@ -1,0 +1,127 @@
+import { useEffect, useState } from 'react';
+import { api } from '../api';
+
+const KINDS = ['founder', 'employee', 'advisor', 'board', 'contractor'];
+
+export function PeopleView() {
+  const [people, setPeople] = useState<any[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState('');
+
+  const [name, setName] = useState('');
+  const [role, setRole] = useState('');
+  const [kind, setKind] = useState('employee');
+  const [cv, setCv] = useState('');
+  const [keyPerson, setKeyPerson] = useState(false);
+  const [startDate, setStartDate] = useState('');
+  const [location, setLocation] = useState('');
+
+  async function load() {
+    try {
+      setPeople((await api.people()).people);
+    } catch (e) {
+      setMsg((e as Error).message);
+    }
+  }
+  useEffect(() => {
+    void load();
+  }, []);
+
+  async function add() {
+    if (!name.trim() || !role.trim()) {
+      setMsg('Name and role are required.');
+      return;
+    }
+    setBusy(true);
+    setMsg('');
+    try {
+      await api.addPerson({
+        name,
+        role,
+        kind,
+        cv: cv.trim() || undefined,
+        keyPerson,
+        startDate: startDate || undefined,
+        location: location.trim() || undefined,
+      });
+      setName('');
+      setRole('');
+      setCv('');
+      setKeyPerson(false);
+      setStartDate('');
+      setLocation('');
+      setMsg('Added. CV summarized into the knowledge base.');
+      await load();
+    } catch (e) {
+      setMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function remove(id: string) {
+    await api.deletePerson(id);
+    await load();
+  }
+
+  return (
+    <div className="layout" style={{ gridTemplateColumns: '1fr 420px' }}>
+      <div className="panel">
+        <h2 style={{ marginTop: 0 }}>People ({people.length})</h2>
+        <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
+          The team a buyer underwrites. Each person’s CV is summarized on-device into a bio, highlights, and skills, and
+          linked to the decisions they own. Flag <strong>key people</strong> so key-person risk is documented.
+        </p>
+        {people.length === 0 && <p className="muted">No team members yet. Add your first on the right.</p>}
+        {people.map((p) => (
+          <div key={p.id} className="card" style={{ marginBottom: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+              <strong>{p.name}</strong>
+              <span className="muted" style={{ fontSize: 13 }}>{p.role}</span>
+              <span className="badge">{p.kind}</span>
+              {p.keyPerson && <span className="badge live">key person</span>}
+              <span style={{ flex: 1 }} />
+              <button className="tag linkbtn" onClick={() => remove(p.id)}>remove</button>
+            </div>
+            <p style={{ margin: '6px 0', fontSize: 14 }}>{p.summary}</p>
+            {p.skills?.length ? (
+              <div className="tagrow">{p.skills.map((s: string) => <span key={s} className="tag">{s}</span>)}</div>
+            ) : null}
+          </div>
+        ))}
+      </div>
+
+      <div className="panel">
+        <h3 style={{ marginTop: 0 }}>Add a team member</h3>
+        <label>Name</label>
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Jane Doe" />
+        <label>Role / title</label>
+        <input value={role} onChange={(e) => setRole(e.target.value)} placeholder="Head of Engineering" />
+        <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ flex: 1 }}>
+            <label>Type</label>
+            <select value={kind} onChange={(e) => setKind(e.target.value)}>
+              {KINDS.map((k) => <option key={k} value={k}>{k}</option>)}
+            </select>
+          </div>
+          <div style={{ flex: 1 }}>
+            <label>Since</label>
+            <input value={startDate} onChange={(e) => setStartDate(e.target.value)} placeholder="2021-03" />
+          </div>
+        </div>
+        <label>Location</label>
+        <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Berlin, DE" />
+        <label>CV / résumé (paste text — summarized on-device)</label>
+        <textarea rows={8} value={cv} onChange={(e) => setCv(e.target.value)} placeholder="Paste the CV or a bio here…" />
+        <label style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 8 }}>
+          <input type="checkbox" checked={keyPerson} onChange={(e) => setKeyPerson(e.target.checked)} />
+          Key person (departure is a material risk)
+        </label>
+        <div className="toolbar" style={{ marginTop: 10 }}>
+          <button className="primary" onClick={add} disabled={busy}>{busy ? 'Adding…' : 'Add team member'}</button>
+        </div>
+        {msg && <div className="notice ok" style={{ marginTop: 10 }}>{msg}</div>}
+      </div>
+    </div>
+  );
+}

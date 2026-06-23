@@ -7,9 +7,10 @@ import { AssetsView } from './views/Assets';
 import { BoundaryView } from './views/Boundary';
 import { OnboardingView } from './views/Onboarding';
 import { KnowledgeView } from './views/Knowledge';
+import { PeopleView } from './views/People';
 import { DataRoomView } from './views/DataRoom';
 
-type Tab = 'ledger' | 'inbox' | 'graph' | 'assets' | 'knowledge' | 'dataroom' | 'boundary' | 'onboarding';
+type Tab = 'ledger' | 'inbox' | 'graph' | 'assets' | 'knowledge' | 'people' | 'dataroom' | 'boundary' | 'onboarding';
 
 const TABS: Array<{ id: Tab; label: string }> = [
   { id: 'ledger', label: 'The Ledger' },
@@ -17,6 +18,7 @@ const TABS: Array<{ id: Tab; label: string }> = [
   { id: 'graph', label: 'Decision Graph' },
   { id: 'assets', label: 'Asset Generation' },
   { id: 'knowledge', label: 'Knowledge' },
+  { id: 'people', label: 'People' },
   { id: 'dataroom', label: 'Data Room' },
   { id: 'boundary', label: 'Boundary & Security' },
   { id: 'onboarding', label: 'Onboarding & Pricing' },
@@ -79,6 +81,7 @@ export function App() {
         {tab === 'graph' && <GraphView />}
         {tab === 'assets' && <AssetsView />}
         {tab === 'knowledge' && <KnowledgeView />}
+        {tab === 'people' && <PeopleView />}
         {tab === 'dataroom' && <DataRoomView />}
         {tab === 'boundary' && <BoundaryView onChanged={refresh} />}
         {tab === 'onboarding' && <OnboardingView />}
