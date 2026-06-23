@@ -7,6 +7,8 @@ import { seedVault } from '../src/seed/seed.js';
 import { vaultPaths } from '../src/ledger/storage.js';
 import { buildObsidianVault } from '../src/obsidian/export.js';
 import { ObsidianAutoExporter } from '../src/obsidian/auto.js';
+import { importObsidianInbox } from '../src/obsidian/import.js';
+import { LocalLLMProvider } from '../src/evaluation/local.js';
 import { computeReadiness } from '../src/obsidian/readiness.js';
 import { tempVault } from './helpers.js';
 
@@ -100,6 +102,30 @@ describe('obsidian auto-exporter', () => {
     expect(moc).toMatch(/KNW-001/);
 
     auto.stop();
+  });
+
+  it('imports notes from _Inbox into knowledge and preserves the folder on re-export', async () => {
+    const { root, ledger, assets, knowledge } = await setup();
+    const out = path.join(root, 'obsidian');
+    await buildObsidianVault({ ledger, knowledge, assets }, out);
+
+    // Operator drops a note into the inbox from Obsidian.
+    await fs.writeFile(
+      path.join(out, '_Inbox', 'idea.md'),
+      '# Pricing experiment\nWe should test value-based pricing on new cells next quarter.',
+    );
+
+    const res = await importObsidianInbox({ knowledge, provider: new LocalLLMProvider() }, out);
+    expect(res.imported).toBe(1);
+    expect(knowledge.list().some((e) => e.title === 'Pricing experiment')).toBe(true);
+
+    // File moved out of the inbox; re-export keeps _Inbox (and Imported/) intact.
+    expect(await fs.readFile(path.join(out, '_Inbox', 'Imported', 'idea.md'), 'utf8')).toMatch(/value-based/);
+    await buildObsidianVault({ ledger, knowledge, assets }, out);
+    expect(await fs.readFile(path.join(out, '_Inbox', 'Imported', 'idea.md'), 'utf8')).toMatch(/value-based/);
+
+    // Re-import is a no-op (already moved out).
+    expect((await importObsidianInbox({ knowledge, provider: new LocalLLMProvider() }, out)).imported).toBe(0);
   });
 
   it('serializes concurrent exports without throwing', async () => {

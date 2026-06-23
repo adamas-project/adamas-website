@@ -16,6 +16,7 @@ import { CommandTranscriber, type Transcriber } from '../ingestion/transcribe.js
 import { ConnectorScheduler } from '../ingestion/scheduler.js';
 import { KnowledgeStore } from '../knowledge/store.js';
 import { ObsidianAutoExporter } from '../obsidian/auto.js';
+import { ObsidianInboxWatcher } from '../obsidian/import.js';
 import { vaultPaths } from '../ledger/storage.js';
 import {
   connectorPullMinutes,
@@ -42,6 +43,7 @@ export interface AppContext {
   transcriber: Transcriber | null;
   knowledge: KnowledgeStore;
   obsidianAuto: ObsidianAutoExporter | null;
+  obsidianInbox: ObsidianInboxWatcher | null;
   connectorScheduler: ConnectorScheduler | null;
   hermes: HermesConfig;
 }
@@ -84,9 +86,14 @@ export async function createContext(root: string): Promise<AppContext> {
   // Keep the derived Obsidian data-room vault in sync with every change (opt-out
   // via ADAMAS_OBSIDIAN_AUTO=0). The manual Data Room → Generate still works.
   let obsidianAuto: ObsidianAutoExporter | null = null;
+  let obsidianInbox: ObsidianInboxWatcher | null = null;
   if (obsidianAutoEnabled()) {
-    obsidianAuto = new ObsidianAutoExporter({ ledger, knowledge, assets }, resolveObsidianDir(root));
+    const obsidianDir = resolveObsidianDir(root);
+    obsidianAuto = new ObsidianAutoExporter({ ledger, knowledge, assets }, obsidianDir);
     obsidianAuto.start();
+    // Write-back: import notes dropped into obsidian/_Inbox/ (two-way sync).
+    obsidianInbox = new ObsidianInboxWatcher({ knowledge, provider: localProvider }, obsidianDir);
+    obsidianInbox.start();
   }
 
   // Optional: periodically pull connectors so the inbox fills itself (opt-in via
@@ -110,6 +117,7 @@ export async function createContext(root: string): Promise<AppContext> {
     transcriber,
     knowledge,
     obsidianAuto,
+    obsidianInbox,
     connectorScheduler,
     hermes,
   };

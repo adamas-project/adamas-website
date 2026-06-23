@@ -6,6 +6,7 @@ import type { KnowledgeStore } from '../knowledge/store.js';
 import type { AssetEngine } from '../assets/engine.js';
 import { atomicWrite } from '../ledger/storage.js';
 import { computeReadiness, type Readiness } from './readiness.js';
+import { RESERVED_INBOX, ensureInbox } from './import.js';
 
 // Generates an Obsidian-native "data room" vault from the ADAMAS files. The
 // ADAMAS vault stays the source of truth; this is a derived view, regenerated on
@@ -137,10 +138,14 @@ export async function buildObsidianVault(
   // Regenerate fresh (derived view). Clear the folder's *contents* rather than
   // removing the folder itself: in Docker the output dir is a bind-mount, and
   // rmdir on a mount point fails with EBUSY. Removing children avoids that.
+  // Preserve reserved entries: Obsidian's own settings (.obsidian) and the
+  // user's write-back inbox (_Inbox) — never clobber what the operator owns.
   await fs.mkdir(outDir, { recursive: true });
   for (const entry of await fs.readdir(outDir)) {
+    if (entry === '.obsidian' || entry === RESERVED_INBOX) continue;
     await fs.rm(path.join(outDir, entry), { recursive: true, force: true });
   }
+  await ensureInbox(outDir);
 
   let files = 0;
   const write = async (rel: string, content: string) => {

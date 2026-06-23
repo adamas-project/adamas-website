@@ -31,6 +31,20 @@ export function DataRoomView() {
     }
   }
 
+  async function importInbox() {
+    setBusy(true);
+    setMsg('');
+    try {
+      const r = await api.obsidianImport();
+      setMsg(r.imported ? `Imported ${r.imported} note(s) from _Inbox: ${r.titles.join(', ')}` : 'No new notes in _Inbox.');
+      await load();
+    } catch (e) {
+      setMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   const r = info?.readiness;
   const score = r?.score ?? 0;
   const scoreColor = score >= 70 ? 'var(--ok)' : score >= 40 ? 'var(--warn)' : 'var(--danger)';
@@ -78,6 +92,9 @@ export function DataRoomView() {
           </button>
           {info?.exists ? <span className="badge live">built</span> : <span className="badge">not built yet</span>}
           {info?.auto && <span className="badge live">auto-sync on</span>}
+          <button onClick={importInbox} disabled={busy} title="Import notes you wrote into obsidian/_Inbox/">
+            Import from _Inbox
+          </button>
         </div>
         {info?.auto && (
           <p className="muted" style={{ fontSize: 13, marginTop: 8 }}>

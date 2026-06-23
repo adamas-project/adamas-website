@@ -114,6 +114,7 @@ export const api = {
 
   obsidian: () => req<{ dir: string; exists: boolean; readiness: any }>('/api/obsidian'),
   obsidianExport: () => req<{ path: string; decisions: number; knowledge: number; files: number; readiness: any }>('/api/obsidian/export', { method: 'POST', body: '{}' }),
+  obsidianImport: () => req<{ imported: number; titles: string[] }>('/api/obsidian/import', { method: 'POST', body: '{}' }),
 
   security: () => req<any>('/api/security'),
   backup: (passphrase: string) => req<{ file: string }>('/api/backup', { method: 'POST', body: JSON.stringify({ passphrase }) }),
