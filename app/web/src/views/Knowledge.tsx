@@ -73,11 +73,11 @@ export function KnowledgeView() {
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <input style={{ width: '100%' }} placeholder="Paste a URL (article / post / video / blog)…" value={url} onChange={(e) => setUrl(e.target.value)} />
+          <input style={{ width: '100%' }} placeholder={t('Paste a URL (article / post / video / blog)…')} value={url} onChange={(e) => setUrl(e.target.value)} />
           <textarea
             rows={3}
             style={{ width: '100%', resize: 'vertical' }}
-            placeholder="…or paste the text directly (for paywalled pages or a video transcript)."
+            placeholder={t('…or paste the text directly (for paywalled pages or a video transcript).')}
             value={text}
             onChange={(e) => setText(e.target.value)}
           />

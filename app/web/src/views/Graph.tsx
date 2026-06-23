@@ -54,6 +54,7 @@ function useReducedMotion(): boolean {
 }
 
 export function GraphView() {
+  const { t } = useLang();
   const fgRef = useRef<any>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
@@ -279,7 +280,7 @@ export function GraphView() {
         onNavigate={openNode}
       >
         <div className="graph-wrap" ref={wrapRef} style={{ height: dims.h }}>
-          <Suspense fallback={<div style={{ padding: 24 }} className="muted">Loading 3D view…</div>}>
+          <Suspense fallback={<div style={{ padding: 24 }} className="muted">{t('Loading 3D view…')}</div>}>
             <Graph3D
               data={graphData}
               width={dims.w}
@@ -290,7 +291,7 @@ export function GraphView() {
             />
           </Suspense>
           <Legend />
-          <div className="graph-hint">drag a node: neighbors follow · click: open · scroll: zoom · drag bg: rotate</div>
+          <div className="graph-hint">{t('drag a node: neighbors follow · click: open · scroll: zoom · drag bg: rotate')}</div>
         </div>
       </GraphChrome>
     );
@@ -352,7 +353,7 @@ export function GraphView() {
           onEngineStop={(() => fgRef.current?.zoomToFit?.(500, 48)) as any}
         />
         <Legend />
-        <div className="graph-hint">hover: focus · click: open · scroll: zoom · drag: pan</div>
+        <div className="graph-hint">{t('hover: focus · click: open · scroll: zoom · drag: pan')}</div>
       </div>
     </GraphChrome>
   );
@@ -471,8 +472,7 @@ function GraphChrome(props: {
           </div>
         ) : (
           <p className="muted">
-            Your second brain: decisions (by department) and knowledge, linked. Click a node to open it; hover to
-            highlight its neighborhood. Drag any node and its connections follow.
+            {t('Your second brain: decisions (by department) and knowledge, linked. Click a node to open it; hover to highlight its neighborhood. Drag any node and its connections follow.')}
           </p>
         )}
       </div>
