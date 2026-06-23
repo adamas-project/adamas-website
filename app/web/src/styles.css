@@ -38,6 +38,7 @@
   --accent-soft: rgba(201, 168, 76, 0.10);
   --accent-line: rgba(201, 168, 76, 0.30);
   --glow: rgba(201, 168, 76, 0.16);
+  --topbar-bg: rgba(0, 0, 0, 0.6);
 
   /* status */
   --ok: #5ecc73;
@@ -82,6 +83,7 @@
   --accent-soft: rgba(138, 109, 34, 0.10);
   --accent-line: rgba(138, 109, 34, 0.28);
   --glow: rgba(138, 109, 34, 0.12);
+  --topbar-bg: rgba(255, 255, 255, 0.78);
   --ok: #2e9e4f;
   --warn: #b07d12;
   --danger: #c0392b;
@@ -110,6 +112,7 @@
   --accent-soft: rgba(0, 255, 102, 0.10);
   --accent-line: rgba(0, 255, 102, 0.30);
   --glow: rgba(0, 255, 102, 0.22);
+  --topbar-bg: rgba(0, 0, 0, 0.7);
   --ok: #4dff88;
   --warn: #b8ff5f;
   --danger: #ff5f8f;
@@ -194,7 +197,7 @@ code, pre, .mono { font-family: var(--font-mono); }
   gap: 22px;
   padding: 12px 22px;
   border-bottom: 1px solid var(--border-2);
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--topbar-bg);
   backdrop-filter: saturate(140%) blur(12px);
   position: sticky;
   top: 0;
