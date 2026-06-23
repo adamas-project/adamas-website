@@ -16,6 +16,10 @@ export const de: Record<string, string> = {
   'local-first': 'lokal-zuerst',
   decisions: 'Entscheidungen',
   role: 'Rolle',
+  theme: 'Design',
+  dark: 'Dunkel',
+  light: 'Hell',
+  matrix: 'Matrix',
 
   // ── Common actions / labels ───────────────────────────────
   Confirm: 'Bestätigen',

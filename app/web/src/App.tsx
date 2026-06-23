@@ -27,12 +27,33 @@ const TABS: Array<{ id: Tab; label: string }> = [
 
 const ROLES = ['owner', 'cfo', 'head-of-sales', 'member'];
 
+type Theme = 'dark' | 'light' | 'matrix';
+const THEMES: Theme[] = ['dark', 'light', 'matrix'];
+
 export function App() {
   const { t, lang, setLang } = useLang();
   const [tab, setTab] = useState<Tab>('ledger');
   const [role, setRole] = useState('owner');
   const [meta, setMeta] = useState<{ count: number; version: number } | null>(null);
   const [pending, setPending] = useState(0);
+  const [theme, setTheme] = useState<Theme>(() => {
+    try {
+      const s = localStorage.getItem('adamas-theme');
+      return s === 'light' || s === 'matrix' ? s : 'dark';
+    } catch {
+      return 'dark';
+    }
+  });
+  useEffect(() => {
+    // Dark is the default (no attribute); light/matrix set data-theme.
+    if (theme === 'dark') document.documentElement.removeAttribute('data-theme');
+    else document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem('adamas-theme', theme);
+    } catch {
+      /* ignore */
+    }
+  }, [theme]);
 
   async function refresh() {
     try {
@@ -72,6 +93,12 @@ export function App() {
           <select id="role" value={role} onChange={(e) => setRole(e.target.value)}>
             {ROLES.map((r) => (
               <option key={r} value={r}>{r}</option>
+            ))}
+          </select>
+          <label htmlFor="theme">{t('theme')}</label>
+          <select id="theme" value={theme} onChange={(e) => setTheme(e.target.value as Theme)}>
+            {THEMES.map((th) => (
+              <option key={th} value={th}>{t(th)}</option>
             ))}
           </select>
           <div className="lang-switch" role="group" aria-label="Language">

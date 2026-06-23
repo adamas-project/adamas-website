@@ -65,6 +65,64 @@
   color-scheme: dark;
 }
 
+/* ── Light theme ──────────────────────────────────────────── */
+:root[data-theme='light'] {
+  --bg: #f6f6f3;
+  --surface: #ffffff;
+  --surface-2: #efefea;
+  --border: rgba(0, 0, 0, 0.12);
+  --border-2: rgba(0, 0, 0, 0.06);
+  --text: #1a1a1c;
+  --text-muted: #5d5d66;
+  --muted: #5d5d66;
+  --faint: #8a8a90;
+  --accent: #8a6d22;
+  --accent-lt: #b8902f;
+  --accent-dk: #6b5316;
+  --accent-soft: rgba(138, 109, 34, 0.10);
+  --accent-line: rgba(138, 109, 34, 0.28);
+  --glow: rgba(138, 109, 34, 0.12);
+  --ok: #2e9e4f;
+  --warn: #b07d12;
+  --danger: #c0392b;
+  --domain-hiring: #3a6ff0;
+  --domain-sales: #c08a1e;
+  --domain-product: #1c9e7a;
+  --domain-finance: #d6555f;
+  --domain-ops: #8a5fd6;
+  color-scheme: light;
+}
+
+/* ── Matrix theme (green-on-black) ────────────────────────── */
+:root[data-theme='matrix'] {
+  --bg: #000000;
+  --surface: #04150b;
+  --surface-2: #06200f;
+  --border: rgba(0, 255, 102, 0.18);
+  --border-2: rgba(0, 255, 102, 0.08);
+  --text: #c7ffd8;
+  --text-muted: #5fbe79;
+  --muted: #5fbe79;
+  --faint: #3f8a55;
+  --accent: #00ff66;
+  --accent-lt: #66ff99;
+  --accent-dk: #00b347;
+  --accent-soft: rgba(0, 255, 102, 0.10);
+  --accent-line: rgba(0, 255, 102, 0.30);
+  --glow: rgba(0, 255, 102, 0.22);
+  --ok: #4dff88;
+  --warn: #b8ff5f;
+  --danger: #ff5f8f;
+  --domain-hiring: #5fffd0;
+  --domain-sales: #b8ff5f;
+  --domain-product: #00ffa3;
+  --domain-finance: #5fffaf;
+  --domain-ops: #9bff6f;
+  --font-sans: var(--font-mono);
+  color-scheme: dark;
+}
+:root[data-theme='matrix'] body { text-shadow: 0 0 2px rgba(0, 255, 102, 0.25); }
+
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
 
@@ -72,7 +130,7 @@ body {
   margin: 0;
   background:
     radial-gradient(900px 500px at 80% -10%, var(--accent-soft), transparent 60%),
-    radial-gradient(700px 500px at 0% 110%, rgba(201, 168, 76, 0.05), transparent 55%),
+    radial-gradient(700px 500px at 0% 110%, var(--glow), transparent 55%),
     var(--bg);
   background-attachment: fixed;
   color: var(--text);
