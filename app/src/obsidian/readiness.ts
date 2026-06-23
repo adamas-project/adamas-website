@@ -1,6 +1,7 @@
 import { DOMAINS, type Domain } from '../schema/decision.schema.js';
 import type { Ledger } from '../ledger/ledger.js';
 import type { KnowledgeStore } from '../knowledge/store.js';
+import type { PeopleStore } from '../people/store.js';
 
 // A simple, explainable "M&A / valuation readiness" scorecard. The things that
 // make a scale-up evaluate higher in diligence: domain coverage, traceable
@@ -16,10 +17,13 @@ export interface Readiness {
   withDissent: number;
   superseded: number;
   domainGaps: Domain[];
+  people: number;
+  peopleWithCv: number;
+  keyPeople: number;
   components: Array<{ label: string; points: number; max: number }>;
 }
 
-export function computeReadiness(ledger: Ledger, knowledge: KnowledgeStore): Readiness {
+export function computeReadiness(ledger: Ledger, knowledge: KnowledgeStore, people?: PeopleStore): Readiness {
   const all = ledger.list();
   const total = all.length;
   const byDomain = Object.fromEntries(DOMAINS.map((d) => [d, 0])) as Record<Domain, number>;
@@ -35,16 +39,28 @@ export function computeReadiness(ledger: Ledger, knowledge: KnowledgeStore): Rea
   const domainGaps = DOMAINS.filter((d) => byDomain[d] === 0);
   const traceabilityPct = total ? Math.round((withSources / total) * 100) : 0;
 
-  const coverage = ((DOMAINS.length - domainGaps.length) / DOMAINS.length) * 30;
-  const traceability = (traceabilityPct / 100) * 40;
-  const volume = Math.min(total / 20, 1) * 15;
-  const knowledgePts = Math.min(knowledge.count / 10, 1) * 15;
+  // Team / key-person documentation — a major diligence factor.
+  const peopleList = people?.list() ?? [];
+  const peopleCount = peopleList.length;
+  const peopleWithCv = peopleList.filter((p) => (p.summary ?? '').trim().length > 40).length;
+  const keyPeople = peopleList.filter((p) => p.keyPerson).length;
+
+  const coverage = ((DOMAINS.length - domainGaps.length) / DOMAINS.length) * 25;
+  const traceability = (traceabilityPct / 100) * 30;
+  const volume = Math.min(total / 20, 1) * 10;
+  const knowledgePts = Math.min(knowledge.count / 10, 1) * 10;
+  // 25 pts: roster depth (15) + CV coverage (10), with a small floor once any
+  // key person is flagged (succession/continuity is documented at all).
+  const roster = Math.min(peopleCount / 5, 1) * 15;
+  const cvCoverage = peopleCount ? (peopleWithCv / peopleCount) * 10 : 0;
+  const teamPts = roster + cvCoverage;
 
   const components = [
-    { label: 'Domain coverage (all 5 areas documented)', points: Math.round(coverage), max: 30 },
-    { label: 'Traceability (decisions cite their sources)', points: Math.round(traceability), max: 40 },
-    { label: 'Decision volume / depth', points: Math.round(volume), max: 15 },
-    { label: 'Knowledge base depth', points: Math.round(knowledgePts), max: 15 },
+    { label: 'Domain coverage (all 5 areas documented)', points: Math.round(coverage), max: 25 },
+    { label: 'Traceability (decisions cite their sources)', points: Math.round(traceability), max: 30 },
+    { label: 'Decision volume / depth', points: Math.round(volume), max: 10 },
+    { label: 'Knowledge base depth', points: Math.round(knowledgePts), max: 10 },
+    { label: 'Team & key-person documentation (CVs on file)', points: Math.round(teamPts), max: 25 },
   ];
   const score = components.reduce((n, c) => n + c.points, 0);
 
@@ -58,6 +74,9 @@ export function computeReadiness(ledger: Ledger, knowledge: KnowledgeStore): Rea
     withDissent,
     superseded,
     domainGaps,
+    people: peopleCount,
+    peopleWithCv,
+    keyPeople,
     components,
   };
 }

@@ -212,6 +212,17 @@ X/Twitter posts are fetched via the public syndication endpoint, so the actual
 tweet text is captured (not the JS app shell). (No JS rendering otherwise: for
 paywalled or video-only pages, paste the text/transcript.)
 
+## People (team / human resources)
+
+The team a buyer underwrites. In the **People** tab add a team member by **name,
+role, and type** (founder/employee/advisor/board/contractor) and paste their
+**CV** — ADAMAS summarizes it on-device into a bio, highlights, and skills, and
+links them to the decisions they own. Flag **key people** so key-person risk is
+explicit. People are stored as portable Markdown + JSON under `vault/people/`,
+rendered into the Obsidian data room (Company → People, with profiles + decisions
+owned), and factored into the **Valuation Readiness** scorecard (a dedicated
+*Team & key-person documentation* component).
+
 ## Obsidian data room (the "second brain")
 
 ADAMAS is the cockpit; **Obsidian is the memory**. ADAMAS keeps its validated
