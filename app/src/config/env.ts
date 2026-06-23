@@ -114,16 +114,23 @@ export interface HermesConfig {
   provider: HermesProviderKind;
   ollamaUrl: string;
   ollamaModel: string;
+  /** Route cheap-first: heuristic handles easy cases, Ollama only when unsure. */
+  router: boolean;
+  routerMinConfidence: number;
 }
 
 /** Hermes (local evaluation) configuration, driven entirely by env vars. */
 export function hermesConfig(): HermesConfig {
   const raw = (process.env.ADAMAS_HERMES_PROVIDER ?? 'local').trim().toLowerCase();
   const provider: HermesProviderKind = raw === 'ollama' ? 'ollama' : 'local';
+  const routerRaw = (process.env.ADAMAS_HERMES_ROUTER ?? '1').trim().toLowerCase();
+  const minC = Number(process.env.ADAMAS_ROUTER_MIN_CONFIDENCE ?? 0.75);
   return {
     provider,
     ollamaUrl: (process.env.ADAMAS_OLLAMA_URL ?? 'http://127.0.0.1:11434').replace(/\/+$/, ''),
     ollamaModel: process.env.ADAMAS_OLLAMA_MODEL ?? 'llama3.1',
+    router: routerRaw !== '0' && routerRaw !== 'false' && routerRaw !== 'off',
+    routerMinConfidence: Number.isFinite(minC) && minC > 0 && minC <= 1 ? minC : 0.75,
   };
 }
 

@@ -3,6 +3,7 @@ import { Ledger } from '../ledger/ledger.js';
 import { CaptureInbox } from '../evaluation/inbox.js';
 import { LocalLLMProvider } from '../evaluation/local.js';
 import { OllamaLLMProvider } from '../evaluation/ollama.js';
+import { RouterLLMProvider } from '../evaluation/router.js';
 import { CloudLLMProvider } from '../evaluation/cloud.js';
 import type { LLMProvider } from '../evaluation/provider.js';
 import { AssetEngine } from '../assets/engine.js';
@@ -59,13 +60,20 @@ export async function createContext(root: string): Promise<AppContext> {
   const inbox = await CaptureInbox.open(path.join(root, 'candidates.json'), ledger);
   const assets = await AssetEngine.open(ledger, paths.assets);
 
-  // Hermes (local evaluation) is pluggable: the deterministic built-in provider
-  // by default, or a local Ollama model when configured. Both run on-device.
+  // Hermes (local evaluation) is pluggable and runs on-device. When an Ollama
+  // model is configured, the router puts the free heuristic in front of it and
+  // only escalates to the model when the heuristic isn't confident — fewer model
+  // calls, same vault. Both tiers are local, so nothing crosses the boundary.
   const hermes = hermesConfig();
-  const localProvider: LLMProvider =
-    hermes.provider === 'ollama'
-      ? new OllamaLLMProvider(hermes.ollamaUrl, hermes.ollamaModel)
-      : new LocalLLMProvider();
+  let localProvider: LLMProvider;
+  if (hermes.provider === 'ollama') {
+    const ollama = new OllamaLLMProvider(hermes.ollamaUrl, hermes.ollamaModel);
+    localProvider = hermes.router
+      ? new RouterLLMProvider(new LocalLLMProvider(), ollama, { minConfidence: hermes.routerMinConfidence })
+      : ollama;
+  } else {
+    localProvider = new LocalLLMProvider();
+  }
 
   const cloudProvider = new CloudLLMProvider();
   const boundary = await BoundaryService.open(
