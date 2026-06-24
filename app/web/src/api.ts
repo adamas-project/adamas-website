@@ -1,4 +1,5 @@
 // Thin API client. All requests stay on the local machine.
+import { qs } from './query';
 
 export type Domain = 'hiring' | 'sales' | 'product' | 'finance' | 'ops';
 export type Status = 'active' | 'superseded' | 'reversed';
@@ -37,10 +38,8 @@ async function req<T>(url: string, opts: RequestInit = {}): Promise<T> {
 
 export const api = {
   meta: () => req<{ count: number; version: number; domains: Domain[]; statuses: Status[] }>('/api/meta'),
-  decisions: (params: { domain?: string; status?: string; role?: string } = {}) => {
-    const q = new URLSearchParams(params as Record<string, string>).toString();
-    return req<{ role: string; decisions: Decision[] }>(`/api/decisions${q ? `?${q}` : ''}`);
-  },
+  decisions: (params: { domain?: string; status?: string; role?: string } = {}) =>
+    req<{ role: string; decisions: Decision[] }>(`/api/decisions${qs(params)}`),
   decision: (id: string, role?: string) =>
     req<{ decision: Decision; neighbors: string[] }>(`/api/decisions/${id}${role ? `?role=${role}` : ''}`),
   graph: () => req<{ nodes: any[]; edges: any[] }>('/api/graph'),
@@ -108,19 +107,15 @@ export const api = {
   approve: (taskId: string) => req<{ route: string; added: any[] }>(`/api/boundary/${taskId}/approve`, { method: 'POST', body: '{}' }),
   decline: (taskId: string) => req<{ route: string; added: any[] }>(`/api/boundary/${taskId}/decline`, { method: 'POST', body: '{}' }),
 
-  knowledge: (params: { q?: string; tag?: string; type?: string } = {}) => {
-    const qs = new URLSearchParams(params as Record<string, string>).toString();
-    return req<{ entries: any[]; tags: string[]; count: number }>(`/api/knowledge${qs ? `?${qs}` : ''}`);
-  },
+  knowledge: (params: { q?: string; tag?: string; type?: string } = {}) =>
+    req<{ entries: any[]; tags: string[]; count: number }>(`/api/knowledge${qs(params)}`),
   knowledgeGet: (id: string) => req<{ entry: any }>(`/api/knowledge/${id}`),
   addKnowledge: (payload: { url?: string; text?: string; title?: string; type?: string; tags?: string[] }) =>
     req<{ entry: any }>('/api/knowledge', { method: 'POST', body: JSON.stringify(payload) }),
   deleteKnowledge: (id: string) => req(`/api/knowledge/${id}`, { method: 'DELETE' }),
 
-  people: (params: { q?: string; kind?: string } = {}) => {
-    const qs = new URLSearchParams(params as Record<string, string>).toString();
-    return req<{ people: any[]; count: number }>(`/api/people${qs ? `?${qs}` : ''}`);
-  },
+  people: (params: { q?: string; kind?: string } = {}) =>
+    req<{ people: any[]; count: number }>(`/api/people${qs(params)}`),
   addPerson: (payload: {
     name: string;
     role: string;
@@ -134,10 +129,8 @@ export const api = {
   }) => req<{ entry: any }>('/api/people', { method: 'POST', body: JSON.stringify(payload) }),
   deletePerson: (id: string) => req(`/api/people/${id}`, { method: 'DELETE' }),
 
-  records: (params: { q?: string; category?: string } = {}) => {
-    const qs = new URLSearchParams(params as Record<string, string>).toString();
-    return req<{ records: any[]; categories: string[]; count: number }>(`/api/records${qs ? `?${qs}` : ''}`);
-  },
+  records: (params: { q?: string; category?: string } = {}) =>
+    req<{ records: any[]; categories: string[]; count: number }>(`/api/records${qs(params)}`),
   addRecord: (payload: Record<string, unknown>) =>
     req<{ entry: any }>('/api/records', { method: 'POST', body: JSON.stringify(payload) }),
   deleteRecord: (id: string) => req(`/api/records/${id}`, { method: 'DELETE' }),
