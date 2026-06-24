@@ -1,5 +1,3 @@
-import { promises as fs } from 'node:fs';
-import path from 'node:path';
 import type { Ledger, DecisionInput } from '../ledger/ledger.js';
 import type { KnowledgeStore, KnowledgeInput } from '../knowledge/store.js';
 import type { PeopleStore, PersonInput } from '../people/store.js';
@@ -129,47 +127,188 @@ export interface DemoSeedDeps {
   records: RecordStore;
 }
 
+// ── Second wave (doubles the data) ──────────────────────────
+const EXTRA_DECISIONS: DecisionInput[] = [
+  // hiring
+  { domain: 'hiring', date: '2025-06-09', title: 'Introduce an employee referral bonus program', context: 'Best hires came from referrals but there was no incentive.', decision: 'Pay a referral bonus for hires that pass probation.', owner: { role: 'head-of-people', name: 'Sofia Reinhardt' } },
+  { domain: 'hiring', date: '2025-06-23', title: 'Create a senior technical career track without forced management', context: 'Top engineers were leaving to avoid management roles.', decision: 'Add a senior IC track with equal pay bands to management.', owner: { role: 'head-of-engineering', name: 'Daniel Okonkwo' } },
+  { domain: 'hiring', date: '2025-07-07', title: 'Move to quarterly performance check-ins', context: 'Annual reviews gave feedback too late.', decision: 'Replace annual reviews with lightweight quarterly check-ins.', owner: { role: 'head-of-people', name: 'Sofia Reinhardt' } },
+  { domain: 'hiring', date: '2025-07-21', title: 'Hire a regional service lead for the Nordics', context: 'Nordic accounts grew faster than local support coverage.', decision: 'Hire a Nordics-based service lead.', owner: { role: 'head-of-ops', name: 'Tomás Herrera' }, tradeoffs: ['New regional overhead'] },
+  // sales
+  { domain: 'sales', date: '2025-06-11', title: 'Add a standard SLA tier for service contracts', context: 'Ad-hoc SLAs were hard to price and support.', decision: 'Offer three standard SLA tiers (Bronze/Silver/Gold).', owner: { role: 'head-of-sales', name: 'Priya Nair' } },
+  { domain: 'sales', date: '2025-06-25', title: 'Enter the bakery sub-segment of F&B', context: 'Bakery lines share our packaging expertise.', decision: 'Expand the ICP to include bakery packaging.', owner: { role: 'head-of-sales', name: 'Priya Nair' }, tradeoffs: ['New application learning curve'] },
+  { domain: 'sales', date: '2025-07-09', title: 'Set a minimum new-build deal size of €75k', context: 'Small builds consumed disproportionate overhead.', decision: 'Decline new builds under €75k.', owner: { role: 'head-of-sales', name: 'Priya Nair', dissent: ['founder'] } },
+  { domain: 'sales', date: '2025-07-23', title: 'Publish reference case studies with named customers', context: 'Prospects wanted proof from peers.', decision: 'Publish named case studies (with customer consent).', owner: { role: 'head-of-sales', name: 'Priya Nair' } },
+  // product
+  { domain: 'product', date: '2025-06-13', title: 'Add OPC-UA connectivity to every cell', context: 'Customers needed standardized data integration.', decision: 'Expose OPC-UA on all new cells by default.', owner: { role: 'head-of-engineering', name: 'Daniel Okonkwo' } },
+  { domain: 'product', date: '2025-06-27', title: 'Offer a predictive-maintenance tier on monitoring', context: 'Telemetry data enabled failure prediction.', decision: 'Add a predictive-maintenance upgrade to the monitoring add-on.', owner: { role: 'head-of-product', name: 'Lena Vasquez' } },
+  { domain: 'product', date: '2025-07-11', title: 'Standardize safety architecture on ISO 13849 PLd', context: 'Inconsistent safety design slowed CE sign-off.', decision: 'Adopt a standard ISO 13849 PLd safety architecture.', owner: { role: 'head-of-engineering', name: 'Daniel Okonkwo' } },
+  { domain: 'product', date: '2025-07-25', title: 'Build a spare-parts kit catalog', context: 'Spares were quoted ad hoc, delaying repairs.', decision: 'Publish a standard spare-parts kit catalog per cell type.', owner: { role: 'head-of-product', name: 'Lena Vasquez' } },
+  // finance
+  { domain: 'finance', date: '2025-06-16', title: 'Move to monthly rolling forecasts', context: 'Annual budgets drifted from reality.', decision: 'Adopt a 12-month rolling forecast updated monthly.', owner: { role: 'cfo', name: 'Henrik Bauer' } },
+  { domain: 'finance', date: '2025-06-30', title: 'Hedge euro/USD exposure on imported drives', context: 'FX swings hit the cost of imported components.', decision: 'Hedge USD component exposure with forward contracts.', owner: { role: 'cfo', name: 'Henrik Bauer' } },
+  { domain: 'finance', date: '2025-07-14', title: 'Set a DSO target of 45 days', context: 'Slow collections strained working capital.', decision: 'Target days-sales-outstanding of 45 days.', owner: { role: 'controller', name: 'Amara Diallo' } },
+  { domain: 'finance', date: '2025-07-28', title: 'Establish a €25k capex approval threshold', context: 'Capital spend lacked a consistent gate.', decision: 'Require CFO approval for capex above €25k.', owner: { role: 'cfo', name: 'Henrik Bauer' } },
+  // ops
+  { domain: 'ops', date: '2025-06-18', title: 'Adopt a CMMS for maintenance scheduling', context: 'Maintenance was tracked in spreadsheets.', decision: 'Roll out a CMMS for scheduled maintenance.', owner: { role: 'head-of-ops', name: 'Tomás Herrera' } },
+  { domain: 'ops', date: '2025-07-02', title: 'Require FAT sign-off before shipment', context: 'Defects slipped to site without a gate.', decision: 'No cell ships without a factory acceptance test sign-off.', owner: { role: 'head-of-ops', name: 'Tomás Herrera' } },
+  { domain: 'ops', date: '2025-07-16', title: 'Set a 48-hour critical support response SLA', context: 'Downtime needed a guaranteed response.', decision: 'Guarantee a 48-hour response on critical support tickets.', owner: { role: 'head-of-ops', name: 'Tomás Herrera' } },
+  { domain: 'ops', date: '2025-07-30', title: 'Run quarterly supplier scorecard reviews', context: 'Supplier quality varied without review.', decision: 'Review key suppliers on a quarterly scorecard.', owner: { role: 'head-of-ops', name: 'Tomás Herrera' } },
+];
+
+const EXTRA_KNOWLEDGE: KnowledgeInput[] = (
+  [
+    ['Designing service SLAs that scale', 'article', 'Tiered SLAs make service pricing and staffing predictable.', 'ops', 'sales'],
+    ['OPC-UA for industrial data', 'article', 'A vendor-neutral standard for machine-to-system data.', 'product', 'integration'],
+    ['Predictive maintenance with telemetry', 'video', 'Using sensor data to predict failures before downtime.', 'product', 'ai'],
+    ['ISO 13849 safety basics', 'article', 'Performance levels and safety architecture for machinery.', 'product', 'safety'],
+    ['Rolling forecasts beat annual budgets', 'article', 'Continuous forecasting keeps finance close to reality.', 'finance'],
+    ['FX hedging for importers', 'note', 'Forward contracts smooth currency risk on imported parts.', 'finance', 'risk'],
+    ['Reducing days-sales-outstanding', 'note', 'Practical levers to collect cash faster.', 'finance', 'cash'],
+    ['CMMS selection guide', 'article', 'What to look for in a maintenance management system.', 'ops'],
+    ['Factory acceptance testing', 'note', 'A FAT gate catches defects before they reach the customer.', 'ops', 'quality'],
+    ['Supplier scorecards', 'note', 'Score suppliers on quality, delivery, and responsiveness.', 'ops', 'supply-chain'],
+    ['Reference selling in capital equipment', 'article', 'Named case studies shorten the sales cycle.', 'sales'],
+    ['Career ladders for engineers', 'article', 'Dual IC/management tracks retain senior talent.', 'hiring', 'people'],
+    ['Referral programs that work', 'note', 'Incentivize referrals without gaming.', 'hiring'],
+    ['Quarterly check-ins vs annual reviews', 'article', 'Faster feedback loops improve performance.', 'hiring', 'people'],
+    ['Spare-parts strategy', 'note', 'Kitting spares reduces repair lead time.', 'product', 'service'],
+    ['Working-capital management', 'article', 'Balancing inventory, receivables, and payables.', 'finance'],
+    ['Cybersecurity for connected machines', 'article', 'Segmentation and signed updates for OT networks.', 'risk', 'security'],
+    ['Net revenue retention explained', 'article', 'Why NRR is a key valuation driver.', 'finance', 'valuation'],
+    ['Build vs buy for monitoring software', 'note', 'When to own the telemetry stack.', 'product', 'build-vs-buy'],
+    ['Customer concentration risk', 'article', 'How buyers view revenue concentration in diligence.', 'm-and-a', 'risk'],
+    ['The diligence binder', 'note', 'What belongs in a buyer-ready diligence binder.', 'm-and-a'],
+    ['Pricing experiments without churn', 'article', 'Test pricing on new logos, protect the base.', 'pricing', 'sales'],
+  ] as const
+).map(([title, type, summary, ...tags]) => ({ title, source: 'manual', type: type as KnowledgeInput['type'], summary, tags: [...tags] }));
+
+const EXTRA_PEOPLE: PersonInput[] = (
+  [
+    ['Klara Novak', 'service-technician', 'employee', 'Field service technician for the DACH region.', 'Vienna, AT', 'commissioning'],
+    ['Ahmed Said', 'controls-engineer', 'employee', 'Controls engineer; safety and motion.', 'Stuttgart, DE', 'plc'],
+    ['Beatrice Romano', 'project-manager', 'employee', 'Project manager for F&B builds.', 'Milan, IT', 'project-management'],
+    ['Felix Braun', 'mechanical-engineer', 'employee', 'Mechanical engineer; fixturing.', 'Stuttgart, DE', 'cad'],
+    ['Nadia Haddad', 'account-executive', 'employee', 'Account executive; bakery segment.', 'Paris, FR', 'sales'],
+    ['Oskar Lind', 'service-lead', 'employee', 'Regional service lead, Nordics.', 'Stockholm, SE', 'service'],
+    ['Petra Kovac', 'quality-engineer', 'employee', 'Quality engineer; FAT/SAT and compliance.', 'Zagreb, HR', 'quality'],
+    ['Wei Zhang', 'data-engineer', 'employee', 'Data engineer; predictive-maintenance models.', 'Berlin, DE', 'python'],
+    ['Liam Murphy', 'sales-engineer', 'employee', 'Sales engineer; discovery and solution design.', 'Dublin, IE', 'pre-sales'],
+    ['Camille Dubois', 'marketing-lead', 'employee', 'Marketing lead; case studies and demand gen.', 'Lyon, FR', 'marketing'],
+    ['Stefan Vogel', 'procurement-manager', 'employee', 'Procurement; supplier scorecards and dual sourcing.', 'Munich, DE', 'procurement'],
+    ['Aino Korhonen', 'controls-engineer', 'employee', 'Controls engineer; OPC-UA integration.', 'Helsinki, FI', 'opc-ua'],
+    ['Diego Santos', 'service-technician', 'employee', 'Service technician; Iberia.', 'Lisbon, PT', 'support'],
+    ['Hanna Bergström', 'people-ops', 'employee', 'People-ops specialist; onboarding.', 'Gothenburg, SE', 'people-ops'],
+    ['Viktor Petrov', 'software-engineer', 'employee', 'Software engineer; monitoring platform.', 'Sofia, BG', 'typescript'],
+    ['Marta Nowak', 'fp&a-analyst', 'employee', 'FP&A analyst; rolling forecasts.', 'Warsaw, PL', 'fp&a'],
+    ['George Papadopoulos', 'advisor', 'advisor', 'Advisor; manufacturing operations.', 'Athens, GR', 'operations'],
+    ['Sarah Goldberg', 'advisor', 'advisor', 'Advisor; M&A and corporate finance.', 'London, UK', 'm-and-a'],
+    ['Thomas Müller', 'board-member', 'board', 'Board member; industry veteran.', 'Frankfurt, DE', 'governance'],
+    ['Anja Horvat', 'contractor', 'contractor', 'Contract technical writer; documentation.', 'Ljubljana, SI', 'documentation'],
+    ['Pedro Alves', 'contractor', 'contractor', 'Contract electrical designer.', 'Porto, PT', 'electrical'],
+    ['Mariam Aziz', 'controls-engineer', 'employee', 'Controls engineer; vision and robotics.', 'Berlin, DE', 'vision'],
+  ] as const
+).map(([name, role, kind, summary, location, skill]) => ({ name, role, kind: kind as PersonInput['kind'], summary, location, skills: [skill] }));
+
+const EXTRA_RECORDS: RecordInput[] = [
+  // customers
+  { category: 'customer', title: 'Crisp & Co', summary: 'Bakery packaging line; new logo.', owner: 'account-executive', status: 'active', amount: 210000, currency: '€', recurring: false, dueDate: '2026-02-28', tags: ['bakery'] },
+  { category: 'customer', title: 'PurePress Juices', summary: 'Two lines + Gold SLA.', owner: 'head-of-sales', status: 'active', amount: 320000, currency: '€', recurring: true, dueDate: '2026-07-15', tags: ['f&b'] },
+  { category: 'customer', title: 'Tundra Frozen', summary: 'Monitoring + predictive-maintenance tier.', owner: 'head-of-sales', status: 'active', amount: 175000, currency: '€', recurring: true, dueDate: '2026-04-30' },
+  { category: 'customer', title: 'Mediterraneo Olive', summary: 'Single cell; expansion in discussion.', owner: 'account-executive', status: 'active', amount: 120000, currency: '€', recurring: false },
+  { category: 'customer', title: 'Highland Brewing', summary: 'Bottling line; Silver SLA.', owner: 'account-executive', status: 'at-risk', amount: 90000, currency: '€', recurring: true, dueDate: '2026-05-20' },
+  // financial KPIs
+  { category: 'financial', title: 'EBITDA margin', summary: 'Operating profitability.', metric: 'EBITDA margin', amount: 14, period: 'Q2 2025', status: 'on-track' },
+  { category: 'financial', title: 'Net revenue retention', summary: 'Expansion minus churn on existing accounts.', metric: 'NRR', amount: 112, period: 'Q2 2025', status: 'improving' },
+  { category: 'financial', title: 'Pipeline coverage', summary: 'Pipeline vs quota for next quarter.', metric: 'Pipeline coverage', amount: 3, period: 'Q3 2025', status: 'on-track' },
+  { category: 'financial', title: 'Order backlog', summary: 'Signed but unrecognized revenue.', metric: 'Backlog', amount: 4200000, currency: '€', period: 'Jun 2025' },
+  { category: 'financial', title: 'Billable utilization', summary: 'Engineering utilization rate.', metric: 'Utilization', amount: 78, period: 'Q2 2025', status: 'on-track' },
+  // risk register
+  { category: 'risk', title: 'FX exposure on imported components', summary: 'USD-priced drives expose margin to FX.', owner: 'cfo', severity: 'medium', mitigation: 'Forward contracts (see finance decision).', status: 'mitigating' },
+  { category: 'risk', title: 'Senior talent retention', summary: 'Competition for senior controls engineers.', owner: 'head-of-people', severity: 'medium', mitigation: 'IC career track + referral program.', status: 'mitigating' },
+  { category: 'risk', title: 'Warranty claims exposure', summary: 'Defects in early cells could drive claims.', owner: 'head-of-engineering', severity: 'low', mitigation: 'FAT gate + simulation-first commissioning.', status: 'monitoring' },
+  { category: 'risk', title: 'CE / regulatory compliance', summary: 'Machinery must meet CE and ISO safety.', owner: 'quality-engineer', severity: 'medium', mitigation: 'Standard ISO 13849 PLd architecture.', status: 'mitigating' },
+  { category: 'risk', title: 'Customer churn on renewals', summary: 'Service renewals are not guaranteed.', owner: 'head-of-sales', severity: 'low', mitigation: 'Proactive QBRs and SLA adherence.', status: 'monitoring' },
+  // IP & assets
+  { category: 'ip', title: 'Predictive-maintenance model (trade secret)', summary: 'In-house failure-prediction models.', owner: 'data-engineer', status: 'owned', tags: ['trade-secret', 'ai'] },
+  { category: 'ip', title: 'NorthPeak trademark (US)', summary: 'US trademark application filed.', owner: 'cfo', status: 'pending', dueDate: '2027-08-01', tags: ['trademark'] },
+  { category: 'ip', title: 'Cell design library (copyright)', summary: 'Reusable CAD and design library; owned.', owner: 'head-of-product', status: 'owned', tags: ['design'] },
+  { category: 'ip', title: 'OPC-UA integration toolkit (owned IP)', summary: 'Internal connectivity toolkit; contributor IP assigned.', owner: 'head-of-engineering', status: 'owned', tags: ['software'] },
+  { category: 'ip', title: 'Simulation software licenses', summary: 'Per-seat simulation licenses; renew annually.', owner: 'controller', status: 'active', dueDate: '2026-10-31', tags: ['license'] },
+];
+
+const ALL_DECISIONS = [...DECISIONS, ...EXTRA_DECISIONS];
+const ALL_KNOWLEDGE = [...KNOWLEDGE, ...EXTRA_KNOWLEDGE];
+const ALL_PEOPLE = [...PEOPLE, ...EXTRA_PEOPLE];
+const ALL_RECORDS = [...RECORDS, ...EXTRA_RECORDS];
+
 export interface DemoSeedResult {
   decisions: number;
   knowledge: number;
   people: number;
   records: number;
-  alreadySeeded?: boolean;
+  /** True when nothing new was added (everything already present). */
+  noop?: boolean;
 }
 
 /**
- * Populate every store with the demo company. Idempotent via a marker file in
- * the vault root (pass force to seed again anyway).
+ * Populate every store with the demo company. Entry-level idempotent: an entry
+ * is skipped if one with the same title/name already exists, so calling it again
+ * (e.g. after the dataset grows) adds only what's new — never duplicates.
  */
-export async function seedDemo(root: string, deps: DemoSeedDeps, force = false): Promise<DemoSeedResult> {
-  const marker = path.join(root, '.demo-seeded');
-  if (!force) {
-    try {
-      await fs.access(marker);
-      return { decisions: 0, knowledge: 0, people: 0, records: 0, alreadySeeded: true };
-    } catch {
-      /* not seeded yet */
-    }
+export async function seedDemo(root: string, deps: DemoSeedDeps): Promise<DemoSeedResult> {
+  void root; // kept for signature stability; no marker file needed anymore.
+  const decTitles = new Set(deps.ledger.list().map((d) => d.title));
+  const knTitles = new Set(deps.knowledge.list().map((e) => e.title));
+  const peopleNames = new Set(deps.people.list().map((p) => p.name.toLowerCase()));
+  const recKeys = new Set(deps.records.list().map((r) => `${r.category}:${r.title}`));
+
+  let decisions = 0;
+  for (const d of ALL_DECISIONS) {
+    if (decTitles.has(d.title)) continue;
+    await deps.ledger.create(d);
+    decTitles.add(d.title);
+    decisions++;
   }
 
-  const created = [];
-  for (const d of DECISIONS) created.push(await deps.ledger.create(d));
-  // A few bi-directional links + one supersede, to make the graph rich.
-  const byId = Object.fromEntries(created.map((d) => [d.title, d.id]));
+  // Bi-directional links so the graph is rich (idempotent: update overwrites).
+  const idByTitle = Object.fromEntries(deps.ledger.list().map((d) => [d.title, d.id]));
   const link = async (a: string, b: string) => {
-    const ida = byId[a];
-    const idb = byId[b];
+    const ida = idByTitle[a];
+    const idb = idByTitle[b];
     if (ida && idb) await deps.ledger.update(ida, { links: [idb] });
   };
   await link('Decline the automotive OEM frame contract', 'Hold a 20% gross-margin floor and walk from sub-floor deals');
   await link('Quote value-based cell packages, not hourly engineering', 'Require a paid discovery phase before any build quote');
   await link('Ship a remote-monitoring add-on for every cell', 'Standardize the controls platform on Beckhoff TwinCAT');
   await link('Cap concurrent build projects at three', 'Focus the ICP on mid-market food & beverage packaging lines');
+  await link('Offer a predictive-maintenance tier on monitoring', 'Ship a remote-monitoring add-on for every cell');
 
-  for (const k of KNOWLEDGE) await deps.knowledge.create(k);
-  for (const p of PEOPLE) await deps.people.create(p);
-  for (const r of RECORDS) await deps.records.create(r);
+  let knowledge = 0;
+  for (const k of ALL_KNOWLEDGE) {
+    if (knTitles.has(k.title)) continue;
+    await deps.knowledge.create(k);
+    knTitles.add(k.title);
+    knowledge++;
+  }
 
-  await fs.writeFile(marker, new Date().toISOString());
-  return { decisions: DECISIONS.length, knowledge: KNOWLEDGE.length, people: PEOPLE.length, records: RECORDS.length };
+  let people = 0;
+  for (const p of ALL_PEOPLE) {
+    if (peopleNames.has(p.name.toLowerCase())) continue;
+    await deps.people.create(p);
+    peopleNames.add(p.name.toLowerCase());
+    people++;
+  }
+
+  let records = 0;
+  for (const r of ALL_RECORDS) {
+    const key = `${r.category}:${r.title}`;
+    if (recKeys.has(key)) continue;
+    await deps.records.create(r);
+    recKeys.add(key);
+    records++;
+  }
+
+  const total = decisions + knowledge + people + records;
+  return { decisions, knowledge, people, records, ...(total === 0 ? { noop: true } : {}) };
 }

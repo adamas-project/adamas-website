@@ -29,15 +29,15 @@ describe('demo seeder', () => {
     const deps = await open(v.root);
 
     const r = await seedDemo(v.root, deps);
-    expect(r.decisions).toBeGreaterThanOrEqual(20);
-    expect(r.knowledge).toBeGreaterThanOrEqual(20);
-    expect(r.people).toBeGreaterThanOrEqual(20);
-    expect(r.records).toBeGreaterThanOrEqual(20);
+    expect(r.decisions).toBeGreaterThanOrEqual(40);
+    expect(r.knowledge).toBeGreaterThanOrEqual(40);
+    expect(r.people).toBeGreaterThanOrEqual(40);
+    expect(r.records).toBeGreaterThanOrEqual(40);
 
-    expect(deps.ledger.count).toBeGreaterThanOrEqual(20);
-    expect(deps.knowledge.count).toBeGreaterThanOrEqual(20);
-    expect(deps.people.count).toBeGreaterThanOrEqual(20);
-    expect(deps.records.count).toBeGreaterThanOrEqual(20);
+    expect(deps.ledger.count).toBeGreaterThanOrEqual(40);
+    expect(deps.knowledge.count).toBeGreaterThanOrEqual(40);
+    expect(deps.people.count).toBeGreaterThanOrEqual(40);
+    expect(deps.records.count).toBeGreaterThanOrEqual(40);
 
     // All four record categories are represented.
     expect(deps.records.categories().sort()).toEqual(['customer', 'financial', 'ip', 'risk']);
@@ -48,9 +48,11 @@ describe('demo seeder', () => {
     expect(g.nodes.some((n) => n.kind === 'record')).toBe(true);
     expect(g.edges.some((e) => e.kind === 'cross')).toBe(true);
 
-    // Second run is a no-op (marker file).
+    // Second run adds nothing (entry-level idempotent) and never duplicates.
+    const before = deps.ledger.count;
     const again = await seedDemo(v.root, deps);
-    expect(again.alreadySeeded).toBe(true);
-    expect(deps.ledger.count).toBeGreaterThanOrEqual(20); // unchanged, not doubled
+    expect(again.noop).toBe(true);
+    expect(again.decisions).toBe(0);
+    expect(deps.ledger.count).toBe(before);
   });
 });

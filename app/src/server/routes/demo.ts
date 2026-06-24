@@ -6,13 +6,13 @@ import { resolveObsidianDir } from '../../config/env.js';
 
 export function registerDemoRoutes(app: FastifyInstance, ctx: AppContext): void {
   // Populate every store with the demo company, then refresh the Obsidian vault.
-  // Idempotent (marker file); pass ?force=1 to seed again on top.
-  app.post('/api/demo', async (req) => {
-    const force = (req.query as Record<string, string>)?.force === '1';
-    const result = await seedDemo(ctx.root, { ledger: ctx.ledger, knowledge: ctx.knowledge, people: ctx.people, records: ctx.records }, force);
+  // Entry-level idempotent: re-calling adds only entries that don't exist yet
+  // (so it never duplicates, and picks up new demo data as the set grows).
+  app.post('/api/demo', async () => {
+    const result = await seedDemo(ctx.root, { ledger: ctx.ledger, knowledge: ctx.knowledge, people: ctx.people, records: ctx.records });
 
-    // Mirror into Obsidian right away so the data room is populated too.
-    if (!result.alreadySeeded) {
+    // Mirror into Obsidian when anything was added, so the data room matches.
+    if (!result.noop) {
       if (ctx.obsidianAuto) await ctx.obsidianAuto.runNow();
       else await buildObsidianVault({ ledger: ctx.ledger, knowledge: ctx.knowledge, assets: ctx.assets, people: ctx.people, records: ctx.records }, resolveObsidianDir(ctx.root));
     }
