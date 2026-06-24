@@ -1,3 +1,4 @@
+import { DOMAINS, type Domain } from '../schema/decision.schema.js';
 import type { Ledger, DecisionInput } from '../ledger/ledger.js';
 import type { KnowledgeStore, KnowledgeInput } from '../knowledge/store.js';
 import type { PeopleStore, PersonInput } from '../people/store.js';
@@ -237,10 +238,91 @@ const EXTRA_RECORDS: RecordInput[] = [
   { category: 'ip', title: 'Simulation software licenses', summary: 'Per-seat simulation licenses; renew annually.', owner: 'controller', status: 'active', dueDate: '2026-10-31', tags: ['license'] },
 ];
 
-const ALL_DECISIONS = [...DECISIONS, ...EXTRA_DECISIONS];
-const ALL_KNOWLEDGE = [...KNOWLEDGE, ...EXTRA_KNOWLEDGE];
-const ALL_PEOPLE = [...PEOPLE, ...EXTRA_PEOPLE];
-const ALL_RECORDS = [...RECORDS, ...EXTRA_RECORDS];
+// ── Generated wave (tops every category up past 100) ────────
+const DOMAIN_OWNER: Record<Domain, { role: string; name: string }> = {
+  hiring: { role: 'head-of-people', name: 'Sofia Reinhardt' },
+  sales: { role: 'head-of-sales', name: 'Priya Nair' },
+  product: { role: 'head-of-product', name: 'Lena Vasquez' },
+  finance: { role: 'cfo', name: 'Henrik Bauer' },
+  ops: { role: 'head-of-ops', name: 'Tomás Herrera' },
+};
+const GEN_CONTEXT: Record<Domain, string> = {
+  hiring: 'Part of building a durable, scalable team.',
+  sales: 'Part of tightening go-to-market and protecting margin.',
+  product: 'Part of standardizing and hardening the product platform.',
+  finance: 'Part of strengthening financial discipline and reporting.',
+  ops: 'Part of improving delivery quality and reliability.',
+};
+const GEN_DEC: Record<Domain, string[]> = {
+  hiring: ['Define competency rubrics for every role', 'Run anonymized CV screening for first-round', 'Offer relocation support for senior hires', 'Set a 30-day ramp plan for every new hire', 'Adopt pair-interviewing for engineering roles', 'Publish internal salary bands', 'Introduce a sabbatical policy after five years', 'Hire an apprentice controls technician each year', 'Require a take-home exercise for product managers', 'Set diversity targets for the hiring funnel', 'Create a mentorship program for juniors', 'Adopt skills-based assessments over pedigree', 'Pilot a four-day workweek for operations', 'Establish an internal mobility policy', 'Run exit interviews and publish themes', 'Cap interview loops at four conversations'],
+  sales: ['Adopt a mutual action plan for every deal', 'Qualify enterprise deals with MEDDICC', 'Set a 30% win-rate floor before discounting', 'Introduce annual maintenance contracts', 'Build a partner program for integrators', 'Standardize a demo environment for prospects', 'Require security questionnaires up front', 'Offer pilot installations for new logos', 'Set regional quotas for DACH and Nordics', 'Adopt usage-based pricing for monitoring', 'Create a win/loss review ritual', 'Tier customers into A/B/C service levels', 'Launch a customer referral incentive', 'Publish transparent list pricing online', 'Add an expansion playbook for accounts', 'Limit custom scope to 10% of any build'],
+  product: ['Adopt a quarterly roadmap review', 'Standardize on one safety-PLC vendor', 'Add multilingual HMI support', 'Ship a self-service diagnostics dashboard', 'Introduce a hardware abstraction layer', 'Adopt semantic versioning for firmware', 'Build an offline simulation sandbox', 'Standardize cabling and panel layouts', 'Add energy monitoring to every cell', 'Create a reference architecture for F&B lines', 'Adopt automated regression tests for logic', 'Ship a mobile app for line operators', 'Introduce a parts-obsolescence review', 'Standardize on stainless for washdown zones', 'Add role-based access control to the HMI', 'Build a digital-twin library per cell type'],
+  finance: ['Adopt activity-based costing for builds', 'Set a 15% EBITDA target', 'Introduce a project-margin dashboard', 'Require a business case for every capex', 'Adopt three-statement modeling', 'Set an inventory-turns target of six', 'Introduce milestone revenue recognition', 'Establish a bad-debt reserve policy', 'Adopt zero-based budgeting for overhead', 'Set a customer-acquisition-cost ceiling', 'Introduce quarterly board financial packs', 'Adopt a 13-week cash-flow forecast', 'Set a debtor-days alert at 60 days', 'Capitalize eligible R&D', 'Introduce expense-approval tiers', 'Adopt IFRS 15 for service contracts'],
+  ops: ['Adopt 5S across the assembly floor', 'Introduce daily standups per build cell', 'Set an on-time-delivery target of 95%', 'Adopt kanban for spare-parts inventory', 'Introduce root-cause analysis for defects', 'Standardize commissioning checklists', 'Adopt a preventive-maintenance schedule', 'Set a safety-incident target of zero', 'Introduce a change-management process', 'Adopt barcode tracking for components', 'Run monthly business-continuity drills', 'Standardize shipping and crating', 'Introduce a vendor onboarding checklist', 'Set a first-pass-yield target of 90%', 'Adopt ISO 9001 quality processes', 'Introduce a lessons-learned database'],
+};
+function genDecisions(): DecisionInput[] {
+  const out: DecisionInput[] = [];
+  let i = 0;
+  for (const domain of DOMAINS) {
+    const o = DOMAIN_OWNER[domain];
+    for (const title of GEN_DEC[domain]) {
+      const m = String((i % 12) + 1).padStart(2, '0');
+      const d = String((i % 27) + 1).padStart(2, '0');
+      out.push({ domain, date: `2024-${m}-${d}`, title, decision: `${title}.`, context: GEN_CONTEXT[domain], owner: { role: o.role, name: o.name } });
+      i++;
+    }
+  }
+  return out;
+}
+
+const GEN_KN_TOPICS: string[] = ['Overall equipment effectiveness (OEE)', 'Takt time fundamentals', 'SMED quick changeovers', 'Statistical process control', 'Theory of constraints', 'Kaizen events', 'Andon systems', 'Poka-yoke error proofing', 'Value-stream mapping', 'Total productive maintenance', 'Just-in-time inventory', 'Heijunka leveling', 'Gemba walks', 'A3 problem solving', 'Servo motion tuning', 'PID control basics', 'Machine vision inspection', 'Robotics path planning', 'PLC programming standards', 'HMI design patterns', 'Edge computing for OT', 'Time-series databases', 'MQTT for telemetry', 'Unit economics for hardware', 'Gross-margin bridges', 'Cohort revenue analysis', 'Cash-conversion cycle', 'Scenario planning', 'Bottoms-up forecasting', 'Channel partnerships', 'Account-based marketing', 'Discovery question frameworks', 'Negotiation tactics', 'Customer success playbooks', 'Churn early-warning signals', 'Pricing power', 'Competitive moats', 'Org design for scale-ups', 'Performance management', 'Compensation design', 'Remote onboarding', 'Knowledge management', 'Decision journals', 'Pre-mortems', 'Second-order thinking', 'Risk-adjusted returns', 'Vendor risk management', 'Business continuity planning', 'Incident postmortems', 'Data-room preparation', 'Quality of earnings', 'Working-capital adjustments', 'Earn-out structures', 'Integration playbooks', 'Founder transitions', 'Retention bonuses', 'IP assignment hygiene', 'GDPR for industrial data', 'Cyber-physical security', 'Local-first architecture'];
+function genKnowledge(): KnowledgeInput[] {
+  const types: KnowledgeInput['type'][] = ['article', 'note', 'post', 'video'];
+  const tagPool = ['ops', 'finance', 'sales', 'product', 'people', 'ai', 'm-and-a'];
+  return GEN_KN_TOPICS.map((title, i) => ({ title, source: 'manual', type: types[i % types.length]!, summary: `A primer on ${title.toLowerCase()} for the NorthPeak team.`, tags: [tagPool[i % tagPool.length]!] }));
+}
+
+const FIRST = ['Anna', 'Lukas', 'Maria', 'Jan', 'Elena', 'David', 'Sara', 'Paul', 'Nina', 'Erik', 'Julia', 'Marco', 'Eva', 'Felix', 'Laura', 'Tobias', 'Clara', 'Maxim', 'Lea', 'Noah', 'Mira', 'Leon', 'Emma', 'Bjorn', 'Lily', 'Samir', 'Ada', 'Ivan', 'Olga', 'Hugo', 'Rosa', 'Karl'];
+const LAST = ['Berger', 'Fischer', 'Keller', 'Wagner', 'Schubert', 'Moretti', 'Costa', 'Novak', 'Lindqvist', 'Jensen'];
+const GEN_ROLES = ['controls-engineer', 'mechanical-engineer', 'project-manager', 'service-technician', 'account-executive', 'software-engineer', 'quality-engineer', 'data-engineer', 'procurement-manager', 'sales-engineer', 'people-ops', 'fp&a-analyst'];
+const GEN_CITIES = ['Stuttgart, DE', 'Berlin, DE', 'Munich, DE', 'Milan, IT', 'Barcelona, ES', 'Amsterdam, NL', 'Stockholm, SE', 'Paris, FR', 'Vienna, AT', 'Copenhagen, DK'];
+const GEN_SKILLS = ['plc', 'cad', 'project-management', 'commissioning', 'sales', 'typescript', 'quality', 'python', 'procurement', 'pre-sales', 'people-ops', 'fp&a'];
+function genPeople(): PersonInput[] {
+  const out: PersonInput[] = [];
+  for (let i = 0; i < 70; i++) {
+    const name = `${FIRST[i % FIRST.length]} ${LAST[Math.floor(i / FIRST.length) % LAST.length]}`;
+    const role = GEN_ROLES[i % GEN_ROLES.length]!;
+    out.push({ name, role, kind: 'employee', summary: `${role.replace(/-/g, ' ')} at NorthPeak Robotics.`, skills: [GEN_SKILLS[i % GEN_SKILLS.length]!], location: GEN_CITIES[i % GEN_CITIES.length] });
+  }
+  return out;
+}
+
+const GEN_COMPANIES = ['Sunrise Cereals', 'Verde Organics', 'Coastal Seafoods', 'Alpenmilch', 'Golden Grain Mills', 'Fresca Beverages', 'Nordfisk', 'Bella Pasta Co', 'Pure Harvest', 'Crisp Valley', 'Lago Dairy', 'Borealis Brewing', 'Sole Mio Foods', 'Frostline Frozen', 'Maple & Oak', 'Terra Snacks', 'Aqua Pura', 'Hansa Bakeries', 'Olivar Foods', 'Vital Juices', 'Stein Confectionery', 'Riviera Canning', 'Polar Foods', 'Estate Wines', 'Garden Fresh', 'Meridian Meats', 'Saffron Spices', 'Brava Coffee', 'Nimbus Waters', 'Heritage Cheese', 'Sol Y Mar', 'Tundra Bakery', 'Lumen Dairy', 'Capri Foods', 'Drift Beverages', 'Edelweiss Foods', 'Marea Seafood', 'Prairie Mills', 'Vesta Foods', 'Lyra Snacks'];
+const GEN_RISKS = ['Lead-time volatility on long-lead parts', 'Talent gap in machine vision', 'Energy-price exposure', 'Customer payment delays', 'Obsolescence of legacy components', 'Reliance on a single freight partner', 'Quality drift on a new supplier', 'Knowledge loss on bus-factor roles', 'Scope creep on fixed-price builds', 'Downtime during platform migration', 'Regulatory change in food safety', 'Warranty cost on early installs', 'Data privacy in remote monitoring', 'Currency risk on US sales', 'Capacity crunch in peak season', 'Cyber risk on connected cells'];
+const GEN_IP = ['Vision-inspection algorithm (trade secret)', 'Cell-controller firmware (owned)', 'Brand style guide (copyright)', 'Fixturing CAD library (owned)', 'Monitoring dashboard UI (copyright)', 'Safety-architecture template (owned)', 'Commissioning toolkit (owned)', 'Training materials (copyright)', 'API specification (owned)', 'Test-bench designs (owned)', 'Domain portfolio (owned)', 'Robot-calibration method (trade secret)', 'Recipe-management module (owned)', 'Telemetry schema (owned)', 'Installation manuals (copyright)', 'Partner integration kit (owned)'];
+function genRecords(): RecordInput[] {
+  const out: RecordInput[] = [];
+  GEN_COMPANIES.forEach((title, i) => {
+    out.push({ category: 'customer', title, summary: `${i % 3 === 0 ? 'Service + monitoring account' : 'Build customer'} in the F&B segment.`, owner: 'head-of-sales', status: i % 5 === 0 ? 'at-risk' : 'active', amount: 80000 + (i % 20) * 15000, currency: '€', recurring: i % 2 === 0, dueDate: `2026-${String((i % 12) + 1).padStart(2, '0')}-15`, tags: ['f&b'] });
+  });
+  const metrics = ['Gross margin', 'EBITDA margin', 'Recurring revenue', 'NRR', 'Backlog', 'Utilization'];
+  const periods = ['Q1 2024', 'Q2 2024', 'Q3 2024', 'Q4 2024'];
+  metrics.forEach((metric, mi) => periods.forEach((period, pi) => {
+    out.push({ category: 'financial', title: `${metric} — ${period}`, summary: `${metric} for ${period}.`, metric, period, amount: 10 + ((mi * 4 + pi) % 90), status: 'on-track' });
+  }));
+  GEN_RISKS.forEach((title, i) => {
+    out.push({ category: 'risk', title, summary: `${title}.`, owner: 'head-of-ops', severity: (['low', 'medium', 'high'] as const)[i % 3], mitigation: 'Tracked on the risk register with an owner and review date.', status: 'monitoring' });
+  });
+  GEN_IP.forEach((title, i) => {
+    out.push({ category: 'ip', title, summary: `${title}.`, owner: 'cfo', status: i % 2 === 0 ? 'owned' : 'registered', tags: ['ip'] });
+  });
+  return out;
+}
+
+const ALL_DECISIONS = [...DECISIONS, ...EXTRA_DECISIONS, ...genDecisions()];
+const ALL_KNOWLEDGE = [...KNOWLEDGE, ...EXTRA_KNOWLEDGE, ...genKnowledge()];
+const ALL_PEOPLE = [...PEOPLE, ...EXTRA_PEOPLE, ...genPeople()];
+const ALL_RECORDS = [...RECORDS, ...EXTRA_RECORDS, ...genRecords()];
 
 export interface DemoSeedResult {
   decisions: number;

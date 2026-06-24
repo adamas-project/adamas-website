@@ -29,15 +29,15 @@ describe('demo seeder', () => {
     const deps = await open(v.root);
 
     const r = await seedDemo(v.root, deps);
-    expect(r.decisions).toBeGreaterThanOrEqual(40);
-    expect(r.knowledge).toBeGreaterThanOrEqual(40);
-    expect(r.people).toBeGreaterThanOrEqual(40);
-    expect(r.records).toBeGreaterThanOrEqual(40);
+    expect(r.decisions).toBeGreaterThanOrEqual(100);
+    expect(r.knowledge).toBeGreaterThanOrEqual(100);
+    expect(r.people).toBeGreaterThanOrEqual(100);
+    expect(r.records).toBeGreaterThanOrEqual(100);
 
-    expect(deps.ledger.count).toBeGreaterThanOrEqual(40);
-    expect(deps.knowledge.count).toBeGreaterThanOrEqual(40);
-    expect(deps.people.count).toBeGreaterThanOrEqual(40);
-    expect(deps.records.count).toBeGreaterThanOrEqual(40);
+    expect(deps.ledger.count).toBeGreaterThanOrEqual(100);
+    expect(deps.knowledge.count).toBeGreaterThanOrEqual(100);
+    expect(deps.people.count).toBeGreaterThanOrEqual(100);
+    expect(deps.records.count).toBeGreaterThanOrEqual(100);
 
     // All four record categories are represented.
     expect(deps.records.categories().sort()).toEqual(['customer', 'financial', 'ip', 'risk']);
