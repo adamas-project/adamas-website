@@ -99,15 +99,15 @@ export function KnowledgeView() {
           </select>
         </div>
 
-        <div className="list">
+        {entries.length === 0 && <p className="muted">{t('No knowledge yet. Add a link or some text above.')}</p>}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {entries.map((e) => (
             <button key={e.id} className={`card ${selected?.id === e.id ? 'selected' : ''}`} onClick={() => setSelected(e)}>
               <div className="id">{e.id} · {e.type} · {e.date}</div>
               <div className="title">{e.title}</div>
-              {e.tags?.length ? <div className="pill-row" style={{ marginTop: 4 }}>{e.tags.slice(0, 4).map((t: string) => <span key={t} className="tag">{t}</span>)}</div> : null}
+              {e.tags?.length ? <div className="pill-row" style={{ marginTop: 4 }}>{e.tags.slice(0, 4).map((tg: string) => <span key={tg} className="tag">{tg}</span>)}</div> : null}
             </button>
           ))}
-          {entries.length === 0 && <p className="muted">{t('No knowledge yet. Add a link or some text above.')}</p>}
         </div>
       </div>
 
