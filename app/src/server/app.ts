@@ -15,6 +15,7 @@ import { registerConnectorRoutes } from './routes/connectors.js';
 import { registerKnowledgeRoutes } from './routes/knowledge.js';
 import { registerPeopleRoutes } from './routes/people.js';
 import { registerRecordRoutes } from './routes/records.js';
+import { registerDemoRoutes } from './routes/demo.js';
 import { registerObsidianRoutes } from './routes/obsidian.js';
 
 export function buildApp(ctx: AppContext): FastifyInstance {
@@ -54,6 +55,7 @@ export function buildApp(ctx: AppContext): FastifyInstance {
   registerKnowledgeRoutes(app, ctx);
   registerPeopleRoutes(app, ctx);
   registerRecordRoutes(app, ctx);
+  registerDemoRoutes(app, ctx);
   registerObsidianRoutes(app, ctx);
 
   // Stop background services cleanly on shutdown.
