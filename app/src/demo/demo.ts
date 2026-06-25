@@ -3,6 +3,7 @@ import type { Ledger, DecisionInput } from '../ledger/ledger.js';
 import type { KnowledgeStore, KnowledgeInput } from '../knowledge/store.js';
 import type { PeopleStore, PersonInput } from '../people/store.js';
 import type { RecordStore, RecordInput } from '../records/store.js';
+import type { GlossaryStore, GlossaryInput } from '../glossary/store.js';
 
 // Demo data — one coherent fictional company ("NorthPeak Robotics", a mid-market
 // industrial-automation scale-up preparing for M&A) so a client demo shows a
@@ -126,7 +127,62 @@ export interface DemoSeedDeps {
   knowledge: KnowledgeStore;
   people: PeopleStore;
   records: RecordStore;
+  glossary: GlossaryStore;
 }
+
+// Glossary — company/industry terms (handbook & onboarding source).
+const GLOSSARY: GlossaryInput[] = (
+  [
+    ['FAT', 'Factory Acceptance Test — validating a cell at our facility before shipment.', 'ops', 'Factory Acceptance Test'],
+    ['SAT', 'Site Acceptance Test — validating a cell at the customer site after install.', 'ops', 'Site Acceptance Test'],
+    ['PLC', 'Programmable Logic Controller — the industrial computer that runs a cell.', 'product', 'Programmable Logic Controller'],
+    ['HMI', 'Human-Machine Interface — the operator screen on a cell.', 'product', 'Human-Machine Interface'],
+    ['OEE', 'Overall Equipment Effectiveness — availability × performance × quality.', 'ops', 'Overall Equipment Effectiveness'],
+    ['Takt time', 'The pace of production needed to meet customer demand.', 'ops', ''],
+    ['ICP', 'Ideal Customer Profile — the segment we focus sales on (mid-market F&B).', 'sales', 'Ideal Customer Profile'],
+    ['ARR', 'Annual Recurring Revenue — yearly value of recurring contracts.', 'finance', 'Annual Recurring Revenue'],
+    ['NRR', 'Net Revenue Retention — expansion minus churn on existing accounts.', 'finance', 'Net Revenue Retention'],
+    ['DSO', 'Days Sales Outstanding — average days to collect a receivable.', 'finance', 'Days Sales Outstanding'],
+    ['EBITDA', 'Earnings Before Interest, Taxes, Depreciation and Amortization.', 'finance', ''],
+    ['MEDDICC', 'An enterprise sales qualification framework.', 'sales', ''],
+    ['CMMS', 'Computerized Maintenance Management System.', 'ops', ''],
+    ['OPC-UA', 'A vendor-neutral standard for machine-to-system data exchange.', 'product', ''],
+    ['ISO 13849', 'Machinery safety standard for control-system performance levels.', 'product', ''],
+    ['CE marking', 'EU conformity marking required to sell machinery in the EEA.', 'product', ''],
+    ['WIP', 'Work In Progress — the number of builds running concurrently.', 'ops', 'Work In Progress'],
+    ['Lead time', 'Time from order to delivery of a cell.', 'ops', ''],
+    ['Gross margin', 'Revenue minus cost of goods sold, as a percentage.', 'finance', ''],
+    ['Dual sourcing', 'Qualifying two vendors for a critical component to de-risk supply.', 'ops', ''],
+    ['Digital twin', 'A simulation model of a cell used to validate logic before the floor.', 'product', ''],
+    ['Servo drive', 'The amplifier that controls a servo motor’s motion.', 'product', ''],
+    ['Commissioning', 'Bringing a cell into full working order on site.', 'ops', ''],
+    ['Runway', 'Months of operating cash before reserves run out.', 'finance', ''],
+    ['Backlog', 'Signed orders not yet recognized as revenue.', 'finance', ''],
+    ['Churn', 'The rate at which customers do not renew.', 'sales', ''],
+    ['Discovery phase', 'A paid scoping engagement before a build quote.', 'sales', ''],
+    ['Milestone billing', 'Invoicing in stages tied to project milestones (50/40/10).', 'finance', ''],
+    ['Bus factor', 'How many people must leave before knowledge is lost — a key-person risk.', 'people', 'key-person risk'],
+    ['Data room', 'The organized set of documents a buyer reviews in diligence.', 'm-and-a', ''],
+    ['Quality of earnings', 'A diligence analysis of how sustainable reported earnings are.', 'm-and-a', 'QoE'],
+    ['Earn-out', 'Deal consideration paid later, contingent on performance.', 'm-and-a', ''],
+    ['SLA', 'Service Level Agreement — guaranteed response/uptime terms.', 'sales', 'Service Level Agreement'],
+    ['Preventive maintenance', 'Scheduled maintenance to prevent failures.', 'ops', ''],
+    ['Root-cause analysis', 'Structured investigation to find the underlying cause of a defect.', 'ops', 'RCA'],
+    ['First-pass yield', 'Share of units that pass without rework.', 'ops', ''],
+    ['Capex', 'Capital expenditure — spend on long-lived assets.', 'finance', ''],
+    ['Opex', 'Operating expenditure — day-to-day running costs.', 'finance', ''],
+    ['Utilization', 'Share of engineering time that is billable.', 'finance', ''],
+    ['Pipeline coverage', 'Pipeline value relative to the quota for a period.', 'sales', ''],
+    ['Telemetry', 'Machine data streamed from cells for monitoring.', 'product', ''],
+    ['Predictive maintenance', 'Using telemetry to predict failures before they happen.', 'product', ''],
+    ['Modular fixturing', 'A reusable fixture standard shared across cells.', 'product', ''],
+    ['Value-based pricing', 'Pricing on the customer’s outcome, not our hours.', 'sales', ''],
+    ['Margin floor', 'The minimum acceptable gross margin on a deal.', 'finance', ''],
+    ['Onboarding bootcamp', 'A four-day program every new hire completes in week one.', 'people', ''],
+    ['Scorecard hiring', 'Interviewing against a shared competency rubric.', 'people', ''],
+    ['Risk register', 'A living list of risks with owners, mitigations, and status.', 'ops', ''],
+  ] as const
+).map(([term, definition, tag, alias]) => ({ term, definition, tags: [tag], ...(alias ? { aliases: [alias] } : {}) }));
 
 // ── Second wave (doubles the data) ──────────────────────────
 const EXTRA_DECISIONS: DecisionInput[] = [
@@ -329,6 +385,7 @@ export interface DemoSeedResult {
   knowledge: number;
   people: number;
   records: number;
+  glossary: number;
   /** True when nothing new was added (everything already present). */
   noop?: boolean;
 }
@@ -391,6 +448,15 @@ export async function seedDemo(root: string, deps: DemoSeedDeps): Promise<DemoSe
     records++;
   }
 
-  const total = decisions + knowledge + people + records;
-  return { decisions, knowledge, people, records, ...(total === 0 ? { noop: true } : {}) };
+  const gloTerms = new Set(deps.glossary.list().map((g) => g.term.toLowerCase()));
+  let glossary = 0;
+  for (const g of GLOSSARY) {
+    if (gloTerms.has(g.term.toLowerCase())) continue;
+    await deps.glossary.create(g);
+    gloTerms.add(g.term.toLowerCase());
+    glossary++;
+  }
+
+  const total = decisions + knowledge + people + records + glossary;
+  return { decisions, knowledge, people, records, glossary, ...(total === 0 ? { noop: true } : {}) };
 }

@@ -20,6 +20,7 @@ import { ConnectorScheduler } from '../ingestion/scheduler.js';
 import { KnowledgeStore } from '../knowledge/store.js';
 import { PeopleStore } from '../people/store.js';
 import { RecordStore } from '../records/store.js';
+import { GlossaryStore } from '../glossary/store.js';
 import { ObsidianAutoExporter } from '../obsidian/auto.js';
 import { ObsidianInboxWatcher } from '../obsidian/import.js';
 import { vaultPaths } from '../ledger/storage.js';
@@ -51,6 +52,7 @@ export interface AppContext {
   knowledge: KnowledgeStore;
   people: PeopleStore;
   records: RecordStore;
+  glossary: GlossaryStore;
   learning: LearningStore;
   obsidianAuto: ObsidianAutoExporter | null;
   obsidianInbox: ObsidianInboxWatcher | null;
@@ -107,6 +109,7 @@ export async function createContext(root: string): Promise<AppContext> {
   const knowledge = await KnowledgeStore.open(path.join(root, 'knowledge'));
   const people = await PeopleStore.open(path.join(root, 'people'));
   const records = await RecordStore.open(path.join(root, 'records'));
+  const glossary = await GlossaryStore.open(path.join(root, 'glossary'));
 
   // Keep the derived Obsidian data-room vault in sync with every change (opt-out
   // via ADAMAS_OBSIDIAN_AUTO=0). The manual Data Room → Generate still works.
@@ -114,7 +117,7 @@ export async function createContext(root: string): Promise<AppContext> {
   let obsidianInbox: ObsidianInboxWatcher | null = null;
   if (obsidianAutoEnabled()) {
     const obsidianDir = resolveObsidianDir(root);
-    obsidianAuto = new ObsidianAutoExporter({ ledger, knowledge, assets, people, records }, obsidianDir);
+    obsidianAuto = new ObsidianAutoExporter({ ledger, knowledge, assets, people, records, glossary }, obsidianDir);
     obsidianAuto.start();
     // Write-back: import notes dropped into obsidian/_Inbox/ (two-way sync).
     obsidianInbox = new ObsidianInboxWatcher({ knowledge, provider: localProvider }, obsidianDir);
@@ -149,6 +152,7 @@ export async function createContext(root: string): Promise<AppContext> {
     knowledge,
     people,
     records,
+    glossary,
     learning,
     obsidianAuto,
     obsidianInbox,

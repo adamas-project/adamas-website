@@ -250,6 +250,29 @@ export const de: Record<string, string> = {
   'Transcribing…': 'Transkribiere…',
   'Summary (used for extraction)': 'Zusammenfassung (für die Extraktion verwendet)',
 
+  // ── Demo data ─────────────────────────────────────────────
+  'Demo data (for showcases)': 'Demodaten (für Präsentationen)',
+  'Fill every section with a sample company (decisions, knowledge, people, diligence records) to showcase ADAMAS. Safe to run repeatedly — it only adds what is missing.':
+    'Befülle jeden Bereich mit einem Beispielunternehmen (Entscheidungen, Wissen, Personen, Due-Diligence-Datensätze), um ADAMAS zu präsentieren. Mehrfaches Ausführen ist sicher — es fügt nur Fehlendes hinzu.',
+  'Load demo data': 'Demodaten laden',
+  'Loaded demo data:': 'Demodaten geladen:',
+  'All demo data is already loaded.': 'Alle Demodaten sind bereits geladen.',
+
+  // ── Glossary ──────────────────────────────────────────────
+  Entries: 'Einträge',
+  Glossary: 'Glossar',
+  'Your company’s terms, defined in your own words — the source for employee handbooks and new-joiner training.':
+    'Die Begriffe deines Unternehmens, in euren eigenen Worten definiert — die Quelle für Mitarbeiterhandbücher und Einarbeitung.',
+  Term: 'Begriff',
+  'Definition (in your company’s context)': 'Definition (im Kontext deines Unternehmens)',
+  'Aliases (comma-separated)': 'Synonyme (kommagetrennt)',
+  'Add term': 'Begriff hinzufügen',
+  'Search glossary…': 'Glossar durchsuchen…',
+  Terms: 'Begriffe',
+  'No terms yet. Add your first on the left.': 'Noch keine Begriffe. Füge links den ersten hinzu.',
+  'Term and definition are required.': 'Begriff und Definition sind erforderlich.',
+  Saved: 'Gespeichert',
+
   // ── Data Room (readiness + obsidian + records) ────────────
   'A diligence-ready view of the vault: how complete and traceable your decision record is. Higher = lower perceived risk in an M&A / fundraise evaluation.':
     'Eine due-diligence-fähige Sicht auf den Tresor: wie vollständig und nachverfolgbar deine Entscheidungshistorie ist. Höher = geringeres wahrgenommenes Risiko bei einer M&A-/Finanzierungsbewertung.',

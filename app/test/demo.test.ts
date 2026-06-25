@@ -4,6 +4,7 @@ import { Ledger } from '../src/ledger/ledger.js';
 import { KnowledgeStore } from '../src/knowledge/store.js';
 import { PeopleStore } from '../src/people/store.js';
 import { RecordStore } from '../src/records/store.js';
+import { GlossaryStore } from '../src/glossary/store.js';
 import { buildMemoryGraph } from '../src/ledger/graph.js';
 import { seedDemo } from '../src/demo/demo.js';
 import { tempVault } from './helpers.js';
@@ -19,6 +20,7 @@ async function open(root: string) {
     knowledge: await KnowledgeStore.open(path.join(root, 'knowledge')),
     people: await PeopleStore.open(path.join(root, 'people')),
     records: await RecordStore.open(path.join(root, 'records')),
+    glossary: await GlossaryStore.open(path.join(root, 'glossary')),
   };
 }
 
@@ -38,6 +40,7 @@ describe('demo seeder', () => {
     expect(deps.knowledge.count).toBeGreaterThanOrEqual(100);
     expect(deps.people.count).toBeGreaterThanOrEqual(100);
     expect(deps.records.count).toBeGreaterThanOrEqual(100);
+    expect(deps.glossary.count).toBeGreaterThanOrEqual(40);
 
     // All four record categories are represented.
     expect(deps.records.categories().sort()).toEqual(['customer', 'financial', 'ip', 'risk']);

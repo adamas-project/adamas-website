@@ -238,6 +238,21 @@ X/Twitter posts are fetched via the public syndication endpoint, so the actual
 tweet text is captured (not the JS app shell). (No JS rendering otherwise: for
 paywalled or video-only pages, paste the text/transcript.)
 
+### Glossary (handbook & onboarding source)
+
+A second sub-section in the **Knowledge** tab: your company's and industry's terms,
+defined in your own words (with optional aliases/abbreviations and tags). It's the
+single place new joiners and handbooks draw from — stored as portable Markdown +
+JSON under `vault/glossary/` and rendered into the Obsidian data room as an
+alphabetical `Glossary` note. API: `/api/glossary`.
+
+## Demo data (for showcases)
+
+`POST /api/demo` (or **Onboarding & Pricing → Load demo data**) fills every
+section with a coherent sample company (NorthPeak Robotics): 100+ decisions,
+knowledge entries, people, and diligence records, plus a glossary — and refreshes
+the Obsidian vault. Entry-level idempotent: re-running only adds what's missing.
+
 ## People (team / human resources)
 
 The team a buyer underwrites. In the **People** tab add a team member by **name,
