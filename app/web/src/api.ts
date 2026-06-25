@@ -110,6 +110,12 @@ export const api = {
   knowledge: (params: { q?: string; tag?: string; type?: string } = {}) =>
     req<{ entries: any[]; tags: string[]; count: number }>(`/api/knowledge${qs(params)}`),
   knowledgeGet: (id: string) => req<{ entry: any }>(`/api/knowledge/${id}`),
+
+  glossary: (params: { q?: string; tag?: string } = {}) =>
+    req<{ terms: any[]; tags: string[]; count: number }>(`/api/glossary${qs(params)}`),
+  addGlossary: (payload: { term: string; definition: string; aliases?: string[]; tags?: string[]; source?: string }) =>
+    req<{ entry: any }>('/api/glossary', { method: 'POST', body: JSON.stringify(payload) }),
+  deleteGlossary: (id: string) => req(`/api/glossary/${id}`, { method: 'DELETE' }),
   addKnowledge: (payload: { url?: string; text?: string; title?: string; type?: string; tags?: string[] }) =>
     req<{ entry: any }>('/api/knowledge', { method: 'POST', body: JSON.stringify(payload) }),
   deleteKnowledge: (id: string) => req(`/api/knowledge/${id}`, { method: 'DELETE' }),
@@ -142,6 +148,7 @@ export const api = {
   security: () => req<any>('/api/security'),
   backup: (passphrase: string) => req<{ file: string }>('/api/backup', { method: 'POST', body: JSON.stringify({ passphrase }) }),
   pricing: (locale: string) => req<{ pricing: any }>(`/api/pricing?locale=${locale}`),
+  demoSeed: () => req<{ decisions: number; knowledge: number; people: number; records: number; noop?: boolean }>('/api/demo', { method: 'POST', body: '{}' }),
 };
 
 // Domain colors live as CSS tokens; see tokens.ts (domainColor / domainVar).

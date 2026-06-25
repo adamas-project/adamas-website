@@ -6,6 +6,25 @@ export function OnboardingView() {
   const { t, lang } = useLang();
   const [locale, setLocale] = useState('en');
   const [pricing, setPricing] = useState<any | null>(null);
+  const [demoBusy, setDemoBusy] = useState(false);
+  const [demoMsg, setDemoMsg] = useState('');
+
+  async function loadDemo() {
+    setDemoBusy(true);
+    setDemoMsg('');
+    try {
+      const r = await api.demoSeed();
+      setDemoMsg(
+        r.noop
+          ? t('All demo data is already loaded.')
+          : `${t('Loaded demo data:')} ${r.decisions} ${t('decisions')}, ${r.knowledge} ${t('knowledge')}, ${r.people} ${t('people')}, ${r.records} ${t('records')}.`,
+      );
+    } catch (e) {
+      setDemoMsg((e as Error).message);
+    } finally {
+      setDemoBusy(false);
+    }
+  }
 
   // Follow the app language for pricing locale/currency, but allow overriding.
   useEffect(() => {
@@ -65,6 +84,17 @@ export function OnboardingView() {
         ))}
       </div>
       <p className="muted">{pricing.annualNote}</p>
+
+      <div className="section-title">{t('Demo data (for showcases)')}</div>
+      <p className="muted" style={{ fontSize: 13, marginTop: 0 }}>
+        {t('Fill every section with a sample company (decisions, knowledge, people, diligence records) to showcase ADAMAS. Safe to run repeatedly — it only adds what is missing.')}
+      </p>
+      <div className="toolbar" style={{ margin: 0 }}>
+        <button className="primary" onClick={loadDemo} disabled={demoBusy}>
+          {demoBusy ? t('Loading…') : t('Load demo data')}
+        </button>
+        {demoMsg && <span className="muted" style={{ fontSize: 13 }}>{demoMsg}</span>}
+      </div>
     </div>
   );
 }

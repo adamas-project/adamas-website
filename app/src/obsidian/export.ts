@@ -7,6 +7,7 @@ import type { PeopleStore } from '../people/store.js';
 import type { PersonEntry } from '../people/schema.js';
 import type { RecordStore } from '../records/store.js';
 import { RECORD_CATEGORIES, RECORD_CATEGORY_LABEL, type RecordEntry } from '../records/schema.js';
+import type { GlossaryStore } from '../glossary/store.js';
 import type { AssetEngine } from '../assets/engine.js';
 import { atomicWrite } from '../ledger/storage.js';
 import { computeReadiness, type Readiness } from './readiness.js';
@@ -192,10 +193,10 @@ export interface ObsidianExportResult {
 }
 
 export async function buildObsidianVault(
-  deps: { ledger: Ledger; knowledge: KnowledgeStore; assets: AssetEngine; people?: PeopleStore; records?: RecordStore },
+  deps: { ledger: Ledger; knowledge: KnowledgeStore; assets: AssetEngine; people?: PeopleStore; records?: RecordStore; glossary?: GlossaryStore },
   outDir: string,
 ): Promise<ObsidianExportResult> {
-  const { ledger, knowledge, assets, people, records } = deps;
+  const { ledger, knowledge, assets, people, records, glossary } = deps;
   // Regenerate fresh (derived view). Clear the folder's *contents* rather than
   // removing the folder itself: in Docker the output dir is a bind-mount, and
   // rmdir on a mount point fails with EBUSY. Removing children avoids that.
@@ -303,6 +304,18 @@ export async function buildObsidianVault(
   }
   await write(path.join('Data Room', 'Data Room MOC.md'), recMoc.join('\n'));
 
+  // Glossary — company/industry terms (handbook & onboarding source). A single
+  // alphabetical note keeps it easy to read and search in Obsidian.
+  const glossaryTerms = glossary?.list() ?? [];
+  if (glossaryTerms.length) {
+    const gloDoc = [frontmatter({ type: 'glossary', tags: ['glossary', 'handbook'] }), '# Glossary', ''];
+    for (const g of glossaryTerms) {
+      const aka = g.aliases?.length ? ` _(${g.aliases.join(', ')})_` : '';
+      gloDoc.push(`### ${g.term}${aka}`, '', g.definition, g.tags?.length ? `\nTags: ${g.tags.join(', ')}` : '', '');
+    }
+    await write(path.join('Glossary', 'Glossary.md'), gloDoc.join('\n'));
+  }
+
   // Readiness scorecard + top-level index/MOC (the cockpit).
   await write('Valuation Readiness.md', readinessNote(readiness));
   const index = [
@@ -318,6 +331,7 @@ export async function buildObsidianVault(
     '- [[Diligence MOC|Diligence]] — diligence binder, founder-continuity dossier, risk register, data-room index',
     '- [[Data Room MOC|Data Room records]] — customers, financials, risk, IP & assets',
     '- [[Knowledge MOC|Knowledge]] — the living knowledge base',
+    ...(glossaryTerms.length ? ['- [[Glossary]] — company & industry terms (handbook / onboarding source)'] : []),
     '- [[People|Company / People]] — team profiles (CVs) + roles across decisions',
     '',
     '_This is a read-only view derived from ADAMAS. Edit decisions in ADAMAS (governed, append-only); use the Knowledge base for the living brain._',

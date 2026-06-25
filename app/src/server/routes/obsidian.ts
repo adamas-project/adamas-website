@@ -22,7 +22,7 @@ export function registerObsidianRoutes(app: FastifyInstance, ctx: AppContext): v
       // auto-refresh are serialized and never clobber each other mid-write.
       const result = ctx.obsidianAuto
         ? await ctx.obsidianAuto.runNow()
-        : await buildObsidianVault({ ledger: ctx.ledger, knowledge: ctx.knowledge, assets: ctx.assets, people: ctx.people, records: ctx.records }, dir);
+        : await buildObsidianVault({ ledger: ctx.ledger, knowledge: ctx.knowledge, assets: ctx.assets, people: ctx.people, records: ctx.records, glossary: ctx.glossary }, dir);
       return result;
     } catch (err) {
       return reply.code(500).send({ error: (err as Error).message });
