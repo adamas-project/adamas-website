@@ -173,9 +173,16 @@ function RecordsManager({ onChanged }: { onChanged: () => void }) {
   }
 
   async function remove(id: string) {
-    await api.deleteRecord(id);
-    await load();
-    onChanged();
+    const snapshot = records;
+    setRecords((prev) => prev.filter((r) => r.id !== id));
+    try {
+      await api.deleteRecord(id);
+      await load();
+      onChanged();
+    } catch (e) {
+      setRecords(snapshot);
+      setMsg((e as Error).message);
+    }
   }
 
   return (

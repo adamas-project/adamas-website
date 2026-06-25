@@ -62,8 +62,17 @@ export function PeopleView() {
   }
 
   async function remove(id: string) {
-    await api.deletePerson(id);
-    await load();
+    const snapshot = people;
+    // Optimistic: drop it from the list immediately for instant feedback.
+    setPeople((prev) => prev.filter((p) => p.id !== id));
+    setMsg('');
+    try {
+      await api.deletePerson(id);
+      await load();
+    } catch (e) {
+      setPeople(snapshot); // restore on failure
+      setMsg(`${t('Could not remove')}: ${(e as Error).message}`);
+    }
   }
 
   return (
