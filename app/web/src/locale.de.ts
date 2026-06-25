@@ -272,6 +272,7 @@ export const de: Record<string, string> = {
   'No terms yet. Add your first on the left.': 'Noch keine Begriffe. Füge links den ersten hinzu.',
   'Term and definition are required.': 'Begriff und Definition sind erforderlich.',
   Saved: 'Gespeichert',
+  'Could not remove': 'Konnte nicht entfernen',
 
   // ── Data Room (readiness + obsidian + records) ────────────
   'A diligence-ready view of the vault: how complete and traceable your decision record is. Higher = lower perceived risk in an M&A / fundraise evaluation.':

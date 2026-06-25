@@ -220,8 +220,15 @@ function GlossaryPanel() {
   }
 
   async function remove(id: string) {
-    await api.deleteGlossary(id);
-    await load();
+    const snapshot = terms;
+    setTerms((prev) => prev.filter((g) => g.id !== id));
+    try {
+      await api.deleteGlossary(id);
+      await load();
+    } catch (e) {
+      setTerms(snapshot);
+      setMsg((e as Error).message);
+    }
   }
 
   return (
