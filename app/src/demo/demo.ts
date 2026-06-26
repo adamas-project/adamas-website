@@ -316,36 +316,73 @@ const GEN_DEC: Record<Domain, string[]> = {
   finance: ['Adopt activity-based costing for builds', 'Set a 15% EBITDA target', 'Introduce a project-margin dashboard', 'Require a business case for every capex', 'Adopt three-statement modeling', 'Set an inventory-turns target of six', 'Introduce milestone revenue recognition', 'Establish a bad-debt reserve policy', 'Adopt zero-based budgeting for overhead', 'Set a customer-acquisition-cost ceiling', 'Introduce quarterly board financial packs', 'Adopt a 13-week cash-flow forecast', 'Set a debtor-days alert at 60 days', 'Capitalize eligible R&D', 'Introduce expense-approval tiers', 'Adopt IFRS 15 for service contracts'],
   ops: ['Adopt 5S across the assembly floor', 'Introduce daily standups per build cell', 'Set an on-time-delivery target of 95%', 'Adopt kanban for spare-parts inventory', 'Introduce root-cause analysis for defects', 'Standardize commissioning checklists', 'Adopt a preventive-maintenance schedule', 'Set a safety-incident target of zero', 'Introduce a change-management process', 'Adopt barcode tracking for components', 'Run monthly business-continuity drills', 'Standardize shipping and crating', 'Introduce a vendor onboarding checklist', 'Set a first-pass-yield target of 90%', 'Adopt ISO 9001 quality processes', 'Introduce a lessons-learned database'],
 };
-function genDecisions(): DecisionInput[] {
+// Scope qualifiers — combined with each base action to mint many unique,
+// still-plausible decision titles (action × qualifier × domain).
+const DEC_QUALIFIERS = [
+  'for the Nordics region', 'in the F&B segment', 'across all build cells', 'for new builds',
+  'for service contracts', 'in the Munich plant', 'for key accounts', 'on the packaging line',
+  'for FY2025', 'company-wide', 'for the bakery segment', 'on critical components',
+  'for the DACH market', 'in the pilot phase', 'for the Stuttgart site', 'for FY2026',
+  'on the assembly floor', 'for enterprise deals', 'for the Iberia region', 'as a standard',
+];
+function genDecisions(count: number): DecisionInput[] {
   const out: DecisionInput[] = [];
   let i = 0;
-  for (const domain of DOMAINS) {
-    const o = DOMAIN_OWNER[domain];
-    for (const title of GEN_DEC[domain]) {
-      const m = String((i % 12) + 1).padStart(2, '0');
-      const d = String((i % 27) + 1).padStart(2, '0');
-      out.push({ domain, date: `2024-${m}-${d}`, title, decision: `${title}.`, context: GEN_CONTEXT[domain], owner: { role: o.role, name: o.name } });
-      i++;
+  for (const qualifier of DEC_QUALIFIERS) {
+    for (const domain of DOMAINS) {
+      const o = DOMAIN_OWNER[domain];
+      for (const base of GEN_DEC[domain]) {
+        if (out.length >= count) return out;
+        const title = `${base} ${qualifier}`;
+        const y = 2018 + (i % 8);
+        const m = String((i % 12) + 1).padStart(2, '0');
+        const d = String((i % 27) + 1).padStart(2, '0');
+        out.push({ domain, date: `${y}-${m}-${d}`, title, decision: `${title}.`, context: GEN_CONTEXT[domain], owner: { role: o.role, name: o.name } });
+        i++;
+      }
     }
   }
   return out;
 }
 
 const GEN_KN_TOPICS: string[] = ['Overall equipment effectiveness (OEE)', 'Takt time fundamentals', 'SMED quick changeovers', 'Statistical process control', 'Theory of constraints', 'Kaizen events', 'Andon systems', 'Poka-yoke error proofing', 'Value-stream mapping', 'Total productive maintenance', 'Just-in-time inventory', 'Heijunka leveling', 'Gemba walks', 'A3 problem solving', 'Servo motion tuning', 'PID control basics', 'Machine vision inspection', 'Robotics path planning', 'PLC programming standards', 'HMI design patterns', 'Edge computing for OT', 'Time-series databases', 'MQTT for telemetry', 'Unit economics for hardware', 'Gross-margin bridges', 'Cohort revenue analysis', 'Cash-conversion cycle', 'Scenario planning', 'Bottoms-up forecasting', 'Channel partnerships', 'Account-based marketing', 'Discovery question frameworks', 'Negotiation tactics', 'Customer success playbooks', 'Churn early-warning signals', 'Pricing power', 'Competitive moats', 'Org design for scale-ups', 'Performance management', 'Compensation design', 'Remote onboarding', 'Knowledge management', 'Decision journals', 'Pre-mortems', 'Second-order thinking', 'Risk-adjusted returns', 'Vendor risk management', 'Business continuity planning', 'Incident postmortems', 'Data-room preparation', 'Quality of earnings', 'Working-capital adjustments', 'Earn-out structures', 'Integration playbooks', 'Founder transitions', 'Retention bonuses', 'IP assignment hygiene', 'GDPR for industrial data', 'Cyber-physical security', 'Local-first architecture'];
-function genKnowledge(): KnowledgeInput[] {
+// Framing lenses — each topic × lens is a distinct, retrievable knowledge note.
+const KN_LENSES = [
+  'a primer', 'the fundamentals', 'for operators', 'a checklist', 'common pitfalls',
+  'a case study', 'best practices', 'metrics that matter', 'a 5-minute overview',
+  'lessons learned', 'a decision framework', 'what buyers look for', 'for new joiners',
+  'a deep dive', 'key trade-offs', 'a field guide', 'an implementation guide',
+];
+function genKnowledge(count: number): KnowledgeInput[] {
   const types: KnowledgeInput['type'][] = ['article', 'note', 'post', 'video'];
   const tagPool = ['ops', 'finance', 'sales', 'product', 'people', 'ai', 'm-and-a'];
-  return GEN_KN_TOPICS.map((title, i) => ({ title, source: 'manual', type: types[i % types.length]!, summary: `A primer on ${title.toLowerCase()} for the NorthPeak team.`, tags: [tagPool[i % tagPool.length]!] }));
+  const out: KnowledgeInput[] = [];
+  let i = 0;
+  for (const lens of KN_LENSES) {
+    for (const topic of GEN_KN_TOPICS) {
+      if (out.length >= count) return out;
+      out.push({
+        title: `${topic} — ${lens}`,
+        source: 'manual',
+        type: types[i % types.length]!,
+        summary: `${lens[0]!.toUpperCase()}${lens.slice(1)} on ${topic.toLowerCase()} for the NorthPeak team.`,
+        tags: [tagPool[i % tagPool.length]!],
+      });
+      i++;
+    }
+  }
+  return out;
 }
 
-const FIRST = ['Anna', 'Lukas', 'Maria', 'Jan', 'Elena', 'David', 'Sara', 'Paul', 'Nina', 'Erik', 'Julia', 'Marco', 'Eva', 'Felix', 'Laura', 'Tobias', 'Clara', 'Maxim', 'Lea', 'Noah', 'Mira', 'Leon', 'Emma', 'Bjorn', 'Lily', 'Samir', 'Ada', 'Ivan', 'Olga', 'Hugo', 'Rosa', 'Karl'];
-const LAST = ['Berger', 'Fischer', 'Keller', 'Wagner', 'Schubert', 'Moretti', 'Costa', 'Novak', 'Lindqvist', 'Jensen'];
+const FIRST = ['Anna', 'Lukas', 'Maria', 'Jan', 'Elena', 'David', 'Sara', 'Paul', 'Nina', 'Erik', 'Julia', 'Marco', 'Eva', 'Felix', 'Laura', 'Tobias', 'Clara', 'Maxim', 'Lea', 'Noah', 'Mira', 'Leon', 'Emma', 'Bjorn', 'Lily', 'Samir', 'Ada', 'Ivan', 'Olga', 'Hugo', 'Rosa', 'Karl', 'Sofia', 'Mateo', 'Yara', 'Theo', 'Ines', 'Ravi', 'Nadia', 'Otto'];
+const LAST = ['Berger', 'Fischer', 'Keller', 'Wagner', 'Schubert', 'Moretti', 'Costa', 'Novak', 'Lindqvist', 'Jensen', 'Hofer', 'Vogel', 'Brandt', 'Schaefer', 'Ricci', 'Andersson', 'Kowalski', 'Haas', 'Dubois', 'Romano', 'Nilsson', 'Weber', 'Kovac', 'Lehmann', 'Soares', 'Marin', 'Bauer', 'Horn'];
 const GEN_ROLES = ['controls-engineer', 'mechanical-engineer', 'project-manager', 'service-technician', 'account-executive', 'software-engineer', 'quality-engineer', 'data-engineer', 'procurement-manager', 'sales-engineer', 'people-ops', 'fp&a-analyst'];
 const GEN_CITIES = ['Stuttgart, DE', 'Berlin, DE', 'Munich, DE', 'Milan, IT', 'Barcelona, ES', 'Amsterdam, NL', 'Stockholm, SE', 'Paris, FR', 'Vienna, AT', 'Copenhagen, DK'];
 const GEN_SKILLS = ['plc', 'cad', 'project-management', 'commissioning', 'sales', 'typescript', 'quality', 'python', 'procurement', 'pre-sales', 'people-ops', 'fp&a'];
-function genPeople(): PersonInput[] {
+function genPeople(count: number): PersonInput[] {
   const out: PersonInput[] = [];
-  for (let i = 0; i < 70; i++) {
+  const max = Math.min(count, FIRST.length * LAST.length); // unique name combos only
+  for (let i = 0; i < max; i++) {
     const name = `${FIRST[i % FIRST.length]} ${LAST[Math.floor(i / FIRST.length) % LAST.length]}`;
     const role = GEN_ROLES[i % GEN_ROLES.length]!;
     out.push({ name, role, kind: 'employee', summary: `${role.replace(/-/g, ' ')} at NorthPeak Robotics.`, skills: [GEN_SKILLS[i % GEN_SKILLS.length]!], location: GEN_CITIES[i % GEN_CITIES.length] });
@@ -356,29 +393,145 @@ function genPeople(): PersonInput[] {
 const GEN_COMPANIES = ['Sunrise Cereals', 'Verde Organics', 'Coastal Seafoods', 'Alpenmilch', 'Golden Grain Mills', 'Fresca Beverages', 'Nordfisk', 'Bella Pasta Co', 'Pure Harvest', 'Crisp Valley', 'Lago Dairy', 'Borealis Brewing', 'Sole Mio Foods', 'Frostline Frozen', 'Maple & Oak', 'Terra Snacks', 'Aqua Pura', 'Hansa Bakeries', 'Olivar Foods', 'Vital Juices', 'Stein Confectionery', 'Riviera Canning', 'Polar Foods', 'Estate Wines', 'Garden Fresh', 'Meridian Meats', 'Saffron Spices', 'Brava Coffee', 'Nimbus Waters', 'Heritage Cheese', 'Sol Y Mar', 'Tundra Bakery', 'Lumen Dairy', 'Capri Foods', 'Drift Beverages', 'Edelweiss Foods', 'Marea Seafood', 'Prairie Mills', 'Vesta Foods', 'Lyra Snacks'];
 const GEN_RISKS = ['Lead-time volatility on long-lead parts', 'Talent gap in machine vision', 'Energy-price exposure', 'Customer payment delays', 'Obsolescence of legacy components', 'Reliance on a single freight partner', 'Quality drift on a new supplier', 'Knowledge loss on bus-factor roles', 'Scope creep on fixed-price builds', 'Downtime during platform migration', 'Regulatory change in food safety', 'Warranty cost on early installs', 'Data privacy in remote monitoring', 'Currency risk on US sales', 'Capacity crunch in peak season', 'Cyber risk on connected cells'];
 const GEN_IP = ['Vision-inspection algorithm (trade secret)', 'Cell-controller firmware (owned)', 'Brand style guide (copyright)', 'Fixturing CAD library (owned)', 'Monitoring dashboard UI (copyright)', 'Safety-architecture template (owned)', 'Commissioning toolkit (owned)', 'Training materials (copyright)', 'API specification (owned)', 'Test-bench designs (owned)', 'Domain portfolio (owned)', 'Robot-calibration method (trade secret)', 'Recipe-management module (owned)', 'Telemetry schema (owned)', 'Installation manuals (copyright)', 'Partner integration kit (owned)'];
-function genRecords(): RecordInput[] {
+const REC_REGIONS = ['DACH', 'Nordics', 'Iberia', 'Benelux', 'Italy', 'France', 'UK & Ireland', 'CEE', 'Alpine', 'Baltics', 'Iberia North', 'Adriatic', 'Rhine', 'Bavaria', 'Catalonia', 'Lombardy', 'Scandinavia', 'Central EU', 'Mediterranean', 'Atlantic'];
+const REC_QUALIFIERS = ['build cells', 'service contracts', 'monitoring', 'spare parts', 'commissioning', 'training', 'warranty', 'integration', 'retrofits', 'upgrades', 'pilots', 'expansion'];
+function genRecords(count: number): RecordInput[] {
   const out: RecordInput[] = [];
-  GEN_COMPANIES.forEach((title, i) => {
-    out.push({ category: 'customer', title, summary: `${i % 3 === 0 ? 'Service + monitoring account' : 'Build customer'} in the F&B segment.`, owner: 'head-of-sales', status: i % 5 === 0 ? 'at-risk' : 'active', amount: 80000 + (i % 20) * 15000, currency: '€', recurring: i % 2 === 0, dueDate: `2026-${String((i % 12) + 1).padStart(2, '0')}-15`, tags: ['f&b'] });
-  });
+  // Customers: company × region (~half of the volume).
+  let ci = 0;
+  for (const region of REC_REGIONS) {
+    for (const company of GEN_COMPANIES) {
+      if (out.filter((r) => r.category === 'customer').length >= Math.floor(count * 0.55)) break;
+      out.push({ category: 'customer', title: `${company} — ${region}`, summary: `${ci % 3 === 0 ? 'Service + monitoring account' : 'Build customer'} in the F&B segment (${region}).`, owner: 'head-of-sales', status: ci % 5 === 0 ? 'at-risk' : 'active', amount: 80000 + (ci % 20) * 15000, currency: '€', recurring: ci % 2 === 0, dueDate: `2026-${String((ci % 12) + 1).padStart(2, '0')}-15`, tags: ['f&b'] });
+      ci++;
+    }
+  }
+  // Financial KPIs: metric × quarter × year.
   const metrics = ['Gross margin', 'EBITDA margin', 'Recurring revenue', 'NRR', 'Backlog', 'Utilization'];
-  const periods = ['Q1 2024', 'Q2 2024', 'Q3 2024', 'Q4 2024'];
-  metrics.forEach((metric, mi) => periods.forEach((period, pi) => {
-    out.push({ category: 'financial', title: `${metric} — ${period}`, summary: `${metric} for ${period}.`, metric, period, amount: 10 + ((mi * 4 + pi) % 90), status: 'on-track' });
+  let fi = 0;
+  for (let y = 2018; y <= 2025; y++) {
+    for (const q of ['Q1', 'Q2', 'Q3', 'Q4']) {
+      for (const metric of metrics) {
+        const period = `${q} ${y}`;
+        out.push({ category: 'financial', title: `${metric} — ${period}`, summary: `${metric} for ${period}.`, metric, period, amount: 10 + (fi % 90), status: 'on-track' });
+        fi++;
+      }
+    }
+  }
+  // Risks: base risk × qualifier.
+  GEN_RISKS.forEach((title, i) => REC_QUALIFIERS.forEach((q, j) => {
+    out.push({ category: 'risk', title: `${title} (${q})`, summary: `${title} — ${q}.`, owner: 'head-of-ops', severity: (['low', 'medium', 'high'] as const)[(i + j) % 3], mitigation: 'Tracked on the risk register with an owner and review date.', status: 'monitoring' });
   }));
-  GEN_RISKS.forEach((title, i) => {
-    out.push({ category: 'risk', title, summary: `${title}.`, owner: 'head-of-ops', severity: (['low', 'medium', 'high'] as const)[i % 3], mitigation: 'Tracked on the risk register with an owner and review date.', status: 'monitoring' });
-  });
-  GEN_IP.forEach((title, i) => {
-    out.push({ category: 'ip', title, summary: `${title}.`, owner: 'cfo', status: i % 2 === 0 ? 'owned' : 'registered', tags: ['ip'] });
-  });
+  // IP & assets: base asset × qualifier.
+  GEN_IP.forEach((title, i) => REC_QUALIFIERS.forEach((q, j) => {
+    out.push({ category: 'ip', title: `${title} — ${q}`, summary: `${title} (${q}).`, owner: 'cfo', status: (i + j) % 2 === 0 ? 'owned' : 'registered', tags: ['ip'] });
+  }));
   return out;
 }
 
-const ALL_DECISIONS = [...DECISIONS, ...EXTRA_DECISIONS, ...genDecisions()];
-const ALL_KNOWLEDGE = [...KNOWLEDGE, ...EXTRA_KNOWLEDGE, ...genKnowledge()];
-const ALL_PEOPLE = [...PEOPLE, ...EXTRA_PEOPLE, ...genPeople()];
-const ALL_RECORDS = [...RECORDS, ...EXTRA_RECORDS, ...genRecords()];
+// Additional real business/industrial terms (distinct from the curated GLOSSARY).
+const GLO_REAL: Array<[string, string, string]> = [
+  ['MRR', 'Monthly Recurring Revenue — the monthly value of recurring contracts.', 'finance'],
+  ['LTV', 'Customer Lifetime Value — the total margin a customer generates over the relationship.', 'sales'],
+  ['CAC', 'Customer Acquisition Cost — the sales and marketing cost to win one new customer.', 'sales'],
+  ['COGS', 'Cost of Goods Sold — the direct cost of producing what is sold.', 'finance'],
+  ['KPI', 'Key Performance Indicator — a measurable value tracking progress to a goal.', 'finance'],
+  ['SKU', 'Stock Keeping Unit — a unique identifier for a stockable product or part.', 'ops'],
+  ['RFQ', 'Request for Quote — a customer’s request for pricing on a defined scope.', 'sales'],
+  ['RFP', 'Request for Proposal — a formal solicitation for a solution and bid.', 'sales'],
+  ['BOM', 'Bill of Materials — the full parts list required to build a cell.', 'ops'],
+  ['MTBF', 'Mean Time Between Failures — average uptime between equipment failures.', 'ops'],
+  ['MTTR', 'Mean Time To Repair — average time to restore a failed machine.', 'ops'],
+  ['FMEA', 'Failure Mode and Effects Analysis — a structured method to anticipate failures.', 'ops'],
+  ['SPC', 'Statistical Process Control — using statistics to keep a process in control.', 'ops'],
+  ['SMED', 'Single-Minute Exchange of Die — techniques to slash changeover time.', 'ops'],
+  ['5S', 'A workplace organization method: Sort, Set, Shine, Standardize, Sustain.', 'ops'],
+  ['Kanban', 'A pull-based system that limits work in progress with visual signals.', 'ops'],
+  ['Kaizen', 'Continuous, incremental improvement driven by the people doing the work.', 'ops'],
+  ['Poka-yoke', 'Error-proofing a process so mistakes cannot happen or are caught instantly.', 'ops'],
+  ['ERP', 'Enterprise Resource Planning — software unifying finance, inventory and operations.', 'ops'],
+  ['MES', 'Manufacturing Execution System — software that tracks production on the floor.', 'product'],
+  ['SCADA', 'Supervisory Control and Data Acquisition — system for monitoring industrial processes.', 'product'],
+  ['IIoT', 'Industrial Internet of Things — connected sensors and machines on the plant floor.', 'product'],
+  ['API', 'Application Programming Interface — a defined way for software to talk to software.', 'product'],
+  ['SaaS', 'Software as a Service — software delivered and billed as an ongoing subscription.', 'finance'],
+  ['NDA', 'Non-Disclosure Agreement — a contract protecting confidential information.', 'm-and-a'],
+  ['GDPR', 'EU General Data Protection Regulation governing personal-data handling.', 'ops'],
+  ['SOC 2', 'A security/compliance audit standard for service organizations.', 'ops'],
+  ['ISO 9001', 'The international standard for quality-management systems.', 'ops'],
+  ['EBIT', 'Earnings Before Interest and Taxes — operating profit.', 'finance'],
+  ['Gross profit', 'Revenue minus cost of goods sold, in absolute terms.', 'finance'],
+  ['Working capital', 'Current assets minus current liabilities — cash for day-to-day operations.', 'finance'],
+  ['Cash conversion cycle', 'Days to turn inventory and receivables back into cash.', 'finance'],
+  ['DPO', 'Days Payable Outstanding — average days taken to pay suppliers.', 'finance'],
+  ['Inventory turns', 'How many times inventory is sold and replaced in a period.', 'ops'],
+  ['CAGR', 'Compound Annual Growth Rate — the smoothed annual growth over several years.', 'finance'],
+  ['TAM', 'Total Addressable Market — total demand for a product or service.', 'sales'],
+  ['SAM', 'Serviceable Addressable Market — the part of the TAM you can reach.', 'sales'],
+  ['SOM', 'Serviceable Obtainable Market — the share you can realistically win.', 'sales'],
+  ['ARPU', 'Average Revenue Per User/account — revenue divided by accounts.', 'finance'],
+  ['Payback period', 'Time for a customer’s margin to repay the cost of acquiring them.', 'finance'],
+  ['Burn rate', 'The rate at which a company spends its cash reserves.', 'finance'],
+  ['Quota', 'A salesperson’s revenue target for a period.', 'sales'],
+  ['Win rate', 'The share of qualified opportunities that close won.', 'sales'],
+  ['Sales cycle', 'The average time from first contact to a closed deal.', 'sales'],
+  ['QBR', 'Quarterly Business Review — a recurring account review with a customer.', 'sales'],
+  ['Upsell', 'Selling a higher tier or more of a product to an existing customer.', 'sales'],
+  ['Cross-sell', 'Selling an additional, complementary product to an existing customer.', 'sales'],
+  ['Cohort analysis', 'Tracking groups of customers over time to see behavior and retention.', 'finance'],
+  ['Unit economics', 'The direct revenues and costs of a single unit (a customer or a cell).', 'finance'],
+  ['Due diligence', 'A buyer’s investigation of a business before a transaction.', 'm-and-a'],
+  ['LOI', 'Letter of Intent — a non-binding outline of proposed deal terms.', 'm-and-a'],
+  ['Term sheet', 'A summary of the key terms of an investment or acquisition.', 'm-and-a'],
+  ['Escrow', 'Funds held by a third party to secure post-closing obligations.', 'm-and-a'],
+  ['Cap table', 'A record of who owns what equity, options and convertibles in a company.', 'm-and-a'],
+  ['ESOP', 'Employee Stock Option Plan — equity set aside to incentivize staff.', 'people'],
+  ['Vesting', 'The schedule over which granted equity is actually earned.', 'people'],
+  ['Cliff', 'An initial period before any granted equity begins to vest.', 'people'],
+  ['NPS', 'Net Promoter Score — a measure of customer willingness to recommend.', 'sales'],
+  ['CSAT', 'Customer Satisfaction score — a survey measure of satisfaction.', 'sales'],
+  ['RCA', 'Root-Cause Analysis — finding the underlying cause of a problem.', 'ops'],
+  ['PoC', 'Proof of Concept — a small build to validate feasibility before committing.', 'product'],
+  ['MVP', 'Minimum Viable Product — the smallest version that delivers and tests value.', 'product'],
+  ['Runbook', 'A documented procedure for carrying out a specific operational task.', 'ops'],
+  ['Changeover', 'Switching a line from producing one product to another.', 'ops'],
+  ['Yield', 'The proportion of output that meets quality requirements.', 'ops'],
+  ['Throughput', 'The rate at which a system produces finished output.', 'ops'],
+  ['Backflush', 'Deducting component stock automatically when a build is completed.', 'ops'],
+  ['Hedging', 'Using financial instruments to offset a price or currency risk.', 'finance'],
+  ['Accrual', 'Recognizing revenue or expense when earned/incurred, not when paid.', 'finance'],
+  ['Amortization', 'Spreading the cost of an intangible asset over its useful life.', 'finance'],
+  ['Depreciation', 'Spreading the cost of a physical asset over its useful life.', 'finance'],
+];
+const GLO_AREAS: Array<[string, string]> = [
+  ['Commissioning', 'ops'], ['Maintenance', 'ops'], ['Quality', 'ops'], ['Safety', 'ops'],
+  ['Supplier', 'ops'], ['Logistics', 'ops'], ['Inventory', 'ops'], ['Warranty', 'ops'],
+  ['Telemetry', 'product'], ['Change', 'ops'], ['Escalation', 'ops'], ['Billing', 'finance'],
+  ['Forecasting', 'finance'], ['Pricing', 'finance'], ['Hiring', 'people'], ['Onboarding', 'people'],
+  ['Sales', 'sales'], ['Procurement', 'ops'], ['Security', 'ops'], ['Compliance', 'ops'],
+];
+const GLO_ARTIFACTS = ['Playbook', 'Protocol', 'Standard', 'Checklist', 'Gate', 'Review', 'Cadence', 'Scorecard', 'Runbook', 'SOP', 'Policy', 'Framework', 'Charter', 'Matrix', 'Register', 'Guideline', 'Workflow', 'Template'];
+function genGlossary(count: number): GlossaryInput[] {
+  const out: GlossaryInput[] = GLO_REAL.map(([term, definition, tag]) => ({ term, definition, tags: [tag] }));
+  // Company-specific internal terms (legitimate "single source of company knowledge").
+  for (const artifact of GLO_ARTIFACTS) {
+    for (const [area, tag] of GLO_AREAS) {
+      if (out.length >= count) return out;
+      out.push({
+        term: `${area} ${artifact}`,
+        definition: `NorthPeak’s internal ${artifact.toLowerCase()} governing ${area.toLowerCase()} — part of the company handbook.`,
+        tags: [tag, 'handbook'],
+      });
+    }
+  }
+  return out;
+}
+
+const ALL_DECISIONS = [...DECISIONS, ...EXTRA_DECISIONS, ...genDecisions(1195)];
+const ALL_KNOWLEDGE = [...KNOWLEDGE, ...EXTRA_KNOWLEDGE, ...genKnowledge(995)];
+const ALL_PEOPLE = [...PEOPLE, ...EXTRA_PEOPLE, ...genPeople(1100)];
+const ALL_RECORDS = [...RECORDS, ...EXTRA_RECORDS, ...genRecords(1320)];
+const ALL_GLOSSARY = [...GLOSSARY, ...genGlossary(432)];
 
 export interface DemoSeedResult {
   decisions: number;
@@ -450,7 +603,7 @@ export async function seedDemo(root: string, deps: DemoSeedDeps): Promise<DemoSe
 
   const gloTerms = new Set(deps.glossary.list().map((g) => g.term.toLowerCase()));
   let glossary = 0;
-  for (const g of GLOSSARY) {
+  for (const g of ALL_GLOSSARY) {
     if (gloTerms.has(g.term.toLowerCase())) continue;
     await deps.glossary.create(g);
     gloTerms.add(g.term.toLowerCase());
