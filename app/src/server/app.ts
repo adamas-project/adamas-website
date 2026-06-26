@@ -12,6 +12,7 @@ import { registerAssetRoutes } from './routes/assets.js';
 import { registerBoundaryRoutes } from './routes/boundary.js';
 import { registerPricingRoutes } from './routes/pricing.js';
 import { registerConnectorRoutes } from './routes/connectors.js';
+import { registerGmailRoutes } from './routes/gmail.js';
 import { registerKnowledgeRoutes } from './routes/knowledge.js';
 import { registerPeopleRoutes } from './routes/people.js';
 import { registerRecordRoutes } from './routes/records.js';
@@ -53,6 +54,7 @@ export function buildApp(ctx: AppContext): FastifyInstance {
   registerBoundaryRoutes(app, ctx);
   registerPricingRoutes(app);
   registerConnectorRoutes(app, ctx);
+  registerGmailRoutes(app, ctx);
   registerKnowledgeRoutes(app, ctx);
   registerPeopleRoutes(app, ctx);
   registerRecordRoutes(app, ctx);

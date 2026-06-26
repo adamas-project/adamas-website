@@ -89,6 +89,13 @@ export const api = {
     return res.json() as Promise<{ transcript: string; summarized: boolean; summary: string; added: number; pending: number }>;
   },
 
+  gmailStatus: () => req<{ configured: boolean; isGmail: boolean; user?: string; label: string }>('/api/gmail/status'),
+  gmailLabelDecisions: () =>
+    req<{ scanned: number; labeled: number; titles: string[] }>('/api/gmail/label-decisions', {
+      method: 'POST',
+      body: '{}',
+    }),
+
   connectors: () => req<{ connectors: any[] }>('/api/connectors'),
   pullConnector: (id: string) =>
     req<{ scanned: number; skipped: number; newDocuments: number; added: number; pending: number }>(
