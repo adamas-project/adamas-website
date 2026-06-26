@@ -312,6 +312,17 @@ export const de: Record<string, string> = {
   'emails as decisions.': 'E-Mails als Entscheidungen.',
   Scanned: 'Durchsucht',
   'emails — none looked like decisions.': 'E-Mails — keine sah nach einer Entscheidung aus.',
+  'Test connection': 'Verbindung testen',
+  'Connection failed': 'Verbindung fehlgeschlagen',
+  'Connected ✓': 'Verbunden ✓',
+  messages: 'Nachrichten',
+  'Send test email': 'Test-E-Mail senden',
+  'Adds a sample decision email to your inbox so you can see labeling work.':
+    'Fügt deinem Posteingang eine Beispiel-Entscheidungs-E-Mail hinzu, damit du die Markierung sehen kannst.',
+  'Test email failed': 'Test-E-Mail fehlgeschlagen',
+  'Test email added to your inbox:': 'Test-E-Mail zu deinem Posteingang hinzugefügt:',
+  'Now click “Label decision emails”.': 'Klicke jetzt auf „Entscheidungs-E-Mails markieren“.',
+  'Labeling failed': 'Markierung fehlgeschlagen',
 
   // ── Data Room (readiness + obsidian + records) ────────────
   'A diligence-ready view of the vault: how complete and traceable your decision record is. Higher = lower perceived risk in an M&A / fundraise evaluation.':

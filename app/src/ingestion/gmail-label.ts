@@ -73,6 +73,59 @@ export class GmailLabeler {
     private readonly labelName = 'ADAMAS/Decisions',
   ) {}
 
+  /** Verify the credentials actually work: connect and read the mailbox size. */
+  async testConnection(): Promise<{ ok: true; mailbox: string; messages: number }> {
+    const { host, port, user, pass, tls, mailbox } = this.cfg;
+    const client = new ImapFlow({ host, port, secure: tls, auth: { user, pass }, logger: false });
+    await client.connect();
+    try {
+      const lock = await client.getMailboxLock(mailbox, { readOnly: true });
+      try {
+        const mb = client.mailbox;
+        const messages = mb && typeof mb !== 'boolean' ? mb.exists : 0;
+        return { ok: true, mailbox, messages };
+      } finally {
+        lock.release();
+      }
+    } finally {
+      await client.logout().catch(() => {});
+    }
+  }
+
+  /**
+   * Drop a sample "decision" email into the mailbox (IMAP APPEND) so the operator
+   * can verify labeling end-to-end without an external mail client. Self-test
+   * only — clearly marked, and labeling it never deletes or sends anything.
+   */
+  async appendTestEmail(): Promise<{ subject: string }> {
+    const { host, port, user, pass, tls, mailbox } = this.cfg;
+    const subject = 'Test decision — ADAMAS self-test';
+    const date = new Date().toUTCString();
+    const raw = [
+      `From: ADAMAS Self-Test <${user}>`,
+      `To: ${user}`,
+      `Subject: ${subject}`,
+      `Date: ${date}`,
+      'MIME-Version: 1.0',
+      'Content-Type: text/plain; charset=utf-8',
+      '',
+      'This is an ADAMAS self-test message.',
+      '',
+      'We decided to go with the new supplier for the Nordics region. ' +
+        'Owner: head of ops. Trade-off: slightly higher unit cost for a more reliable lead time.',
+      '',
+      'You can safely delete this email.',
+    ].join('\r\n');
+    const client = new ImapFlow({ host, port, secure: tls, auth: { user, pass }, logger: false });
+    await client.connect();
+    try {
+      await client.append(mailbox, raw, undefined, new Date());
+      return { subject };
+    } finally {
+      await client.logout().catch(() => {});
+    }
+  }
+
   /**
    * Scan recent mail and add the label to threads that look like decisions.
    * Read-mostly: opens the source READ-ONLY (no flags touched) and only COPYs

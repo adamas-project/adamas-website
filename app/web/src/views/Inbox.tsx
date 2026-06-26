@@ -252,22 +252,37 @@ function GmailLabelPanel() {
     api.gmailStatus().then(setStatus).catch(() => setStatus(null));
   }, []);
 
-  async function run() {
+  async function act(label: string, fn: () => Promise<string>) {
     setBusy(true);
     setMsg('');
     try {
-      const r = await api.gmailLabelDecisions();
-      setMsg(
-        r.labeled
-          ? `${t('Labeled')} ${r.labeled} / ${r.scanned} ${t('emails as decisions.')}`
-          : `${t('Scanned')} ${r.scanned} ${t('emails — none looked like decisions.')}`,
-      );
+      setMsg(await fn());
     } catch (e) {
-      setMsg((e as Error).message);
+      setMsg(`${label}: ${(e as Error).message}`);
     } finally {
       setBusy(false);
     }
   }
+
+  const testConnection = () =>
+    act(t('Connection failed'), async () => {
+      const r = await api.gmailTestConnection();
+      return `${t('Connected ✓')} — ${status?.user} (${r.mailbox}, ${r.messages} ${t('messages')})`;
+    });
+
+  const sendTest = () =>
+    act(t('Test email failed'), async () => {
+      const r = await api.gmailTestEmail();
+      return `${t('Test email added to your inbox:')} “${r.subject}”. ${t('Now click “Label decision emails”.')}`;
+    });
+
+  const run = () =>
+    act(t('Labeling failed'), async () => {
+      const r = await api.gmailLabelDecisions();
+      return r.labeled
+        ? `${t('Labeled')} ${r.labeled} / ${r.scanned} ${t('emails as decisions.')}`
+        : `${t('Scanned')} ${r.scanned} ${t('emails — none looked like decisions.')}`;
+    });
 
   if (!status) return null;
 
@@ -278,7 +293,11 @@ function GmailLabelPanel() {
         {t('Scan your Gmail and add an “ADAMAS/Decisions” label to threads that look like business decisions. Only adds a label — never deletes, moves, or sends.')}
       </p>
       {status.configured && status.isGmail ? (
-        <div className="toolbar" style={{ margin: 0 }}>
+        <div className="toolbar" style={{ margin: 0, flexWrap: 'wrap' }}>
+          <button onClick={testConnection} disabled={busy}>{t('Test connection')}</button>
+          <button onClick={sendTest} disabled={busy} title={t('Adds a sample decision email to your inbox so you can see labeling work.')}>
+            {t('Send test email')}
+          </button>
           <button className="primary" onClick={run} disabled={busy}>
             {busy ? t('Labeling…') : t('Label decision emails')}
           </button>
