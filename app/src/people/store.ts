@@ -151,6 +151,19 @@ export class PeopleStore {
     return entry;
   }
 
+  async update(id: string, patch: Partial<PersonInput>): Promise<PersonEntry | undefined> {
+    const v = this.map.get(id);
+    if (!v) return undefined;
+    // Strip undefined so callers can pass a sparse patch; id/date are immutable.
+    const clean = Object.fromEntries(Object.entries(patch).filter(([, val]) => val !== undefined));
+    const updated: PersonEntry = { ...v.entry, ...clean, id: v.entry.id, date: v.entry.date };
+    assertPerson(updated);
+    await atomicWrite(path.join(this.dir, v.fileName), serialize(updated));
+    this.map.set(id, { entry: updated, fileName: v.fileName });
+    this.emit();
+    return updated;
+  }
+
   async remove(id: string): Promise<boolean> {
     const v = this.map.get(id);
     if (!v) return false;

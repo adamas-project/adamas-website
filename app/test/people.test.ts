@@ -147,6 +147,33 @@ describe('people API', () => {
     expect(res.statusCode).toBe(400);
   });
 
+  it('edits a person via PATCH (only provided fields)', async () => {
+    const created = (await app.inject({
+      method: 'POST',
+      url: '/api/people',
+      payload: { name: 'Edit Me', role: 'Intern', kind: 'employee' },
+    })).json().entry;
+
+    const res = await app.inject({
+      method: 'PATCH',
+      url: `/api/people/${created.id}`,
+      payload: { role: 'Senior Engineer', keyPerson: true, skills: ['plc', 'cad'], summary: 'Promoted.' },
+    });
+    expect(res.statusCode).toBe(200);
+    const entry = res.json().entry;
+    expect(entry.name).toBe('Edit Me'); // untouched
+    expect(entry.role).toBe('Senior Engineer'); // changed
+    expect(entry.keyPerson).toBe(true);
+    expect(entry.skills).toEqual(['plc', 'cad']);
+    expect(entry.id).toBe(created.id); // id immutable
+
+    // Empty name is rejected; unknown id is 404.
+    expect((await app.inject({ method: 'PATCH', url: `/api/people/${created.id}`, payload: { name: '  ' } })).statusCode).toBe(400);
+    expect((await app.inject({ method: 'PATCH', url: '/api/people/PER-999', payload: { role: 'x' } })).statusCode).toBe(404);
+
+    await app.inject({ method: 'DELETE', url: `/api/people/${created.id}` });
+  });
+
   it('reports and merges duplicates via the API', async () => {
     await app.inject({ method: 'POST', url: '/api/people', payload: { name: 'Dana Fox', role: 'COO', kind: 'employee' } });
     await app.inject({ method: 'POST', url: '/api/people', payload: { name: 'Dana Fox', role: 'Chief Operating Officer', kind: 'employee' } });
