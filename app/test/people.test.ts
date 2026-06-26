@@ -1,7 +1,8 @@
 import { describe, it, expect, afterEach, beforeAll, afterAll } from 'vitest';
 import path from 'node:path';
 import type { FastifyInstance } from 'fastify';
-import { PeopleStore } from '../src/people/store.js';
+import { PeopleStore, mergePeopleEntries } from '../src/people/store.js';
+import type { PersonEntry } from '../src/people/schema.js';
 import { validatePerson } from '../src/people/schema.js';
 import { computeReadiness } from '../src/obsidian/readiness.js';
 import { KnowledgeStore } from '../src/knowledge/store.js';
@@ -37,6 +38,46 @@ describe('people schema + store', () => {
     expect(reopened.count).toBe(2);
     expect(await reopened.remove('PER-001')).toBe(true);
     expect(reopened.get('PER-001')).toBeUndefined();
+  });
+});
+
+describe('merge duplicate people', () => {
+  it('combines fields, keeps the strongest kind and canonical id (pure)', () => {
+    const a: PersonEntry = { id: 'PER-001', name: 'Massimo Sahin', role: 'Founder', kind: 'founder', date: '2024-01-01', summary: 'Founder and CEO.', skills: ['strategy'], keyPerson: true, location: 'Stuttgart, DE' };
+    const b: PersonEntry = { id: 'PER-115', name: 'Massimo Sahin', role: 'CEO', kind: 'employee', date: '2026-06-01', summary: 'A much longer, hand-written bio that should win on length.', skills: ['operations'], email: 'm@x.example' };
+    const merged = mergePeopleEntries([a, b]);
+    expect(merged.id).toBe('PER-001');
+    expect(merged.kind).toBe('founder'); // founder beats employee
+    expect(merged.summary).toBe(b.summary); // longest wins
+    expect(merged.skills).toEqual(['strategy', 'operations']); // unioned
+    expect(merged.keyPerson).toBe(true); // OR-ed
+    expect(merged.email).toBe('m@x.example'); // filled from b
+    expect(merged.date).toBe('2024-01-01'); // earliest
+  });
+
+  it('merges same-name records in the store and is idempotent', async () => {
+    const v = tempVault();
+    cleanups.push(v.cleanup);
+    const store = await PeopleStore.open(path.join(v.root, 'people'));
+    await store.create({ name: 'Massimo Sahin', role: 'Founder', kind: 'founder', summary: 'Founder.', keyPerson: true });
+    await store.create({ name: 'massimo sahin', role: 'CEO', kind: 'employee', summary: 'Manually added duplicate of the founder.' });
+    await store.create({ name: 'Sam Lee', role: 'Sales', kind: 'employee', summary: 'No duplicate.' });
+    expect(store.count).toBe(3);
+    expect(store.duplicateCount()).toBe(1);
+
+    const r = await store.mergeDuplicates();
+    expect(r.merged).toBe(1);
+    expect(r.names).toContain('Massimo Sahin');
+    expect(store.count).toBe(2);
+    expect(store.duplicateCount()).toBe(0);
+    const massimo = store.list().find((p) => /massimo/i.test(p.name))!;
+    expect(massimo.id).toBe('PER-001'); // canonical id kept
+    expect(massimo.kind).toBe('founder');
+
+    // Persisted + idempotent: reopening and re-merging is a no-op.
+    const reopened = await PeopleStore.open(path.join(v.root, 'people'));
+    expect(reopened.count).toBe(2);
+    expect((await reopened.mergeDuplicates()).merged).toBe(0);
   });
 });
 
@@ -104,5 +145,20 @@ describe('people API', () => {
   it('requires name and role', async () => {
     const res = await app.inject({ method: 'POST', url: '/api/people', payload: { name: 'No Role' } });
     expect(res.statusCode).toBe(400);
+  });
+
+  it('reports and merges duplicates via the API', async () => {
+    await app.inject({ method: 'POST', url: '/api/people', payload: { name: 'Dana Fox', role: 'COO', kind: 'employee' } });
+    await app.inject({ method: 'POST', url: '/api/people', payload: { name: 'Dana Fox', role: 'Chief Operating Officer', kind: 'employee' } });
+    const before = (await app.inject({ method: 'GET', url: '/api/people' })).json();
+    expect(before.duplicates).toBeGreaterThanOrEqual(1);
+
+    const merge = await app.inject({ method: 'POST', url: '/api/people/merge-duplicates' });
+    expect(merge.statusCode).toBe(200);
+    expect(merge.json().merged).toBeGreaterThanOrEqual(1);
+
+    const after = (await app.inject({ method: 'GET', url: '/api/people' })).json();
+    expect(after.duplicates).toBe(0);
+    expect(after.people.filter((p: any) => p.name === 'Dana Fox')).toHaveLength(1);
   });
 });

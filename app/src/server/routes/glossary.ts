@@ -1,12 +1,23 @@
 import type { FastifyInstance } from 'fastify';
 import type { AppContext } from '../context.js';
+import { defineTerm } from '../../glossary/define.js';
 
 export function registerGlossaryRoutes(app: FastifyInstance, ctx: AppContext): void {
-  const { glossary } = ctx;
+  const { glossary, localProvider } = ctx;
 
   app.get('/api/glossary', async (req) => {
     const q = req.query as { q?: string; tag?: string };
     return { terms: glossary.list(q), tags: glossary.allTags(), count: glossary.count };
+  });
+
+  // Draft a definition for a term on-device (no save). The UI pre-fills the form
+  // with this; the user reviews and edits before saving.
+  app.post('/api/glossary/define', async (req, reply) => {
+    const b = (req.body ?? {}) as { term?: string };
+    const term = b.term?.trim();
+    if (!term) return reply.code(400).send({ error: 'term is required.' });
+    const draft = await defineTerm(localProvider, term);
+    return { ...draft, term };
   });
 
   app.post('/api/glossary', async (req, reply) => {

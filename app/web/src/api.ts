@@ -115,13 +115,20 @@ export const api = {
     req<{ terms: any[]; tags: string[]; count: number }>(`/api/glossary${qs(params)}`),
   addGlossary: (payload: { term: string; definition: string; aliases?: string[]; tags?: string[]; source?: string }) =>
     req<{ entry: any }>('/api/glossary', { method: 'POST', body: JSON.stringify(payload) }),
+  defineGlossary: (term: string) =>
+    req<{ term: string; definition: string; aliases: string[]; tags: string[]; source: 'builtin' | 'model' | 'draft' }>(
+      '/api/glossary/define',
+      { method: 'POST', body: JSON.stringify({ term }) },
+    ),
   deleteGlossary: (id: string) => req(`/api/glossary/${id}`, { method: 'DELETE' }),
   addKnowledge: (payload: { url?: string; text?: string; title?: string; type?: string; tags?: string[] }) =>
     req<{ entry: any }>('/api/knowledge', { method: 'POST', body: JSON.stringify(payload) }),
   deleteKnowledge: (id: string) => req(`/api/knowledge/${id}`, { method: 'DELETE' }),
 
   people: (params: { q?: string; kind?: string } = {}) =>
-    req<{ people: any[]; count: number }>(`/api/people${qs(params)}`),
+    req<{ people: any[]; count: number; duplicates: number }>(`/api/people${qs(params)}`),
+  mergePeople: () =>
+    req<{ merged: number; names: string[] }>('/api/people/merge-duplicates', { method: 'POST', body: '{}' }),
   addPerson: (payload: {
     name: string;
     role: string;

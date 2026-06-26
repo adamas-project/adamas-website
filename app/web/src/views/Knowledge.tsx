@@ -176,6 +176,7 @@ function GlossaryPanel() {
   const [newTags, setNewTags] = useState('');
   const [aliases, setAliases] = useState('');
   const [busy, setBusy] = useState(false);
+  const [drafting, setDrafting] = useState(false);
   const [msg, setMsg] = useState('');
 
   async function load() {
@@ -190,6 +191,35 @@ function GlossaryPanel() {
   useEffect(() => {
     void load();
   }, [q, tag]);
+
+  // Draft a definition on-device from the typed term, then let the user edit it.
+  async function draftDefinition() {
+    if (!term.trim()) {
+      setMsg(t('Type a term first, then let ADAMAS draft it.'));
+      return;
+    }
+    setDrafting(true);
+    setMsg('');
+    try {
+      const d = await api.defineGlossary(term.trim());
+      setDefinition(d.definition);
+      const merge = (cur: string, extra: string[]) =>
+        [...new Set([...cur.split(',').map((s) => s.trim()).filter(Boolean), ...extra])].join(', ');
+      if (d.aliases.length) setAliases((cur) => merge(cur, d.aliases));
+      if (d.tags.length) setNewTags((cur) => merge(cur, d.tags));
+      setMsg(
+        d.source === 'draft'
+          ? t('No built-in definition — finish it in your own words (or connect a local model).')
+          : d.source === 'model'
+            ? t('Drafted by your local model — review and edit before saving.')
+            : t('Drafted from the built-in dictionary — review and edit before saving.'),
+      );
+    } catch (e) {
+      setMsg((e as Error).message);
+    } finally {
+      setDrafting(false);
+    }
+  }
 
   async function add() {
     if (!term.trim() || !definition.trim()) {
@@ -239,7 +269,12 @@ function GlossaryPanel() {
           {t('Your company’s terms, defined in your own words — the source for employee handbooks and new-joiner training.')}
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <input placeholder={t('Term')} value={term} onChange={(e) => setTerm(e.target.value)} />
+          <div className="toolbar" style={{ margin: 0 }}>
+            <input style={{ flex: 1 }} placeholder={t('Term')} value={term} onChange={(e) => setTerm(e.target.value)} />
+            <button onClick={draftDefinition} disabled={drafting || !term.trim()} title={t('Draft a definition on-device from the term.')}>
+              {drafting ? t('Drafting…') : `✨ ${t('Draft with AI')}`}
+            </button>
+          </div>
           <textarea rows={3} style={{ resize: 'vertical' }} placeholder={t('Definition (in your company’s context)')} value={definition} onChange={(e) => setDefinition(e.target.value)} />
           <div className="toolbar" style={{ margin: 0 }}>
             <input style={{ flex: 1, minWidth: 140 }} placeholder={t('Aliases (comma-separated)')} value={aliases} onChange={(e) => setAliases(e.target.value)} />

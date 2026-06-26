@@ -12,7 +12,12 @@ export function registerPeopleRoutes(app: FastifyInstance, ctx: AppContext): voi
 
   app.get('/api/people', async (req) => {
     const q = req.query as { q?: string; kind?: string };
-    return { people: people.list(q), count: people.count };
+    return { people: people.list(q), count: people.count, duplicates: people.duplicateCount() };
+  });
+
+  // Merge same-name duplicates into one record each (combining all fields).
+  app.post('/api/people/merge-duplicates', async () => {
+    return people.mergeDuplicates();
   });
 
   app.get('/api/people/:id', async (req, reply) => {
