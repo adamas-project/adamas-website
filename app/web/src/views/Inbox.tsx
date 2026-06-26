@@ -159,6 +159,8 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
         </>
       )}
 
+      <GmailLabelPanel />
+
       <MeetingCapture
         onChanged={() => {
           void load();
@@ -234,6 +236,60 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+// Opt-in: add a Gmail "ADAMAS/Decisions" label to threads that look like
+// decisions. Only adds a label (never deletes/sends), using a Gmail app password.
+function GmailLabelPanel() {
+  const { t } = useLang();
+  const [status, setStatus] = useState<{ configured: boolean; isGmail: boolean; user?: string; label: string } | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState('');
+
+  useEffect(() => {
+    api.gmailStatus().then(setStatus).catch(() => setStatus(null));
+  }, []);
+
+  async function run() {
+    setBusy(true);
+    setMsg('');
+    try {
+      const r = await api.gmailLabelDecisions();
+      setMsg(
+        r.labeled
+          ? `${t('Labeled')} ${r.labeled} / ${r.scanned} ${t('emails as decisions.')}`
+          : `${t('Scanned')} ${r.scanned} ${t('emails — none looked like decisions.')}`,
+      );
+    } catch (e) {
+      setMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (!status) return null;
+
+  return (
+    <div style={{ marginTop: 16 }}>
+      <div className="section-title">{t('Gmail decision labeling')}</div>
+      <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
+        {t('Scan your Gmail and add an “ADAMAS/Decisions” label to threads that look like business decisions. Only adds a label — never deletes, moves, or sends.')}
+      </p>
+      {status.configured && status.isGmail ? (
+        <div className="toolbar" style={{ margin: 0 }}>
+          <button className="primary" onClick={run} disabled={busy}>
+            {busy ? t('Labeling…') : t('Label decision emails')}
+          </button>
+          <span className="muted" style={{ fontSize: 13 }}>{status.user}</span>
+        </div>
+      ) : (
+        <p className="muted" style={{ fontSize: 13 }}>
+          {t('To enable, set ADAMAS_IMAP_HOST=imap.gmail.com, ADAMAS_IMAP_USER and ADAMAS_IMAP_PASS (a Gmail app password) in your environment.')}
+        </p>
+      )}
+      {msg && <div className="notice ok" style={{ marginTop: 8 }}>{msg}</div>}
     </div>
   );
 }

@@ -292,6 +292,19 @@ export const de: Record<string, string> = {
   'Combine records that share the same name into one.':
     'Datensätze mit gleichem Namen zu einem zusammenführen.',
 
+  // ── Gmail decision labeling ───────────────────────────────
+  'Gmail decision labeling': 'Gmail-Entscheidungsmarkierung',
+  'Scan your Gmail and add an “ADAMAS/Decisions” label to threads that look like business decisions. Only adds a label — never deletes, moves, or sends.':
+    'Durchsuche dein Gmail und füge Threads, die nach Geschäftsentscheidungen aussehen, das Label „ADAMAS/Decisions“ hinzu. Fügt nur ein Label hinzu — löscht, verschiebt oder sendet nie.',
+  'Label decision emails': 'Entscheidungs-E-Mails markieren',
+  'Labeling…': 'Markiere…',
+  'To enable, set ADAMAS_IMAP_HOST=imap.gmail.com, ADAMAS_IMAP_USER and ADAMAS_IMAP_PASS (a Gmail app password) in your environment.':
+    'Zum Aktivieren ADAMAS_IMAP_HOST=imap.gmail.com, ADAMAS_IMAP_USER und ADAMAS_IMAP_PASS (ein Gmail-App-Passwort) in der Umgebung setzen.',
+  Labeled: 'Markiert',
+  'emails as decisions.': 'E-Mails als Entscheidungen.',
+  Scanned: 'Durchsucht',
+  'emails — none looked like decisions.': 'E-Mails — keine sah nach einer Entscheidung aus.',
+
   // ── Data Room (readiness + obsidian + records) ────────────
   'A diligence-ready view of the vault: how complete and traceable your decision record is. Higher = lower perceived risk in an M&A / fundraise evaluation.':
     'Eine due-diligence-fähige Sicht auf den Tresor: wie vollständig und nachverfolgbar deine Entscheidungshistorie ist. Höher = geringeres wahrgenommenes Risiko bei einer M&A-/Finanzierungsbewertung.',
