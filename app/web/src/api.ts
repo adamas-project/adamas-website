@@ -155,6 +155,17 @@ export const api = {
     location?: string;
     email?: string;
   }) => req<{ entry: any }>('/api/people', { method: 'POST', body: JSON.stringify(payload) }),
+  updatePerson: (id: string, patch: {
+    name?: string;
+    role?: string;
+    kind?: string;
+    summary?: string;
+    skills?: string[];
+    keyPerson?: boolean;
+    startDate?: string;
+    location?: string;
+    email?: string;
+  }) => req<{ entry: any }>(`/api/people/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
   deletePerson: (id: string) => req(`/api/people/${id}`, { method: 'DELETE' }),
 
   records: (params: { q?: string; category?: string } = {}) =>

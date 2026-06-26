@@ -80,6 +80,44 @@ export function registerPeopleRoutes(app: FastifyInstance, ctx: AppContext): voi
     }
   });
 
+  // Edit a person: update only the provided fields.
+  app.patch('/api/people/:id', async (req, reply) => {
+    const { id } = req.params as { id: string };
+    const b = (req.body ?? {}) as {
+      name?: string; role?: string; kind?: string; summary?: string;
+      skills?: string[]; keyPerson?: boolean; startDate?: string; location?: string; email?: string;
+    };
+    const patch: Record<string, unknown> = {};
+    if (b.name != null) {
+      const name = b.name.trim();
+      if (!name) return reply.code(400).send({ error: 'name cannot be empty.' });
+      patch.name = name.slice(0, 200);
+    }
+    if (b.role != null) {
+      const role = b.role.trim();
+      if (!role) return reply.code(400).send({ error: 'role cannot be empty.' });
+      patch.role = role.slice(0, 200);
+    }
+    if (b.kind != null) {
+      const kind = asKind(b.kind);
+      if (!kind) return reply.code(400).send({ error: 'invalid kind.' });
+      patch.kind = kind;
+    }
+    if (b.summary != null && b.summary.trim()) patch.summary = b.summary.trim();
+    if (b.skills != null) patch.skills = b.skills.map((s) => s.trim()).filter(Boolean);
+    if (b.keyPerson != null) patch.keyPerson = !!b.keyPerson || undefined;
+    if (b.startDate != null) patch.startDate = b.startDate.trim() || undefined;
+    if (b.location != null) patch.location = b.location.trim() || undefined;
+    if (b.email != null) patch.email = b.email.trim() || undefined;
+    try {
+      const entry = await people.update(id, patch);
+      if (!entry) return reply.code(404).send({ error: `No person ${id}` });
+      return { entry };
+    } catch (err) {
+      return reply.code(422).send({ error: (err as Error).message });
+    }
+  });
+
   app.delete('/api/people/:id', async (req, reply) => {
     const { id } = req.params as { id: string };
     const ok = await people.remove(id);
