@@ -40,6 +40,54 @@ function nextId(ids: Iterable<string>): string {
 
 export type PersonInput = Omit<PersonEntry, 'id' | 'date'> & { id?: string; date?: string };
 
+function idNum(id: string): number {
+  const m = /-([0-9]+)$/.exec(id);
+  return m && m[1] ? parseInt(m[1], 10) : 0;
+}
+
+const KIND_RANK: Record<PersonEntry['kind'], number> = { founder: 5, board: 4, advisor: 3, employee: 2, contractor: 1 };
+
+function union(...lists: (string[] | undefined)[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const list of lists) for (const v of list ?? []) {
+    const k = v.trim();
+    if (k && !seen.has(k.toLowerCase())) { seen.add(k.toLowerCase()); out.push(k); }
+  }
+  return out;
+}
+
+/**
+ * Merge several records for the same person into one, keeping the canonical id
+ * (passed first) and combining every field: the richest summary, the strongest
+ * `kind` (founder > board > advisor > employee > contractor), unioned skills /
+ * highlights / links, OR-ed key-person flag, and the earliest date. Pure +
+ * unit-tested so the merge behaviour is verifiable without the filesystem.
+ */
+export function mergePeopleEntries(entries: PersonEntry[]): PersonEntry {
+  const base = entries[0]!;
+  const out: PersonEntry = { id: base.id, name: base.name, role: base.role, kind: base.kind, date: base.date, summary: base.summary };
+  for (const e of entries) {
+    if (e.summary.length > out.summary.length) out.summary = e.summary;
+    if (!out.role && e.role) out.role = e.role;
+    if (KIND_RANK[e.kind] > KIND_RANK[out.kind]) out.kind = e.kind;
+    if (e.date < out.date) out.date = e.date;
+    out.keyPerson = out.keyPerson || e.keyPerson || undefined;
+    out.startDate = out.startDate || e.startDate;
+    out.location = out.location || e.location;
+    out.email = out.email || e.email;
+    if ((e.excerpt?.length ?? 0) > (out.excerpt?.length ?? 0)) out.excerpt = e.excerpt;
+  }
+  const skills = union(...entries.map((e) => e.skills));
+  const highlights = union(...entries.map((e) => e.highlights));
+  const links = union(...entries.map((e) => e.links));
+  if (skills.length) out.skills = skills;
+  if (highlights.length) out.highlights = highlights;
+  if (links.length) out.links = links;
+  if (!out.keyPerson) delete out.keyPerson;
+  return out;
+}
+
 /** Local-first people registry: one Markdown+JSON file per team member. */
 export class PeopleStore {
   private map = new Map<string, { entry: PersonEntry; fileName: string }>();
@@ -110,5 +158,53 @@ export class PeopleStore {
     this.map.delete(id);
     this.emit();
     return true;
+  }
+
+  /** How many records would be removed by merging same-name duplicates. */
+  duplicateCount(): number {
+    const byName = new Map<string, number>();
+    for (const { entry } of this.map.values()) {
+      const k = entry.name.trim().toLowerCase();
+      byName.set(k, (byName.get(k) ?? 0) + 1);
+    }
+    let extra = 0;
+    for (const n of byName.values()) if (n > 1) extra += n - 1;
+    return extra;
+  }
+
+  /**
+   * Merge people that share the same name (case-insensitive) into a single
+   * record, keeping the lowest-numbered id as canonical and combining all fields.
+   * Idempotent: a second call with no duplicates is a no-op.
+   */
+  async mergeDuplicates(): Promise<{ merged: number; names: string[] }> {
+    const groups = new Map<string, { entry: PersonEntry; fileName: string }[]>();
+    for (const v of this.map.values()) {
+      const k = v.entry.name.trim().toLowerCase();
+      const g = groups.get(k);
+      if (g) g.push(v);
+      else groups.set(k, [v]);
+    }
+
+    let merged = 0;
+    const names: string[] = [];
+    for (const group of groups.values()) {
+      if (group.length < 2) continue;
+      group.sort((a, b) => idNum(a.entry.id) - idNum(b.entry.id));
+      const survivor = group[0]!;
+      const mergedEntry = mergePeopleEntries(group.map((g) => g.entry));
+      mergedEntry.id = survivor.entry.id; // keep the canonical id + file
+      assertPerson(mergedEntry);
+      await atomicWrite(path.join(this.dir, survivor.fileName), serialize(mergedEntry));
+      this.map.set(survivor.entry.id, { entry: mergedEntry, fileName: survivor.fileName });
+      for (const dup of group.slice(1)) {
+        await removeFile(path.join(this.dir, dup.fileName));
+        this.map.delete(dup.entry.id);
+        merged++;
+      }
+      names.push(mergedEntry.name);
+    }
+    if (merged > 0) this.emit();
+    return { merged, names };
   }
 }

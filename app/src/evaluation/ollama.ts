@@ -154,6 +154,42 @@ export class OllamaLLMProvider implements LLMProvider {
     }
   }
 
+  async defineGlossaryTerm(term: string): Promise<{ definition: string; aliases?: string[]; tags?: string[] }> {
+    const prompt = [
+      'You are the glossary assistant for ADAMAS, a company knowledge base used for employee',
+      'handbooks and new-joiner training. Define the given term in clear, plain language as it is',
+      'used in a mid-market industrial-automation / B2B company context.',
+      'Return STRICT JSON only — no prose, no markdown — in exactly this shape:',
+      '{"definition":"...","aliases":["..."],"tags":["..."]}',
+      'Rules:',
+      '- definition: 1-2 sentences, concrete and self-contained. No "X is..." filler; just define it.',
+      '- aliases: common synonyms or the spelled-out form of an acronym. If none, use [].',
+      '- tags: 1-3 lowercase, hyphenated topic tags (e.g. "finance", "ops", "sales"). If unsure, use [].',
+      'Do not ask questions or mention that you are an AI.',
+      `\nTERM: ${term}`,
+    ].join('\n');
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), this.timeoutMs);
+    try {
+      const res = await fetch(`${this.url}/api/generate`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ model: this.model, prompt, stream: false, format: 'json', options: { temperature: 0.2 } }),
+        signal: controller.signal,
+      });
+      if (!res.ok) throw new Error(`Ollama responded ${res.status}`);
+      const body = (await res.json()) as { response?: string };
+      const parsed = JSON.parse(body.response ?? '{}') as { definition?: string; aliases?: unknown; tags?: unknown };
+      const definition = (parsed.definition ?? '').trim();
+      if (!definition) throw new Error('empty definition');
+      const clean = (arr: unknown): string[] =>
+        Array.isArray(arr) ? arr.map((x) => String(x).trim()).filter(Boolean).slice(0, 6) : [];
+      return { definition, aliases: clean(parsed.aliases), tags: clean(parsed.tags) };
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   async synthesizeKnowledge(text: string): Promise<KnowledgeSynthesis> {
     const prompt = [
       'You are the synthesis engine for ADAMAS, a decision-support system for a company founder/operator.',

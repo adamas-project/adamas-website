@@ -7,6 +7,7 @@ const KINDS = ['founder', 'employee', 'advisor', 'board', 'contractor'];
 export function PeopleView() {
   const { t } = useLang();
   const [people, setPeople] = useState<any[]>([]);
+  const [dupes, setDupes] = useState(0);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
 
@@ -20,7 +21,9 @@ export function PeopleView() {
 
   async function load() {
     try {
-      setPeople((await api.people()).people);
+      const r = await api.people();
+      setPeople(r.people);
+      setDupes(r.duplicates ?? 0);
     } catch (e) {
       setMsg((e as Error).message);
     }
@@ -28,6 +31,20 @@ export function PeopleView() {
   useEffect(() => {
     void load();
   }, []);
+
+  async function mergeDuplicates() {
+    setBusy(true);
+    setMsg('');
+    try {
+      const r = await api.mergePeople();
+      setMsg(r.merged ? `${t('Merged duplicates')}: ${r.names.join(', ')}` : t('No duplicates found.'));
+      await load();
+    } catch (e) {
+      setMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function add() {
     if (!name.trim() || !role.trim()) {
@@ -78,7 +95,15 @@ export function PeopleView() {
   return (
     <div className="layout" style={{ gridTemplateColumns: '1fr 420px' }}>
       <div className="panel">
-        <h2 style={{ marginTop: 0 }}>{t('People')} ({people.length})</h2>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+          <h2 style={{ marginTop: 0 }}>{t('People')} ({people.length})</h2>
+          <span style={{ flex: 1 }} />
+          {dupes > 0 && (
+            <button onClick={mergeDuplicates} disabled={busy} title={t('Combine records that share the same name into one.')}>
+              {busy ? t('Merging…') : `${t('Merge duplicates')} (${dupes})`}
+            </button>
+          )}
+        </div>
         <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
           {t('The team a buyer underwrites. Each person’s CV is summarized on-device into a bio, highlights, and skills, and linked to the decisions they own. Flag key people so key-person risk is documented.')}
         </p>

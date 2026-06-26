@@ -3,6 +3,8 @@ import path from 'node:path';
 import type { FastifyInstance } from 'fastify';
 import { GlossaryStore } from '../src/glossary/store.js';
 import { validateGlossary } from '../src/glossary/schema.js';
+import { defineTerm, inferGlossaryTags } from '../src/glossary/define.js';
+import { LocalLLMProvider } from '../src/evaluation/local.js';
 import { createContext } from '../src/server/context.js';
 import { buildApp } from '../src/server/app.js';
 import { tempVault } from './helpers.js';
@@ -37,6 +39,46 @@ describe('glossary schema + store', () => {
   });
 });
 
+describe('glossary auto-define', () => {
+  const provider = new LocalLLMProvider(); // no defineGlossaryTerm → dictionary/scaffold paths
+
+  it('defines a known term from the built-in dictionary', async () => {
+    const d = await defineTerm(provider, 'FAT');
+    expect(d.source).toBe('builtin');
+    expect(d.definition).toMatch(/Factory Acceptance Test/i);
+    expect(d.tags).toContain('ops');
+  });
+
+  it('matches an alias (spelled-out form) to its canonical entry', async () => {
+    const d = await defineTerm(provider, 'annual recurring revenue');
+    expect(d.source).toBe('builtin');
+    expect(d.definition).toMatch(/recurring/i);
+    // the typed term itself is dropped from aliases
+    expect(d.aliases.map((a) => a.toLowerCase())).not.toContain('annual recurring revenue');
+  });
+
+  it('scaffolds unknown terms with inferred tags, never a hard fail', async () => {
+    const d = await defineTerm(provider, 'Quarterly revenue bridge');
+    expect(d.source).toBe('draft');
+    expect(d.definition).toContain('Quarterly revenue bridge');
+    expect(d.tags).toContain('finance');
+  });
+
+  it('prefers a local model when one is available', async () => {
+    const modelProvider = Object.assign(new LocalLLMProvider(), {
+      defineGlossaryTerm: async () => ({ definition: 'A model-written definition.', tags: ['custom'] }),
+    });
+    const d = await defineTerm(modelProvider, 'Anything');
+    expect(d.source).toBe('model');
+    expect(d.definition).toBe('A model-written definition.');
+  });
+
+  it('infers tags from free text', () => {
+    expect(inferGlossaryTags('gross margin and ebitda')).toContain('finance');
+    expect(inferGlossaryTags('the sales pipeline and quota')).toContain('sales');
+  });
+});
+
 describe('glossary API', () => {
   let app: FastifyInstance;
   let cleanup: () => void;
@@ -66,5 +108,19 @@ describe('glossary API', () => {
   it('requires term and definition', async () => {
     const res = await app.inject({ method: 'POST', url: '/api/glossary', payload: { term: 'X' } });
     expect(res.statusCode).toBe(400);
+  });
+
+  it('drafts a definition without saving it', async () => {
+    const res = await app.inject({ method: 'POST', url: '/api/glossary/define', payload: { term: 'OEE' } });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.term).toBe('OEE');
+    expect(body.definition).toMatch(/Overall Equipment Effectiveness/i);
+    // define is a draft only — nothing persisted
+    expect((await app.inject({ method: 'GET', url: '/api/glossary' })).json().count).toBe(0);
+  });
+
+  it('rejects an empty define request', async () => {
+    expect((await app.inject({ method: 'POST', url: '/api/glossary/define', payload: {} })).statusCode).toBe(400);
   });
 });

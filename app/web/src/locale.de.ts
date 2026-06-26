@@ -273,6 +273,24 @@ export const de: Record<string, string> = {
   'Term and definition are required.': 'Begriff und Definition sind erforderlich.',
   Saved: 'Gespeichert',
   'Could not remove': 'Konnte nicht entfernen',
+  'Draft with AI': 'Mit KI entwerfen',
+  'Drafting…': 'Wird entworfen…',
+  'Draft a definition on-device from the term.': 'Entwirf eine Definition lokal aus dem Begriff.',
+  'Type a term first, then let ADAMAS draft it.': 'Gib zuerst einen Begriff ein, dann entwirft ADAMAS ihn.',
+  'Drafted from the built-in dictionary — review and edit before saving.':
+    'Aus dem integrierten Wörterbuch entworfen — vor dem Speichern prüfen und bearbeiten.',
+  'Drafted by your local model — review and edit before saving.':
+    'Von deinem lokalen Modell entworfen — vor dem Speichern prüfen und bearbeiten.',
+  'No built-in definition — finish it in your own words (or connect a local model).':
+    'Keine integrierte Definition — vervollständige sie in deinen eigenen Worten (oder verbinde ein lokales Modell).',
+
+  // ── People: merge duplicates ──────────────────────────────
+  'Merge duplicates': 'Duplikate zusammenführen',
+  'Merging…': 'Wird zusammengeführt…',
+  'Merged duplicates': 'Duplikate zusammengeführt',
+  'No duplicates found.': 'Keine Duplikate gefunden.',
+  'Combine records that share the same name into one.':
+    'Datensätze mit gleichem Namen zu einem zusammenführen.',
 
   // ── Data Room (readiness + obsidian + records) ────────────
   'A diligence-ready view of the vault: how complete and traceable your decision record is. Higher = lower perceived risk in an M&A / fundraise evaluation.':

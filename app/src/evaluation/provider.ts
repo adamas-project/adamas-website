@@ -63,4 +63,6 @@ export interface LLMProvider {
   summarize?(text: string, opts?: { kind?: 'meeting' | 'article' }): Promise<string>;
   /** Synthesize a knowledge entry (title, summary, takeaways, tags) from text. */
   synthesizeKnowledge?(text: string): Promise<KnowledgeSynthesis>;
+  /** Draft a plain-language definition for a glossary term. */
+  defineGlossaryTerm?(term: string): Promise<{ definition: string; aliases?: string[]; tags?: string[] }>;
 }
