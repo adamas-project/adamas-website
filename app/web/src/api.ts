@@ -90,7 +90,10 @@ export const api = {
     return res.json() as Promise<{ transcript: string; summarized: boolean; summary: string; added: number; pending: number }>;
   },
 
-  gmailStatus: () => req<{ configured: boolean; isGmail: boolean; user?: string; label: string }>('/api/gmail/status'),
+  gmailStatus: () => req<{ configured: boolean; isGmail: boolean; user?: string; source: 'saved' | 'env' | null; label: string }>('/api/gmail/status'),
+  gmailSaveSettings: (user: string, pass: string) =>
+    req<{ ok: boolean; user: string }>('/api/gmail/settings', { method: 'POST', body: JSON.stringify({ user, pass }) }),
+  gmailClearSettings: () => req<{ ok: boolean }>('/api/gmail/settings', { method: 'DELETE' }),
   gmailTestConnection: () =>
     req<{ ok: boolean; mailbox: string; messages: number }>('/api/gmail/test-connection', { method: 'POST', body: '{}' }),
   gmailTestEmail: () =>

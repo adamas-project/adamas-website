@@ -244,12 +244,20 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
 // decisions. Only adds a label (never deletes/sends), using a Gmail app password.
 function GmailLabelPanel() {
   const { t } = useLang();
-  const [status, setStatus] = useState<{ configured: boolean; isGmail: boolean; user?: string; label: string } | null>(null);
+  const [status, setStatus] = useState<{ configured: boolean; isGmail: boolean; user?: string; source: 'saved' | 'env' | null; label: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
+  const [editing, setEditing] = useState(false);
+  const [email, setEmail] = useState('');
+  const [appPass, setAppPass] = useState('');
 
+  async function refreshStatus() {
+    const s = await api.gmailStatus().catch(() => null);
+    setStatus(s);
+    return s;
+  }
   useEffect(() => {
-    api.gmailStatus().then(setStatus).catch(() => setStatus(null));
+    void refreshStatus();
   }, []);
 
   async function act(label: string, fn: () => Promise<string>) {
@@ -284,7 +292,46 @@ function GmailLabelPanel() {
         : `${t('Scanned')} ${r.scanned} ${t('emails — none looked like decisions.')}`;
     });
 
+  async function saveSettings() {
+    if (!email.trim() || !appPass.trim()) {
+      setMsg(t('Enter your Gmail address and app password.'));
+      return;
+    }
+    setBusy(true);
+    setMsg('');
+    try {
+      await api.gmailSaveSettings(email.trim(), appPass.trim());
+      setAppPass('');
+      setEditing(false);
+      await refreshStatus();
+      // Immediately verify the credentials so the user gets instant feedback.
+      const r = await api.gmailTestConnection();
+      setMsg(`${t('Connected ✓')} — ${email.trim()} (${r.mailbox}, ${r.messages} ${t('messages')})`);
+    } catch (e) {
+      setMsg(`${t('Connection failed')}: ${(e as Error).message}`);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function disconnect() {
+    setBusy(true);
+    setMsg('');
+    try {
+      await api.gmailClearSettings();
+      await refreshStatus();
+      setMsg(t('Disconnected.'));
+    } catch (e) {
+      setMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
   if (!status) return null;
+
+  const connected = status.configured && status.isGmail;
+  const showForm = editing || !connected;
 
   return (
     <div style={{ marginTop: 16 }}>
@@ -292,7 +339,35 @@ function GmailLabelPanel() {
       <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
         {t('Scan your Gmail and add an “ADAMAS/Decisions” label to threads that look like business decisions. Only adds a label — never deletes, moves, or sends.')}
       </p>
-      {status.configured && status.isGmail ? (
+
+      {showForm ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 460 }}>
+          <p className="muted" style={{ margin: 0, fontSize: 13 }}>
+            {t('Paste your Gmail address and a Gmail app password (Google Account → Security → App passwords — not your normal password).')}
+          </p>
+          <input
+            type="email"
+            placeholder="m@adamas-project.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder={t('16-character app password')}
+            value={appPass}
+            onChange={(e) => setAppPass(e.target.value)}
+          />
+          <div className="toolbar" style={{ margin: 0 }}>
+            <button className="primary" onClick={saveSettings} disabled={busy}>
+              {busy ? t('Saving…') : t('Save & connect')}
+            </button>
+            {connected && <button onClick={() => { setEditing(false); setMsg(''); }} disabled={busy}>{t('Cancel')}</button>}
+          </div>
+          <p className="muted" style={{ margin: 0, fontSize: 12 }}>
+            {t('Stored locally on this machine only. Never sent anywhere except your own Gmail.')}
+          </p>
+        </div>
+      ) : (
         <div className="toolbar" style={{ margin: 0, flexWrap: 'wrap' }}>
           <button onClick={testConnection} disabled={busy}>{t('Test connection')}</button>
           <button onClick={sendTest} disabled={busy} title={t('Adds a sample decision email to your inbox so you can see labeling work.')}>
@@ -301,12 +376,11 @@ function GmailLabelPanel() {
           <button className="primary" onClick={run} disabled={busy}>
             {busy ? t('Labeling…') : t('Label decision emails')}
           </button>
+          <span style={{ flex: 1 }} />
           <span className="muted" style={{ fontSize: 13 }}>{status.user}</span>
+          <button onClick={() => { setEditing(true); setEmail(status.user ?? ''); setMsg(''); }} disabled={busy}>{t('Change')}</button>
+          {status.source === 'saved' && <button onClick={disconnect} disabled={busy}>{t('Disconnect')}</button>}
         </div>
-      ) : (
-        <p className="muted" style={{ fontSize: 13 }}>
-          {t('To enable, set ADAMAS_IMAP_HOST=imap.gmail.com, ADAMAS_IMAP_USER and ADAMAS_IMAP_PASS (a Gmail app password) in your environment.')}
-        </p>
       )}
       {msg && <div className="notice ok" style={{ marginTop: 8 }}>{msg}</div>}
     </div>
