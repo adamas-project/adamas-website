@@ -25,22 +25,22 @@ async function open(root: string) {
 }
 
 describe('demo seeder', () => {
-  it('fills every category with 20+ entries and is idempotent', async () => {
+  it('fills every category at ~10x scale and is idempotent', async () => {
     const v = tempVault();
     cleanups.push(v.cleanup);
     const deps = await open(v.root);
 
     const r = await seedDemo(v.root, deps);
-    expect(r.decisions).toBeGreaterThanOrEqual(100);
-    expect(r.knowledge).toBeGreaterThanOrEqual(100);
-    expect(r.people).toBeGreaterThanOrEqual(100);
-    expect(r.records).toBeGreaterThanOrEqual(100);
+    expect(r.decisions).toBeGreaterThanOrEqual(1000);
+    expect(r.knowledge).toBeGreaterThanOrEqual(900);
+    expect(r.people).toBeGreaterThanOrEqual(1000);
+    expect(r.records).toBeGreaterThanOrEqual(1200);
 
-    expect(deps.ledger.count).toBeGreaterThanOrEqual(100);
-    expect(deps.knowledge.count).toBeGreaterThanOrEqual(100);
-    expect(deps.people.count).toBeGreaterThanOrEqual(100);
-    expect(deps.records.count).toBeGreaterThanOrEqual(100);
-    expect(deps.glossary.count).toBeGreaterThanOrEqual(40);
+    expect(deps.ledger.count).toBeGreaterThanOrEqual(1000);
+    expect(deps.knowledge.count).toBeGreaterThanOrEqual(900);
+    expect(deps.people.count).toBeGreaterThanOrEqual(1000);
+    expect(deps.records.count).toBeGreaterThanOrEqual(1200);
+    expect(deps.glossary.count).toBeGreaterThanOrEqual(400);
 
     // All four record categories are represented.
     expect(deps.records.categories().sort()).toEqual(['customer', 'financial', 'ip', 'risk']);
@@ -57,5 +57,5 @@ describe('demo seeder', () => {
     expect(again.noop).toBe(true);
     expect(again.decisions).toBe(0);
     expect(deps.ledger.count).toBe(before);
-  });
+  }, 180_000);
 });
