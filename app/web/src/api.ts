@@ -91,6 +91,10 @@ export const api = {
   },
 
   gmailStatus: () => req<{ configured: boolean; isGmail: boolean; user?: string; label: string }>('/api/gmail/status'),
+  gmailTestConnection: () =>
+    req<{ ok: boolean; mailbox: string; messages: number }>('/api/gmail/test-connection', { method: 'POST', body: '{}' }),
+  gmailTestEmail: () =>
+    req<{ subject: string }>('/api/gmail/test-email', { method: 'POST', body: '{}' }),
   gmailLabelDecisions: () =>
     req<{ scanned: number; labeled: number; titles: string[] }>('/api/gmail/label-decisions', {
       method: 'POST',

@@ -17,6 +17,28 @@ export function registerGmailRoutes(app: FastifyInstance, _ctx: AppContext): voi
     };
   });
 
+  // Verify the app password actually connects (more than the env-only status).
+  app.post('/api/gmail/test-connection', async (_req, reply) => {
+    const cfg = imapConfig();
+    if (!cfg) return reply.code(400).send({ error: 'No mailbox connected. Set the ADAMAS_IMAP_* variables first.' });
+    try {
+      return await new GmailLabeler(cfg).testConnection();
+    } catch (err) {
+      return reply.code(502).send({ error: `Could not connect: ${(err as Error).message}` });
+    }
+  });
+
+  // Drop a sample decision email into the inbox so labeling can be tested in-app.
+  app.post('/api/gmail/test-email', async (_req, reply) => {
+    const cfg = imapConfig();
+    if (!cfg) return reply.code(400).send({ error: 'No mailbox connected. Set the ADAMAS_IMAP_* variables first.' });
+    try {
+      return await new GmailLabeler(cfg).appendTestEmail();
+    } catch (err) {
+      return reply.code(502).send({ error: `Could not send the test email: ${(err as Error).message}` });
+    }
+  });
+
   app.post('/api/gmail/label-decisions', async (req, reply) => {
     const cfg = imapConfig();
     if (!cfg) {
