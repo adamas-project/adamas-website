@@ -119,7 +119,7 @@ function knowledgeTerms(tags: string[] | undefined, title: string): string[] {
 export function buildMemoryGraph(
   ledger: Ledger,
   knowledge?: KnowledgeStore,
-  opts: { topics?: boolean; people?: PeopleStore; records?: RecordStore } = {},
+  opts: { topics?: boolean; people?: PeopleStore; records?: RecordStore; limit?: number } = {},
 ): MemoryGraph {
   const decisions = ledger.list();
   const knEntries = knowledge?.list() ?? [];
@@ -297,6 +297,21 @@ export function buildMemoryGraph(
       degree: degree.get(id) ?? 0,
     })),
   ];
+
+  // Cap for rendering: a force-directed 3D view bogs down past a few hundred
+  // nodes. Keep all structural nodes (hubs + topic tags) plus the most-connected
+  // leaves up to `limit`, then drop edges to pruned nodes. The full vault is
+  // unchanged — this only bounds what the graph view has to draw.
+  if (opts.limit && opts.limit > 0 && nodes.length > opts.limit) {
+    const structural = nodes.filter((n) => n.kind === 'hub' || n.kind === 'tag');
+    const leaves = nodes
+      .filter((n) => n.kind !== 'hub' && n.kind !== 'tag')
+      .sort((a, b) => b.degree - a.degree);
+    const room = Math.max(0, opts.limit - structural.length);
+    const kept = [...structural, ...leaves.slice(0, room)];
+    const keepIds = new Set(kept.map((n) => n.id));
+    return { nodes: kept, edges: edges.filter((e) => keepIds.has(e.source) && keepIds.has(e.target)) };
+  }
 
   return { nodes, edges };
 }

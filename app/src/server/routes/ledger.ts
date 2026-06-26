@@ -114,8 +114,12 @@ export function registerLedgerRoutes(app: FastifyInstance, ctx: AppContext): voi
   // Combined "second brain" graph: decisions + knowledge, structured like the
   // Obsidian vault (hubs + bi-links + topic cross-links). Powers the 3D view.
   app.get('/api/graph/memory', async (req) => {
-    const topics = (req.query as Record<string, string>)?.topics === '1';
-    return buildMemoryGraph(ledger, ctx.knowledge, { topics, people: ctx.people, records: ctx.records });
+    const q = (req.query as Record<string, string>) ?? {};
+    const topics = q.topics === '1';
+    // Bound the rendered graph by default (the 3D view slows past a few hundred
+    // nodes); `limit=0` returns the whole graph for power users who accept it.
+    const limit = q.limit != null ? Math.max(0, Number(q.limit) || 0) : 600;
+    return buildMemoryGraph(ledger, ctx.knowledge, { topics, people: ctx.people, records: ctx.records, limit });
   });
 
   app.get('/api/export', async (_req, reply) => {

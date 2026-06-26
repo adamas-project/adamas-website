@@ -138,6 +138,14 @@ export const de: Record<string, string> = {
   records: 'Datensätze',
   topic: 'Thema',
   hub: 'Knoten',
+  'Nodes: 300 (fastest)': 'Knoten: 300 (am schnellsten)',
+  'Nodes: 600': 'Knoten: 600',
+  'Nodes: 1200': 'Knoten: 1200',
+  'All nodes (slow)': 'Alle Knoten (langsam)',
+  'How many nodes to draw. Fewer = faster; the full vault is unchanged.':
+    'Wie viele Knoten gezeichnet werden. Weniger = schneller; der gesamte Tresor bleibt unverändert.',
+  nodes: 'Knoten',
+  loaded: 'geladen',
 
   // ── Ledger / Decision detail ──────────────────────────────
   '+ New decision': '+ Neue Entscheidung',

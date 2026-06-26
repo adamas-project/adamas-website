@@ -73,11 +73,12 @@ export function GraphView() {
   const [topics, setTopics] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [focusId, setFocusId] = useState<string | null>(null);
+  const [limit, setLimit] = useState(600);
 
   // Load the combined memory graph; seed positions clustered by group so
   // departments and the knowledge cluster settle into distinct regions.
   useEffect(() => {
-    api.graphMemory(topics).then((g) => {
+    api.graphMemory(topics, limit).then((g) => {
       const groupAngle = (group: string): number => {
         if (group === 'hub') return 0;
         if (group === 'knowledge') return Math.PI;
@@ -100,7 +101,7 @@ export function GraphView() {
       setEdges(g.edges.map((e: any) => ({ source: e.source, target: e.target, kind: e.kind, supersedes: e.supersedes })));
       setFocusId(null);
     });
-  }, [topics]);
+  }, [topics, limit]);
 
   // Responsive canvas sizing.
   useEffect(() => {
@@ -278,6 +279,10 @@ export function GraphView() {
         detail={detail}
         knDetail={knDetail}
         onNavigate={openNode}
+        limit={limit}
+        setLimit={setLimit}
+        shown={graphData.nodes.length}
+        total={nodesAll.length}
       >
         <div className="graph-wrap" ref={wrapRef} style={{ height: dims.h }}>
           <Suspense fallback={<div style={{ padding: 24 }} className="muted">{t('Loading 3D view…')}</div>}>
@@ -286,6 +291,7 @@ export function GraphView() {
               width={dims.w}
               height={dims.h}
               reduced={reduced}
+              heavy={heavy}
               nodeColor={memoryNodeColor}
               onNodeClick={(n: GNode) => openNode(n.id)}
             />
@@ -317,6 +323,10 @@ export function GraphView() {
       detail={detail}
       knDetail={knDetail}
       onNavigate={openNode}
+      limit={limit}
+      setLimit={setLimit}
+      shown={graphData.nodes.length}
+      total={nodesAll.length}
     >
       <div className="graph-wrap" ref={wrapRef} style={{ height: dims.h }}>
         <FG
@@ -413,6 +423,10 @@ function GraphChrome(props: {
   detail: { decision: Decision; neighbors: string[] } | null;
   knDetail: { id: string; title: string; type: string; summary: string; takeaways?: string[]; tags?: string[]; source?: string } | null;
   onNavigate: (id: string) => void;
+  limit: number;
+  setLimit: (v: number) => void;
+  shown: number;
+  total: number;
   children: ReactNode;
 }) {
   const { t } = useLang();
@@ -421,6 +435,17 @@ function GraphChrome(props: {
       <div className="panel">
         <div className="toolbar">
           <h2 style={{ margin: 0, flex: 1 }}>{t('Decision Graph')}</h2>
+          <select
+            value={props.limit}
+            onChange={(e) => props.setLimit(Number(e.target.value))}
+            aria-label="Graph size"
+            title={t('How many nodes to draw. Fewer = faster; the full vault is unchanged.')}
+          >
+            <option value={300}>{t('Nodes: 300 (fastest)')}</option>
+            <option value={600}>{t('Nodes: 600')}</option>
+            <option value={1200}>{t('Nodes: 1200')}</option>
+            <option value={0}>{t('All nodes (slow)')}</option>
+          </select>
           <select value={props.domainFilter} onChange={(e) => props.setDomainFilter(e.target.value)} aria-label="Filter by domain">
             <option value="">{t('all domains')}</option>
             {DOMAINS.map((d) => <option key={d} value={d}>{d}</option>)}
@@ -446,6 +471,9 @@ function GraphChrome(props: {
           <button className={props.mode === '3d' ? 'primary' : ''} onClick={() => props.setMode(props.mode === '2d' ? '3d' : '2d')}>
             {props.mode === '2d' ? '3D' : '2D'}
           </button>
+          <span className="muted" style={{ fontSize: 12 }} title={`${props.total} ${t('loaded')}`}>
+            {props.shown} {t('nodes')}
+          </span>
         </div>
         {props.children}
       </div>
