@@ -13,6 +13,7 @@ export default function Graph3D({
   width,
   height,
   reduced,
+  heavy = false,
   nodeColor,
   onNodeClick,
 }: {
@@ -20,10 +21,14 @@ export default function Graph3D({
   width: number;
   height: number;
   reduced: boolean;
+  heavy?: boolean;
   nodeColor: (n: GNode) => string;
   onNodeClick: (n: GNode) => void;
 }) {
   const accent = token('--accent', '#c9a84c');
+  // For large graphs, drop the per-link animated particles (the biggest cost),
+  // simplify sphere geometry, and bound the simulation so it settles fast.
+  const particles = reduced || heavy ? 0 : 1;
   return (
     <FG3
       graphData={data}
@@ -33,15 +38,20 @@ export default function Graph3D({
       nodeColor={((n: GNode) => nodeColor(n)) as any}
       nodeVal={((n: GNode) => (n.kind === 'hub' ? 8 + n.degree * 0.5 : n.kind === 'tag' ? 0.6 : 1 + n.degree)) as any}
       nodeOpacity={0.92}
+      nodeResolution={heavy ? 6 : 10}
       nodeLabel={((n: GNode) => (n.kind === 'hub' || n.kind === 'tag' ? n.title : `${n.id} — ${n.title}`)) as any}
       linkColor={((l: GLink) => (l.kind === 'cross' ? 'rgba(227,201,119,0.5)' : 'rgba(201,168,76,0.32)')) as any}
       linkOpacity={0.5}
       linkWidth={((l: GLink) => (l.kind === 'hub' ? 0.6 : 0.4)) as any}
-      linkDirectionalParticles={reduced ? 0 : 1}
+      linkDirectionalParticles={particles}
       linkDirectionalParticleWidth={1.4}
       linkDirectionalParticleColor={(() => accent) as any}
+      // Bound the force run so it stops instead of churning every frame forever.
+      warmupTicks={heavy ? 40 : 0}
+      cooldownTicks={heavy ? 80 : reduced ? 0 : 200}
+      cooldownTime={heavy ? 6000 : 15000}
       // Drag a node and the force engine pulls its neighbors along (Obsidian-like).
-      enableNodeDrag
+      enableNodeDrag={!heavy}
       onNodeClick={((n: GNode) => onNodeClick(n)) as any}
     />
   );

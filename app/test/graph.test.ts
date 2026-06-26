@@ -95,6 +95,28 @@ describe('buildMemoryGraph', () => {
     expect(buildMemoryGraph(ledger, knowledge).nodes.some((n) => n.kind === 'tag')).toBe(false);
   });
 
+  it('caps the graph to `limit` nodes, keeping hubs + most-connected leaves', async () => {
+    const v = tempVault();
+    cleanups.push(v.cleanup);
+    const ledger = await seedVault(v.root);
+    const knowledge = await KnowledgeStore.open(path.join(v.root, 'knowledge'));
+    for (let i = 0; i < 40; i++) {
+      await knowledge.create({ title: `Note ${i}`, source: 'manual', type: 'note', summary: 's', tags: ['ops'] });
+    }
+
+    const full = buildMemoryGraph(ledger, knowledge);
+    const capped = buildMemoryGraph(ledger, knowledge, { limit: 20 });
+    expect(full.nodes.length).toBeGreaterThan(20);
+    expect(capped.nodes.length).toBeLessThanOrEqual(20);
+    // Structural nodes (hubs) survive the cap.
+    expect(capped.nodes.some((n) => n.id === '#decisions')).toBe(true);
+    // Every retained edge connects two retained nodes.
+    const ids = new Set(capped.nodes.map((n) => n.id));
+    expect(capped.edges.every((e) => ids.has(e.source) && ids.has(e.target))).toBe(true);
+    // limit=0 means "no cap".
+    expect(buildMemoryGraph(ledger, knowledge, { limit: 0 }).nodes.length).toBe(full.nodes.length);
+  });
+
   it('omits the knowledge hub when there is no knowledge', async () => {
     const v = tempVault();
     cleanups.push(v.cleanup);
