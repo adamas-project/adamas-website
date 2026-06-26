@@ -323,6 +323,16 @@ export const de: Record<string, string> = {
   'Test email added to your inbox:': 'Test-E-Mail zu deinem Posteingang hinzugefügt:',
   'Now click “Label decision emails”.': 'Klicke jetzt auf „Entscheidungs-E-Mails markieren“.',
   'Labeling failed': 'Markierung fehlgeschlagen',
+  'Paste your Gmail address and a Gmail app password (Google Account → Security → App passwords — not your normal password).':
+    'Füge deine Gmail-Adresse und ein Gmail-App-Passwort ein (Google-Konto → Sicherheit → App-Passwörter — nicht dein normales Passwort).',
+  '16-character app password': '16-stelliges App-Passwort',
+  'Save & connect': 'Speichern & verbinden',
+  'Stored locally on this machine only. Never sent anywhere except your own Gmail.':
+    'Nur lokal auf diesem Gerät gespeichert. Wird nirgendwo gesendet außer an dein eigenes Gmail.',
+  'Enter your Gmail address and app password.': 'Gib deine Gmail-Adresse und das App-Passwort ein.',
+  Change: 'Ändern',
+  Disconnect: 'Trennen',
+  'Disconnected.': 'Getrennt.',
 
   // ── Data Room (readiness + obsidian + records) ────────────
   'A diligence-ready view of the vault: how complete and traceable your decision record is. Higher = lower perceived risk in an M&A / fundraise evaluation.':
