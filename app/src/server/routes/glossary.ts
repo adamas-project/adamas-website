@@ -39,6 +39,32 @@ export function registerGlossaryRoutes(app: FastifyInstance, ctx: AppContext): v
     }
   });
 
+  app.patch('/api/glossary/:id', async (req, reply) => {
+    const { id } = req.params as { id: string };
+    const b = (req.body ?? {}) as { term?: string; definition?: string; aliases?: string[]; tags?: string[]; source?: string };
+    const patch: Record<string, unknown> = {};
+    if (b.term != null) {
+      const tt = b.term.trim();
+      if (!tt) return reply.code(400).send({ error: 'term cannot be empty.' });
+      patch.term = tt.slice(0, 200);
+    }
+    if (b.definition != null) {
+      const def = b.definition.trim();
+      if (!def) return reply.code(400).send({ error: 'definition cannot be empty.' });
+      patch.definition = def;
+    }
+    if (b.aliases != null) patch.aliases = b.aliases.map((s) => s.trim()).filter(Boolean);
+    if (b.tags != null) patch.tags = b.tags.map((s) => s.trim()).filter(Boolean);
+    if (b.source != null && b.source.trim()) patch.source = b.source.trim();
+    try {
+      const entry = await glossary.update(id, patch);
+      if (!entry) return reply.code(404).send({ error: `No glossary ${id}` });
+      return { entry };
+    } catch (err) {
+      return reply.code(422).send({ error: (err as Error).message });
+    }
+  });
+
   app.delete('/api/glossary/:id', async (req, reply) => {
     const { id } = req.params as { id: string };
     const ok = await glossary.remove(id);

@@ -81,6 +81,29 @@ export function registerKnowledgeRoutes(app: FastifyInstance, ctx: AppContext): 
     }
   });
 
+  app.patch('/api/knowledge/:id', async (req, reply) => {
+    const { id } = req.params as { id: string };
+    const b = (req.body ?? {}) as { title?: string; summary?: string; takeaways?: string[]; tags?: string[]; type?: string; source?: string };
+    const patch: Record<string, unknown> = {};
+    if (b.title != null) {
+      const tt = b.title.trim();
+      if (!tt) return reply.code(400).send({ error: 'title cannot be empty.' });
+      patch.title = tt.slice(0, 300);
+    }
+    if (b.summary != null && b.summary.trim()) patch.summary = b.summary.trim();
+    if (b.takeaways != null) patch.takeaways = b.takeaways.map((s) => s.trim()).filter(Boolean);
+    if (b.tags != null) patch.tags = b.tags.map((s) => s.trim()).filter(Boolean);
+    if (b.type != null) { const ty = asType(b.type); if (ty) patch.type = ty; }
+    if (b.source != null && b.source.trim()) patch.source = b.source.trim();
+    try {
+      const entry = await knowledge.update(id, patch);
+      if (!entry) return reply.code(404).send({ error: `No knowledge ${id}` });
+      return { entry };
+    } catch (err) {
+      return reply.code(422).send({ error: (err as Error).message });
+    }
+  });
+
   app.delete('/api/knowledge/:id', async (req, reply) => {
     const { id } = req.params as { id: string };
     const ok = await knowledge.remove(id);

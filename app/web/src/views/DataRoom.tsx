@@ -131,11 +131,15 @@ export function DataRoomView() {
   );
 }
 
+const REC_CAP = 25; // per category, to keep the DOM light at scale.
+
 function RecordsManager({ onChanged }: { onChanged: () => void }) {
   const { t } = useLang();
   const [records, setRecords] = useState<any[]>([]);
   const [category, setCategory] = useState('customer');
   const [form, setForm] = useState<Record<string, any>>({});
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [q, setQ] = useState('');
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
 
@@ -151,18 +155,44 @@ function RecordsManager({ onChanged }: { onChanged: () => void }) {
   }, []);
 
   const set = (k: string, v: any) => setForm((f) => ({ ...f, [k]: v }));
+  function resetForm() {
+    setEditingId(null);
+    setForm({});
+  }
+  function startEdit(r: any) {
+    setEditingId(r.id);
+    setCategory(r.category);
+    setForm({
+      title: r.title, owner: r.owner, amount: r.amount, dueDate: r.dueDate, recurring: r.recurring,
+      metric: r.metric, period: r.period, severity: r.severity, mitigation: r.mitigation,
+      status: r.status, source: r.source, summary: r.summary,
+    });
+    setMsg('');
+    if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-  async function add() {
+  function matches(r: any): boolean {
+    const needle = q.trim().toLowerCase();
+    if (!needle) return true;
+    return [r.title, r.summary, r.owner, r.metric, r.status, r.period].filter(Boolean).join(' ').toLowerCase().includes(needle);
+  }
+
+  async function save() {
     if (!form.title?.trim()) {
-      setMsg('Title is required.');
+      setMsg(t('Title is required.'));
       return;
     }
     setBusy(true);
     setMsg('');
     try {
-      await api.addRecord({ ...form, category });
-      setForm({});
-      setMsg('Added.');
+      if (editingId) {
+        await api.updateRecord(editingId, { ...form, category });
+        setMsg(t('Saved changes.'));
+      } else {
+        await api.addRecord({ ...form, category });
+        setMsg(t('Added.'));
+      }
+      resetForm();
       await load();
       onChanged();
     } catch (e) {
@@ -175,6 +205,7 @@ function RecordsManager({ onChanged }: { onChanged: () => void }) {
   async function remove(id: string) {
     const snapshot = records;
     setRecords((prev) => prev.filter((r) => r.id !== id));
+    if (editingId === id) resetForm();
     try {
       await api.deleteRecord(id);
       await load();
@@ -241,23 +272,38 @@ function RecordsManager({ onChanged }: { onChanged: () => void }) {
         onChange={(e) => set('summary', e.target.value)}
       />
       <div className="toolbar" style={{ marginTop: 8 }}>
-        <button className="primary" onClick={add} disabled={busy}>{busy ? t('Adding…') : `${t('Add')} ${t(CATEGORIES.find((c) => c.id === category)?.label ?? '')}`}</button>
+        <button className="primary" onClick={save} disabled={busy}>
+          {busy ? t('Saving…') : editingId ? t('Save changes') : `${t('Add')} ${t(CATEGORIES.find((c) => c.id === category)?.label ?? '')}`}
+        </button>
+        {editingId && <button onClick={resetForm} disabled={busy}>{t('Cancel')}</button>}
         {msg && <span className="muted" style={{ fontSize: 13 }}>{msg}</span>}
       </div>
 
+      <input
+        style={{ width: '100%', marginTop: 14 }}
+        placeholder={t('Search records by title, owner, metric…')}
+        value={q}
+        onChange={(e) => setQ(e.target.value)}
+      />
+
       {CATEGORIES.map((c) => {
-        const inCat = records.filter((r) => r.category === c.id);
+        const inCat = records.filter((r) => r.category === c.id && matches(r));
         if (!inCat.length) return null;
+        const shown = inCat.slice(0, REC_CAP);
         return (
           <div key={c.id} style={{ marginTop: 12 }}>
             <div className="section-title">{t(c.label)} ({inCat.length})</div>
-            {inCat.map((r) => (
-              <div key={r.id} style={{ display: 'flex', alignItems: 'baseline', gap: 8, padding: '4px 0' }}>
+            {inCat.length > REC_CAP && (
+              <div className="muted" style={{ fontSize: 12 }}>{t('Showing')} {REC_CAP} {t('of')} {inCat.length} — {t('search to narrow down.')}</div>
+            )}
+            {shown.map((r) => (
+              <div key={r.id} className={editingId === r.id ? 'selected' : ''} style={{ display: 'flex', alignItems: 'baseline', gap: 8, padding: '4px 0' }}>
                 <strong>{r.title}</strong>
                 {r.status && <span className="badge">{r.status}</span>}
                 {r.severity && <span className="badge">{r.severity}</span>}
                 {r.amount != null && <span className="muted" style={{ fontSize: 13 }}>{r.currency ?? ''}{Number(r.amount).toLocaleString()}{r.recurring ? '/yr' : ''}</span>}
                 <span style={{ flex: 1 }} />
+                <button className="tag linkbtn" onClick={() => startEdit(r)}>{t('edit')}</button>
                 <button className="tag linkbtn" onClick={() => remove(r.id)}>{t('remove')}</button>
               </div>
             ))}

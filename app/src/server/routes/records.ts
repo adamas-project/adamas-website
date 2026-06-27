@@ -59,6 +59,42 @@ export function registerRecordRoutes(app: FastifyInstance, ctx: AppContext): voi
     }
   });
 
+  app.patch('/api/records/:id', async (req, reply) => {
+    const { id } = req.params as { id: string };
+    const b = (req.body ?? {}) as Record<string, unknown>;
+    const patch: Record<string, unknown> = {};
+    if (typeof b.title === 'string') {
+      const tt = b.title.trim();
+      if (!tt) return reply.code(400).send({ error: 'title cannot be empty.' });
+      patch.title = tt.slice(0, 200);
+    }
+    if (typeof b.summary === 'string' && b.summary.trim()) patch.summary = b.summary.trim();
+    if (b.category !== undefined) {
+      const c = asCategory(b.category);
+      if (!c) return reply.code(400).send({ error: 'invalid category.' });
+      patch.category = c;
+    }
+    if (b.owner !== undefined) patch.owner = String(b.owner).trim() || undefined;
+    if (b.status !== undefined) patch.status = String(b.status).trim() || undefined;
+    if (b.amount !== undefined) patch.amount = num(b.amount);
+    if (b.currency !== undefined) patch.currency = String(b.currency).trim() || undefined;
+    if (b.recurring !== undefined) patch.recurring = typeof b.recurring === 'boolean' ? b.recurring : undefined;
+    if (b.metric !== undefined) patch.metric = String(b.metric).trim() || undefined;
+    if (b.period !== undefined) patch.period = String(b.period).trim() || undefined;
+    if (b.severity !== undefined) patch.severity = b.severity === 'low' || b.severity === 'medium' || b.severity === 'high' ? b.severity : undefined;
+    if (b.mitigation !== undefined) patch.mitigation = String(b.mitigation).trim() || undefined;
+    if (b.dueDate !== undefined) patch.dueDate = String(b.dueDate).trim() || undefined;
+    if (b.source !== undefined) patch.source = String(b.source).trim() || undefined;
+    if (b.tags !== undefined) patch.tags = Array.isArray(b.tags) ? (b.tags as unknown[]).map((t) => String(t).trim()).filter(Boolean) : undefined;
+    try {
+      const entry = await records.update(id, patch);
+      if (!entry) return reply.code(404).send({ error: `No record ${id}` });
+      return { entry };
+    } catch (err) {
+      return reply.code(422).send({ error: (err as Error).message });
+    }
+  });
+
   app.delete('/api/records/:id', async (req, reply) => {
     const { id } = req.params as { id: string };
     const ok = await records.remove(id);

@@ -123,4 +123,14 @@ describe('glossary API', () => {
   it('rejects an empty define request', async () => {
     expect((await app.inject({ method: 'POST', url: '/api/glossary/define', payload: {} })).statusCode).toBe(400);
   });
+
+  it('edits a term via PATCH', async () => {
+    const entry = (await app.inject({ method: 'POST', url: '/api/glossary', payload: { term: 'OEE', definition: 'old def' } })).json().entry;
+    const res = await app.inject({ method: 'PATCH', url: `/api/glossary/${entry.id}`, payload: { definition: 'new def', tags: ['ops'] } });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().entry.definition).toBe('new def');
+    expect(res.json().entry.term).toBe('OEE'); // untouched
+    expect((await app.inject({ method: 'PATCH', url: `/api/glossary/${entry.id}`, payload: { definition: ' ' } })).statusCode).toBe(400);
+    await app.inject({ method: 'DELETE', url: `/api/glossary/${entry.id}` });
+  });
 });

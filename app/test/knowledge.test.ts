@@ -210,6 +210,18 @@ describe('knowledge API', () => {
     expect((await app.inject({ method: 'GET', url: '/api/knowledge' })).json().count).toBe(0);
   });
 
+  it('edits an entry via PATCH', async () => {
+    const entry = (await app.inject({ method: 'POST', url: '/api/knowledge', payload: { text: 'Some note about pricing and margin and value capture for the team.', title: 'Old title', tags: ['a'] } })).json().entry;
+    const res = await app.inject({ method: 'PATCH', url: `/api/knowledge/${entry.id}`, payload: { title: 'New title', tags: ['b', 'c'] } });
+    expect(res.statusCode).toBe(200);
+    const updated = res.json().entry;
+    expect(updated.title).toBe('New title');
+    expect(updated.tags).toEqual(['b', 'c']);
+    expect(updated.id).toBe(entry.id);
+    expect((await app.inject({ method: 'PATCH', url: `/api/knowledge/${entry.id}`, payload: { title: ' ' } })).statusCode).toBe(400);
+    await app.inject({ method: 'DELETE', url: `/api/knowledge/${entry.id}` });
+  });
+
   it('requires a url or text', async () => {
     const res = await app.inject({ method: 'POST', url: '/api/knowledge', payload: {} });
     expect(res.statusCode).toBe(400);

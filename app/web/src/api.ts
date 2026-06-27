@@ -148,6 +148,8 @@ export const api = {
     req<{ terms: any[]; tags: string[]; count: number }>(`/api/glossary${qs(params)}`),
   addGlossary: (payload: { term: string; definition: string; aliases?: string[]; tags?: string[]; source?: string }) =>
     req<{ entry: any }>('/api/glossary', { method: 'POST', body: JSON.stringify(payload) }),
+  updateGlossary: (id: string, patch: { term?: string; definition?: string; aliases?: string[]; tags?: string[]; source?: string }) =>
+    req<{ entry: any }>(`/api/glossary/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
   defineGlossary: (term: string) =>
     req<{ term: string; definition: string; aliases: string[]; tags: string[]; source: 'builtin' | 'model' | 'draft' }>(
       '/api/glossary/define',
@@ -156,6 +158,8 @@ export const api = {
   deleteGlossary: (id: string) => req(`/api/glossary/${id}`, { method: 'DELETE' }),
   addKnowledge: (payload: { url?: string; text?: string; title?: string; type?: string; tags?: string[] }) =>
     req<{ entry: any }>('/api/knowledge', { method: 'POST', body: JSON.stringify(payload) }),
+  updateKnowledge: (id: string, patch: { title?: string; summary?: string; takeaways?: string[]; tags?: string[]; type?: string; source?: string }) =>
+    req<{ entry: any }>(`/api/knowledge/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
   deleteKnowledge: (id: string) => req(`/api/knowledge/${id}`, { method: 'DELETE' }),
 
   people: (params: { q?: string; kind?: string } = {}) =>
@@ -190,6 +194,8 @@ export const api = {
     req<{ records: any[]; categories: string[]; count: number }>(`/api/records${qs(params)}`),
   addRecord: (payload: Record<string, unknown>) =>
     req<{ entry: any }>('/api/records', { method: 'POST', body: JSON.stringify(payload) }),
+  updateRecord: (id: string, patch: Record<string, unknown>) =>
+    req<{ entry: any }>(`/api/records/${id}`, { method: 'PATCH', body: JSON.stringify(patch) }),
   deleteRecord: (id: string) => req(`/api/records/${id}`, { method: 'DELETE' }),
 
   obsidian: () => req<{ dir: string; exists: boolean; readiness: any }>('/api/obsidian'),
