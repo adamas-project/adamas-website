@@ -427,3 +427,25 @@ th { color: var(--faint); font-weight: 700; text-transform: uppercase; letter-sp
 .lang-switch .lang-opt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; line-height: 1; color: var(--text-muted); padding: 5px 9px; border-radius: 99px; background: transparent; border: 0; cursor: pointer; transition: color 0.2s, background 0.2s; }
 .lang-switch .lang-opt:hover { color: var(--text); }
 .lang-switch .lang-opt.on { color: var(--accent); background: var(--accent-soft); }
+
+/* Print / "Save as PDF": a clean light layout of just the current view (the
+   Dashboard). Hides app chrome and forces readable colors regardless of theme. */
+@media print {
+  .topbar, .no-print, .graph-wrap, .graph-hint, .graph-legend { display: none !important; }
+  html, body, .app, .content { background: #ffffff !important; color: #111111 !important; }
+  .content { padding: 0 !important; display: block !important; }
+  .panel, .card {
+    background: #ffffff !important;
+    color: #111111 !important;
+    border: 1px solid #d0d0d0 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .muted, .id { color: #555555 !important; }
+  h2, h3, strong, .title, .section-title { color: #111111 !important; }
+  table { color: #111111 !important; }
+  th, td { border-color: #d0d0d0 !important; }
+  a { color: #111111 !important; text-decoration: none; }
+  .badge { border-color: #bbbbbb !important; color: #333333 !important; }
+}
