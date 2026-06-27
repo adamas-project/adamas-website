@@ -31,7 +31,9 @@ async function req<T>(url: string, opts: RequestInit = {}): Promise<T> {
     } catch {
       /* ignore */
     }
-    throw new Error(msg);
+    const err = new Error(msg) as Error & { status?: number };
+    err.status = res.status; // let callers distinguish 404 (already gone) from 5xx
+    throw err;
   }
   return res.json() as Promise<T>;
 }

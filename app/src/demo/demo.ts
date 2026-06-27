@@ -4,6 +4,7 @@ import type { KnowledgeStore, KnowledgeInput } from '../knowledge/store.js';
 import type { PeopleStore, PersonInput } from '../people/store.js';
 import type { RecordStore, RecordInput } from '../records/store.js';
 import type { GlossaryStore, GlossaryInput } from '../glossary/store.js';
+import { FAMOUS_NAMES } from './famous-names.js';
 
 // Demo data — one coherent fictional company ("NorthPeak Robotics", a mid-market
 // industrial-automation scale-up preparing for M&A) so a client demo shows a
@@ -374,16 +375,16 @@ function genKnowledge(count: number): KnowledgeInput[] {
   return out;
 }
 
-const FIRST = ['Anna', 'Lukas', 'Maria', 'Jan', 'Elena', 'David', 'Sara', 'Paul', 'Nina', 'Erik', 'Julia', 'Marco', 'Eva', 'Felix', 'Laura', 'Tobias', 'Clara', 'Maxim', 'Lea', 'Noah', 'Mira', 'Leon', 'Emma', 'Bjorn', 'Lily', 'Samir', 'Ada', 'Ivan', 'Olga', 'Hugo', 'Rosa', 'Karl', 'Sofia', 'Mateo', 'Yara', 'Theo', 'Ines', 'Ravi', 'Nadia', 'Otto'];
-const LAST = ['Berger', 'Fischer', 'Keller', 'Wagner', 'Schubert', 'Moretti', 'Costa', 'Novak', 'Lindqvist', 'Jensen', 'Hofer', 'Vogel', 'Brandt', 'Schaefer', 'Ricci', 'Andersson', 'Kowalski', 'Haas', 'Dubois', 'Romano', 'Nilsson', 'Weber', 'Kovac', 'Lehmann', 'Soares', 'Marin', 'Bauer', 'Horn'];
 const GEN_ROLES = ['controls-engineer', 'mechanical-engineer', 'project-manager', 'service-technician', 'account-executive', 'software-engineer', 'quality-engineer', 'data-engineer', 'procurement-manager', 'sales-engineer', 'people-ops', 'fp&a-analyst'];
 const GEN_CITIES = ['Stuttgart, DE', 'Berlin, DE', 'Munich, DE', 'Milan, IT', 'Barcelona, ES', 'Amsterdam, NL', 'Stockholm, SE', 'Paris, FR', 'Vienna, AT', 'Copenhagen, DK'];
 const GEN_SKILLS = ['plc', 'cad', 'project-management', 'commissioning', 'sales', 'typescript', 'quality', 'python', 'procurement', 'pre-sales', 'people-ops', 'fp&a'];
+// The demo "team" is a roster of famous people in ordinary NorthPeak roles — a
+// memorable, funnier showcase than random names (Pablo Escobar, Procurement…).
 function genPeople(count: number): PersonInput[] {
   const out: PersonInput[] = [];
-  const max = Math.min(count, FIRST.length * LAST.length); // unique name combos only
+  const max = Math.min(count, FAMOUS_NAMES.length); // one record per unique famous name
   for (let i = 0; i < max; i++) {
-    const name = `${FIRST[i % FIRST.length]} ${LAST[Math.floor(i / FIRST.length) % LAST.length]}`;
+    const name = FAMOUS_NAMES[i]!;
     const role = GEN_ROLES[i % GEN_ROLES.length]!;
     out.push({ name, role, kind: 'employee', summary: `${role.replace(/-/g, ' ')} at NorthPeak Robotics.`, skills: [GEN_SKILLS[i % GEN_SKILLS.length]!], location: GEN_CITIES[i % GEN_CITIES.length] });
   }
@@ -552,7 +553,7 @@ export async function seedDemo(root: string, deps: DemoSeedDeps): Promise<DemoSe
   void root; // kept for signature stability; no marker file needed anymore.
   const decTitles = new Set(deps.ledger.list().map((d) => d.title));
   const knTitles = new Set(deps.knowledge.list().map((e) => e.title));
-  const peopleNames = new Set(deps.people.list().map((p) => p.name.toLowerCase()));
+  const peopleNames = new Set(deps.people.list().map((p) => p.name.trim().toLowerCase()));
   const recKeys = new Set(deps.records.list().map((r) => `${r.category}:${r.title}`));
 
   let decisions = 0;
@@ -586,9 +587,9 @@ export async function seedDemo(root: string, deps: DemoSeedDeps): Promise<DemoSe
 
   let people = 0;
   for (const p of ALL_PEOPLE) {
-    if (peopleNames.has(p.name.toLowerCase())) continue;
+    if (peopleNames.has(p.name.trim().toLowerCase())) continue;
     await deps.people.create(p);
-    peopleNames.add(p.name.toLowerCase());
+    peopleNames.add(p.name.trim().toLowerCase());
     people++;
   }
 

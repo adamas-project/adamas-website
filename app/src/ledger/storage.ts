@@ -63,7 +63,9 @@ export async function listDecisionFiles(paths: VaultPaths): Promise<string[]> {
 export async function removeFile(filePath: string): Promise<void> {
   try {
     await fs.unlink(filePath);
-  } catch {
-    /* already gone */
+  } catch (e) {
+    // Already gone is fine; a real failure (EACCES/EPERM/EBUSY) must surface so
+    // a delete can't report success while the file lingers and resurrects later.
+    if ((e as NodeJS.ErrnoException).code !== 'ENOENT') throw e;
   }
 }
