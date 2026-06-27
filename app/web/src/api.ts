@@ -20,10 +20,11 @@ export interface Decision {
 }
 
 async function req<T>(url: string, opts: RequestInit = {}): Promise<T> {
-  const res = await fetch(url, {
-    headers: { 'content-type': 'application/json', ...(opts.headers ?? {}) },
-    ...opts,
-  });
+  // Only declare a JSON content-type when there's actually a body. Sending it on
+  // a bodyless DELETE makes the server reject an "empty JSON body" with a 400.
+  const headers: Record<string, string> = { ...(opts.headers as Record<string, string> | undefined) };
+  if (opts.body != null && headers['content-type'] == null) headers['content-type'] = 'application/json';
+  const res = await fetch(url, { ...opts, headers });
   if (!res.ok) {
     let msg = res.statusText;
     try {
@@ -183,7 +184,8 @@ export const api = {
   security: () => req<any>('/api/security'),
   backup: (passphrase: string) => req<{ file: string }>('/api/backup', { method: 'POST', body: JSON.stringify({ passphrase }) }),
   pricing: (locale: string) => req<{ pricing: any }>(`/api/pricing?locale=${locale}`),
-  demoSeed: () => req<{ decisions: number; knowledge: number; people: number; records: number; noop?: boolean }>('/api/demo', { method: 'POST', body: '{}' }),
+  demoSeed: () => req<{ decisions: number; knowledge: number; people: number; records: number; glossary: number; noop?: boolean }>('/api/demo', { method: 'POST', body: '{}' }),
+  demoReset: () => req<{ reset: boolean; decisions: number; knowledge: number; people: number; records: number; glossary: number }>('/api/demo/reset', { method: 'POST', body: '{}' }),
 };
 
 // Domain colors live as CSS tokens; see tokens.ts (domainColor / domainVar).

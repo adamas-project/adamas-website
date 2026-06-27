@@ -173,6 +173,13 @@ export class PeopleStore {
     return true;
   }
 
+  /** Remove every entry (files + memory). Used by the demo reset. */
+  async clear(): Promise<void> {
+    for (const { fileName } of this.map.values()) await removeFile(path.join(this.dir, fileName));
+    this.map.clear();
+    this.emit();
+  }
+
   /** How many records would be removed by merging same-name duplicates. */
   duplicateCount(): number {
     const byName = new Map<string, number>();

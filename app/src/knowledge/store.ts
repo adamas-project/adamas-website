@@ -121,4 +121,11 @@ export class KnowledgeStore {
     this.emit();
     return true;
   }
+
+  /** Remove every entry (files + memory). Used by the demo reset. */
+  async clear(): Promise<void> {
+    for (const { fileName } of this.map.values()) await removeFile(path.join(this.dir, fileName));
+    this.map.clear();
+    this.emit();
+  }
 }

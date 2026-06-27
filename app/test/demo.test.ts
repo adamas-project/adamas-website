@@ -46,6 +46,11 @@ describe('demo seeder', () => {
     const names = deps.people.list().map((p) => p.name);
     expect(names).toContain('Pablo Escobar');
     expect(names).toContain('Michael Jackson');
+    // The real founder name was purged; the seed founder is now a famous figure.
+    expect(names).not.toContain('Massimo Sahin');
+    expect(names).toContain('Steve Jobs');
+    // Decisions reference the renamed owners, keeping people↔decision links intact.
+    expect(deps.ledger.list().some((d) => d.owner.name === 'Steve Jobs')).toBe(true);
 
     // All four record categories are represented.
     expect(deps.records.categories().sort()).toEqual(['customer', 'financial', 'ip', 'risk']);

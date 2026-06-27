@@ -281,6 +281,12 @@ export const de: Record<string, string> = {
   'Load demo data': 'Demodaten laden',
   'Loaded demo data:': 'Demodaten geladen:',
   'All demo data is already loaded.': 'Alle Demodaten sind bereits geladen.',
+  'Reset & reload demo data': 'Zurücksetzen & Demodaten neu laden',
+  'Wipe everything and load a fresh demo database.': 'Alles löschen und eine frische Demo-Datenbank laden.',
+  'This wipes ALL current data (decisions, knowledge, people, records, glossary) and loads a fresh demo database. Continue?':
+    'Dies löscht ALLE aktuellen Daten (Entscheidungen, Wissen, Personen, Datensätze, Glossar) und lädt eine frische Demo-Datenbank. Fortfahren?',
+  'Resetting and reloading… this can take a minute.': 'Zurücksetzen und neu laden… das kann eine Minute dauern.',
+  'Fresh demo loaded:': 'Frische Demo geladen:',
 
   // ── Glossary ──────────────────────────────────────────────
   Entries: 'Einträge',

@@ -26,6 +26,19 @@ export function buildApp(ctx: AppContext): FastifyInstance {
   // Multipart for audio/video recording uploads (transcribed on-device).
   app.register(fastifyMultipart, { limits: { fileSize: 500 * 1024 * 1024, files: 1 } });
 
+  // Tolerate an empty JSON body (e.g. a bodyless DELETE that still carries a
+  // application/json content-type) instead of failing it with a 400.
+  app.addContentTypeParser('application/json', { parseAs: 'string' }, (_req, body, done) => {
+    const s = body as string;
+    if (!s || s.trim() === '') return done(null, {});
+    try {
+      done(null, JSON.parse(s));
+    } catch (err) {
+      (err as Error & { statusCode?: number }).statusCode = 400;
+      done(err as Error, undefined);
+    }
+  });
+
   // Optional HTTP basic auth for a shared LAN/staging instance. Disabled unless
   // both env vars are set (so local single-operator use and tests need no auth).
   const user = process.env.ADAMAS_BASIC_USER;

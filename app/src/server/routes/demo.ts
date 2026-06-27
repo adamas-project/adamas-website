@@ -18,4 +18,21 @@ export function registerDemoRoutes(app: FastifyInstance, ctx: AppContext): void 
     }
     return result;
   });
+
+  // Factory reset: wipe every store, then re-seed a fresh demo database. Use this
+  // to replace an old dataset (e.g. random names) with the current demo data.
+  app.post('/api/demo/reset', async () => {
+    await ctx.ledger.clearAll();
+    await ctx.knowledge.clear();
+    await ctx.people.clear();
+    await ctx.records.clear();
+    await ctx.glossary.clear();
+
+    const result = await seedDemo(ctx.root, { ledger: ctx.ledger, knowledge: ctx.knowledge, people: ctx.people, records: ctx.records, glossary: ctx.glossary });
+
+    if (ctx.obsidianAuto) await ctx.obsidianAuto.runNow();
+    else await buildObsidianVault({ ledger: ctx.ledger, knowledge: ctx.knowledge, assets: ctx.assets, people: ctx.people, records: ctx.records, glossary: ctx.glossary }, resolveObsidianDir(ctx.root));
+
+    return { reset: true, ...result };
+  });
 }
