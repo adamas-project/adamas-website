@@ -23,6 +23,13 @@ export function DashboardView() {
     api.dashboard().then(setD).catch((e) => setErr((e as Error).message));
   }, []);
 
+  function exportPdf() {
+    const prev = document.title;
+    document.title = 'ADAMAS — Overview';
+    window.print(); // the browser's print dialog includes "Save as PDF"
+    setTimeout(() => { document.title = prev; }, 500);
+  }
+
   if (err) return <div className="panel"><p className="muted">{err}</p></div>;
   if (!d) return <div className="panel"><p className="muted">{t('Loading…')}</p></div>;
 
@@ -35,7 +42,13 @@ export function DashboardView() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       <div className="panel">
-        <h2 style={{ marginTop: 0 }}>{t('Overview')}</h2>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+          <h2 style={{ marginTop: 0 }}>{t('Overview')}</h2>
+          <span style={{ flex: 1 }} />
+          <button className="no-print" onClick={exportPdf} title={t('Open the print dialog — choose “Save as PDF”.')}>
+            {t('Save as PDF')}
+          </button>
+        </div>
         <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
           {t('Everything at a glance — totals and money, calculated for you from the live data.')}
         </p>

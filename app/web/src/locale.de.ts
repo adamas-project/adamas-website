@@ -316,6 +316,8 @@ export const de: Record<string, string> = {
   'Key financial metrics (latest)': 'Wichtige Finanzkennzahlen (aktuell)',
   Metric: 'Kennzahl',
   Period: 'Zeitraum',
+  'Save as PDF': 'Als PDF speichern',
+  'Open the print dialog — choose “Save as PDF”.': 'Druckdialog öffnen — „Als PDF speichern“ wählen.',
   'Decisions by department': 'Entscheidungen nach Abteilung',
   'People by type': 'Personen nach Typ',
   'risks tracked': 'erfasste Risiken',
