@@ -36,7 +36,11 @@ export function DashboardView() {
   const cur = d.revenue.currency;
   const money = (n: number) => `${cur}${Math.round(n).toLocaleString()}`;
   const compact = (n: number) =>
-    n >= 1_000_000 ? `${cur}${(n / 1_000_000).toFixed(1)}M` : n >= 1_000 ? `${cur}${Math.round(n / 1_000)}k` : money(n);
+    n >= 1_000_000_000_000 ? `${cur}${(n / 1_000_000_000_000).toFixed(2)}T`
+      : n >= 1_000_000_000 ? `${cur}${(n / 1_000_000_000).toFixed(1)}B`
+      : n >= 1_000_000 ? `${cur}${(n / 1_000_000).toFixed(1)}M`
+      : n >= 1_000 ? `${cur}${Math.round(n / 1_000)}k`
+      : money(n);
   const maxYear = Math.max(1, ...d.revenue.byYear.map((y) => y.amount));
 
   return (

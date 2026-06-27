@@ -99,4 +99,16 @@ describe('records API', () => {
     const res = await app.inject({ method: 'POST', url: '/api/records', payload: { category: 'vendor', title: 'x' } });
     expect(res.statusCode).toBe(400);
   });
+
+  it('edits a record via PATCH', async () => {
+    const entry = (await app.inject({ method: 'POST', url: '/api/records', payload: { category: 'customer', title: 'Edit Co', amount: 100, recurring: false } })).json().entry;
+    const res = await app.inject({ method: 'PATCH', url: `/api/records/${entry.id}`, payload: { amount: 999, recurring: true, status: 'active' } });
+    expect(res.statusCode).toBe(200);
+    const u = res.json().entry;
+    expect(u.amount).toBe(999);
+    expect(u.recurring).toBe(true);
+    expect(u.title).toBe('Edit Co'); // untouched
+    expect((await app.inject({ method: 'PATCH', url: '/api/records/REC-999', payload: { amount: 1 } })).statusCode).toBe(404);
+    await app.inject({ method: 'DELETE', url: `/api/records/${entry.id}` });
+  });
 });

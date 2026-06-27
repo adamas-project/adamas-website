@@ -18,6 +18,13 @@ export function KnowledgeView() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
 
+  // Inline edit of the selected entry.
+  const [editing, setEditing] = useState(false);
+  const [eTitle, setETitle] = useState('');
+  const [eSummary, setESummary] = useState('');
+  const [eTags, setETags] = useState('');
+  const CAP = 60;
+
   async function load() {
     try {
       const r = await api.knowledge({ q: q || undefined, tag: tag || undefined });
@@ -25,6 +32,31 @@ export function KnowledgeView() {
       setTags(r.tags);
     } catch (e) {
       setMsg((e as Error).message);
+    }
+  }
+
+  function startEdit(e: any) {
+    setEditing(true);
+    setETitle(e.title ?? '');
+    setESummary(e.summary ?? '');
+    setETags((e.tags ?? []).join(', '));
+  }
+  async function saveEdit() {
+    if (!selected) return;
+    setBusy(true);
+    try {
+      const r = await api.updateKnowledge(selected.id, {
+        title: eTitle.trim() || undefined,
+        summary: eSummary.trim() || undefined,
+        tags: eTags.split(',').map((s) => s.trim()).filter(Boolean),
+      });
+      setSelected(r.entry);
+      setEditing(false);
+      await load();
+    } catch (err) {
+      setMsg((err as Error).message);
+    } finally {
+      setBusy(false);
     }
   }
   useEffect(() => {
@@ -107,9 +139,10 @@ export function KnowledgeView() {
         </div>
 
         {entries.length === 0 && <p className="muted">{t('No knowledge yet. Add a link or some text above.')}</p>}
+        {entries.length > CAP && <p className="muted" style={{ fontSize: 12 }}>{t('Showing')} {CAP} {t('of')} {entries.length} — {t('search to narrow down.')}</p>}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {entries.map((e) => (
-            <button key={e.id} className={`card ${selected?.id === e.id ? 'selected' : ''}`} onClick={() => setSelected(e)}>
+          {entries.slice(0, CAP).map((e) => (
+            <button key={e.id} className={`card ${selected?.id === e.id ? 'selected' : ''}`} onClick={() => { setSelected(e); setEditing(false); }}>
               <div className="id">{e.id} · {e.type} · {e.date}</div>
               <div className="title">{e.title}</div>
               {e.tags?.length ? <div className="pill-row" style={{ marginTop: 4 }}>{e.tags.slice(0, 4).map((tg: string) => <span key={tg} className="tag">{tg}</span>)}</div> : null}
@@ -120,6 +153,21 @@ export function KnowledgeView() {
 
       <div className="panel">
         {selected ? (
+          editing ? (
+            <div>
+              <div className="id mono">{selected.id} · {selected.type}</div>
+              <label>{t('Title')}</label>
+              <input value={eTitle} onChange={(e) => setETitle(e.target.value)} />
+              <label>{t('Summary')}</label>
+              <textarea rows={6} style={{ resize: 'vertical' }} value={eSummary} onChange={(e) => setESummary(e.target.value)} />
+              <label>{t('Tags (comma-separated)')}</label>
+              <input value={eTags} onChange={(e) => setETags(e.target.value)} />
+              <div className="toolbar" style={{ marginTop: 10 }}>
+                <button className="primary" onClick={saveEdit} disabled={busy}>{busy ? t('Saving…') : t('Save changes')}</button>
+                <button onClick={() => setEditing(false)} disabled={busy}>{t('Cancel')}</button>
+              </div>
+            </div>
+          ) : (
           <div>
             <div className="id mono">{selected.id} · {selected.type}</div>
             <h2 style={{ marginTop: 4 }}>{selected.title}</h2>
@@ -151,10 +199,12 @@ export function KnowledgeView() {
               </>
             ) : null}
 
-            <div style={{ marginTop: 16 }}>
+            <div className="toolbar" style={{ marginTop: 16 }}>
+              <button onClick={() => startEdit(selected)}>{t('Edit')}</button>
               <button className="ghost" onClick={() => remove(selected.id)}>{t('Remove')}</button>
             </div>
           </div>
+          )
         ) : (
           <p className="muted">{t('Select an entry, or add a link/text to build your knowledge base.')}</p>
         )}
@@ -175,9 +225,11 @@ function GlossaryPanel() {
   const [definition, setDefinition] = useState('');
   const [newTags, setNewTags] = useState('');
   const [aliases, setAliases] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [drafting, setDrafting] = useState(false);
   const [msg, setMsg] = useState('');
+  const CAP = 80;
 
   async function load() {
     try {
@@ -221,7 +273,24 @@ function GlossaryPanel() {
     }
   }
 
-  async function add() {
+  function resetForm() {
+    setEditingId(null);
+    setTerm('');
+    setDefinition('');
+    setNewTags('');
+    setAliases('');
+  }
+
+  function startEdit(g: any) {
+    setEditingId(g.id);
+    setTerm(g.term ?? '');
+    setDefinition(g.definition ?? '');
+    setNewTags((g.tags ?? []).join(', '));
+    setAliases((g.aliases ?? []).join(', '));
+    setMsg('');
+  }
+
+  async function save() {
     if (!term.trim() || !definition.trim()) {
       setMsg(t('Term and definition are required.'));
       return;
@@ -229,18 +298,20 @@ function GlossaryPanel() {
     setBusy(true);
     setMsg('');
     try {
-      const r = await api.addGlossary({
+      const payload = {
         term: term.trim(),
         definition: definition.trim(),
         tags: newTags.split(',').map((s) => s.trim()).filter(Boolean),
         aliases: aliases.split(',').map((s) => s.trim()).filter(Boolean),
-      });
-      setTerm('');
-      setDefinition('');
-      setNewTags('');
-      setAliases('');
-      setTerms((prev) => [r.entry, ...prev.filter((e) => e.id !== r.entry.id)].sort((a, b) => a.term.localeCompare(b.term)));
-      setMsg(`${t('Saved')} ${r.entry.term}`);
+      };
+      if (editingId) {
+        await api.updateGlossary(editingId, payload);
+        setMsg(`${t('Saved changes.')}`);
+      } else {
+        const r = await api.addGlossary(payload);
+        setMsg(`${t('Saved')} ${r.entry.term}`);
+      }
+      resetForm();
       await load();
     } catch (e) {
       setMsg((e as Error).message);
@@ -279,7 +350,8 @@ function GlossaryPanel() {
           <div className="toolbar" style={{ margin: 0 }}>
             <input style={{ flex: 1, minWidth: 140 }} placeholder={t('Aliases (comma-separated)')} value={aliases} onChange={(e) => setAliases(e.target.value)} />
             <input style={{ flex: 1, minWidth: 140 }} placeholder={t('Tags (comma-separated)')} value={newTags} onChange={(e) => setNewTags(e.target.value)} />
-            <button className="primary" onClick={add} disabled={busy || !term.trim() || !definition.trim()}>{busy ? t('Saving…') : t('Add term')}</button>
+            <button className="primary" onClick={save} disabled={busy || !term.trim() || !definition.trim()}>{busy ? t('Saving…') : editingId ? t('Save changes') : t('Add term')}</button>
+            {editingId && <button onClick={resetForm} disabled={busy}>{t('Cancel')}</button>}
           </div>
           {msg && <div className="notice ok">{msg}</div>}
         </div>
@@ -295,13 +367,15 @@ function GlossaryPanel() {
       <div className="panel">
         <div className="section-title">{t('Terms')} {terms.length > 0 ? `(${terms.length})` : ''}</div>
         {terms.length === 0 && <p className="muted">{t('No terms yet. Add your first on the left.')}</p>}
+        {terms.length > CAP && <p className="muted" style={{ fontSize: 12 }}>{t('Showing')} {CAP} {t('of')} {terms.length} — {t('search to narrow down.')}</p>}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {terms.map((g) => (
-            <div key={g.id} className="card" style={{ cursor: 'default' }}>
+          {terms.slice(0, CAP).map((g) => (
+            <div key={g.id} className={`card ${editingId === g.id ? 'selected' : ''}`} style={{ cursor: 'default' }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
                 <strong>{g.term}</strong>
                 {g.aliases?.length ? <span className="muted" style={{ fontSize: 12 }}>({g.aliases.join(', ')})</span> : null}
                 <span style={{ flex: 1 }} />
+                <button className="tag linkbtn" onClick={() => startEdit(g)}>{t('edit')}</button>
                 <button className="tag linkbtn" onClick={() => remove(g.id)}>{t('remove')}</button>
               </div>
               <p style={{ margin: '6px 0', fontSize: 14 }}>{g.definition}</p>

@@ -98,16 +98,16 @@ const PEOPLE: PersonInput[] = [
 
 const RECORDS: RecordInput[] = [
   // customers
-  { category: 'customer', title: 'Alpine Foods', summary: 'Top account; three packaging lines under service contract.', owner: 'head-of-sales', status: 'active', amount: 420000, currency: '€', recurring: true, dueDate: '2026-03-31', tags: ['f&b', 'key-account'], source: 'crm:alpine' },
-  { category: 'customer', title: 'Nordic Dairy Co', summary: 'Two cells plus remote monitoring.', owner: 'head-of-sales', status: 'active', amount: 260000, currency: '€', recurring: true, dueDate: '2026-06-30', tags: ['f&b'] },
-  { category: 'customer', title: 'Bavaria Bottling', summary: 'One build, one-off, service attach pending.', owner: 'account-executive', status: 'active', amount: 180000, currency: '€', recurring: false, dueDate: '2026-01-15' },
-  { category: 'customer', title: 'Iberia Snacks', summary: 'Discovery phase for a new packaging line.', owner: 'account-executive', status: 'at-risk', amount: 95000, currency: '€', recurring: false },
-  { category: 'customer', title: 'GreenLeaf Beverages', summary: 'Renewed monitoring contract; expansion likely.', owner: 'head-of-sales', status: 'active', amount: 140000, currency: '€', recurring: true, dueDate: '2026-09-01', tags: ['f&b', 'expansion'] },
+  { category: 'customer', title: 'Alpine Foods', summary: 'Top account; three packaging lines under service contract.', owner: 'head-of-sales', status: 'active', amount: 420000, currency: '$', recurring: true, dueDate: '2026-03-31', tags: ['f&b', 'key-account'], source: 'crm:alpine' },
+  { category: 'customer', title: 'Nordic Dairy Co', summary: 'Two cells plus remote monitoring.', owner: 'head-of-sales', status: 'active', amount: 260000, currency: '$', recurring: true, dueDate: '2026-06-30', tags: ['f&b'] },
+  { category: 'customer', title: 'Bavaria Bottling', summary: 'One build, one-off, service attach pending.', owner: 'account-executive', status: 'active', amount: 180000, currency: '$', recurring: false, dueDate: '2026-01-15' },
+  { category: 'customer', title: 'Iberia Snacks', summary: 'Discovery phase for a new packaging line.', owner: 'account-executive', status: 'at-risk', amount: 95000, currency: '$', recurring: false },
+  { category: 'customer', title: 'GreenLeaf Beverages', summary: 'Renewed monitoring contract; expansion likely.', owner: 'head-of-sales', status: 'active', amount: 140000, currency: '$', recurring: true, dueDate: '2026-09-01', tags: ['f&b', 'expansion'] },
   // financial KPIs
   { category: 'financial', title: 'Gross margin', summary: 'Above the 20% floor and trending up.', metric: 'Gross margin', amount: 27, period: 'Q2 2025', status: 'on-track', source: 'finance:q2' },
   { category: 'financial', title: 'Recurring revenue %', summary: 'Service + monitoring share of revenue.', metric: 'Recurring revenue', amount: 31, period: 'Q2 2025', status: 'improving' },
   { category: 'financial', title: 'Cash runway (months)', summary: 'Operating cash reserve.', metric: 'Runway', amount: 7, period: 'Jun 2025', status: 'on-track' },
-  { category: 'financial', title: 'Revenue (TTM)', summary: 'Trailing twelve months revenue.', metric: 'Revenue TTM', amount: 8600000, currency: '€', period: 'TTM Jun 2025' },
+  { category: 'financial', title: 'Revenue (TTM)', summary: 'Trailing twelve months revenue.', metric: 'Revenue TTM', amount: 8600000, currency: '$', period: 'TTM Jun 2025' },
   { category: 'financial', title: 'Customer concentration (top account)', summary: 'Largest customer as a share of revenue.', metric: 'Top-account concentration', amount: 12, period: 'Q2 2025', status: 'watch' },
   // risk register
   { category: 'risk', title: 'Key-person dependence on the founder', summary: 'Founder holds key customer and technical relationships.', owner: 'board-member', severity: 'high', mitigation: 'Document playbooks; name successors per key role.', status: 'mitigating' },
@@ -270,16 +270,16 @@ const EXTRA_PEOPLE: PersonInput[] = (
 
 const EXTRA_RECORDS: RecordInput[] = [
   // customers
-  { category: 'customer', title: 'Crisp & Co', summary: 'Bakery packaging line; new logo.', owner: 'account-executive', status: 'active', amount: 210000, currency: '€', recurring: false, dueDate: '2026-02-28', tags: ['bakery'] },
-  { category: 'customer', title: 'PurePress Juices', summary: 'Two lines + Gold SLA.', owner: 'head-of-sales', status: 'active', amount: 320000, currency: '€', recurring: true, dueDate: '2026-07-15', tags: ['f&b'] },
-  { category: 'customer', title: 'Tundra Frozen', summary: 'Monitoring + predictive-maintenance tier.', owner: 'head-of-sales', status: 'active', amount: 175000, currency: '€', recurring: true, dueDate: '2026-04-30' },
-  { category: 'customer', title: 'Mediterraneo Olive', summary: 'Single cell; expansion in discussion.', owner: 'account-executive', status: 'active', amount: 120000, currency: '€', recurring: false },
-  { category: 'customer', title: 'Highland Brewing', summary: 'Bottling line; Silver SLA.', owner: 'account-executive', status: 'at-risk', amount: 90000, currency: '€', recurring: true, dueDate: '2026-05-20' },
+  { category: 'customer', title: 'Crisp & Co', summary: 'Bakery packaging line; new logo.', owner: 'account-executive', status: 'active', amount: 210000, currency: '$', recurring: false, dueDate: '2026-02-28', tags: ['bakery'] },
+  { category: 'customer', title: 'PurePress Juices', summary: 'Two lines + Gold SLA.', owner: 'head-of-sales', status: 'active', amount: 320000, currency: '$', recurring: true, dueDate: '2026-07-15', tags: ['f&b'] },
+  { category: 'customer', title: 'Tundra Frozen', summary: 'Monitoring + predictive-maintenance tier.', owner: 'head-of-sales', status: 'active', amount: 175000, currency: '$', recurring: true, dueDate: '2026-04-30' },
+  { category: 'customer', title: 'Mediterraneo Olive', summary: 'Single cell; expansion in discussion.', owner: 'account-executive', status: 'active', amount: 120000, currency: '$', recurring: false },
+  { category: 'customer', title: 'Highland Brewing', summary: 'Bottling line; Silver SLA.', owner: 'account-executive', status: 'at-risk', amount: 90000, currency: '$', recurring: true, dueDate: '2026-05-20' },
   // financial KPIs
   { category: 'financial', title: 'EBITDA margin', summary: 'Operating profitability.', metric: 'EBITDA margin', amount: 14, period: 'Q2 2025', status: 'on-track' },
   { category: 'financial', title: 'Net revenue retention', summary: 'Expansion minus churn on existing accounts.', metric: 'NRR', amount: 112, period: 'Q2 2025', status: 'improving' },
   { category: 'financial', title: 'Pipeline coverage', summary: 'Pipeline vs quota for next quarter.', metric: 'Pipeline coverage', amount: 3, period: 'Q3 2025', status: 'on-track' },
-  { category: 'financial', title: 'Order backlog', summary: 'Signed but unrecognized revenue.', metric: 'Backlog', amount: 4200000, currency: '€', period: 'Jun 2025' },
+  { category: 'financial', title: 'Order backlog', summary: 'Signed but unrecognized revenue.', metric: 'Backlog', amount: 4200000, currency: '$', period: 'Jun 2025' },
   { category: 'financial', title: 'Billable utilization', summary: 'Engineering utilization rate.', metric: 'Utilization', amount: 78, period: 'Q2 2025', status: 'on-track' },
   // risk register
   { category: 'risk', title: 'FX exposure on imported components', summary: 'USD-priced drives expose margin to FX.', owner: 'cfo', severity: 'medium', mitigation: 'Forward contracts (see finance decision).', status: 'mitigating' },
@@ -403,7 +403,7 @@ function genRecords(count: number): RecordInput[] {
   for (const region of REC_REGIONS) {
     for (const company of GEN_COMPANIES) {
       if (out.filter((r) => r.category === 'customer').length >= Math.floor(count * 0.55)) break;
-      out.push({ category: 'customer', title: `${company} — ${region}`, summary: `${ci % 3 === 0 ? 'Service + monitoring account' : 'Build customer'} in the F&B segment (${region}).`, owner: 'head-of-sales', status: ci % 5 === 0 ? 'at-risk' : 'active', amount: 80000 + (ci % 20) * 15000, currency: '€', recurring: ci % 2 === 0, dueDate: `2026-${String((ci % 12) + 1).padStart(2, '0')}-15`, tags: ['f&b'] });
+      out.push({ category: 'customer', title: `${company} — ${region}`, summary: `${ci % 3 === 0 ? 'Service + monitoring account' : 'Build customer'} in the F&B segment (${region}).`, owner: 'head-of-sales', status: ci % 5 === 0 ? 'at-risk' : 'active', amount: 2_000_000_000 + (ci % 20) * 350_000_000, currency: '$', recurring: ci % 2 === 0, dueDate: `2026-${String((ci % 12) + 1).padStart(2, '0')}-15`, tags: ['f&b'] });
       ci++;
     }
   }

@@ -6,6 +6,7 @@ import { PeopleStore } from '../src/people/store.js';
 import { RecordStore } from '../src/records/store.js';
 import { GlossaryStore } from '../src/glossary/store.js';
 import { buildMemoryGraph } from '../src/ledger/graph.js';
+import { computeOverview } from '../src/dashboard/overview.js';
 import { seedDemo } from '../src/demo/demo.js';
 import { tempVault } from './helpers.js';
 
@@ -51,6 +52,11 @@ describe('demo seeder', () => {
     expect(names).toContain('Steve Jobs');
     // Decisions reference the renamed owners, keeping people↔decision links intact.
     expect(deps.ledger.list().some((d) => d.owner.name === 'Steve Jobs')).toBe(true);
+
+    // For-fun: the demo book of business exceeds a trillion.
+    const overview = computeOverview(deps);
+    expect(overview.revenue.totalContractValue).toBeGreaterThan(1_000_000_000_000);
+    expect(overview.revenue.currency).toBe('$');
 
     // All four record categories are represented.
     expect(deps.records.categories().sort()).toEqual(['customer', 'financial', 'ip', 'risk']);

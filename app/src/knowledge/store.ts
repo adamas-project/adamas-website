@@ -122,6 +122,18 @@ export class KnowledgeStore {
     return true;
   }
 
+  async update(id: string, patch: Partial<KnowledgeInput>): Promise<KnowledgeEntry | undefined> {
+    const v = this.map.get(id);
+    if (!v) return undefined;
+    const clean = Object.fromEntries(Object.entries(patch).filter(([, val]) => val !== undefined));
+    const updated: KnowledgeEntry = { ...v.entry, ...clean, id: v.entry.id, date: v.entry.date };
+    assertKnowledge(updated);
+    await atomicWrite(path.join(this.dir, v.fileName), serialize(updated));
+    this.map.set(id, { entry: updated, fileName: v.fileName });
+    this.emit();
+    return updated;
+  }
+
   /** Remove every entry (files + memory). Used by the demo reset. */
   async clear(): Promise<void> {
     for (const { fileName } of this.map.values()) await removeFile(path.join(this.dir, fileName));

@@ -135,6 +135,10 @@ export const de: Record<string, string> = {
 
   // ── Data Room ─────────────────────────────────────────────
   'Diligence records': 'Due-Diligence-Datensätze',
+  'Search records by title, owner, metric…': 'Datensätze nach Titel, Eigentümer, Kennzahl suchen…',
+  'Title is required.': 'Titel ist erforderlich.',
+  'Added.': 'Hinzugefügt.',
+  Edit: 'Bearbeiten',
   'Customers & contracts': 'Kunden & Verträge',
   'Financial KPIs': 'Finanz-KPIs',
   'Risk register': 'Risikoregister',
