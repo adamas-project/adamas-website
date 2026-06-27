@@ -105,7 +105,7 @@ export function registerPeopleRoutes(app: FastifyInstance, ctx: AppContext): voi
     }
     if (b.summary != null && b.summary.trim()) patch.summary = b.summary.trim();
     if (b.skills != null) patch.skills = b.skills.map((s) => s.trim()).filter(Boolean);
-    if (b.keyPerson != null) patch.keyPerson = !!b.keyPerson || undefined;
+    if (b.keyPerson != null) patch.keyPerson = !!b.keyPerson; // allow turning it OFF (false), not just on
     if (b.startDate != null) patch.startDate = b.startDate.trim() || undefined;
     if (b.location != null) patch.location = b.location.trim() || undefined;
     if (b.email != null) patch.email = b.email.trim() || undefined;
