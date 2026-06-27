@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from './api';
 import { useLang } from './i18n';
+import { DashboardView } from './views/Dashboard';
 import { LedgerView } from './views/Ledger';
 import { InboxView } from './views/Inbox';
 import { GraphView } from './views/Graph';
@@ -11,9 +12,10 @@ import { KnowledgeView } from './views/Knowledge';
 import { PeopleView } from './views/People';
 import { DataRoomView } from './views/DataRoom';
 
-type Tab = 'ledger' | 'inbox' | 'graph' | 'assets' | 'knowledge' | 'people' | 'dataroom' | 'boundary' | 'onboarding';
+type Tab = 'dashboard' | 'ledger' | 'inbox' | 'graph' | 'assets' | 'knowledge' | 'people' | 'dataroom' | 'boundary' | 'onboarding';
 
 const TABS: Array<{ id: Tab; label: string }> = [
+  { id: 'dashboard', label: 'Dashboard' },
   { id: 'ledger', label: 'The Ledger' },
   { id: 'inbox', label: 'Capture Inbox' },
   { id: 'graph', label: 'Decision Graph' },
@@ -32,7 +34,7 @@ const THEMES: Theme[] = ['dark', 'light', 'matrix'];
 
 export function App() {
   const { t, lang, setLang } = useLang();
-  const [tab, setTab] = useState<Tab>('ledger');
+  const [tab, setTab] = useState<Tab>('dashboard');
   const [role, setRole] = useState('owner');
   const [meta, setMeta] = useState<{ count: number; version: number } | null>(null);
   const [pending, setPending] = useState(0);
@@ -109,6 +111,7 @@ export function App() {
       </header>
 
       <main className="content">
+        {tab === 'dashboard' && <DashboardView />}
         {tab === 'ledger' && <LedgerView role={role} onChanged={refresh} />}
         {tab === 'inbox' && <InboxView onChanged={refresh} />}
         {tab === 'graph' && <GraphView />}

@@ -41,6 +41,21 @@ async function req<T>(url: string, opts: RequestInit = {}): Promise<T> {
 
 export const api = {
   meta: () => req<{ count: number; version: number; domains: Domain[]; statuses: Status[] }>('/api/meta'),
+  dashboard: () => req<{
+    counts: { decisions: number; knowledge: number; people: number; records: number; glossary: number };
+    decisions: { byDomain: Record<string, number>; active: number; superseded: number };
+    people: { total: number; keyPeople: number; byKind: Record<string, number> };
+    revenue: {
+      currency: string; arr: number; oneOff: number; totalContractValue: number;
+      customers: number; activeCustomers: number; atRiskCustomers: number; avgContract: number;
+      topCustomers: Array<{ id: string; title: string; amount: number; recurring: boolean; status?: string }>;
+      byYear: Array<{ year: string; amount: number }>;
+    };
+    keyMetrics: Array<{ metric: string; period?: string; amount?: number; currency?: string; status?: string }>;
+    records: { total: number; byCategory: Record<string, number> };
+    risks: { total: number; bySeverity: { low: number; medium: number; high: number } };
+    readiness: { score: number; traceabilityPct: number };
+  }>('/api/dashboard'),
   decisions: (params: { domain?: string; status?: string; role?: string } = {}) =>
     req<{ role: string; decisions: Decision[] }>(`/api/decisions${qs(params)}`),
   decision: (id: string, role?: string) =>
