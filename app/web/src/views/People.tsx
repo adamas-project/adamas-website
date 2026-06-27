@@ -138,10 +138,23 @@ export function PeopleView() {
     if (editingId === id) resetForm();
     try {
       await api.deletePerson(id);
-      await load();
     } catch (e) {
-      setPeople(snapshot); // restore on failure
-      setMsg(`${t('Could not remove')}: ${(e as Error).message}`);
+      const status = (e as { status?: number }).status;
+      if (status !== 404) {
+        // A 404 means it's already gone — keep the optimistic removal. Any other
+        // error is a real failure, so restore the row and surface why.
+        setPeople(snapshot);
+        setMsg(`${t('Could not remove')}: ${(e as Error).message}`);
+        return;
+      }
+    }
+    // The delete succeeded (or was already gone). Confirm it explicitly — the row
+    // may be off-screen under the 60-row cap, so the message is the real signal.
+    setMsg(`${t('Removed')}: ${who}`);
+    try {
+      await load(); // reconcile counts/duplicates; a refresh failure must NOT undo the delete
+    } catch {
+      /* keep optimistic state */
     }
   }
 
@@ -180,12 +193,13 @@ export function PeopleView() {
           <div key={p.id} className={`card ${editingId === p.id ? 'selected' : ''}`} style={{ marginBottom: 10 }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
               <strong>{p.name}</strong>
+              <span className="muted mono" style={{ fontSize: 11 }}>{p.id}</span>
               <span className="muted" style={{ fontSize: 13 }}>{p.role}</span>
               <span className="badge">{t(p.kind)}</span>
               {p.keyPerson && <span className="badge live">{t('key person')}</span>}
               <span style={{ flex: 1 }} />
               <button className="tag linkbtn" onClick={() => startEdit(p)}>{t('edit')}</button>
-              <button className="tag linkbtn" onClick={() => remove(p.id, `${p.name} · ${p.role}`)}>{t('remove')}</button>
+              <button className="tag linkbtn" onClick={() => remove(p.id, `${p.name} · ${p.role} (${p.id})`)}>{t('remove')}</button>
             </div>
             <p style={{ margin: '6px 0', fontSize: 14 }}>{p.summary}</p>
             {p.skills?.length ? (

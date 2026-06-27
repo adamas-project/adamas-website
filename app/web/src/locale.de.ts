@@ -128,6 +128,7 @@ export const de: Record<string, string> = {
   'Name and role are required.': 'Name und Rolle sind erforderlich.',
   'Added. CV summarized into the knowledge base.': 'Hinzugefügt. Lebenslauf in die Wissensbasis zusammengefasst.',
   'Remove this person?': 'Diese Person entfernen?',
+  Removed: 'Entfernt',
   'Bio / summary': 'Bio / Zusammenfassung',
   'Short bio shown on the card.': 'Kurze Bio, die auf der Karte angezeigt wird.',
   'Skills (comma-separated)': 'Fähigkeiten (kommagetrennt)',

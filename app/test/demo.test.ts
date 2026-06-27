@@ -42,6 +42,11 @@ describe('demo seeder', () => {
     expect(deps.records.count).toBeGreaterThanOrEqual(1200);
     expect(deps.glossary.count).toBeGreaterThanOrEqual(400);
 
+    // The demo "team" is famous people in ordinary roles (funnier showcase).
+    const names = deps.people.list().map((p) => p.name);
+    expect(names).toContain('Pablo Escobar');
+    expect(names).toContain('Michael Jackson');
+
     // All four record categories are represented.
     expect(deps.records.categories().sort()).toEqual(['customer', 'financial', 'ip', 'risk']);
 
