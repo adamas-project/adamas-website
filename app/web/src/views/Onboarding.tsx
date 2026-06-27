@@ -26,6 +26,20 @@ export function OnboardingView() {
     }
   }
 
+  async function resetDemo() {
+    if (typeof window !== 'undefined' && !window.confirm(t('This wipes ALL current data (decisions, knowledge, people, records, glossary) and loads a fresh demo database. Continue?'))) return;
+    setDemoBusy(true);
+    setDemoMsg(t('Resetting and reloading… this can take a minute.'));
+    try {
+      const r = await api.demoReset();
+      setDemoMsg(`${t('Fresh demo loaded:')} ${r.decisions} ${t('decisions')}, ${r.knowledge} ${t('knowledge')}, ${r.people} ${t('people')}, ${r.records} ${t('records')}.`);
+    } catch (e) {
+      setDemoMsg((e as Error).message);
+    } finally {
+      setDemoBusy(false);
+    }
+  }
+
   // Follow the app language for pricing locale/currency, but allow overriding.
   useEffect(() => {
     setLocale(lang);
@@ -92,6 +106,9 @@ export function OnboardingView() {
       <div className="toolbar" style={{ margin: 0 }}>
         <button className="primary" onClick={loadDemo} disabled={demoBusy}>
           {demoBusy ? t('Loading…') : t('Load demo data')}
+        </button>
+        <button onClick={resetDemo} disabled={demoBusy} title={t('Wipe everything and load a fresh demo database.')}>
+          {t('Reset & reload demo data')}
         </button>
         {demoMsg && <span className="muted" style={{ fontSize: 13 }}>{demoMsg}</span>}
       </div>

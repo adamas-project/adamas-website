@@ -274,6 +274,20 @@ export class Ledger {
     return { original: this.getOrThrow(id), successor: this.getOrThrow(successorId) };
   }
 
+  /**
+   * Remove ALL decisions (files + index). Append-only is the norm; this is the
+   * explicit exception used only by the demo "factory reset".
+   */
+  async clearAll(): Promise<void> {
+    for (const id of [...this.index.ids()]) {
+      const fn = this.fileNameOf(id);
+      if (fn) await removeFile(path.join(this.paths.decisions, fn));
+    }
+    await this.index.rebuild(); // re-reads the now-empty directory
+    await this.index.persist();
+    this.emit({ type: 'updated', id: '*', affected: [] });
+  }
+
   /** Rebuild the derived index from the canonical Markdown files. */
   async rebuildIndex(): Promise<void> {
     await this.index.rebuild();

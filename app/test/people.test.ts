@@ -39,6 +39,19 @@ describe('people schema + store', () => {
     expect(await reopened.remove('PER-001')).toBe(true);
     expect(reopened.get('PER-001')).toBeUndefined();
   });
+
+  it('clear() removes every record (files + memory)', async () => {
+    const v = tempVault();
+    cleanups.push(v.cleanup);
+    const store = await PeopleStore.open(path.join(v.root, 'people'));
+    await store.create({ name: 'A', role: 'r', kind: 'employee', summary: 's' });
+    await store.create({ name: 'B', role: 'r', kind: 'employee', summary: 's' });
+    expect(store.count).toBe(2);
+    await store.clear();
+    expect(store.count).toBe(0);
+    const reopened = await PeopleStore.open(path.join(v.root, 'people'));
+    expect(reopened.count).toBe(0); // persisted
+  });
 });
 
 describe('merge duplicate people', () => {
@@ -172,6 +185,22 @@ describe('people API', () => {
     expect((await app.inject({ method: 'PATCH', url: '/api/people/PER-999', payload: { role: 'x' } })).statusCode).toBe(404);
 
     await app.inject({ method: 'DELETE', url: `/api/people/${created.id}` });
+  });
+
+  it('deletes with an empty JSON body + content-type (browser-style) — no 400', async () => {
+    const created = (await app.inject({
+      method: 'POST',
+      url: '/api/people',
+      payload: { name: 'Delete Me', role: 'Temp', kind: 'employee' },
+    })).json().entry;
+    // Reproduce the browser DELETE: application/json header but no body.
+    const res = await app.inject({
+      method: 'DELETE',
+      url: `/api/people/${created.id}`,
+      headers: { 'content-type': 'application/json' },
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().removed).toBe(created.id);
   });
 
   it('reports and merges duplicates via the API', async () => {

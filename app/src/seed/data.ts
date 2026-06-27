@@ -84,7 +84,7 @@ export const SEED_DECISIONS: DecisionInput[] = [
       'A large automotive OEM offered a high-volume welded-frame contract (~$900k/yr). It would consume two of three build slots for 14 months at an estimated 11% margin, off-ICP, with punitive change-order terms.',
     decision:
       'Decline the contract. Protect capacity for higher-margin F&B cell work and hold the margin floor.',
-    owner: { role: 'founder', name: 'Massimo Sahin', dissent: ['head-of-sales'] },
+    owner: { role: 'founder', name: 'Steve Jobs', dissent: ['head-of-sales'] },
     tradeoffs: [
       'Forgoes ~$900k/yr of top-line revenue',
       'Strains the relationship with a marquee logo',
@@ -159,7 +159,7 @@ export const SEED_DECISIONS: DecisionInput[] = [
       'An angel offered $750k for ~15%. Modeling showed organic margin could fund the next hire and a second bay without dilution.',
     decision:
       'Decline equity; fund growth from retained margin and milestone cash. Revisit only for a step-change opportunity.',
-    owner: { role: 'founder', name: 'Massimo Sahin' },
+    owner: { role: 'founder', name: 'Steve Jobs' },
     tradeoffs: ['Slower expansion', 'Carries more single-shop risk without an outside balance sheet'],
     links: ['FIN-016'],
     sources: ['meeting:2025-04-28#funding-discussion', 'email:2025-04-25#angel-term-sheet'],
