@@ -72,7 +72,7 @@ const KNOWLEDGE: KnowledgeInput[] = [
 ];
 
 const PEOPLE: PersonInput[] = [
-  { name: 'Steve Jobs', role: 'founder', kind: 'founder', summary: 'Founder and CEO; set the company’s margin discipline and ICP focus. Background in controls engineering and operations.', skills: ['strategy', 'controls', 'operations'], highlights: ['Founded NorthPeak in 2018', 'Grew to 60 staff profitably'], keyPerson: true, startDate: '2018-03', location: 'Stuttgart, DE', email: 'm@northpeak.example' },
+  { name: 'Steve Jobs', role: 'founder', kind: 'founder', summary: 'Founder and CEO; set the company’s margin discipline and ICP focus. Background in controls engineering and operations.', skills: ['strategy', 'controls', 'operations'], highlights: ['Founded NorthPeak in 2018', 'Grew to 60 staff profitably'], startDate: '2018-03', location: 'Stuttgart, DE', email: 'm@northpeak.example' },
   { name: 'Warren Buffett', role: 'cfo', kind: 'employee', summary: 'CFO; owns margin floor, milestone billing, and the cash-runway policy.', skills: ['finance', 'fp&a', 'controlling'], startDate: '2020-06', location: 'Munich, DE' },
   { name: 'Jordan Belfort', role: 'head-of-sales', kind: 'employee', summary: 'Head of Sales; drove the F&B ICP focus and value-based pricing.', skills: ['enterprise-sales', 'pricing', 'negotiation'], startDate: '2019-09', location: 'Amsterdam, NL' },
   { name: 'Nikola Tesla', role: 'head-of-engineering', kind: 'employee', summary: 'Head of Engineering; standardized the controls platform and simulation-first commissioning.', skills: ['twincat', 'controls', 'simulation'], startDate: '2019-02', location: 'Stuttgart, DE' },
@@ -380,13 +380,15 @@ const GEN_CITIES = ['Stuttgart, DE', 'Berlin, DE', 'Munich, DE', 'Milan, IT', 'B
 const GEN_SKILLS = ['plc', 'cad', 'project-management', 'commissioning', 'sales', 'typescript', 'quality', 'python', 'procurement', 'pre-sales', 'people-ops', 'fp&a'];
 // The demo "team" is a roster of famous people in ordinary NorthPeak roles — a
 // memorable, funnier showcase than random names (Pablo Escobar, Procurement…).
+// Exactly one is flagged as the key person (departure = material risk).
+const KEY_PERSON = 'Albert Einstein';
 function genPeople(count: number): PersonInput[] {
   const out: PersonInput[] = [];
   const max = Math.min(count, FAMOUS_NAMES.length); // one record per unique famous name
   for (let i = 0; i < max; i++) {
     const name = FAMOUS_NAMES[i]!;
     const role = GEN_ROLES[i % GEN_ROLES.length]!;
-    out.push({ name, role, kind: 'employee', summary: `${role.replace(/-/g, ' ')} at NorthPeak Robotics.`, skills: [GEN_SKILLS[i % GEN_SKILLS.length]!], location: GEN_CITIES[i % GEN_CITIES.length] });
+    out.push({ name, role, kind: 'employee', summary: `${role.replace(/-/g, ' ')} at NorthPeak Robotics.`, skills: [GEN_SKILLS[i % GEN_SKILLS.length]!], location: GEN_CITIES[i % GEN_CITIES.length], ...(name === KEY_PERSON ? { keyPerson: true } : {}) });
   }
   return out;
 }

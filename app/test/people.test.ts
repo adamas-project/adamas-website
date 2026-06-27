@@ -180,6 +180,10 @@ describe('people API', () => {
     expect(entry.skills).toEqual(['plc', 'cad']);
     expect(entry.id).toBe(created.id); // id immutable
 
+    // The key-person flag can be turned OFF again (regression: false was ignored).
+    const off = await app.inject({ method: 'PATCH', url: `/api/people/${created.id}`, payload: { keyPerson: false } });
+    expect(off.json().entry.keyPerson).toBeFalsy();
+
     // Empty name is rejected; unknown id is 404.
     expect((await app.inject({ method: 'PATCH', url: `/api/people/${created.id}`, payload: { name: '  ' } })).statusCode).toBe(400);
     expect((await app.inject({ method: 'PATCH', url: '/api/people/PER-999', payload: { role: 'x' } })).statusCode).toBe(404);
