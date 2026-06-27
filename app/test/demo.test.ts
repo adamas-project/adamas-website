@@ -53,9 +53,10 @@ describe('demo seeder', () => {
     // Decisions reference the renamed owners, keeping people↔decision links intact.
     expect(deps.ledger.list().some((d) => d.owner.name === 'Steve Jobs')).toBe(true);
 
-    // For-fun: the demo book of business exceeds a trillion.
+    // For-fun: thousands of customers and a book of business in the trillions.
     const overview = computeOverview(deps);
-    expect(overview.revenue.totalContractValue).toBeGreaterThan(1_000_000_000_000);
+    expect(overview.revenue.customers).toBeGreaterThanOrEqual(1500);
+    expect(overview.revenue.totalContractValue).toBeGreaterThan(5_000_000_000_000); // > $5T
     expect(overview.revenue.currency).toBe('$');
 
     // All four record categories are represented.

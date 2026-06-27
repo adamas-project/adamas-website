@@ -396,15 +396,23 @@ const GEN_RISKS = ['Lead-time volatility on long-lead parts', 'Talent gap in mac
 const GEN_IP = ['Vision-inspection algorithm (trade secret)', 'Cell-controller firmware (owned)', 'Brand style guide (copyright)', 'Fixturing CAD library (owned)', 'Monitoring dashboard UI (copyright)', 'Safety-architecture template (owned)', 'Commissioning toolkit (owned)', 'Training materials (copyright)', 'API specification (owned)', 'Test-bench designs (owned)', 'Domain portfolio (owned)', 'Robot-calibration method (trade secret)', 'Recipe-management module (owned)', 'Telemetry schema (owned)', 'Installation manuals (copyright)', 'Partner integration kit (owned)'];
 const REC_REGIONS = ['DACH', 'Nordics', 'Iberia', 'Benelux', 'Italy', 'France', 'UK & Ireland', 'CEE', 'Alpine', 'Baltics', 'Iberia North', 'Adriatic', 'Rhine', 'Bavaria', 'Catalonia', 'Lombardy', 'Scandinavia', 'Central EU', 'Mediterranean', 'Atlantic'];
 const REC_QUALIFIERS = ['build cells', 'service contracts', 'monitoring', 'spare parts', 'commissioning', 'training', 'warranty', 'integration', 'retrofits', 'upgrades', 'pilots', 'expansion'];
+// Generate this many customers (company × region × division) with billion-dollar
+// contracts so the demo book of business runs into the tens of trillions.
+const CUSTOMER_TARGET = 2000;
 function genRecords(count: number): RecordInput[] {
+  void count;
   const out: RecordInput[] = [];
-  // Customers: company × region (~half of the volume).
+  // Customers: company × region × division — unique titles, billions each.
   let ci = 0;
-  for (const region of REC_REGIONS) {
-    for (const company of GEN_COMPANIES) {
-      if (out.filter((r) => r.category === 'customer').length >= Math.floor(count * 0.55)) break;
-      out.push({ category: 'customer', title: `${company} — ${region}`, summary: `${ci % 3 === 0 ? 'Service + monitoring account' : 'Build customer'} in the F&B segment (${region}).`, owner: 'head-of-sales', status: ci % 5 === 0 ? 'at-risk' : 'active', amount: 2_000_000_000 + (ci % 20) * 350_000_000, currency: '$', recurring: ci % 2 === 0, dueDate: `2026-${String((ci % 12) + 1).padStart(2, '0')}-15`, tags: ['f&b'] });
-      ci++;
+  for (let div = 1; ci < CUSTOMER_TARGET; div++) {
+    for (const region of REC_REGIONS) {
+      for (const company of GEN_COMPANIES) {
+        if (ci >= CUSTOMER_TARGET) break;
+        const title = div === 1 ? `${company} — ${region}` : `${company} — ${region} (Division ${div})`;
+        const year = 2025 + (ci % 5); // spread renewals across 2025–2029
+        out.push({ category: 'customer', title, summary: `${ci % 3 === 0 ? 'Service + monitoring account' : 'Build customer'} in the F&B segment (${region}).`, owner: 'head-of-sales', status: ci % 5 === 0 ? 'at-risk' : 'active', amount: 3_000_000_000 + (ci % 25) * 400_000_000, currency: '$', recurring: ci % 2 === 0, dueDate: `${year}-${String((ci % 12) + 1).padStart(2, '0')}-15`, tags: ['f&b'] });
+        ci++;
+      }
     }
   }
   // Financial KPIs: metric × quarter × year.
