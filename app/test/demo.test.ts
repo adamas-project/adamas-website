@@ -52,6 +52,8 @@ describe('demo seeder', () => {
     expect(names).toContain('Steve Jobs');
     // Decisions reference the renamed owners, keeping people↔decision links intact.
     expect(deps.ledger.list().some((d) => d.owner.name === 'Steve Jobs')).toBe(true);
+    // Exactly one key person (the founder).
+    expect(deps.people.list().filter((p) => p.keyPerson).length).toBe(1);
 
     // For-fun: thousands of customers and a book of business in the trillions.
     const overview = computeOverview(deps);
