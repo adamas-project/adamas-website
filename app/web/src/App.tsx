@@ -32,6 +32,45 @@ const ROLES = ['owner', 'cfo', 'head-of-sales', 'member'];
 type Theme = 'dark' | 'light' | 'matrix';
 const THEMES: Theme[] = ['dark', 'light', 'matrix'];
 
+// Bump this when the legal terms change to re-prompt all users for acceptance.
+const TERMS_VERSION = '2026-06-v1';
+const TERMS_KEY = 'adamas-terms';
+const LEGAL_ENTITY = 'Falcon Intelligence Group LLC (operating as ADAMAS)';
+
+// First-run clickwrap license gate. Blocks the app until the user accepts the
+// current TERMS_VERSION. [TODO: counsel] — placeholder wording; have legal
+// counsel finalize before release.
+function LicenseGate({ onAccept }: { onAccept: () => void }) {
+  const { t } = useLang();
+  const year = new Date().getFullYear();
+  return (
+    <div className="license-gate-overlay" role="dialog" aria-modal="true" aria-labelledby="license-gate-title">
+      <div className="license-gate-modal panel">
+        <h2 id="license-gate-title" style={{ marginTop: 0 }}>{t('Before you continue')}</h2>
+        <p>
+          {t('By using ADAMAS you agree to the Terms of Use, Privacy Policy and End-User License Agreement.')}
+        </p>
+        <p className="muted" style={{ fontSize: 13 }}>
+          {t('ADAMAS is proprietary software, licensed and not sold. All intellectual property and rights in the software remain with')} {LEGAL_ENTITY}. {t('The software is provided “as is”, without warranties of any kind. AI-generated content and the valuation-readiness score are not professional legal, financial, or investment advice. [TODO: counsel]')}
+        </p>
+        <p className="muted" style={{ fontSize: 13 }}>
+          <a href="https://adamas-project.com/terms" target="_blank" rel="noreferrer">{t('Terms of Use')}</a>
+          {' · '}
+          <a href="https://adamas-project.com/privacy" target="_blank" rel="noreferrer">{t('Privacy Policy')}</a>
+          {' · '}
+          <a href="https://adamas-project.com/eula" target="_blank" rel="noreferrer">{t('End-User License Agreement')}</a>
+        </p>
+        <div className="toolbar" style={{ marginTop: 12 }}>
+          <button className="primary" onClick={onAccept}>{t('I accept')}</button>
+        </div>
+        <p className="muted" style={{ fontSize: 11, marginTop: 8 }}>
+          © {year} {LEGAL_ENTITY}. {t('All rights reserved.')}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export function App() {
   const { t, lang, setLang } = useLang();
   const [tab, setTab] = useState<Tab>('dashboard');
@@ -39,6 +78,22 @@ export function App() {
   const [meta, setMeta] = useState<{ count: number; version: number } | null>(null);
   const [pending, setPending] = useState(0);
   const [brand, setBrand] = useState<{ companyName: string; tagline: string; accentColor: string } | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(TERMS_KEY) === TERMS_VERSION;
+    } catch {
+      return false;
+    }
+  });
+
+  function acceptTerms() {
+    try {
+      localStorage.setItem(TERMS_KEY, TERMS_VERSION);
+    } catch {
+      /* ignore */
+    }
+    setTermsAccepted(true);
+  }
 
   // White-label branding: company name in the bar + optional accent color.
   useEffect(() => {
@@ -81,6 +136,7 @@ export function App() {
 
   return (
     <div className="app">
+      {!termsAccepted && <LicenseGate onAccept={acceptTerms} />}
       <header className="topbar">
         <div className="brand">
           {brand?.companyName || 'ADAMAS'}<small>{brand?.tagline || t('All Decisions And Memory Archive System')}</small>
@@ -100,7 +156,7 @@ export function App() {
         </nav>
         <div className="spacer" />
         <div className="rolebox">
-          <span>{t('local-first')} · {meta ? `${meta.count} ${t('decisions')}` : '…'}</span>
+          <span title={t('Local-first by default — features you enable (cloud AI, Gmail labeling, email/calendar connectors) transmit data to services you choose.')}>{t('local-first by default')} · {meta ? `${meta.count} ${t('decisions')}` : '…'}</span>
           <label htmlFor="role">{t('role')}</label>
           <select id="role" value={role} onChange={(e) => setRole(e.target.value)}>
             {ROLES.map((r) => (
@@ -132,6 +188,14 @@ export function App() {
         {tab === 'boundary' && <BoundaryView onChanged={refresh} />}
         {tab === 'onboarding' && <OnboardingView />}
       </main>
+
+      <footer className="app-footer">
+        <span>© {new Date().getFullYear()} {LEGAL_ENTITY.replace(' (operating as ADAMAS)', '')} — {t('ADAMAS is licensed, not sold.')}</span>
+        {' · '}
+        <a href="https://adamas-project.com/terms" target="_blank" rel="noreferrer">{t('Terms of Use')}</a>
+        {' · '}
+        <a href="https://adamas-project.com/privacy" target="_blank" rel="noreferrer">{t('Privacy Policy')}</a>
+      </footer>
     </div>
   );
 }

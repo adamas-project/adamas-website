@@ -43,6 +43,7 @@
   th{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:400}
   hr{border:0;border-top:1px solid var(--border);margin:40px 0}
   .ftr{color:var(--faint);font-size:11.5px;margin-top:40px;border-top:1px solid var(--border2);padding-top:16px}
+  .todo{display:inline-block;background:rgba(201,168,76,.12);border:1px dashed var(--accent);border-radius:6px;padding:1px 8px;color:var(--accent);font-size:13px}
   @media(max-width:600px){.toc ol{column-count:1}.kv{grid-template-columns:1fr}}
   @media print{body{background:#fff;color:#111}.back{display:none}}
 </style>
@@ -134,7 +135,7 @@
       <ul>
         <li><strong>Netlify</strong> — hosts the Site and receives the form submissions you send through it (contact, Clarity Audit, guide downloads, waitlist).</li>
         <li><strong>Plausible Analytics</strong> — cookieless, EU-hosted website analytics; processes anonymous, aggregated page-view data only.</li>
-        <li><strong>Google</strong> — call scheduling via Google Calendar booking (the details you enter when booking) and webfont delivery via Google Fonts (standard font requests from your browser).</li>
+        <li><strong>Google</strong> — call scheduling via Google Calendar booking (the details you enter when booking). The Site does not load remote Google Fonts; fonts are served from our own host so no font request is sent to Google before you book.</li>
         <li><strong>Business email provider</strong> — stores and transmits correspondence you send to our mailboxes.</li>
       </ul>
       These providers may only use the information to provide services to us.</li>
@@ -151,7 +152,14 @@
   <p><strong>This Site sets no tracking cookies.</strong> It does not use advertising cookies, cross-site tracking pixels, or third-party profiling analytics, and therefore shows no cookie banner — there is nothing to consent to. Any cookies or local-storage values we use are strictly necessary to operate the Site (for example, remembering your selected colour theme). Our analytics run on Plausible, a cookieless, EU-hosted, privacy-first service that collects no personal data and stores no identifiers in your browser. Because we do not engage in cross-site tracking, we treat browser “Do Not Track” and Global Privacy Control signals consistently with this no-tracking approach.</p>
 
   <h2 id="retention"><span class="nz">9</span>Data retention</h2>
-  <p>We retain personal information only for as long as necessary for the purposes set out in this Policy — including to provide the Services, maintain our business relationship, and meet legal, tax, accounting, or reporting requirements — after which we delete or anonymise it. Retention periods vary by the type of information and the context in which it was collected.</p>
+  <p>We retain personal information only for as long as necessary for the purposes set out in this Policy — including to provide the Services, maintain our business relationship, and meet legal, tax, accounting, or reporting requirements — after which we delete or anonymise it. Retention periods vary by the type of information and the context in which it was collected. Our current guideline periods are:</p>
+  <ul>
+    <li><strong>Website enquiry &amp; form submissions</strong> (contact, Clarity Audit, guide downloads, waitlist) that do not lead to an engagement — up to <span class="todo">[TODO: confirm period with counsel — e.g. 12 months]</span> from last contact, then deleted.</li>
+    <li><strong>Client &amp; contract records</strong> — for the duration of the engagement and thereafter as required by applicable statutory retention obligations <span class="todo">[TODO: confirm — German tax/commercial law generally requires 6–10 years (§ 147 AO, § 257 HGB); confirm applicability with counsel]</span>.</li>
+    <li><strong>Server logs</strong> held by our hosting provider — typically a short period for security and abuse prevention <span class="todo">[TODO: confirm Netlify log-retention period]</span>.</li>
+    <li><strong>Newsletter / marketing consent records</strong> — until you unsubscribe or withdraw consent, plus a reasonable period to evidence the consent.</li>
+  </ul>
+  <p>Where a specific period is not yet fixed, we apply the shortest period that meets the purpose and our legal obligations.</p>
 
   <h2 id="security"><span class="nz">10</span>Security</h2>
   <p>We maintain reasonable administrative, technical, and organisational measures designed to protect personal information against unauthorised access, loss, misuse, or alteration. Our local-first architecture is itself a privacy and security feature: it minimises the personal and proprietary data that ever leaves your control. No method of transmission or storage is completely secure, and we cannot guarantee absolute security.</p>
@@ -164,6 +172,7 @@
 
   <h2 id="thirdparty"><span class="nz">13</span>Third-party services &amp; links</h2>
   <p>The Site and Services may reference or interoperate with third-party tools — including, in your own environment, software such as Obsidian and the Hermes AI agent on which ADAMAS is built. Those tools are provided by their respective owners and are governed by their own terms and privacy practices. We are not responsible for the content or privacy practices of third-party sites or services. We encourage you to review their policies.</p>
+  <p><strong>Third-party subresources / CDNs.</strong> The Site loads scripts, styles, and fonts from our own host (or the cookieless services named above); it does not embed remote Google Fonts. If any interactive feature is later served from a third-party content-delivery network (for example the jsDelivr CDN used for a Three.js visualisation), that subresource — and the IP address your browser necessarily shares to fetch it — will be disclosed here. <span class="todo">[TODO: self-host any such CDN-delivered assets, or list the CDN provider and purpose here, before that feature ships]</span></p>
 
   <h2 id="rights"><span class="nz">14</span>Your privacy rights</h2>
   <p>Subject to applicable law, you may have the right to access, correct, update, delete, or obtain a copy of your personal information; to object to or restrict certain processing; to withdraw consent; and to lodge a complaint with a regulator. Region-specific rights are described in the <a href="#us">U.S. state privacy notice</a> and the <a href="#eea">EEA, UK &amp; Switzerland notice</a> below. To exercise any right, contact us using the details in <a href="#contact">How to contact us</a>; we will respond within the timeframes required by applicable law and will not discriminate against you for exercising your rights.</p>
@@ -204,8 +213,14 @@
   <div class="kv">
     <dt>Data controller</dt><dd>Falcon Intelligence Group LLC, 8 The Green, Suite B, Dover, DE 19901, USA</dd>
     <dt>Contact</dt><dd><a href="mailto:privacy@adamas-project.com">privacy@adamas-project.com</a></dd>
+    <dt>EU representative (Art. 27 GDPR)</dt><dd><span class="todo">[TODO: appoint &amp; insert the name and EU postal address of the Art. 27 GDPR representative — required because the controller is established outside the EU but offers services to EU data subjects — confirm with counsel]</span></dd>
+    <dt>Data protection officer</dt><dd>We have not appointed a statutory Data Protection Officer (DPO) because we are not required to under Art. 37 GDPR. Privacy matters are handled at <a href="mailto:privacy@adamas-project.com">privacy@adamas-project.com</a>. <span class="todo">[TODO: confirm DPO is not required for current processing — re-assess if scale/scope changes]</span></dd>
     <dt>Legal bases</dt><dd>Consent; performance of a contract; legitimate interests; legal obligation (see §5)</dd>
   </div>
+  <h3>Automated decision-making</h3>
+  <p>We do not use your personal data for automated decision-making, including profiling, that produces legal or similarly significant effects concerning you (Art. 22 GDPR).</p>
+  <h3>Supervisory authority</h3>
+  <p>You have the right to lodge a complaint with a data protection supervisory authority, in particular in the EU/EEA Member State of your habitual residence, place of work, or place of the alleged infringement. In Germany, the competent lead authority for our processing is <span class="todo">[TODO: name the competent German state (Land) supervisory authority once the operating address is fixed — e.g. the Landesdatenschutzbehörde of the relevant Bundesland; confirm with counsel]</span>. In the United Kingdom, the relevant authority is the Information Commissioner's Office (ICO).</p>
   <h3>Your rights</h3>
   <p>Subject to conditions and exemptions under applicable law, you have the right to:</p>
   <ul>

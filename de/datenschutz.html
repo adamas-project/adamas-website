@@ -27,6 +27,7 @@
   .back{display:inline-block;margin-bottom:24px;font-size:13px;color:var(--muted)}
   hr{border:0;border-top:1px solid var(--border);margin:36px 0}
   .ftr{color:var(--faint);font-size:11.5px;margin-top:30px}
+  .todo{display:inline-block;background:rgba(201,168,76,.12);border:1px dashed var(--accent);border-radius:6px;padding:1px 8px;color:var(--accent);font-size:13px}
 </style>
   <script defer data-domain="adamas-project.com" src="https://plausible.io/js/script.js"></script>
 </head>
@@ -61,8 +62,8 @@
   <h2>6. Web-Analyse (Plausible — ohne Cookies)</h2>
   <p>Wir verwenden Plausible Analytics (Plausible Insights OÜ, Estland, EU). Plausible arbeitet ohne Cookies und ohne Speicherung von Kennungen im Browser, erhebt ausschließlich aggregierte Nutzungsdaten (z. B. Seitenaufrufe, Referrer, Gerätetyp) und ist auf Servern in der EU gehostet. Eine Identifizierung einzelner Besucher ist nicht möglich. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an reichweitenbezogener Auswertung ohne Eingriff in Ihre Privatsphäre).</p>
 
-  <h2>7. Schriftarten (Google Fonts)</h2>
-  <p>Diese Website lädt eine Schriftart (JetBrains Mono) über Google Fonts. Dabei wird Ihre IP-Adresse an Google übermittelt, um die Schriftdatei auszuliefern. Die Hauptschrift der Website (D-DIN) wird lokal von unserem Server geladen. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p>
+  <h2>7. Schriftarten (lokal gehostet) &amp; Drittanbieter-CDNs</h2>
+  <p>Alle Schriftarten dieser Website werden lokal von unserem eigenen Server ausgeliefert. Es werden keine externen Schriftdienste (z. B. Google Fonts) eingebunden; beim Seitenaufruf wird daher keine IP-Adresse zu diesem Zweck an Google oder andere Dritte übermittelt. Skripte und Stile werden ebenfalls von unserem eigenen Server geladen. Sollte künftig eine interaktive Funktion über ein Drittanbieter-CDN ausgeliefert werden (z. B. das jsDelivr-CDN für eine Three.js-Visualisierung), wird diese Einbindung — samt der dabei notwendigerweise übermittelten IP-Adresse — hier offengelegt. <span class="todo">[TODO: solche CDN-Inhalte selbst hosten oder CDN-Anbieter und Zweck hier benennen, bevor die Funktion live geht]</span></p>
 
   <h2>8. Cookies &amp; Local Storage</h2>
   <p>Diese Website setzt keine Tracking-Cookies und keine Werbe-Cookies. Wir verwenden ausschließlich technisch notwendige Local-Storage-Werte (z. B. zur Speicherung Ihres gewählten Farbschemas und ob ein Hinweisfenster bereits angezeigt wurde). Diese Werte verlassen Ihren Browser nicht.</p>
@@ -71,15 +72,32 @@
   <p>In Kundenprojekten handelt Falcon Intelligence Group für Material, das Sie während des Aufbaus mit uns teilen, als Auftragsverarbeiter (Art. 28 DSGVO); ein Auftragsverarbeitungsvertrag (AVV) steht <a href="/de/avv.html">hier als Vorlage</a> bereit. Der ADAMAS-Vault selbst läuft auf Hardware des Kunden; die dort verarbeiteten Daten liegen in der Verantwortung des Kunden und werden nicht an uns übertragen. Details: <a href="/de/sicherheit.html">Sicherheit &amp; Datenhoheit</a>.</p>
 
   <h2>10. Speicherdauer</h2>
-  <p>Wir speichern personenbezogene Daten nur so lange, wie es für die genannten Zwecke erforderlich ist — insbesondere zur Bearbeitung Ihrer Anfrage, zur Pflege der Geschäftsbeziehung und zur Erfüllung gesetzlicher Aufbewahrungspflichten — und löschen oder anonymisieren sie danach.</p>
+  <p>Wir speichern personenbezogene Daten nur so lange, wie es für die genannten Zwecke erforderlich ist — insbesondere zur Bearbeitung Ihrer Anfrage, zur Pflege der Geschäftsbeziehung und zur Erfüllung gesetzlicher Aufbewahrungspflichten — und löschen oder anonymisieren sie danach. Als Richtwerte gelten:</p>
+  <ul>
+    <li><strong>Anfragen über Formulare</strong> (Kontakt, Clarity-Audit, Guide-Download, Warteliste), die nicht zu einem Auftrag führen — bis zu <span class="todo">[TODO: Frist mit Rechtsbeistand bestätigen — z. B. 12 Monate]</span> ab dem letzten Kontakt, danach Löschung.</li>
+    <li><strong>Kunden- und Vertragsunterlagen</strong> — für die Dauer der Geschäftsbeziehung sowie anschließend im Rahmen gesetzlicher Aufbewahrungsfristen <span class="todo">[TODO: bestätigen — i. d. R. 6–10 Jahre nach § 147 AO / § 257 HGB, Anwendbarkeit mit Rechtsbeistand klären]</span>.</li>
+    <li><strong>Server-Logs</strong> bei unserem Hoster — i. d. R. nur ein kurzer Zeitraum zu Sicherheits- und Missbrauchsabwehrzwecken <span class="todo">[TODO: Log-Aufbewahrungsdauer von Netlify bestätigen]</span>.</li>
+    <li><strong>Einwilligungen zu Newsletter/Marketing</strong> — bis zum Widerruf bzw. zur Abmeldung, zzgl. eines angemessenen Zeitraums zum Nachweis der Einwilligung.</li>
+  </ul>
 
   <h2>11. Drittlandübermittlung</h2>
   <p>Soweit Daten in die USA übermittelt werden (Netlify, Google), erfolgt dies auf Grundlage der Standardvertragsklauseln der EU-Kommission sowie ergänzender Maßnahmen, soweit erforderlich.</p>
 
-  <h2>12. Ihre Rechte</h2>
-  <p>Sie haben nach der DSGVO das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen Verarbeitungen auf Grundlage berechtigter Interessen (Art. 21). Erteilte Einwilligungen können Sie jederzeit mit Wirkung für die Zukunft widerrufen. Wenden Sie sich dazu an <a href="mailto:privacy@adamas-project.com">privacy@adamas-project.com</a>. Außerdem haben Sie das Recht, sich bei einer Datenschutzaufsichtsbehörde zu beschweren.</p>
+  <h2>12. EU-Vertreter (Art. 27 DSGVO)</h2>
+  <p>Da der Verantwortliche seinen Sitz außerhalb der EU hat, aber Leistungen für Betroffene in der EU anbietet, ist ein Vertreter in der Union nach Art. 27 DSGVO zu benennen:<br>
+  <span class="todo">[TODO: Name und ladungsfähige EU-Anschrift des Art.-27-DSGVO-Vertreters benennen und einsetzen — mit Rechtsbeistand klären]</span></p>
 
-  <h2>13. Änderungen</h2>
+  <h2>13. Datenschutzbeauftragter</h2>
+  <p>Wir haben keinen gesetzlich vorgeschriebenen Datenschutzbeauftragten bestellt, da hierfür nach Art. 37 DSGVO / § 38 BDSG keine Pflicht besteht. Datenschutzanfragen richten Sie bitte an <a href="mailto:privacy@adamas-project.com">privacy@adamas-project.com</a>. <span class="todo">[TODO: Bestellpflicht für die aktuelle Verarbeitung bestätigen — bei Änderung von Umfang/Art neu bewerten]</span></p>
+
+  <h2>14. Keine automatisierte Entscheidungsfindung</h2>
+  <p>Wir verwenden Ihre personenbezogenen Daten nicht für eine automatisierte Entscheidungsfindung einschließlich Profiling, die Ihnen gegenüber rechtliche Wirkung entfaltet oder Sie in ähnlicher Weise erheblich beeinträchtigt (Art. 22 DSGVO).</p>
+
+  <h2>15. Ihre Rechte</h2>
+  <p>Sie haben nach der DSGVO das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) und Widerspruch gegen Verarbeitungen auf Grundlage berechtigter Interessen (Art. 21). Erteilte Einwilligungen können Sie jederzeit mit Wirkung für die Zukunft widerrufen. Wenden Sie sich dazu an <a href="mailto:privacy@adamas-project.com">privacy@adamas-project.com</a>.</p>
+  <p>Außerdem haben Sie das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren — insbesondere in dem EU-/EWR-Mitgliedstaat Ihres Aufenthaltsorts, Arbeitsplatzes oder des Orts des mutmaßlichen Verstoßes. Die für unsere Verarbeitung zuständige deutsche Aufsichtsbehörde ist <span class="todo">[TODO: zuständige deutsche Landes-Datenschutzbehörde benennen, sobald der operative Sitz feststeht — Aufsichtsbehörde des jeweiligen Bundeslandes; mit Rechtsbeistand bestätigen]</span>.</p>
+
+  <h2>16. Änderungen</h2>
   <p>Wir passen diese Datenschutzerklärung an, wenn sich unsere Datenverarbeitung oder die Rechtslage ändert. Es gilt die jeweils hier veröffentlichte Fassung.</p>
 
   <hr>

@@ -23,7 +23,6 @@
   <meta name="twitter:title" content="ADAMAS — Das Entscheidungs-Ledger für Gründer">
   <meta name="twitter:description" content="Das Warum hinter jeder Entscheidung — damit Ihr Wissen wächst und Ihr Unternehmen ohne Sie skaliert.">
   <meta name="twitter:image" content="https://adamas-project.com/og/og-default.png">
-  <!-- JetBrains Mono: async-loaded to avoid render-blocking -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -34,14 +33,10 @@
       { "@type": "Question", "name": "Können wir das nicht einfach selbst aufschreiben?", "acceptedAnswer": { "@type": "Answer", "text": "Das Problem ist nicht das Schreiben — es ist das Strukturieren, Verknüpfen und Auffinden des richtigen Wissens im richtigen Moment. ADAMAS macht das automatisch." } },
       { "@type": "Question", "name": "Ist das nur KI-Hype?", "acceptedAnswer": { "@type": "Answer", "text": "Die KI ist der Motor, nicht das Produkt. Das Produkt ist das Entscheidungs-Ledger — eine strukturierte, lokale Wissensschicht, die unabhängig vom Modell über die Zeit wächst." } },
       { "@type": "Question", "name": "Welche Hardware brauchen wir?", "acceptedAnswer": { "@type": "Answer", "text": "ADAMAS ist hardware-flexibel — das sind Beispiele, keine Voraussetzungen. Der Standard ist ein Apple Mac mini M4 (ca. 600–1.000 € in 2026); für größere lokale Modelle laufen 128-GB-Maschinen mit AMD Ryzen AI Max+ oder NVIDIA DGX Spark bei ca. 1.800–4.000 €. Ein typisches Local-First-Setup ersetzt rund 200–459 €/Monat an Cloud-KI-Abos." } },
-      { "@type": "Question", "name": "Verlassen unsere Daten das Unternehmen?", "acceptedAnswer": { "@type": "Answer", "text": "Nein. Der Vault ist local-first und läuft auf Ihrer Hardware. Optionales hybrides Cloud-Routing wird nur für ausdrücklich freigegebene Aufgaben genutzt." } }
+      { "@type": "Question", "name": "Verlassen unsere Daten das Unternehmen?", "acceptedAnswer": { "@type": "Answer", "text": "Standardmäßig nicht. Der Vault ist local-first und läuft auf Ihrer Hardware. Daten verlassen Ihr Unternehmen nur für hybride Cloud-Aufgaben, die Sie ausdrücklich freigeben, sowie für Integrationen, die Sie selbst anbinden." } }
     ]
   }
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
   <script>
     // Set theme before paint to avoid flash-of-wrong-theme
     (function () {
@@ -243,7 +238,7 @@
           <span>Cloud-Abo</span>
         </div>
         <div class="is-card fade">
-          <p class="lead">Ein <b>Entscheidungs-Ledger</b> — das erste System, das gezielt erfasst, <b>warum</b> Entscheidungen getroffen wurden, sie strukturiert, verknüpft und genau die Geschäftsunterlagen erzeugt, die Ihr Unternehmen in jeder Wachstumsphase braucht.</p>
+          <p class="lead">Ein <b>Entscheidungs-Ledger</b> — ein System, das gezielt erfasst, <b>warum</b> Entscheidungen getroffen wurden, sie strukturiert, verknüpft und genau die Geschäftsunterlagen erzeugt, die Ihr Unternehmen in jeder Wachstumsphase braucht.</p>
           <div class="schema">
             <div class="sc"><div class="sc-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-network"/></svg></div><div class="sc-n">Kontext</div><div class="sc-d">Die Situation zum Zeitpunkt der Entscheidung</div></div>
             <div class="sc"><div class="sc-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-scale"/></svg></div><div class="sc-n">Entscheidung</div><div class="sc-d">Die exakte Wahl und wer entschied</div></div>
@@ -372,7 +367,7 @@
           <div class="cstat fade"><div class="big">200–459 €</div><div class="lbl">typische monatliche Cloud-KI-Kosten, die ADAMAS ersetzt</div></div>
         </div>
         <div class="arb fade">
-          <p>Eine einmalige Maschine, die Ihnen gehört, erledigt die Arbeit — und das Wissen Ihres Unternehmens verlässt sie nie. Der Standard ist ein <b>Apple Mac mini M4</b> (ca. 600–1.000 € in 2026); für größere lokale Modelle laufen 128-GB-Maschinen mit <b>AMD Ryzen AI Max+</b> oder <b>NVIDIA DGX Spark</b> bei ca. 1.800–4.000 €. Beispiele, keine Voraussetzungen — ADAMAS ist hardware-flexibel. <a href="/de/docs/hardware.html">Hardware vergleichen →</a></p>
+          <p>Eine einmalige Maschine, die Ihnen gehört, erledigt die Arbeit — und das Wissen Ihres Unternehmens bleibt standardmäßig auf ihr; es verlässt sie nur für hybride Cloud-Aufgaben, die Sie ausdrücklich freigeben, oder für Integrationen, die Sie anbinden. Der Standard ist ein <b>Apple Mac mini M4</b> (ca. 600–1.000 € in 2026); für größere lokale Modelle laufen 128-GB-Maschinen mit <b>AMD Ryzen AI Max+</b> oder <b>NVIDIA DGX Spark</b> bei ca. 1.800–4.000 €. Beispiele, keine Voraussetzungen — ADAMAS ist hardware-flexibel. <a href="/de/docs/hardware.html">Hardware vergleichen →</a></p>
         </div>
       </div>
     </section>
@@ -469,7 +464,7 @@
             <div class="pc-price">1.000 €</div>
             <p class="pc-desc">Wir kartieren die Wissensfalle, interviewen Sie und liefern einen Klarheitsbericht.</p>
             <!-- TODO (Gründer): genauen Garantie-Wortlaut vor dem Launch bestätigen. -->
-            <p class="pc-guarantee">Bringt das Audit nichts ans Licht, das sich zu beheben lohnt, erstatten wir die Gebühr.</p>
+            <p class="pc-guarantee">Volle Erstattung, wenn Sie mit dem Bericht nicht zufrieden sind — sagen Sie uns einfach innerhalb von 14 Tagen Bescheid.</p>
             <span class="pc-badge">Wird auf Ihren Aufbau angerechnet</span>
           </div>
           <div class="pc fade">
@@ -521,8 +516,12 @@
               <input type="hidden" name="form-name" value="selfserve-waitlist">
               <p hidden><label>Dieses Feld leer lassen: <input name="bot-field"></label></p>
               <input type="email" name="email" required placeholder="Geschäftliche E-Mail" aria-label="Geschäftliche E-Mail für die Self-Service-Warteliste">
+              <label class="form-consent" style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--muted);margin:8px 0;text-align:left">
+                <input type="checkbox" name="consent-marketing" value="yes" required style="margin-top:3px">
+                <span>Ich bin einverstanden, gelegentlich E-Mails von ADAMAS zu erhalten; ich kann mich jederzeit abmelden. Siehe die <a href="de/datenschutz.html">Datenschutzerklärung</a>.</span>
+              </label>
               <button class="btn btn-ghost" type="submit">Auf die Warteliste</button>
-              <span class="pc-wait-note">Wartelisten-Mitglieder erhalten Starttermin — und Gründungskonditionen — zuerst.</span>
+              <span class="pc-wait-note">Wartelisten-Mitglieder erhalten Starttermin — und Gründungskonditionen — zuerst. Siehe unsere <a href="de/datenschutz.html">Datenschutzerklärung</a>.</span>
             </form>
           </div>
         </div>
@@ -543,7 +542,7 @@
           <details class="fade"><summary>Wir können doch alles aufschreiben.</summary><p>Das wissen Sie längst. Das Problem ist nicht das Aufschreiben — es ist das Strukturieren, Verknüpfen und Bereitstellen des richtigen Wissens im richtigen Moment. ADAMAS tut das automatisch.</p></details>
           <details class="fade"><summary>Ist das nur KI-Hype?</summary><p>Die KI ist der Motor, nicht das Produkt. Das Produkt ist das Entscheidungs-Ledger — eine strukturierte, lokale Wissensschicht, die über die Zeit wächst, egal welches Modell sie antreibt.</p></details>
           <details class="fade"><summary>Welche Hardware brauchen wir?</summary><p>ADAMAS ist hardware-flexibel — das sind Beispiele, keine Voraussetzungen. Der Standard ist ein Apple Mac mini M4 (ca. 600–1.000 € in 2026); für größere lokale Modelle laufen 128-GB-Maschinen mit AMD Ryzen AI Max+ oder NVIDIA DGX Spark bei ca. 1.800–4.000 €. Ein typisches Local-First-Setup ersetzt rund 200–459 €/Monat an Cloud-KI-Abos.</p></details>
-          <details class="fade"><summary>Verlassen unsere Daten das Unternehmen?</summary><p>Nein. Der Vault ist Local-First und läuft auf Ihrer Hardware. Das ist der Punkt — Ihr wertvollstes IP bleibt im Haus, genau deshalb wählen datenschutzbewusste Gründer ADAMAS.</p></details>
+          <details class="fade"><summary>Verlassen unsere Daten das Unternehmen?</summary><p>Standardmäßig nicht. Der Vault ist Local-First und läuft auf Ihrer Hardware — Ihr wertvollstes IP bleibt im Haus, genau deshalb wählen datenschutzbewusste Gründer ADAMAS. Daten verlassen Ihr Unternehmen nur für hybride Cloud-Aufgaben, die Sie ausdrücklich freigeben, sowie für Integrationen, die Sie anbinden.</p></details>
         </div>
       </div>
     </section>
@@ -584,7 +583,7 @@
               <option>Ich informiere mich erst einmal</option>
             </select>
             <button class="btn btn-gold" type="submit">Clarity-Audit anfragen →</button>
-            <p class="lf-note">Local-First &amp; vertraulich. Wir geben Ihre Daten niemals weiter.</p>
+            <p class="lf-note">Local-First &amp; vertraulich. Wir verwenden Ihre Daten nur zur Beantwortung dieser Anfrage — siehe unsere <a href="de/datenschutz.html">Datenschutzerklärung</a>.</p>
           </form>
           <p class="book-call">Lieber direkt einen Termin? <a href="https://calendar.app.google/QrCeWrs8UB96nXSP8" target="_blank" rel="noopener">30-minütigen Termin buchen →</a></p>
           <div class="lf-ok" id="leadOk"><strong>Danke — erhalten.</strong> Wir antworten innerhalb eines Werktags, um Ihr 30-minütiges Clarity-Audit zu vereinbaren.</div>
@@ -687,8 +686,12 @@
         <input type="hidden" name="language" value="de">
         <p hidden><label>Dieses Feld leer lassen: <input name="bot-field"></label></p>
         <input type="email" name="email" id="gateEmail" required placeholder="Geschäftliche E-Mail" aria-label="Geschäftliche E-Mail" autocomplete="email">
+        <label class="form-consent" style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--muted);margin:8px 0;text-align:left">
+          <input type="checkbox" name="consent-marketing" value="yes" style="margin-top:3px">
+          <span>Ich bin einverstanden, gelegentlich E-Mails von ADAMAS zu erhalten; ich kann mich jederzeit abmelden. Siehe die <a href="de/datenschutz.html">Datenschutzerklärung</a>.</span>
+        </label>
         <button type="submit" class="btn btn-gold">Download freischalten →</button>
-        <p class="gate-note">Wir geben Ihre Daten niemals weiter. <a href="de/datenschutz.html">Datenschutz</a></p>
+        <p class="gate-note">Das PDF erhalten Sie in jedem Fall. Wir verwenden Ihre Daten nur wie in unserer <a href="de/datenschutz.html">Datenschutzerklärung</a> beschrieben.</p>
       </form>
       <div class="gate-ok" id="gateOk" hidden>
         <div class="gate-tick">✓</div>
@@ -712,8 +715,12 @@
         <input type="hidden" name="source" value="pricing-exit-intent-de">
         <p hidden><label>Dieses Feld leer lassen: <input name="bot-field"></label></p>
         <input type="email" name="email" required placeholder="Geschäftliche E-Mail" aria-label="Geschäftliche E-Mail" autocomplete="email">
+        <label class="form-consent" style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--muted);margin:8px 0;text-align:left">
+          <input type="checkbox" name="consent-marketing" value="yes" style="margin-top:3px">
+          <span>Ich bin einverstanden, gelegentlich E-Mails von ADAMAS zu erhalten; ich kann mich jederzeit abmelden. Siehe die <a href="de/datenschutz.html">Datenschutzerklärung</a>.</span>
+        </label>
         <button type="submit" class="btn btn-gold">Playbook zusenden →</button>
-        <p class="gate-note">Wir geben Ihre Daten niemals weiter. <a href="de/datenschutz.html">Datenschutz</a></p>
+        <p class="gate-note">Das PDF erhalten Sie in jedem Fall. Wir verwenden Ihre Daten nur wie in unserer <a href="de/datenschutz.html">Datenschutzerklärung</a> beschrieben.</p>
       </form>
       <div class="gate-ok" id="exitOk" hidden>
         <div class="gate-tick">✓</div>

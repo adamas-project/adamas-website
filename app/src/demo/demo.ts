@@ -12,38 +12,38 @@ import { FAMOUS_NAMES } from './famous-names.js';
 
 const DECISIONS: DecisionInput[] = [
   // hiring
-  { domain: 'hiring', date: '2025-01-14', title: 'Run a 90-day paid trial before any full-time engineering offer', context: 'Interviews were poor predictors of on-the-floor performance.', decision: 'Every engineering hire does a paid 90-day trial project before a full-time offer.', owner: { role: 'head-of-people', name: 'Oprah Winfrey', dissent: ['head-of-engineering'] }, tradeoffs: ['Slower time-to-hire', 'Some candidates decline a trial'], sources: ['meeting:2025-01-13#hiring-review'] },
-  { domain: 'hiring', date: '2025-02-03', title: 'Hire a dedicated controls engineer over a mechanical generalist', context: 'Controls work was the delivery bottleneck on every cell.', decision: 'Prioritize a senior controls engineer for the next hire.', owner: { role: 'head-of-engineering', name: 'Nikola Tesla' }, tradeoffs: ['Higher comp band'], sources: ['email:2025-01-30#headcount'] },
-  { domain: 'hiring', date: '2025-03-10', title: 'Adopt structured scorecards for every interview', context: 'Hiring decisions were inconsistent across panels.', decision: 'All interviews use a shared competency scorecard before a debrief.', owner: { role: 'head-of-people', name: 'Oprah Winfrey' }, sources: ['meeting:2025-03-09#people-ops'] },
-  { domain: 'hiring', date: '2025-04-22', title: 'Freeze senior hiring until utilization exceeds 75%', context: 'Bench cost was eroding margin during a slow quarter.', decision: 'No new senior hires until billable utilization is above 75% for two months.', owner: { role: 'founder', name: 'Steve Jobs', dissent: ['head-of-sales'] }, tradeoffs: ['Risk of being short-staffed if pipeline rebounds'] },
-  { domain: 'hiring', date: '2025-05-30', title: 'Standardize a four-day onboarding bootcamp', context: 'New hires took months to become productive on our stack.', decision: 'Every new hire completes a 4-day onboarding bootcamp in week one.', owner: { role: 'head-of-people', name: 'Oprah Winfrey' }, tradeoffs: ['Upfront time cost'] },
+  { domain: 'hiring', date: '2025-01-14', title: 'Run a 90-day paid trial before any full-time engineering offer', context: 'Interviews were poor predictors of on-the-floor performance.', decision: 'Every engineering hire does a paid 90-day trial project before a full-time offer.', owner: { role: 'head-of-people', name: 'Delphine Astovar', dissent: ['head-of-engineering'] }, tradeoffs: ['Slower time-to-hire', 'Some candidates decline a trial'], sources: ['meeting:2025-01-13#hiring-review'] },
+  { domain: 'hiring', date: '2025-02-03', title: 'Hire a dedicated controls engineer over a mechanical generalist', context: 'Controls work was the delivery bottleneck on every cell.', decision: 'Prioritize a senior controls engineer for the next hire.', owner: { role: 'head-of-engineering', name: 'Soraya Quillgate' }, tradeoffs: ['Higher comp band'], sources: ['email:2025-01-30#headcount'] },
+  { domain: 'hiring', date: '2025-03-10', title: 'Adopt structured scorecards for every interview', context: 'Hiring decisions were inconsistent across panels.', decision: 'All interviews use a shared competency scorecard before a debrief.', owner: { role: 'head-of-people', name: 'Delphine Astovar' }, sources: ['meeting:2025-03-09#people-ops'] },
+  { domain: 'hiring', date: '2025-04-22', title: 'Freeze senior hiring until utilization exceeds 75%', context: 'Bench cost was eroding margin during a slow quarter.', decision: 'No new senior hires until billable utilization is above 75% for two months.', owner: { role: 'founder', name: 'Marcus Halvorsen', dissent: ['head-of-sales'] }, tradeoffs: ['Risk of being short-staffed if pipeline rebounds'] },
+  { domain: 'hiring', date: '2025-05-30', title: 'Standardize a four-day onboarding bootcamp', context: 'New hires took months to become productive on our stack.', decision: 'Every new hire completes a 4-day onboarding bootcamp in week one.', owner: { role: 'head-of-people', name: 'Delphine Astovar' }, tradeoffs: ['Upfront time cost'] },
 
   // sales
-  { domain: 'sales', date: '2025-01-20', title: 'Decline the automotive OEM frame contract', context: 'A large OEM offered ~$900k/yr at ~11% margin, off-ICP, with punitive change-order terms.', decision: 'Decline the contract and protect capacity for higher-margin F&B work.', owner: { role: 'founder', name: 'Steve Jobs', dissent: ['head-of-sales'] }, tradeoffs: ['Forgoes ~$900k/yr top line', 'Strains a marquee-logo relationship'], sources: ['meeting:2025-01-18#oem-go-no-go'] },
-  { domain: 'sales', date: '2025-02-12', title: 'Focus the ICP on mid-market food & beverage packaging lines', context: 'Win rates and margins were far higher in F&B than in scattered verticals.', decision: 'Concentrate sales and marketing on mid-market F&B packaging integrators.', owner: { role: 'head-of-sales', name: 'Jordan Belfort' }, tradeoffs: ['Narrower funnel'] , sources: ['doc:2025-02#icp-analysis'] },
-  { domain: 'sales', date: '2025-03-05', title: 'Quote value-based cell packages, not hourly engineering', context: 'Hourly quoting capped upside and invited scope haggling.', decision: 'Price work as fixed value-based cell packages.', owner: { role: 'head-of-sales', name: 'Jordan Belfort' }, tradeoffs: ['More estimation risk on us'] },
-  { domain: 'sales', date: '2025-04-08', title: 'Require a paid discovery phase before any build quote', context: 'Unpaid scoping burned engineering hours on deals that never closed.', decision: 'A paid discovery phase precedes every build quote.', owner: { role: 'head-of-sales', name: 'Jordan Belfort' }, sources: ['meeting:2025-04-07#sales-process'] },
-  { domain: 'sales', date: '2025-05-19', title: 'Drop the reseller channel and sell direct', context: 'Resellers wanted heavy discounts and owned the customer relationship.', decision: 'Wind down the reseller channel and sell direct.', owner: { role: 'head-of-sales', name: 'Jordan Belfort', dissent: ['founder'] }, tradeoffs: ['Lose some reach in the short term'] },
+  { domain: 'sales', date: '2025-01-20', title: 'Decline the automotive OEM frame contract', context: 'A large OEM offered ~$900k/yr at ~11% margin, off-ICP, with punitive change-order terms.', decision: 'Decline the contract and protect capacity for higher-margin F&B work.', owner: { role: 'founder', name: 'Marcus Halvorsen', dissent: ['head-of-sales'] }, tradeoffs: ['Forgoes ~$900k/yr top line', 'Strains a marquee-logo relationship'], sources: ['meeting:2025-01-18#oem-go-no-go'] },
+  { domain: 'sales', date: '2025-02-12', title: 'Focus the ICP on mid-market food & beverage packaging lines', context: 'Win rates and margins were far higher in F&B than in scattered verticals.', decision: 'Concentrate sales and marketing on mid-market F&B packaging integrators.', owner: { role: 'head-of-sales', name: 'Rovan Brashford' }, tradeoffs: ['Narrower funnel'] , sources: ['doc:2025-02#icp-analysis'] },
+  { domain: 'sales', date: '2025-03-05', title: 'Quote value-based cell packages, not hourly engineering', context: 'Hourly quoting capped upside and invited scope haggling.', decision: 'Price work as fixed value-based cell packages.', owner: { role: 'head-of-sales', name: 'Rovan Brashford' }, tradeoffs: ['More estimation risk on us'] },
+  { domain: 'sales', date: '2025-04-08', title: 'Require a paid discovery phase before any build quote', context: 'Unpaid scoping burned engineering hours on deals that never closed.', decision: 'A paid discovery phase precedes every build quote.', owner: { role: 'head-of-sales', name: 'Rovan Brashford' }, sources: ['meeting:2025-04-07#sales-process'] },
+  { domain: 'sales', date: '2025-05-19', title: 'Drop the reseller channel and sell direct', context: 'Resellers wanted heavy discounts and owned the customer relationship.', decision: 'Wind down the reseller channel and sell direct.', owner: { role: 'head-of-sales', name: 'Rovan Brashford', dissent: ['founder'] }, tradeoffs: ['Lose some reach in the short term'] },
 
   // product
-  { domain: 'product', date: '2025-01-28', title: 'Standardize the controls platform on Beckhoff TwinCAT', context: 'Bespoke stacks slowed delivery and made support hard.', decision: 'Standardize all new cells on Beckhoff TwinCAT.', owner: { role: 'head-of-engineering', name: 'Nikola Tesla' }, tradeoffs: ['Retraining cost'], sources: ['doc:2025-01#platform-adr'] },
-  { domain: 'product', date: '2025-02-25', title: 'Build cells on a modular fixture standard, not bespoke rigs', context: 'Every project reinvented fixturing from scratch.', decision: 'Adopt a modular fixture standard reused across cells.', owner: { role: 'head-of-product', name: 'Elon Musk' }, tradeoffs: ['Up-front standardization effort'] },
-  { domain: 'product', date: '2025-03-18', title: 'Sunset the legacy HMI toolkit', context: 'The old HMI toolkit was unsupported and fragile.', decision: 'Migrate all cells off the legacy HMI toolkit by year end.', owner: { role: 'head-of-product', name: 'Elon Musk' }, tradeoffs: ['Migration effort on active sites'] },
-  { domain: 'product', date: '2025-04-14', title: 'Ship a remote-monitoring add-on for every cell', context: 'Customers wanted uptime visibility and it opened recurring revenue.', decision: 'Bundle a remote-monitoring add-on with every cell.', owner: { role: 'head-of-product', name: 'Elon Musk' }, tradeoffs: ['Ongoing support load'] },
-  { domain: 'product', date: '2025-05-26', title: 'Adopt simulation-first commissioning', context: 'On-site commissioning overruns were the top schedule risk.', decision: 'Simulate and validate cells digitally before on-site commissioning.', owner: { role: 'head-of-engineering', name: 'Nikola Tesla' }, tradeoffs: ['Simulation licensing cost'] },
+  { domain: 'product', date: '2025-01-28', title: 'Standardize the controls platform on Beckhoff TwinCAT', context: 'Bespoke stacks slowed delivery and made support hard.', decision: 'Standardize all new cells on Beckhoff TwinCAT.', owner: { role: 'head-of-engineering', name: 'Soraya Quillgate' }, tradeoffs: ['Retraining cost'], sources: ['doc:2025-01#platform-adr'] },
+  { domain: 'product', date: '2025-02-25', title: 'Build cells on a modular fixture standard, not bespoke rigs', context: 'Every project reinvented fixturing from scratch.', decision: 'Adopt a modular fixture standard reused across cells.', owner: { role: 'head-of-product', name: 'Tobias Norrindale' }, tradeoffs: ['Up-front standardization effort'] },
+  { domain: 'product', date: '2025-03-18', title: 'Sunset the legacy HMI toolkit', context: 'The old HMI toolkit was unsupported and fragile.', decision: 'Migrate all cells off the legacy HMI toolkit by year end.', owner: { role: 'head-of-product', name: 'Tobias Norrindale' }, tradeoffs: ['Migration effort on active sites'] },
+  { domain: 'product', date: '2025-04-14', title: 'Ship a remote-monitoring add-on for every cell', context: 'Customers wanted uptime visibility and it opened recurring revenue.', decision: 'Bundle a remote-monitoring add-on with every cell.', owner: { role: 'head-of-product', name: 'Tobias Norrindale' }, tradeoffs: ['Ongoing support load'] },
+  { domain: 'product', date: '2025-05-26', title: 'Adopt simulation-first commissioning', context: 'On-site commissioning overruns were the top schedule risk.', decision: 'Simulate and validate cells digitally before on-site commissioning.', owner: { role: 'head-of-engineering', name: 'Soraya Quillgate' }, tradeoffs: ['Simulation licensing cost'] },
 
   // finance
-  { domain: 'finance', date: '2025-01-31', title: 'Hold a 20% gross-margin floor and walk from sub-floor deals', context: 'Competitive bids were dragging margins below sustainable levels.', decision: 'Hold a 20% gross-margin floor; walk from deals below it.', owner: { role: 'cfo', name: 'Warren Buffett' }, tradeoffs: ['Lose price-driven deals'], sources: ['meeting:2025-01-29#margin'] },
-  { domain: 'finance', date: '2025-02-18', title: 'Switch to 50/40/10 milestone billing', context: 'Cash was tight between milestones on long builds.', decision: 'Bill 50/40/10 across kickoff, FAT, and SAT milestones.', owner: { role: 'cfo', name: 'Warren Buffett' }, tradeoffs: ['Tougher negotiation on terms'] },
-  { domain: 'finance', date: '2025-03-22', title: 'Self-fund growth and decline outside equity for now', context: 'Inbound term sheets undervalued the book of recurring revenue.', decision: 'Fund growth from operations; decline outside equity this year.', owner: { role: 'founder', name: 'Steve Jobs', dissent: ['cfo'] }, tradeoffs: ['Slower growth than with capital'] },
-  { domain: 'finance', date: '2025-04-29', title: 'Maintain a six-month cash runway buffer', context: 'A supplier delay nearly caused a cash crunch.', decision: 'Keep at least six months of operating cash in reserve.', owner: { role: 'cfo', name: 'Warren Buffett' } },
-  { domain: 'finance', date: '2025-05-12', title: 'Capitalize the simulation software as a tooling asset', context: 'Simulation tooling has multi-year useful life.', decision: 'Capitalize and amortize the simulation software over three years.', owner: { role: 'controller', name: 'Christine Lagarde' } },
+  { domain: 'finance', date: '2025-01-31', title: 'Hold a 20% gross-margin floor and walk from sub-floor deals', context: 'Competitive bids were dragging margins below sustainable levels.', decision: 'Hold a 20% gross-margin floor; walk from deals below it.', owner: { role: 'cfo', name: 'Eleni Castermount' }, tradeoffs: ['Lose price-driven deals'], sources: ['meeting:2025-01-29#margin'] },
+  { domain: 'finance', date: '2025-02-18', title: 'Switch to 50/40/10 milestone billing', context: 'Cash was tight between milestones on long builds.', decision: 'Bill 50/40/10 across kickoff, FAT, and SAT milestones.', owner: { role: 'cfo', name: 'Eleni Castermount' }, tradeoffs: ['Tougher negotiation on terms'] },
+  { domain: 'finance', date: '2025-03-22', title: 'Self-fund growth and decline outside equity for now', context: 'Inbound term sheets undervalued the book of recurring revenue.', decision: 'Fund growth from operations; decline outside equity this year.', owner: { role: 'founder', name: 'Marcus Halvorsen', dissent: ['cfo'] }, tradeoffs: ['Slower growth than with capital'] },
+  { domain: 'finance', date: '2025-04-29', title: 'Maintain a six-month cash runway buffer', context: 'A supplier delay nearly caused a cash crunch.', decision: 'Keep at least six months of operating cash in reserve.', owner: { role: 'cfo', name: 'Eleni Castermount' } },
+  { domain: 'finance', date: '2025-05-12', title: 'Capitalize the simulation software as a tooling asset', context: 'Simulation tooling has multi-year useful life.', decision: 'Capitalize and amortize the simulation software over three years.', owner: { role: 'controller', name: 'Ingrid Pellowin' } },
 
   // ops
-  { domain: 'ops', date: '2025-02-07', title: 'Cap concurrent build projects at three', context: 'Quality slipped when running five builds at once.', decision: 'Cap concurrent builds at three; a fourth waits in queue.', owner: { role: 'head-of-ops', name: 'Tim Cook', dissent: ['head-of-sales'] }, tradeoffs: ['Lower throughput'], sources: ['meeting:2025-02-06#wip'] },
-  { domain: 'ops', date: '2025-03-14', title: 'Dual-source critical servo drives with a qualified backup vendor', context: 'A single servo-drive vendor was a single point of failure.', decision: 'Qualify and dual-source critical servo drives.', owner: { role: 'head-of-ops', name: 'Tim Cook' }, tradeoffs: ['Qualification overhead'] },
-  { domain: 'ops', date: '2025-04-02', title: 'Adopt a weekly Monday operating cadence with written commitments', context: 'Verbal commitments slipped without a record.', decision: 'Run a weekly Monday operating review with written commitments.', owner: { role: 'head-of-ops', name: 'Tim Cook' } },
-  { domain: 'ops', date: '2025-05-05', title: 'Implement a formal risk register reviewed monthly', context: 'Risks were tracked ad hoc and fell through the cracks.', decision: 'Maintain a formal risk register reviewed every month.', owner: { role: 'head-of-ops', name: 'Tim Cook' }, sources: ['meeting:2025-05-04#risk'] },
+  { domain: 'ops', date: '2025-02-07', title: 'Cap concurrent build projects at three', context: 'Quality slipped when running five builds at once.', decision: 'Cap concurrent builds at three; a fourth waits in queue.', owner: { role: 'head-of-ops', name: 'Priya Vandermoor', dissent: ['head-of-sales'] }, tradeoffs: ['Lower throughput'], sources: ['meeting:2025-02-06#wip'] },
+  { domain: 'ops', date: '2025-03-14', title: 'Dual-source critical servo drives with a qualified backup vendor', context: 'A single servo-drive vendor was a single point of failure.', decision: 'Qualify and dual-source critical servo drives.', owner: { role: 'head-of-ops', name: 'Priya Vandermoor' }, tradeoffs: ['Qualification overhead'] },
+  { domain: 'ops', date: '2025-04-02', title: 'Adopt a weekly Monday operating cadence with written commitments', context: 'Verbal commitments slipped without a record.', decision: 'Run a weekly Monday operating review with written commitments.', owner: { role: 'head-of-ops', name: 'Priya Vandermoor' } },
+  { domain: 'ops', date: '2025-05-05', title: 'Implement a formal risk register reviewed monthly', context: 'Risks were tracked ad hoc and fell through the cracks.', decision: 'Maintain a formal risk register reviewed every month.', owner: { role: 'head-of-ops', name: 'Priya Vandermoor' }, sources: ['meeting:2025-05-04#risk'] },
 ];
 
 const KNOWLEDGE: KnowledgeInput[] = [
@@ -72,28 +72,28 @@ const KNOWLEDGE: KnowledgeInput[] = [
 ];
 
 const PEOPLE: PersonInput[] = [
-  { name: 'Steve Jobs', role: 'founder', kind: 'founder', summary: 'Founder and CEO; set the company’s margin discipline and ICP focus. Background in controls engineering and operations.', skills: ['strategy', 'controls', 'operations'], highlights: ['Founded NorthPeak in 2018', 'Grew to 60 staff profitably'], startDate: '2018-03', location: 'Stuttgart, DE', email: 'm@northpeak.example' },
-  { name: 'Warren Buffett', role: 'cfo', kind: 'employee', summary: 'CFO; owns margin floor, milestone billing, and the cash-runway policy.', skills: ['finance', 'fp&a', 'controlling'], startDate: '2020-06', location: 'Munich, DE' },
-  { name: 'Jordan Belfort', role: 'head-of-sales', kind: 'employee', summary: 'Head of Sales; drove the F&B ICP focus and value-based pricing.', skills: ['enterprise-sales', 'pricing', 'negotiation'], startDate: '2019-09', location: 'Amsterdam, NL' },
-  { name: 'Nikola Tesla', role: 'head-of-engineering', kind: 'employee', summary: 'Head of Engineering; standardized the controls platform and simulation-first commissioning.', skills: ['twincat', 'controls', 'simulation'], startDate: '2019-02', location: 'Stuttgart, DE' },
-  { name: 'Elon Musk', role: 'head-of-product', kind: 'employee', summary: 'Head of Product; owns the modular fixture standard and remote-monitoring add-on.', skills: ['product', 'mechanical-design'], startDate: '2021-01', location: 'Barcelona, ES' },
-  { name: 'Tim Cook', role: 'head-of-ops', kind: 'employee', summary: 'Head of Operations; runs WIP limits, dual sourcing, and the weekly cadence.', skills: ['operations', 'supply-chain', 'lean'], startDate: '2019-11', location: 'Stuttgart, DE' },
-  { name: 'Oprah Winfrey', role: 'head-of-people', kind: 'employee', summary: 'Head of People; built the scorecard hiring process and onboarding bootcamp.', skills: ['recruiting', 'people-ops'], startDate: '2021-05', location: 'Berlin, DE' },
-  { name: 'Christine Lagarde', role: 'controller', kind: 'employee', summary: 'Financial controller; manages capitalization, audits, and reporting.', skills: ['accounting', 'audit'], startDate: '2022-02', location: 'Munich, DE' },
-  { name: 'Keanu Reeves', role: 'controls-engineer', kind: 'employee', summary: 'Senior controls engineer specializing in TwinCAT and servo tuning.', skills: ['twincat', 'plc', 'servo'], startDate: '2022-08', location: 'Stuttgart, DE' },
-  { name: 'Bruce Lee', role: 'controls-engineer', kind: 'employee', summary: 'Controls engineer; vision systems and line integration.', skills: ['vision', 'plc'], startDate: '2023-03', location: 'Stuttgart, DE' },
-  { name: 'Diego Maradona', role: 'mechanical-engineer', kind: 'employee', summary: 'Mechanical engineer; fixture and cell design.', skills: ['cad', 'mechanical-design'], startDate: '2022-04', location: 'Barcelona, ES' },
-  { name: 'Taylor Swift', role: 'project-manager', kind: 'employee', summary: 'Project manager; runs build schedules and customer comms.', skills: ['project-management'], startDate: '2021-10', location: 'Berlin, DE' },
-  { name: 'Shah Rukh Khan', role: 'account-executive', kind: 'employee', summary: 'Account executive for the F&B segment.', skills: ['sales', 'discovery'], startDate: '2022-06', location: 'London, UK' },
-  { name: 'Sophia Loren', role: 'account-executive', kind: 'employee', summary: 'Account executive; mid-market packaging accounts.', skills: ['sales'], startDate: '2023-01', location: 'Milan, IT' },
-  { name: 'Zlatan Ibrahimovic', role: 'service-technician', kind: 'employee', summary: 'Field service technician; commissioning and support.', skills: ['commissioning', 'support'], startDate: '2021-07', location: 'Gothenburg, SE' },
-  { name: 'Malala Yousafzai', role: 'data-engineer', kind: 'employee', summary: 'Data engineer; built the remote-monitoring telemetry pipeline.', skills: ['python', 'telemetry', 'cloud'], startDate: '2023-05', location: 'Berlin, DE' },
-  { name: 'Marie Curie', role: 'advisor', kind: 'advisor', summary: 'Technical advisor; former VP Engineering at a packaging OEM.', skills: ['automation', 'strategy'], startDate: '2020-01', location: 'Hamburg, DE' },
-  { name: 'Stephen King', role: 'advisor', kind: 'advisor', summary: 'Go-to-market advisor; scaled two industrial SaaS companies.', skills: ['gtm', 'pricing'], startDate: '2021-03', location: 'Boston, US' },
-  { name: 'Greta Thunberg', role: 'board-member', kind: 'board', summary: 'Board member; chair of the audit committee.', skills: ['governance', 'finance'], startDate: '2020-09', location: 'Oslo, NO' },
-  { name: 'Andrea Bocelli', role: 'board-member', kind: 'board', summary: 'Board member; industry operator and former CEO.', skills: ['governance', 'operations'], startDate: '2020-09', location: 'Milan, IT' },
-  { name: 'Hayao Miyazaki', role: 'contractor', kind: 'contractor', summary: 'Contract robotics integrator for peak project load.', skills: ['robotics', 'integration'], startDate: '2023-09', location: 'Remote' },
-  { name: 'Ingmar Bergman', role: 'contractor', kind: 'contractor', summary: 'Contract safety/compliance consultant (CE, ISO 13849).', skills: ['safety', 'compliance'], startDate: '2022-11', location: 'Malmö, SE' },
+  { name: 'Marcus Halvorsen', role: 'founder', kind: 'founder', keyPerson: true, summary: 'Founder and CEO; set the company’s margin discipline and ICP focus. Background in controls engineering and operations.', skills: ['strategy', 'controls', 'operations'], highlights: ['Founded NorthPeak in 2018', 'Grew to 60 staff profitably'], startDate: '2018-03', location: 'Stuttgart, DE', email: 'm@northpeak.example' },
+  { name: 'Eleni Castermount', role: 'cfo', kind: 'employee', summary: 'CFO; owns margin floor, milestone billing, and the cash-runway policy.', skills: ['finance', 'fp&a', 'controlling'], startDate: '2020-06', location: 'Munich, DE' },
+  { name: 'Rovan Brashford', role: 'head-of-sales', kind: 'employee', summary: 'Head of Sales; drove the F&B ICP focus and value-based pricing.', skills: ['enterprise-sales', 'pricing', 'negotiation'], startDate: '2019-09', location: 'Amsterdam, NL' },
+  { name: 'Soraya Quillgate', role: 'head-of-engineering', kind: 'employee', summary: 'Head of Engineering; standardized the controls platform and simulation-first commissioning.', skills: ['twincat', 'controls', 'simulation'], startDate: '2019-02', location: 'Stuttgart, DE' },
+  { name: 'Tobias Norrindale', role: 'head-of-product', kind: 'employee', summary: 'Head of Product; owns the modular fixture standard and remote-monitoring add-on.', skills: ['product', 'mechanical-design'], startDate: '2021-01', location: 'Barcelona, ES' },
+  { name: 'Priya Vandermoor', role: 'head-of-ops', kind: 'employee', summary: 'Head of Operations; runs WIP limits, dual sourcing, and the weekly cadence.', skills: ['operations', 'supply-chain', 'lean'], startDate: '2019-11', location: 'Stuttgart, DE' },
+  { name: 'Delphine Astovar', role: 'head-of-people', kind: 'employee', summary: 'Head of People; built the scorecard hiring process and onboarding bootcamp.', skills: ['recruiting', 'people-ops'], startDate: '2021-05', location: 'Berlin, DE' },
+  { name: 'Ingrid Pellowin', role: 'controller', kind: 'employee', summary: 'Financial controller; manages capitalization, audits, and reporting.', skills: ['accounting', 'audit'], startDate: '2022-02', location: 'Munich, DE' },
+  { name: 'Aldric Tavelholm', role: 'controls-engineer', kind: 'employee', summary: 'Senior controls engineer specializing in TwinCAT and servo tuning.', skills: ['twincat', 'plc', 'servo'], startDate: '2022-08', location: 'Stuttgart, DE' },
+  { name: 'Nerys Larkmoor', role: 'controls-engineer', kind: 'employee', summary: 'Controls engineer; vision systems and line integration.', skills: ['vision', 'plc'], startDate: '2023-03', location: 'Stuttgart, DE' },
+  { name: 'Esteban Calvecchio', role: 'mechanical-engineer', kind: 'employee', summary: 'Mechanical engineer; fixture and cell design.', skills: ['cad', 'mechanical-design'], startDate: '2022-04', location: 'Barcelona, ES' },
+  { name: 'Carola Brindlecourt', role: 'project-manager', kind: 'employee', summary: 'Project manager; runs build schedules and customer comms.', skills: ['project-management'], startDate: '2021-10', location: 'Berlin, DE' },
+  { name: 'Rahim Wexbury', role: 'account-executive', kind: 'employee', summary: 'Account executive for the F&B segment.', skills: ['sales', 'discovery'], startDate: '2022-06', location: 'London, UK' },
+  { name: 'Liora Cresswold', role: 'account-executive', kind: 'employee', summary: 'Account executive; mid-market packaging accounts.', skills: ['sales'], startDate: '2023-01', location: 'Milan, IT' },
+  { name: 'Sven Garnoff', role: 'service-technician', kind: 'employee', summary: 'Field service technician; commissioning and support.', skills: ['commissioning', 'support'], startDate: '2021-07', location: 'Gothenburg, SE' },
+  { name: 'Amina Salvern', role: 'data-engineer', kind: 'employee', summary: 'Data engineer; built the remote-monitoring telemetry pipeline.', skills: ['python', 'telemetry', 'cloud'], startDate: '2023-05', location: 'Berlin, DE' },
+  { name: 'Helene Mordancey', role: 'advisor', kind: 'advisor', summary: 'Technical advisor; former VP Engineering at a packaging OEM.', skills: ['automation', 'strategy'], startDate: '2020-01', location: 'Hamburg, DE' },
+  { name: 'Gideon Tollard', role: 'advisor', kind: 'advisor', summary: 'Go-to-market advisor; scaled two industrial SaaS companies.', skills: ['gtm', 'pricing'], startDate: '2021-03', location: 'Boston, US' },
+  { name: 'Annika Renquist', role: 'board-member', kind: 'board', summary: 'Board member; chair of the audit committee.', skills: ['governance', 'finance'], startDate: '2020-09', location: 'Oslo, NO' },
+  { name: 'Matteo Yelloway', role: 'board-member', kind: 'board', summary: 'Board member; industry operator and former CEO.', skills: ['governance', 'operations'], startDate: '2020-09', location: 'Milan, IT' },
+  { name: 'Kenji Avondreth', role: 'contractor', kind: 'contractor', summary: 'Contract robotics integrator for peak project load.', skills: ['robotics', 'integration'], startDate: '2023-09', location: 'Remote' },
+  { name: 'Lasse Lindquay', role: 'contractor', kind: 'contractor', summary: 'Contract safety/compliance consultant (CE, ISO 13849).', skills: ['safety', 'compliance'], startDate: '2022-11', location: 'Malmö, SE' },
 ];
 
 const RECORDS: RecordInput[] = [
@@ -188,30 +188,30 @@ const GLOSSARY: GlossaryInput[] = (
 // ── Second wave (doubles the data) ──────────────────────────
 const EXTRA_DECISIONS: DecisionInput[] = [
   // hiring
-  { domain: 'hiring', date: '2025-06-09', title: 'Introduce an employee referral bonus program', context: 'Best hires came from referrals but there was no incentive.', decision: 'Pay a referral bonus for hires that pass probation.', owner: { role: 'head-of-people', name: 'Oprah Winfrey' } },
-  { domain: 'hiring', date: '2025-06-23', title: 'Create a senior technical career track without forced management', context: 'Top engineers were leaving to avoid management roles.', decision: 'Add a senior IC track with equal pay bands to management.', owner: { role: 'head-of-engineering', name: 'Nikola Tesla' } },
-  { domain: 'hiring', date: '2025-07-07', title: 'Move to quarterly performance check-ins', context: 'Annual reviews gave feedback too late.', decision: 'Replace annual reviews with lightweight quarterly check-ins.', owner: { role: 'head-of-people', name: 'Oprah Winfrey' } },
-  { domain: 'hiring', date: '2025-07-21', title: 'Hire a regional service lead for the Nordics', context: 'Nordic accounts grew faster than local support coverage.', decision: 'Hire a Nordics-based service lead.', owner: { role: 'head-of-ops', name: 'Tim Cook' }, tradeoffs: ['New regional overhead'] },
+  { domain: 'hiring', date: '2025-06-09', title: 'Introduce an employee referral bonus program', context: 'Best hires came from referrals but there was no incentive.', decision: 'Pay a referral bonus for hires that pass probation.', owner: { role: 'head-of-people', name: 'Delphine Astovar' } },
+  { domain: 'hiring', date: '2025-06-23', title: 'Create a senior technical career track without forced management', context: 'Top engineers were leaving to avoid management roles.', decision: 'Add a senior IC track with equal pay bands to management.', owner: { role: 'head-of-engineering', name: 'Soraya Quillgate' } },
+  { domain: 'hiring', date: '2025-07-07', title: 'Move to quarterly performance check-ins', context: 'Annual reviews gave feedback too late.', decision: 'Replace annual reviews with lightweight quarterly check-ins.', owner: { role: 'head-of-people', name: 'Delphine Astovar' } },
+  { domain: 'hiring', date: '2025-07-21', title: 'Hire a regional service lead for the Nordics', context: 'Nordic accounts grew faster than local support coverage.', decision: 'Hire a Nordics-based service lead.', owner: { role: 'head-of-ops', name: 'Priya Vandermoor' }, tradeoffs: ['New regional overhead'] },
   // sales
-  { domain: 'sales', date: '2025-06-11', title: 'Add a standard SLA tier for service contracts', context: 'Ad-hoc SLAs were hard to price and support.', decision: 'Offer three standard SLA tiers (Bronze/Silver/Gold).', owner: { role: 'head-of-sales', name: 'Jordan Belfort' } },
-  { domain: 'sales', date: '2025-06-25', title: 'Enter the bakery sub-segment of F&B', context: 'Bakery lines share our packaging expertise.', decision: 'Expand the ICP to include bakery packaging.', owner: { role: 'head-of-sales', name: 'Jordan Belfort' }, tradeoffs: ['New application learning curve'] },
-  { domain: 'sales', date: '2025-07-09', title: 'Set a minimum new-build deal size of €75k', context: 'Small builds consumed disproportionate overhead.', decision: 'Decline new builds under €75k.', owner: { role: 'head-of-sales', name: 'Jordan Belfort', dissent: ['founder'] } },
-  { domain: 'sales', date: '2025-07-23', title: 'Publish reference case studies with named customers', context: 'Prospects wanted proof from peers.', decision: 'Publish named case studies (with customer consent).', owner: { role: 'head-of-sales', name: 'Jordan Belfort' } },
+  { domain: 'sales', date: '2025-06-11', title: 'Add a standard SLA tier for service contracts', context: 'Ad-hoc SLAs were hard to price and support.', decision: 'Offer three standard SLA tiers (Bronze/Silver/Gold).', owner: { role: 'head-of-sales', name: 'Rovan Brashford' } },
+  { domain: 'sales', date: '2025-06-25', title: 'Enter the bakery sub-segment of F&B', context: 'Bakery lines share our packaging expertise.', decision: 'Expand the ICP to include bakery packaging.', owner: { role: 'head-of-sales', name: 'Rovan Brashford' }, tradeoffs: ['New application learning curve'] },
+  { domain: 'sales', date: '2025-07-09', title: 'Set a minimum new-build deal size of €75k', context: 'Small builds consumed disproportionate overhead.', decision: 'Decline new builds under €75k.', owner: { role: 'head-of-sales', name: 'Rovan Brashford', dissent: ['founder'] } },
+  { domain: 'sales', date: '2025-07-23', title: 'Publish reference case studies with named customers', context: 'Prospects wanted proof from peers.', decision: 'Publish named case studies (with customer consent).', owner: { role: 'head-of-sales', name: 'Rovan Brashford' } },
   // product
-  { domain: 'product', date: '2025-06-13', title: 'Add OPC-UA connectivity to every cell', context: 'Customers needed standardized data integration.', decision: 'Expose OPC-UA on all new cells by default.', owner: { role: 'head-of-engineering', name: 'Nikola Tesla' } },
-  { domain: 'product', date: '2025-06-27', title: 'Offer a predictive-maintenance tier on monitoring', context: 'Telemetry data enabled failure prediction.', decision: 'Add a predictive-maintenance upgrade to the monitoring add-on.', owner: { role: 'head-of-product', name: 'Elon Musk' } },
-  { domain: 'product', date: '2025-07-11', title: 'Standardize safety architecture on ISO 13849 PLd', context: 'Inconsistent safety design slowed CE sign-off.', decision: 'Adopt a standard ISO 13849 PLd safety architecture.', owner: { role: 'head-of-engineering', name: 'Nikola Tesla' } },
-  { domain: 'product', date: '2025-07-25', title: 'Build a spare-parts kit catalog', context: 'Spares were quoted ad hoc, delaying repairs.', decision: 'Publish a standard spare-parts kit catalog per cell type.', owner: { role: 'head-of-product', name: 'Elon Musk' } },
+  { domain: 'product', date: '2025-06-13', title: 'Add OPC-UA connectivity to every cell', context: 'Customers needed standardized data integration.', decision: 'Expose OPC-UA on all new cells by default.', owner: { role: 'head-of-engineering', name: 'Soraya Quillgate' } },
+  { domain: 'product', date: '2025-06-27', title: 'Offer a predictive-maintenance tier on monitoring', context: 'Telemetry data enabled failure prediction.', decision: 'Add a predictive-maintenance upgrade to the monitoring add-on.', owner: { role: 'head-of-product', name: 'Tobias Norrindale' } },
+  { domain: 'product', date: '2025-07-11', title: 'Standardize safety architecture on ISO 13849 PLd', context: 'Inconsistent safety design slowed CE sign-off.', decision: 'Adopt a standard ISO 13849 PLd safety architecture.', owner: { role: 'head-of-engineering', name: 'Soraya Quillgate' } },
+  { domain: 'product', date: '2025-07-25', title: 'Build a spare-parts kit catalog', context: 'Spares were quoted ad hoc, delaying repairs.', decision: 'Publish a standard spare-parts kit catalog per cell type.', owner: { role: 'head-of-product', name: 'Tobias Norrindale' } },
   // finance
-  { domain: 'finance', date: '2025-06-16', title: 'Move to monthly rolling forecasts', context: 'Annual budgets drifted from reality.', decision: 'Adopt a 12-month rolling forecast updated monthly.', owner: { role: 'cfo', name: 'Warren Buffett' } },
-  { domain: 'finance', date: '2025-06-30', title: 'Hedge euro/USD exposure on imported drives', context: 'FX swings hit the cost of imported components.', decision: 'Hedge USD component exposure with forward contracts.', owner: { role: 'cfo', name: 'Warren Buffett' } },
-  { domain: 'finance', date: '2025-07-14', title: 'Set a DSO target of 45 days', context: 'Slow collections strained working capital.', decision: 'Target days-sales-outstanding of 45 days.', owner: { role: 'controller', name: 'Christine Lagarde' } },
-  { domain: 'finance', date: '2025-07-28', title: 'Establish a €25k capex approval threshold', context: 'Capital spend lacked a consistent gate.', decision: 'Require CFO approval for capex above €25k.', owner: { role: 'cfo', name: 'Warren Buffett' } },
+  { domain: 'finance', date: '2025-06-16', title: 'Move to monthly rolling forecasts', context: 'Annual budgets drifted from reality.', decision: 'Adopt a 12-month rolling forecast updated monthly.', owner: { role: 'cfo', name: 'Eleni Castermount' } },
+  { domain: 'finance', date: '2025-06-30', title: 'Hedge euro/USD exposure on imported drives', context: 'FX swings hit the cost of imported components.', decision: 'Hedge USD component exposure with forward contracts.', owner: { role: 'cfo', name: 'Eleni Castermount' } },
+  { domain: 'finance', date: '2025-07-14', title: 'Set a DSO target of 45 days', context: 'Slow collections strained working capital.', decision: 'Target days-sales-outstanding of 45 days.', owner: { role: 'controller', name: 'Ingrid Pellowin' } },
+  { domain: 'finance', date: '2025-07-28', title: 'Establish a €25k capex approval threshold', context: 'Capital spend lacked a consistent gate.', decision: 'Require CFO approval for capex above €25k.', owner: { role: 'cfo', name: 'Eleni Castermount' } },
   // ops
-  { domain: 'ops', date: '2025-06-18', title: 'Adopt a CMMS for maintenance scheduling', context: 'Maintenance was tracked in spreadsheets.', decision: 'Roll out a CMMS for scheduled maintenance.', owner: { role: 'head-of-ops', name: 'Tim Cook' } },
-  { domain: 'ops', date: '2025-07-02', title: 'Require FAT sign-off before shipment', context: 'Defects slipped to site without a gate.', decision: 'No cell ships without a factory acceptance test sign-off.', owner: { role: 'head-of-ops', name: 'Tim Cook' } },
-  { domain: 'ops', date: '2025-07-16', title: 'Set a 48-hour critical support response SLA', context: 'Downtime needed a guaranteed response.', decision: 'Guarantee a 48-hour response on critical support tickets.', owner: { role: 'head-of-ops', name: 'Tim Cook' } },
-  { domain: 'ops', date: '2025-07-30', title: 'Run quarterly supplier scorecard reviews', context: 'Supplier quality varied without review.', decision: 'Review key suppliers on a quarterly scorecard.', owner: { role: 'head-of-ops', name: 'Tim Cook' } },
+  { domain: 'ops', date: '2025-06-18', title: 'Adopt a CMMS for maintenance scheduling', context: 'Maintenance was tracked in spreadsheets.', decision: 'Roll out a CMMS for scheduled maintenance.', owner: { role: 'head-of-ops', name: 'Priya Vandermoor' } },
+  { domain: 'ops', date: '2025-07-02', title: 'Require FAT sign-off before shipment', context: 'Defects slipped to site without a gate.', decision: 'No cell ships without a factory acceptance test sign-off.', owner: { role: 'head-of-ops', name: 'Priya Vandermoor' } },
+  { domain: 'ops', date: '2025-07-16', title: 'Set a 48-hour critical support response SLA', context: 'Downtime needed a guaranteed response.', decision: 'Guarantee a 48-hour response on critical support tickets.', owner: { role: 'head-of-ops', name: 'Priya Vandermoor' } },
+  { domain: 'ops', date: '2025-07-30', title: 'Run quarterly supplier scorecard reviews', context: 'Supplier quality varied without review.', decision: 'Review key suppliers on a quarterly scorecard.', owner: { role: 'head-of-ops', name: 'Priya Vandermoor' } },
 ];
 
 const EXTRA_KNOWLEDGE: KnowledgeInput[] = (
@@ -243,28 +243,28 @@ const EXTRA_KNOWLEDGE: KnowledgeInput[] = (
 
 const EXTRA_PEOPLE: PersonInput[] = (
   [
-    ['Audrey Hepburn', 'service-technician', 'employee', 'Field service technician for the DACH region.', 'Vienna, AT', 'commissioning'],
-    ['Omar Sharif', 'controls-engineer', 'employee', 'Controls engineer; safety and motion.', 'Stuttgart, DE', 'plc'],
-    ['Monica Bellucci', 'project-manager', 'employee', 'Project manager for F&B builds.', 'Milan, IT', 'project-management'],
-    ['Wolfgang Amadeus Mozart', 'mechanical-engineer', 'employee', 'Mechanical engineer; fixturing.', 'Stuttgart, DE', 'cad'],
-    ['Salma Hayek', 'account-executive', 'employee', 'Account executive; bakery segment.', 'Paris, FR', 'sales'],
-    ['Alfred Nobel', 'service-lead', 'employee', 'Regional service lead, Nordics.', 'Stockholm, SE', 'service'],
-    ['Martina Navratilova', 'quality-engineer', 'employee', 'Quality engineer; FAT/SAT and compliance.', 'Zagreb, HR', 'quality'],
-    ['Jackie Chan', 'data-engineer', 'employee', 'Data engineer; predictive-maintenance models.', 'Berlin, DE', 'python'],
-    ['Cillian Murphy', 'sales-engineer', 'employee', 'Sales engineer; discovery and solution design.', 'Dublin, IE', 'pre-sales'],
-    ['Coco Chanel', 'marketing-lead', 'employee', 'Marketing lead; case studies and demand gen.', 'Lyon, FR', 'marketing'],
-    ['Roger Federer', 'procurement-manager', 'employee', 'Procurement; supplier scorecards and dual sourcing.', 'Munich, DE', 'procurement'],
-    ['Linus Torvalds', 'controls-engineer', 'employee', 'Controls engineer; OPC-UA integration.', 'Helsinki, FI', 'opc-ua'],
-    ['Ayrton Senna', 'service-technician', 'employee', 'Service technician; Iberia.', 'Lisbon, PT', 'support'],
-    ['Greta Garbo', 'people-ops', 'employee', 'People-ops specialist; onboarding.', 'Gothenburg, SE', 'people-ops'],
-    ['Garry Kasparov', 'software-engineer', 'employee', 'Software engineer; monitoring platform.', 'Sofia, BG', 'typescript'],
-    ['Robert Lewandowski', 'fp&a-analyst', 'employee', 'FP&A analyst; rolling forecasts.', 'Warsaw, PL', 'fp&a'],
-    ['Aristotle Onassis', 'advisor', 'advisor', 'Advisor; manufacturing operations.', 'Athens, GR', 'operations'],
-    ['Ruth Bader Ginsburg', 'advisor', 'advisor', 'Advisor; M&A and corporate finance.', 'London, UK', 'm-and-a'],
-    ['Thomas Mann', 'board-member', 'board', 'Board member; industry veteran.', 'Frankfurt, DE', 'governance'],
-    ['Marina Abramović', 'contractor', 'contractor', 'Contract technical writer; documentation.', 'Ljubljana, SI', 'documentation'],
-    ['José Mourinho', 'contractor', 'contractor', 'Contract electrical designer.', 'Porto, PT', 'electrical'],
-    ['Frida Kahlo', 'controls-engineer', 'employee', 'Controls engineer; vision and robotics.', 'Berlin, DE', 'vision'],
+    ['Vesna Harrowgate', 'service-technician', 'employee', 'Field service technician for the DACH region.', 'Vienna, AT', 'commissioning'],
+    ['Darian Stennfeld', 'controls-engineer', 'employee', 'Controls engineer; safety and motion.', 'Stuttgart, DE', 'plc'],
+    ['Giulia Marchetwood', 'project-manager', 'employee', 'Project manager for F&B builds.', 'Milan, IT', 'project-management'],
+    ['Florian Ondrasek', 'mechanical-engineer', 'employee', 'Mechanical engineer; fixturing.', 'Stuttgart, DE', 'cad'],
+    ['Noemi Velbrook', 'account-executive', 'employee', 'Account executive; bakery segment.', 'Paris, FR', 'sales'],
+    ['Bjorn Castermount', 'service-lead', 'employee', 'Regional service lead, Nordics.', 'Stockholm, SE', 'service'],
+    ['Petra Drummerfield', 'quality-engineer', 'employee', 'Quality engineer; FAT/SAT and compliance.', 'Zagreb, HR', 'quality'],
+    ['Hong Pellowin', 'data-engineer', 'employee', 'Data engineer; predictive-maintenance models.', 'Berlin, DE', 'python'],
+    ['Eamon Cresswold', 'sales-engineer', 'employee', 'Sales engineer; discovery and solution design.', 'Dublin, IE', 'pre-sales'],
+    ['Margaux Vandermoor', 'marketing-lead', 'employee', 'Marketing lead; case studies and demand gen.', 'Lyon, FR', 'marketing'],
+    ['Klaus Brashford', 'procurement-manager', 'employee', 'Procurement; supplier scorecards and dual sourcing.', 'Munich, DE', 'procurement'],
+    ['Aatos Norrindale', 'controls-engineer', 'employee', 'Controls engineer; OPC-UA integration.', 'Helsinki, FI', 'opc-ua'],
+    ['Rui Thessaly', 'service-technician', 'employee', 'Service technician; Iberia.', 'Lisbon, PT', 'support'],
+    ['Astrid Garnoff', 'people-ops', 'employee', 'People-ops specialist; onboarding.', 'Gothenburg, SE', 'people-ops'],
+    ['Velin Astovar', 'software-engineer', 'employee', 'Software engineer; monitoring platform.', 'Sofia, BG', 'typescript'],
+    ['Wojciech Salvern', 'fp&a-analyst', 'employee', 'FP&A analyst; rolling forecasts.', 'Warsaw, PL', 'fp&a'],
+    ['Theron Calvecchio', 'advisor', 'advisor', 'Advisor; manufacturing operations.', 'Athens, GR', 'operations'],
+    ['Marisedd Tollard', 'advisor', 'advisor', 'Advisor; M&A and corporate finance.', 'London, UK', 'm-and-a'],
+    ['Konrad Larkmoor', 'board-member', 'board', 'Board member; industry veteran.', 'Frankfurt, DE', 'governance'],
+    ['Branka Avondreth', 'contractor', 'contractor', 'Contract technical writer; documentation.', 'Ljubljana, SI', 'documentation'],
+    ['Tiago Renquist', 'contractor', 'contractor', 'Contract electrical designer.', 'Porto, PT', 'electrical'],
+    ['Ilvana Brindlecourt', 'controls-engineer', 'employee', 'Controls engineer; vision and robotics.', 'Berlin, DE', 'vision'],
   ] as const
 ).map(([name, role, kind, summary, location, skill]) => ({ name, role, kind: kind as PersonInput['kind'], summary, location, skills: [skill] }));
 
@@ -297,11 +297,11 @@ const EXTRA_RECORDS: RecordInput[] = [
 
 // ── Generated wave (tops every category up past 100) ────────
 const DOMAIN_OWNER: Record<Domain, { role: string; name: string }> = {
-  hiring: { role: 'head-of-people', name: 'Oprah Winfrey' },
-  sales: { role: 'head-of-sales', name: 'Jordan Belfort' },
-  product: { role: 'head-of-product', name: 'Elon Musk' },
-  finance: { role: 'cfo', name: 'Warren Buffett' },
-  ops: { role: 'head-of-ops', name: 'Tim Cook' },
+  hiring: { role: 'head-of-people', name: 'Delphine Astovar' },
+  sales: { role: 'head-of-sales', name: 'Rovan Brashford' },
+  product: { role: 'head-of-product', name: 'Tobias Norrindale' },
+  finance: { role: 'cfo', name: 'Eleni Castermount' },
+  ops: { role: 'head-of-ops', name: 'Priya Vandermoor' },
 };
 const GEN_CONTEXT: Record<Domain, string> = {
   hiring: 'Part of building a durable, scalable team.',
@@ -378,17 +378,54 @@ function genKnowledge(count: number): KnowledgeInput[] {
 const GEN_ROLES = ['controls-engineer', 'mechanical-engineer', 'project-manager', 'service-technician', 'account-executive', 'software-engineer', 'quality-engineer', 'data-engineer', 'procurement-manager', 'sales-engineer', 'people-ops', 'fp&a-analyst'];
 const GEN_CITIES = ['Stuttgart, DE', 'Berlin, DE', 'Munich, DE', 'Milan, IT', 'Barcelona, ES', 'Amsterdam, NL', 'Stockholm, SE', 'Paris, FR', 'Vienna, AT', 'Copenhagen, DK'];
 const GEN_SKILLS = ['plc', 'cad', 'project-management', 'commissioning', 'sales', 'typescript', 'quality', 'python', 'procurement', 'pre-sales', 'people-ops', 'fp&a'];
-// The demo "team" is a roster of famous people in ordinary NorthPeak roles — a
-// memorable, funnier showcase than random names (Pablo Escobar, Procurement…).
-// Exactly one is flagged as the key person (departure = material risk).
-const KEY_PERSON = 'Albert Einstein';
+
+// Fictional name pools — invented, non-real first/last names so the generated
+// demo "team" can't be mistaken for, or implicate, any real person. Unique
+// first×last combinations give well over a thousand distinct names. The real
+// FAMOUS_NAMES roster is only used as a dev-only opt-in (ADAMAS_DEMO_FAMOUS=1).
+const FICTIONAL_FIRST = [
+  'Maren', 'Tovan', 'Lirael', 'Quillon', 'Saphine', 'Drevan', 'Yelina', 'Korrin',
+  'Brannoch', 'Velda', 'Therin', 'Oswen', 'Calyra', 'Fenwick', 'Marwen', 'Ilvana',
+  'Daskel', 'Norabeth', 'Pellan', 'Surek', 'Tamsel', 'Veylin', 'Orrin', 'Halvard',
+  'Mireska', 'Ondric', 'Sylwen', 'Garvin', 'Lunara', 'Bexley', 'Cassoval', 'Renwick',
+  'Tessoria', 'Andrel', 'Velora', 'Joskin', 'Marisedd', 'Doverin', 'Selwyn', 'Cantrel',
+];
+const FICTIONAL_LAST = [
+  'Vandermoor', 'Quillgate', 'Brashford', 'Thessaly', 'Norrindale', 'Calvecchio',
+  'Drummerfield', 'Astovar', 'Pellowin', 'Marchetwood', 'Velbrook', 'Harrowgate',
+  'Stennfeld', 'Larkmoor', 'Ondrasek', 'Tavelholm', 'Wexbury', 'Cresswold',
+  'Garnoff', 'Brindlecourt', 'Salvern', 'Mordancey', 'Tollard', 'Renquist',
+  'Yelloway', 'Castermount', 'Avondreth', 'Lindquay',
+];
+
+// Exactly one generated person is flagged as the key person (departure = material
+// risk). The hand-authored founder also carries keyPerson:true, so the generated
+// roster intentionally adds none — keeping a single key person across the dataset.
 function genPeople(count: number): PersonInput[] {
   const out: PersonInput[] = [];
-  const max = Math.min(count, FAMOUS_NAMES.length); // one record per unique famous name
-  for (let i = 0; i < max; i++) {
-    const name = FAMOUS_NAMES[i]!;
-    const role = GEN_ROLES[i % GEN_ROLES.length]!;
-    out.push({ name, role, kind: 'employee', summary: `${role.replace(/-/g, ' ')} at NorthPeak Robotics.`, skills: [GEN_SKILLS[i % GEN_SKILLS.length]!], location: GEN_CITIES[i % GEN_CITIES.length], startDate: `${2015 + (i % 11)}-01`, ...(name === KEY_PERSON ? { keyPerson: true } : {}) });
+  const famous = process.env.ADAMAS_DEMO_FAMOUS === '1';
+  if (famous) {
+    const max = Math.min(count, FAMOUS_NAMES.length); // one record per unique famous name
+    for (let i = 0; i < max; i++) {
+      const name = FAMOUS_NAMES[i]!;
+      const role = GEN_ROLES[i % GEN_ROLES.length]!;
+      out.push({ name, role, kind: 'employee', summary: `${role.replace(/-/g, ' ')} at NorthPeak Robotics.`, skills: [GEN_SKILLS[i % GEN_SKILLS.length]!], location: GEN_CITIES[i % GEN_CITIES.length], startDate: `${2015 + (i % 11)}-01` });
+    }
+    return out;
+  }
+  // Default: fictional first×last combinations, each unique.
+  const seen = new Set<string>();
+  let i = 0;
+  for (const last of FICTIONAL_LAST) {
+    for (const first of FICTIONAL_FIRST) {
+      if (out.length >= count) return out;
+      const name = `${first} ${last}`;
+      if (seen.has(name)) continue;
+      seen.add(name);
+      const role = GEN_ROLES[i % GEN_ROLES.length]!;
+      out.push({ name, role, kind: 'employee', summary: `${role.replace(/-/g, ' ')} at NorthPeak Robotics.`, skills: [GEN_SKILLS[i % GEN_SKILLS.length]!], location: GEN_CITIES[i % GEN_CITIES.length], startDate: `${2015 + (i % 11)}-01` });
+      i++;
+    }
   }
   return out;
 }

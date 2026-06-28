@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 import { useLang } from '../i18n';
+import { AiNote, ReadinessNote } from '../components/Disclaimer';
 
 const CATEGORIES: Array<{ id: string; label: string }> = [
   { id: 'customer', label: 'Customers & contracts' },
@@ -85,6 +86,7 @@ export function DataRoomView() {
                 {t('Coverage gap: no decisions yet in')} {r.domainGaps.join(', ')}. {t('Capturing a few there raises the score.')}
               </div>
             )}
+            <ReadinessNote />
           </>
         )}
       </div>
@@ -110,6 +112,7 @@ export function DataRoomView() {
           </p>
         )}
         {msg && <div className="notice ok">{msg}</div>}
+        <AiNote />
 
         {info?.dir && (
           <>

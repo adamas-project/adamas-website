@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 import { useLang } from '../i18n';
+import { AiNote } from '../components/Disclaimer';
 
 export function KnowledgeView() {
   const { t } = useLang();
@@ -184,6 +185,7 @@ export function KnowledgeView() {
 
             <div className="section-title">{t('Summary')}</div>
             <p>{selected.summary}</p>
+            <AiNote />
 
             {selected.takeaways?.length ? (
               <>
@@ -354,6 +356,7 @@ function GlossaryPanel() {
             {editingId && <button onClick={resetForm} disabled={busy}>{t('Cancel')}</button>}
           </div>
           {msg && <div className="notice ok">{msg}</div>}
+          <AiNote />
         </div>
         <div className="toolbar" style={{ marginTop: 16 }}>
           <input style={{ flex: 1 }} placeholder={t('Search glossary…')} value={q} onChange={(e) => setQ(e.target.value)} />

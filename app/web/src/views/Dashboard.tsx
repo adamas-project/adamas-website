@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 import { useLang } from '../i18n';
+import { ReadinessNote } from '../components/Disclaimer';
 
 type Overview = Awaited<ReturnType<typeof api.dashboard>>;
 
@@ -57,6 +58,7 @@ export function DashboardView() {
         <div style={{ fontSize: 26, fontWeight: 800 }}>{company}</div>
         <div style={{ fontSize: 14 }}>{brand?.tagline || t('Company overview')}</div>
         <div style={{ fontSize: 12, marginTop: 4 }}>{t('Confidential — Investor Overview')} · {today}</div>
+        <ReadinessNote />
       </div>
 
       <div className="panel">
@@ -78,6 +80,7 @@ export function DashboardView() {
           <Tile label={t('Glossary')} value={d.counts.glossary.toLocaleString()} sub={t('terms')} />
           <Tile label={t('Readiness')} value={`${d.readiness.score}/100`} sub={`${d.readiness.traceabilityPct}% ${t('sourced')}`} />
         </div>
+        <ReadinessNote />
       </div>
 
       <div className="panel">
