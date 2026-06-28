@@ -244,7 +244,7 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
 // decisions. Only adds a label (never deletes/sends), using a Gmail app password.
 function GmailLabelPanel() {
   const { t } = useLang();
-  const [status, setStatus] = useState<{ configured: boolean; isGmail: boolean; user?: string; source: 'saved' | 'env' | null; label: string } | null>(null);
+  const [status, setStatus] = useState<{ configured: boolean; isGmail: boolean; user?: string; source: 'saved' | 'env' | null; autoLabelMinutes: number; label: string } | null>(null);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
   const [editing, setEditing] = useState(false);
@@ -277,6 +277,20 @@ function GmailLabelPanel() {
       const r = await api.gmailTestConnection();
       return `${t('Connected ✓')} — ${status?.user} (${r.mailbox}, ${r.messages} ${t('messages')})`;
     });
+
+  async function setAuto(minutes: number) {
+    setBusy(true);
+    setMsg('');
+    try {
+      await api.gmailAutoLabel(minutes);
+      await refreshStatus();
+      setMsg(minutes > 0 ? `${t('Auto-labeling every')} ${minutes} ${t('min.')}` : t('Auto-labeling off.'));
+    } catch (e) {
+      setMsg((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
 
   const sendTest = () =>
     act(t('Test email failed'), async () => {
@@ -376,6 +390,16 @@ function GmailLabelPanel() {
           <button className="primary" onClick={run} disabled={busy}>
             {busy ? t('Labeling…') : t('Label decision emails')}
           </button>
+          <label className="rolebox" title={t('Automatically label decision emails on a schedule.')}>
+            {t('Auto')}
+            <select value={status.autoLabelMinutes ?? 0} onChange={(e) => setAuto(Number(e.target.value))} disabled={busy} style={{ marginLeft: 6 }}>
+              <option value={0}>{t('off')}</option>
+              <option value={30}>{t('every 30 min')}</option>
+              <option value={60}>{t('hourly')}</option>
+              <option value={360}>{t('every 6 h')}</option>
+              <option value={1440}>{t('daily')}</option>
+            </select>
+          </label>
           <span style={{ flex: 1 }} />
           <span className="muted" style={{ fontSize: 13 }}>{status.user}</span>
           <button onClick={() => { setEditing(true); setEmail(status.user ?? ''); setMsg(''); }} disabled={busy}>{t('Change')}</button>

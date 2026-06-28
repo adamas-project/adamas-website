@@ -11,6 +11,8 @@ export interface GmailSettings {
   host: string;
   user: string;
   pass: string;
+  /** Auto-label decision emails every N minutes (0/undefined = off). */
+  autoLabelMinutes?: number;
 }
 
 function settingsFile(root: string): string {
@@ -20,7 +22,9 @@ function settingsFile(root: string): string {
 export async function loadGmailSettings(root: string): Promise<GmailSettings | null> {
   try {
     const s = JSON.parse(await fs.readFile(settingsFile(root), 'utf8')) as Partial<GmailSettings>;
-    if (s.host && s.user && s.pass) return { host: s.host, user: s.user, pass: s.pass };
+    if (s.host && s.user && s.pass) {
+      return { host: s.host, user: s.user, pass: s.pass, ...(s.autoLabelMinutes ? { autoLabelMinutes: s.autoLabelMinutes } : {}) };
+    }
     return null;
   } catch {
     return null;
@@ -28,8 +32,20 @@ export async function loadGmailSettings(root: string): Promise<GmailSettings | n
 }
 
 export async function saveGmailSettings(root: string, s: GmailSettings): Promise<void> {
+  // Merge so saving credentials preserves the auto-label interval and vice versa.
+  const cur = (await loadGmailSettings(root)) ?? undefined;
+  const next = { ...cur, ...s };
   // 0600 so only the owner can read the stored app password.
-  await fs.writeFile(settingsFile(root), JSON.stringify(s, null, 2), { mode: 0o600 });
+  await fs.writeFile(settingsFile(root), JSON.stringify(next, null, 2), { mode: 0o600 });
+}
+
+/** Set just the auto-label interval (preserving credentials). */
+export async function setAutoLabelMinutes(root: string, minutes: number): Promise<GmailSettings | null> {
+  const cur = await loadGmailSettings(root);
+  if (!cur) return null;
+  const next: GmailSettings = { ...cur, autoLabelMinutes: minutes > 0 ? minutes : undefined };
+  await fs.writeFile(settingsFile(root), JSON.stringify(next, null, 2), { mode: 0o600 });
+  return next;
 }
 
 export async function clearGmailSettings(root: string): Promise<void> {

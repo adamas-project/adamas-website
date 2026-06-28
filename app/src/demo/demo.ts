@@ -388,7 +388,7 @@ function genPeople(count: number): PersonInput[] {
   for (let i = 0; i < max; i++) {
     const name = FAMOUS_NAMES[i]!;
     const role = GEN_ROLES[i % GEN_ROLES.length]!;
-    out.push({ name, role, kind: 'employee', summary: `${role.replace(/-/g, ' ')} at NorthPeak Robotics.`, skills: [GEN_SKILLS[i % GEN_SKILLS.length]!], location: GEN_CITIES[i % GEN_CITIES.length], ...(name === KEY_PERSON ? { keyPerson: true } : {}) });
+    out.push({ name, role, kind: 'employee', summary: `${role.replace(/-/g, ' ')} at NorthPeak Robotics.`, skills: [GEN_SKILLS[i % GEN_SKILLS.length]!], location: GEN_CITIES[i % GEN_CITIES.length], startDate: `${2015 + (i % 11)}-01`, ...(name === KEY_PERSON ? { keyPerson: true } : {}) });
   }
   return out;
 }

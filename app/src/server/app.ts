@@ -19,6 +19,7 @@ import { registerRecordRoutes } from './routes/records.js';
 import { registerGlossaryRoutes } from './routes/glossary.js';
 import { registerDemoRoutes } from './routes/demo.js';
 import { registerDashboardRoutes } from './routes/dashboard.js';
+import { registerBrandRoutes } from './routes/brand.js';
 import { registerObsidianRoutes } from './routes/obsidian.js';
 
 export function buildApp(ctx: AppContext): FastifyInstance {
@@ -75,6 +76,7 @@ export function buildApp(ctx: AppContext): FastifyInstance {
   registerGlossaryRoutes(app, ctx);
   registerDemoRoutes(app, ctx);
   registerDashboardRoutes(app, ctx);
+  registerBrandRoutes(app, ctx);
   registerObsidianRoutes(app, ctx);
 
   // Stop background services cleanly on shutdown.
@@ -82,6 +84,7 @@ export function buildApp(ctx: AppContext): FastifyInstance {
     ctx.obsidianAuto?.stop();
     ctx.obsidianInbox?.stop();
     ctx.connectorScheduler?.stop();
+    ctx.gmailAuto?.stop();
   });
 
   return app;

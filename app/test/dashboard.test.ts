@@ -25,8 +25,8 @@ describe('dashboard overview', () => {
 
     await ledger.create({ domain: 'sales', date: '2025-01-01', title: 'A sales call', context: 'c', decision: 'd', owner: { role: 'head-of-sales', name: 'X' } });
     await knowledge.create({ title: 'Note', source: 'manual', type: 'note', summary: 's' });
-    await people.create({ name: 'Founder', role: 'founder', kind: 'founder', summary: 'bio', keyPerson: true });
-    await people.create({ name: 'Worker', role: 'engineer', kind: 'employee', summary: 'bio' });
+    await people.create({ name: 'Founder', role: 'founder', kind: 'founder', summary: 'bio', keyPerson: true, startDate: '2019-01' });
+    await people.create({ name: 'Worker', role: 'engineer', kind: 'employee', summary: 'bio', startDate: '2021-06' });
     await records.create({ category: 'customer', title: 'Big Co', summary: 's', amount: 100000, currency: '€', recurring: true, status: 'active', dueDate: '2026-03-01' });
     await records.create({ category: 'customer', title: 'Small Co', summary: 's', amount: 50000, currency: '€', recurring: false, status: 'at-risk', dueDate: '2026-06-01' });
     await records.create({ category: 'financial', title: 'GM', summary: 's', metric: 'Gross margin', period: 'Q2 2025', amount: 27 });
@@ -51,5 +51,7 @@ describe('dashboard overview', () => {
     expect(o.risks.bySeverity.high).toBe(1);
     expect(o.decisions.byDomain.sales).toBe(1);
     expect(o.readiness.score).toBeGreaterThanOrEqual(0);
+    // Cumulative headcount trend from startDate years.
+    expect(o.trends.headcountByYear).toEqual([{ year: '2019', count: 1 }, { year: '2021', count: 2 }]);
   });
 });

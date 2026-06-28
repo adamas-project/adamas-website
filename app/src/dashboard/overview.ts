@@ -34,6 +34,7 @@ export interface Overview {
     byYear: Array<{ year: string; amount: number }>;
   };
   keyMetrics: Array<{ metric: string; period?: string; amount?: number; currency?: string; status?: string }>;
+  trends: { headcountByYear: Array<{ year: string; count: number }> };
   records: { total: number; byCategory: Record<string, number> };
   risks: { total: number; bySeverity: { low: number; medium: number; high: number } };
   readiness: { score: number; traceabilityPct: number };
@@ -113,6 +114,18 @@ export function computeOverview(deps: OverviewDeps): Overview {
   const bySeverity = { low: 0, medium: 0, high: 0 };
   for (const r of risks) if (r.severity) bySeverity[r.severity] += 1;
 
+  // Cumulative headcount by hire year (from each person's startDate).
+  const startCounts = new Map<string, number>();
+  for (const p of people) {
+    const y = (p.startDate ?? '').slice(0, 4);
+    if (/^\d{4}$/.test(y)) startCounts.set(y, (startCounts.get(y) ?? 0) + 1);
+  }
+  let cumulative = 0;
+  const headcountByYear = [...startCounts.keys()].sort().map((year) => {
+    cumulative += startCounts.get(year)!;
+    return { year, count: cumulative };
+  });
+
   const readiness = computeReadiness(deps.ledger, deps.knowledge, deps.people, deps.records);
 
   return {
@@ -138,6 +151,7 @@ export function computeOverview(deps: OverviewDeps): Overview {
       byYear,
     },
     keyMetrics,
+    trends: { headcountByYear },
     records: { total: records.length, byCategory },
     risks: { total: risks.length, bySeverity },
     readiness: { score: readiness.score, traceabilityPct: readiness.traceabilityPct },
