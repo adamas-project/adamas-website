@@ -81,8 +81,8 @@
       --card-shadow: 0 24px 60px rgba(0,0,0,0.6);
       --nav-bg: rgba(0,6,0,0.6);
       --grain-op: 0.02;
-      --font-d: "SF Mono", ui-monospace, "JetBrains Mono", monospace;
-      --font-b: "SF Mono", ui-monospace, "JetBrains Mono", monospace;
+      --font-d: 'JetBrains Mono', ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      --font-b: 'JetBrains Mono', ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -645,9 +645,9 @@ body.site-in main{animation:siteIn 1.2s cubic-bezier(.7,0,.2,1) both}
 .hero-shot .hs-bar{display:flex;gap:6px;align-items:center;padding:10px 14px;border-bottom:1px solid var(--border-2);background:var(--surface-2)}
 .hero-shot .hs-bar i{width:8px;height:8px;border-radius:50%;background:var(--border)}
 .hero-shot .hs-bar i:first-child{background:var(--accent)}
-.hero-shot .hs-bar b{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:400;color:var(--faint);margin-left:8px}
+.hero-shot .hs-bar b{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;font-weight:400;color:var(--faint);margin-left:8px}
 .hero-shot svg{display:block;width:100%;height:auto}
-.hero-shot svg text{font-family:'JetBrains Mono',monospace}
+.hero-shot svg text{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
 .hero-shot .hs-cap{display:block;padding:12px 18px;border-top:1px solid var(--border-2);font-size:13px;font-weight:600;color:var(--accent)}
 
 /* micro-interactions: card hover lift (subtle, hype-skeptical audience) */

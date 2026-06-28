@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from '../api';
 import { useLang } from '../i18n';
 import { MeetingCapture } from '../components/MeetingCapture';
+import { AiNote } from '../components/Disclaimer';
 
 const KINDS = ['doc', 'meeting', 'email', 'chat'] as const;
 const DOMAINS = ['hiring', 'sales', 'product', 'finance', 'ops'] as const;
@@ -205,6 +206,7 @@ export function InboxView({ onChanged }: { onChanged: () => void }) {
       </div>
 
       <div className="section-title">{t('Pending candidates')} {candidates.length > 0 ? `(${candidates.length})` : ''}</div>
+      {candidates.length > 0 && <AiNote />}
       {candidates.length > 0 && (
         <div className="toolbar" style={{ margin: '0 0 8px' }}>
           <button onClick={autoFile} disabled={busy} title="Auto-file every high-confidence candidate (reversible)">

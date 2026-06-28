@@ -53,7 +53,7 @@ export function BoundaryView({ onChanged }: { onChanged: () => void }) {
       <div className="panel">
         <h2>{t('Hybrid-cloud approval (per task)')}</h2>
         <p className="muted">
-          {t('ADAMAS is local-first by default — nothing leaves the machine. A cloud route is opt-in per task: you see exactly what would be transmitted before anything is sent.')}
+          {t('Local-first by default — features you enable (cloud AI, Gmail labeling, email/calendar connectors) transmit data to services you choose. A cloud route is opt-in per task: you see exactly what would be transmitted before anything is sent.')}
         </p>
         {!preview && <button className="primary" onClick={prepare}>{t('Prepare a cloud evaluation task…')}</button>}
         {result && <div className="notice ok" style={{ marginTop: 10 }}>{result}</div>}
@@ -75,6 +75,9 @@ export function BoundaryView({ onChanged }: { onChanged: () => void }) {
 
       <div className="panel">
         <h2>{t('Security & data ownership')}</h2>
+        <p className="muted" style={{ marginTop: 0, fontSize: 13 }}>
+          {t('These values reflect the default configuration. Enabling optional features (cloud AI, Gmail labeling, email/calendar connectors) transmits data to the services you choose.')}
+        </p>
         {security && (
           <dl className="kv">
             <dt>{t('Local-first')}</dt><dd className="ok">{String(security.localFirst)}</dd>

@@ -43,19 +43,20 @@ describe('demo seeder', () => {
     expect(deps.records.count).toBeGreaterThanOrEqual(1200);
     expect(deps.glossary.count).toBeGreaterThanOrEqual(400);
 
-    // The demo "team" is famous people in ordinary roles (funnier showcase).
+    // The demo "team" is fictional by default — no real famous names appear
+    // (personality-rights safe). The real FAMOUS_NAMES roster is a dev-only
+    // opt-in via ADAMAS_DEMO_FAMOUS=1.
     const names = deps.people.list().map((p) => p.name);
-    expect(names).toContain('Pablo Escobar');
-    expect(names).toContain('Michael Jackson');
-    // The real founder name was purged; the seed founder is now a famous figure.
+    expect(names).not.toContain('Pablo Escobar');
+    expect(names).not.toContain('Steve Jobs');
     expect(names).not.toContain('Massimo Sahin');
-    expect(names).toContain('Steve Jobs');
-    // Decisions reference the renamed owners, keeping people↔decision links intact.
-    expect(deps.ledger.list().some((d) => d.owner.name === 'Steve Jobs')).toBe(true);
-    // Exactly one key person — Albert Einstein.
+    // Decisions reference the renamed (fictional) owners, keeping people↔decision links intact.
+    expect(deps.ledger.list().some((d) => d.owner.name === 'Marcus Halvorsen')).toBe(true);
+    // Exactly one key person — the fictional founder.
     const keyPeople = deps.people.list().filter((p) => p.keyPerson);
     expect(keyPeople.length).toBe(1);
-    expect(keyPeople[0]!.name).toBe('Albert Einstein');
+    expect(keyPeople[0]!.name).toBe('Marcus Halvorsen');
+    expect(keyPeople[0]!.kind).toBe('founder');
 
     // For-fun: thousands of customers and a book of business in the trillions.
     const overview = computeOverview(deps);

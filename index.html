@@ -72,15 +72,10 @@
       { "@type": "Question", "name": "Can't we just write things down ourselves?", "acceptedAnswer": { "@type": "Answer", "text": "The problem isn't writing — it's structuring, linking, and surfacing the right knowledge at the right moment. ADAMAS does that automatically." } },
       { "@type": "Question", "name": "Is this just AI hype?", "acceptedAnswer": { "@type": "Answer", "text": "The AI is the engine, not the product. The product is the decision ledger — a structured, local-first knowledge layer that compounds over time regardless of which model powers it." } },
       { "@type": "Question", "name": "What hardware do we need?", "acceptedAnswer": { "@type": "Answer", "text": "ADAMAS is hardware-flexible — these are examples, not requirements. The default is an Apple Mac mini M4 (about $600–$1,000 in 2026); for larger local models, 128 GB AMD Ryzen AI Max+ or NVIDIA DGX Spark machines run about $1,800–$4,000. A typical local-first setup replaces about $200–459/month in cloud-AI subscriptions." } },
-      { "@type": "Question", "name": "Does our data leave our company?", "acceptedAnswer": { "@type": "Answer", "text": "No. The vault is local-first and runs on your hardware. Optional hybrid cloud routing is used only for tasks you explicitly approve." } }
+      { "@type": "Question", "name": "Does our data leave our company?", "acceptedAnswer": { "@type": "Answer", "text": "Not by default. The vault is local-first and runs on your hardware. Data leaves only for hybrid-cloud tasks you explicitly approve, and for any third-party integrations you choose to connect." } }
     ]
   }
   </script>
-  <!-- JetBrains Mono: async-loaded to avoid render-blocking -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
   <script>
     // Set theme before paint to avoid flash-of-wrong-theme
     (function () {
@@ -282,7 +277,7 @@
           <span>Cloud subscription</span>
         </div>
         <div class="is-card fade">
-          <p class="lead">A <b>decision ledger</b> — the first system built specifically to capture <b>why</b> decisions were made, structure them, link them, and generate the exact business assets your company needs at each stage of growth.</p>
+          <p class="lead">A <b>decision ledger</b> — a system built specifically to capture <b>why</b> decisions were made, structure them, link them, and generate the exact business assets your company needs at each stage of growth.</p>
           <div class="schema">
             <div class="sc"><div class="sc-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-network"/></svg></div><div class="sc-n">Context</div><div class="sc-d">The situation at the time of the call</div></div>
             <div class="sc"><div class="sc-ic"><svg class="icn" aria-hidden="true"><use href="/assets/icons.svg#i-scale"/></svg></div><div class="sc-n">Decision</div><div class="sc-d">The exact choice made and who decided</div></div>
@@ -411,7 +406,7 @@
           <div class="cstat fade"><div class="big">$200–459</div><div class="lbl">typical monthly cloud AI spend ADAMAS replaces</div></div>
         </div>
         <div class="arb fade">
-          <p>A one-time machine you own does the work — and your company's knowledge never leaves it. The default is an <b>Apple Mac mini M4</b> (~$600–$1,000 in 2026); for larger local models, 128&nbsp;GB <b>AMD Ryzen AI Max+</b> or <b>NVIDIA DGX Spark</b> machines run ~$1,800–$4,000. Examples, not requirements — ADAMAS is hardware-flexible. <a href="/docs/hardware.html">Compare the hardware →</a></p>
+          <p>A one-time machine you own does the work — and by default your company's knowledge stays on it, leaving only for hybrid-cloud tasks you explicitly approve or integrations you connect. The default is an <b>Apple Mac mini M4</b> (~$600–$1,000 in 2026); for larger local models, 128&nbsp;GB <b>AMD Ryzen AI Max+</b> or <b>NVIDIA DGX Spark</b> machines run ~$1,800–$4,000. Examples, not requirements — ADAMAS is hardware-flexible. <a href="/docs/hardware.html">Compare the hardware →</a></p>
         </div>
       </div>
     </section>
@@ -508,7 +503,7 @@
             <div class="pc-price">$1,000</div>
             <p class="pc-desc">We map the knowledge trap, interview you, and deliver a clarity report.</p>
             <!-- TODO (founder): confirm you stand behind this exact guarantee wording before launch. -->
-            <p class="pc-guarantee">If the audit surfaces nothing worth fixing, we refund it.</p>
+            <p class="pc-guarantee">Full refund if you're not satisfied with the report — just tell us within 14 days.</p>
             <span class="pc-badge">Credited toward your build</span>
           </div>
           <div class="pc fade">
@@ -560,8 +555,12 @@
               <input type="hidden" name="form-name" value="selfserve-waitlist">
               <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
               <input type="email" name="email" required placeholder="Work email" aria-label="Work email for the Self-Serve waitlist">
+              <label class="form-consent" style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--muted);margin:8px 0;text-align:left">
+                <input type="checkbox" name="consent-marketing" value="yes" required style="margin-top:3px">
+                <span>I agree to receive occasional ADAMAS emails; I can unsubscribe anytime. See the <a href="/privacy.html">Privacy Policy</a>.</span>
+              </label>
               <button class="btn btn-ghost" type="submit">Join the waitlist</button>
-              <span class="pc-wait-note">Waitlist members get the launch date — and founding pricing — first.</span>
+              <span class="pc-wait-note">Waitlist members get the launch date — and founding pricing — first. See our <a href="/privacy.html">Privacy Policy</a>.</span>
             </form>
           </div>
         </div>
@@ -582,7 +581,7 @@
           <details class="fade"><summary>We can just write things down.</summary><p>You already know that. The problem isn't writing — it's structuring, linking, and surfacing the right knowledge at the right moment. ADAMAS does that automatically.</p></details>
           <details class="fade"><summary>Is this just AI hype?</summary><p>The AI is the engine, not the product. The product is the decision ledger — a structured, local-first knowledge layer that compounds over time regardless of which model powers it.</p></details>
           <details class="fade"><summary>What hardware do we need?</summary><p>ADAMAS is hardware-flexible — these are examples, not requirements. The default is an Apple Mac mini M4 (about $600–$1,000 in 2026); for larger local models, 128 GB AMD Ryzen AI Max+ or NVIDIA DGX Spark machines run about $1,800–$4,000. A typical local-first setup replaces about $200–459/month in cloud-AI subscriptions.</p></details>
-          <details class="fade"><summary>Does our data leave our company?</summary><p>No. The vault is local-first and runs on your hardware. That's the point — your most valuable IP stays on-premise, which is exactly why privacy-sensitive founders choose it.</p></details>
+          <details class="fade"><summary>Does our data leave our company?</summary><p>Not by default. The vault is local-first and runs on your hardware, so your most valuable IP stays on-premise — exactly why privacy-sensitive founders choose it. Data leaves only for hybrid-cloud tasks you explicitly approve, and for any integrations you connect.</p></details>
         </div>
       </div>
     </section>
@@ -623,7 +622,7 @@
               <option>Just exploring for now</option>
             </select>
             <button class="btn btn-gold" type="submit">Request your Clarity Audit →</button>
-            <p class="lf-note">Local-first &amp; private. We'll never share your details.</p>
+            <p class="lf-note">Local-first &amp; private. We use your details only to respond to this request — see our <a href="/privacy.html">Privacy Policy</a>.</p>
           </form>
           <p class="book-call">Prefer to pick a time? <a href="https://calendar.app.google/QrCeWrs8UB96nXSP8" target="_blank" rel="noopener">Book a 30-minute call →</a></p>
           <div class="lf-ok" id="leadOk"><strong>Thanks — got it.</strong> We'll reply within one business day to set up your 30-minute Clarity Audit.</div>
@@ -727,8 +726,12 @@
         <input type="hidden" name="guide" id="gateGuide" value="">
         <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
         <input type="email" name="email" id="gateEmail" required placeholder="Work email" aria-label="Work email" autocomplete="email">
+        <label class="form-consent" style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--muted);margin:8px 0;text-align:left">
+          <input type="checkbox" name="consent-marketing" value="yes" style="margin-top:3px">
+          <span>I agree to receive occasional ADAMAS emails; I can unsubscribe anytime. See the <a href="privacy.html">Privacy Policy</a>.</span>
+        </label>
         <button type="submit" class="btn btn-gold">Unlock the download →</button>
-        <p class="gate-note">We'll never share your details. <a href="privacy.html">Privacy</a></p>
+        <p class="gate-note">We'll send the PDF either way. We use your details only as described in our <a href="privacy.html">Privacy Policy</a>.</p>
       </form>
       <div class="gate-ok" id="gateOk" hidden>
         <div class="gate-tick">✓</div>
@@ -752,8 +755,12 @@
         <input type="hidden" name="source" value="pricing-exit-intent">
         <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
         <input type="email" name="email" required placeholder="Work email" aria-label="Work email" autocomplete="email">
+        <label class="form-consent" style="display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--muted);margin:8px 0;text-align:left">
+          <input type="checkbox" name="consent-marketing" value="yes" style="margin-top:3px">
+          <span>I agree to receive occasional ADAMAS emails; I can unsubscribe anytime. See the <a href="privacy.html">Privacy Policy</a>.</span>
+        </label>
         <button type="submit" class="btn btn-gold">Send me the playbook →</button>
-        <p class="gate-note">We'll never share your details. <a href="privacy.html">Privacy</a></p>
+        <p class="gate-note">We'll send the PDF either way. We use your details only as described in our <a href="privacy.html">Privacy Policy</a>.</p>
       </form>
       <div class="gate-ok" id="exitOk" hidden>
         <div class="gate-tick">✓</div>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { api } from '../api';
 import { useLang } from '../i18n';
+import { AiNote } from '../components/Disclaimer';
 
 const KINDS = ['founder', 'employee', 'advisor', 'board', 'contractor'];
 const RENDER_CAP = 60; // keep the DOM light; search to find anyone beyond this.
@@ -246,6 +247,7 @@ export function PeopleView() {
           <>
             <label>{t('CV / résumé (paste text — summarized on-device)')}</label>
             <textarea rows={8} value={cv} onChange={(e) => setCv(e.target.value)} placeholder={t('Paste the CV or a bio here…')} />
+            <AiNote />
           </>
         )}
 

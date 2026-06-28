@@ -453,4 +453,37 @@ th { color: var(--faint); font-weight: 700; text-transform: uppercase; letter-sp
   th, td { border-color: #d0d0d0 !important; }
   a { color: #111111 !important; text-decoration: none; }
   .badge { border-color: #bbbbbb !important; color: #333333 !important; }
+  .app-footer, .license-gate-overlay { display: none !important; }
 }
+
+/* First-run license acceptance gate (clickwrap). Blocks the app until accepted. */
+.license-gate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(3px);
+}
+.license-gate-modal {
+  max-width: 540px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.license-gate-modal a { color: var(--accent); }
+
+/* Persistent licensing footer — "licensed, not sold". */
+.app-footer {
+  padding: 10px 18px;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+}
+.app-footer a { color: var(--text-muted); text-decoration: underline; }
+.app-footer a:hover { color: var(--text); }
