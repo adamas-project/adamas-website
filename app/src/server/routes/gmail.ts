@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import type { AppContext } from '../context.js';
 import { GmailLabeler, isGmailHost } from '../../ingestion/gmail-label.js';
-import { resolveImapConfig, saveGmailSettings, clearGmailSettings } from '../gmail-settings.js';
+import { resolveImapConfig, saveGmailSettings, clearGmailSettings, loadGmailSettings, setAutoLabelMinutes } from '../gmail-settings.js';
 
 // Opt-in "auto-label decision emails" for Gmail. Configurable from the app
 // (Settings box) or via ADAMAS_IMAP_* env vars. It only ADDS a label — never
@@ -9,13 +9,24 @@ import { resolveImapConfig, saveGmailSettings, clearGmailSettings } from '../gma
 export function registerGmailRoutes(app: FastifyInstance, ctx: AppContext): void {
   app.get('/api/gmail/status', async () => {
     const { cfg, source } = await resolveImapConfig(ctx.root);
+    const saved = await loadGmailSettings(ctx.root);
     return {
       configured: !!cfg,
       isGmail: cfg ? isGmailHost(cfg.host) : false,
       user: cfg?.user,
       source,
+      autoLabelMinutes: saved?.autoLabelMinutes ?? 0,
       label: 'ADAMAS/Decisions',
     };
+  });
+
+  // Turn auto-labeling on (minutes > 0) or off (0). Requires saved credentials.
+  app.post('/api/gmail/auto-label', async (req, reply) => {
+    const b = (req.body ?? {}) as { minutes?: number };
+    const minutes = Math.max(0, Math.min(1440, Number(b.minutes) || 0));
+    const next = await setAutoLabelMinutes(ctx.root, minutes);
+    if (!next) return reply.code(400).send({ error: 'Connect Gmail first, then enable auto-labeling.' });
+    return { ok: true, autoLabelMinutes: next.autoLabelMinutes ?? 0 };
   });
 
   // Save Gmail address + app password from the app (no .env editing needed).

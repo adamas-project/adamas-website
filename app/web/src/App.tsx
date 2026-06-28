@@ -38,6 +38,16 @@ export function App() {
   const [role, setRole] = useState('owner');
   const [meta, setMeta] = useState<{ count: number; version: number } | null>(null);
   const [pending, setPending] = useState(0);
+  const [brand, setBrand] = useState<{ companyName: string; tagline: string; accentColor: string } | null>(null);
+
+  // White-label branding: company name in the bar + optional accent color.
+  useEffect(() => {
+    api.brand().then((b) => {
+      setBrand(b);
+      if (b.accentColor) document.documentElement.style.setProperty('--accent', b.accentColor);
+      else document.documentElement.style.removeProperty('--accent');
+    }).catch(() => setBrand(null));
+  }, []);
   const [theme, setTheme] = useState<Theme>(() => {
     try {
       const s = localStorage.getItem('adamas-theme');
@@ -73,7 +83,7 @@ export function App() {
     <div className="app">
       <header className="topbar">
         <div className="brand">
-          ADAMAS<small>{t('All Decisions And Memory Archive System')}</small>
+          {brand?.companyName || 'ADAMAS'}<small>{brand?.tagline || t('All Decisions And Memory Archive System')}</small>
         </div>
         <nav className="nav" aria-label="Primary">
           {TABS.map((tb) => (

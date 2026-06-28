@@ -17,6 +17,7 @@ import { CalendarConnector } from '../ingestion/calendar.js';
 import type { Connector } from '../ingestion/connector.js';
 import { CommandTranscriber, type Transcriber } from '../ingestion/transcribe.js';
 import { ConnectorScheduler } from '../ingestion/scheduler.js';
+import { GmailAutoLabeler } from '../ingestion/gmail-auto.js';
 import { KnowledgeStore } from '../knowledge/store.js';
 import { PeopleStore } from '../people/store.js';
 import { RecordStore } from '../records/store.js';
@@ -57,6 +58,7 @@ export interface AppContext {
   obsidianAuto: ObsidianAutoExporter | null;
   obsidianInbox: ObsidianInboxWatcher | null;
   connectorScheduler: ConnectorScheduler | null;
+  gmailAuto: GmailAutoLabeler;
   hermes: HermesConfig;
 }
 
@@ -139,6 +141,10 @@ export async function createContext(root: string): Promise<AppContext> {
     connectorScheduler.start();
   }
 
+  // Background Gmail decision-labeler (opt-in via the Gmail settings interval).
+  const gmailAuto = new GmailAutoLabeler(root);
+  gmailAuto.start();
+
   return {
     root,
     ledger,
@@ -157,6 +163,7 @@ export async function createContext(root: string): Promise<AppContext> {
     obsidianAuto,
     obsidianInbox,
     connectorScheduler,
+    gmailAuto,
     hermes,
   };
 }

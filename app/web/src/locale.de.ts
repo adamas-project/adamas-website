@@ -325,6 +325,32 @@ export const de: Record<string, string> = {
   'Decisions by department': 'Entscheidungen nach Abteilung',
   'People by type': 'Personen nach Typ',
   'risks tracked': 'erfasste Risiken',
+  'Headcount growth by year': 'Personalwachstum nach Jahr',
+  'Company overview': 'Unternehmensübersicht',
+  'Confidential — Investor Overview': 'Vertraulich — Investorenübersicht',
+
+  // ── Branding ──────────────────────────────────────────────
+  Branding: 'Branding',
+  'Put your company name, tagline, and accent color on the top bar, dashboard, and PDF export.':
+    'Setze deinen Firmennamen, Slogan und deine Akzentfarbe in die obere Leiste, das Dashboard und den PDF-Export.',
+  'Company name': 'Firmenname',
+  Tagline: 'Slogan',
+  'Accent color': 'Akzentfarbe',
+  'Reset color': 'Farbe zurücksetzen',
+  'Save branding': 'Branding speichern',
+  'Branding saved — reload to see it everywhere.': 'Branding gespeichert — neu laden, um es überall zu sehen.',
+
+  // ── Gmail auto-label ──────────────────────────────────────
+  Auto: 'Auto',
+  off: 'aus',
+  'every 30 min': 'alle 30 Min',
+  hourly: 'stündlich',
+  'every 6 h': 'alle 6 Std',
+  daily: 'täglich',
+  'Automatically label decision emails on a schedule.': 'Entscheidungs-E-Mails automatisch nach Zeitplan markieren.',
+  'Auto-labeling every': 'Auto-Markierung alle',
+  'min.': 'Min.',
+  'Auto-labeling off.': 'Auto-Markierung aus.',
 
   // ── Glossary ──────────────────────────────────────────────
   Entries: 'Einträge',

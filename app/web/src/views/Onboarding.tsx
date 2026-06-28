@@ -8,6 +8,25 @@ export function OnboardingView() {
   const [pricing, setPricing] = useState<any | null>(null);
   const [demoBusy, setDemoBusy] = useState(false);
   const [demoMsg, setDemoMsg] = useState('');
+  const [brand, setBrand] = useState<{ companyName: string; tagline: string; accentColor: string }>({ companyName: '', tagline: '', accentColor: '' });
+  const [brandMsg, setBrandMsg] = useState('');
+
+  useEffect(() => {
+    api.brand().then(setBrand).catch(() => {});
+  }, []);
+
+  async function saveBrand() {
+    setBrandMsg('');
+    try {
+      const b = await api.updateBrand(brand);
+      setBrand(b);
+      if (b.accentColor) document.documentElement.style.setProperty('--accent', b.accentColor);
+      else document.documentElement.style.removeProperty('--accent');
+      setBrandMsg(t('Branding saved — reload to see it everywhere.'));
+    } catch (e) {
+      setBrandMsg((e as Error).message);
+    }
+  }
 
   async function loadDemo() {
     setDemoBusy(true);
@@ -98,6 +117,23 @@ export function OnboardingView() {
         ))}
       </div>
       <p className="muted">{pricing.annualNote}</p>
+
+      <div className="section-title">{t('Branding')}</div>
+      <p className="muted" style={{ fontSize: 13, marginTop: 0 }}>
+        {t('Put your company name, tagline, and accent color on the top bar, dashboard, and PDF export.')}
+      </p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 480 }}>
+        <input placeholder={t('Company name')} value={brand.companyName} onChange={(e) => setBrand({ ...brand, companyName: e.target.value })} />
+        <input placeholder={t('Tagline')} value={brand.tagline} onChange={(e) => setBrand({ ...brand, tagline: e.target.value })} />
+        <div className="toolbar" style={{ margin: 0 }}>
+          <label className="rolebox">{t('Accent color')}
+            <input type="color" value={brand.accentColor || '#c9a84c'} onChange={(e) => setBrand({ ...brand, accentColor: e.target.value })} style={{ marginLeft: 6 }} />
+          </label>
+          <button onClick={() => setBrand({ ...brand, accentColor: '' })}>{t('Reset color')}</button>
+          <button className="primary" onClick={saveBrand}>{t('Save branding')}</button>
+        </div>
+        {brandMsg && <div className="notice ok">{brandMsg}</div>}
+      </div>
 
       <div className="section-title">{t('Demo data (for showcases)')}</div>
       <p className="muted" style={{ fontSize: 13, marginTop: 0 }}>

@@ -52,6 +52,7 @@ export const api = {
       byYear: Array<{ year: string; amount: number }>;
     };
     keyMetrics: Array<{ metric: string; period?: string; amount?: number; currency?: string; status?: string }>;
+    trends: { headcountByYear: Array<{ year: string; count: number }> };
     records: { total: number; byCategory: Record<string, number> };
     risks: { total: number; bySeverity: { low: number; medium: number; high: number } };
     readiness: { score: number; traceabilityPct: number };
@@ -108,7 +109,13 @@ export const api = {
     return res.json() as Promise<{ transcript: string; summarized: boolean; summary: string; added: number; pending: number }>;
   },
 
-  gmailStatus: () => req<{ configured: boolean; isGmail: boolean; user?: string; source: 'saved' | 'env' | null; label: string }>('/api/gmail/status'),
+  brand: () => req<{ companyName: string; tagline: string; accentColor: string }>('/api/brand'),
+  updateBrand: (patch: { companyName?: string; tagline?: string; accentColor?: string }) =>
+    req<{ companyName: string; tagline: string; accentColor: string }>('/api/brand', { method: 'PUT', body: JSON.stringify(patch) }),
+
+  gmailStatus: () => req<{ configured: boolean; isGmail: boolean; user?: string; source: 'saved' | 'env' | null; autoLabelMinutes: number; label: string }>('/api/gmail/status'),
+  gmailAutoLabel: (minutes: number) =>
+    req<{ ok: boolean; autoLabelMinutes: number }>('/api/gmail/auto-label', { method: 'POST', body: JSON.stringify({ minutes }) }),
   gmailSaveSettings: (user: string, pass: string) =>
     req<{ ok: boolean; user: string }>('/api/gmail/settings', { method: 'POST', body: JSON.stringify({ user, pass }) }),
   gmailClearSettings: () => req<{ ok: boolean }>('/api/gmail/settings', { method: 'DELETE' }),

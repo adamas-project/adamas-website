@@ -17,21 +17,28 @@ function Tile({ label, value, sub }: { label: string; value: string | number; su
 export function DashboardView() {
   const { t } = useLang();
   const [d, setD] = useState<Overview | null>(null);
+  const [brand, setBrand] = useState<{ companyName: string; tagline: string } | null>(null);
   const [err, setErr] = useState('');
 
   useEffect(() => {
     api.dashboard().then(setD).catch((e) => setErr((e as Error).message));
+    api.brand().then(setBrand).catch(() => setBrand(null));
   }, []);
+
+  const company = brand?.companyName || 'ADAMAS';
 
   function exportPdf() {
     const prev = document.title;
-    document.title = 'ADAMAS — Overview';
+    document.title = `${company} — Investor Overview`;
     window.print(); // the browser's print dialog includes "Save as PDF"
     setTimeout(() => { document.title = prev; }, 500);
   }
 
   if (err) return <div className="panel"><p className="muted">{err}</p></div>;
   if (!d) return <div className="panel"><p className="muted">{t('Loading…')}</p></div>;
+
+  const today = new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+  const maxHead = Math.max(1, ...d.trends.headcountByYear.map((y) => y.count));
 
   const cur = d.revenue.currency;
   const money = (n: number) => `${cur}${Math.round(n).toLocaleString()}`;
@@ -45,6 +52,13 @@ export function DashboardView() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {/* Shown only in the printed/PDF export — a clean cover line. */}
+      <div className="print-only print-header">
+        <div style={{ fontSize: 26, fontWeight: 800 }}>{company}</div>
+        <div style={{ fontSize: 14 }}>{brand?.tagline || t('Company overview')}</div>
+        <div style={{ fontSize: 12, marginTop: 4 }}>{t('Confidential — Investor Overview')} · {today}</div>
+      </div>
+
       <div className="panel">
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
           <h2 style={{ marginTop: 0 }}>{t('Overview')}</h2>
@@ -86,6 +100,23 @@ export function DashboardView() {
                     <div style={{ width: `${Math.max(3, (y.amount / maxYear) * 100)}%`, background: 'var(--accent)', height: 16, borderRadius: 6 }} />
                   </div>
                   <span className="muted" style={{ width: 90, textAlign: 'right', fontSize: 13 }}>{compact(y.amount)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {d.trends.headcountByYear.length > 0 && (
+          <div style={{ marginTop: 14 }}>
+            <div className="section-title">{t('Headcount growth by year')}</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {d.trends.headcountByYear.map((y) => (
+                <div key={y.year} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <span className="mono" style={{ width: 48, fontSize: 13 }}>{y.year}</span>
+                  <div style={{ flex: 1, background: 'var(--surface-2, rgba(255,255,255,0.06))', borderRadius: 6, overflow: 'hidden' }}>
+                    <div style={{ width: `${Math.max(3, (y.count / maxHead) * 100)}%`, background: 'var(--accent-lt, var(--accent))', height: 16, borderRadius: 6 }} />
+                  </div>
+                  <span className="muted" style={{ width: 90, textAlign: 'right', fontSize: 13 }}>{y.count.toLocaleString()}</span>
                 </div>
               ))}
             </div>
